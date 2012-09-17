@@ -1,4 +1,4 @@
-guide-android
-=============
+guide-android-vandy-mobile
+==========================
 
-Android Guide Project Fall 2012
+VandyMobile's Guide app for Android
