@@ -1,16 +1,15 @@
 package edu.vanderbilt.vm.guide;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
-public class GuideMain extends SherlockFragmentActivity {
+@TargetApi(13)
+public class GuideMain extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,7 @@ public class GuideMain extends SherlockFragmentActivity {
     }
     
     private void setupActionBar() {
-    	ActionBar ab = getSupportActionBar();
+    	ActionBar ab = getActionBar();
     	ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
     	ab.setDisplayShowTitleEnabled(false);
     	
@@ -43,7 +42,7 @@ public class GuideMain extends SherlockFragmentActivity {
      *
      * @param <T> The fragment's class
      */
-    @TargetApi(11)
+    @TargetApi(13)
 	public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private Fragment mFragment;
         private final Activity mActivity;
