@@ -11,40 +11,21 @@ public class Place {
 	private String mName;
 	private String mDescription;
 	private String mHours;
+	private String mCategory;
 	private int mUniqueId;
 	
 	/* package */ Place() { }
 	
-	/**
-	 * Constructs a Place with the given parameters.  It is recommended
-	 * that you do not use this constructor, but instead use the Place.Builder class
-	 * to make a Place.
-	 * @param lat latitude
-	 * @param lon longitude
-	 * @param picUri Uri pointing to this Place's picture
-	 * @param audioUri Uri pointing to this place's audio
-	 * @param name Name of this Place
-	 * @param desc Description of this Place
-	 * @param hours Hours of operation of this Place
-	 * @param uniqueId The unique ID for this Place.  It is very important that
-	 * 					this is actually unique.
-	 */
-	public Place(double lat,
-			double lon,
-			Uri picUri,
-			Uri audioUri,
-			String name,
-			String desc,
-			String hours,
-			int uniqueId) {
-		mLatitude = lat;
-		mLongitude = lon;
-		mPictureUri = picUri;
-		mAudioUri = audioUri;
-		mName = name;
-		mDescription = desc;
-		mHours = hours;
-		mUniqueId = uniqueId;
+	private Place(Place.Builder builder) {
+		mLatitude = builder.mLatitude;
+		mLongitude = builder.mLongitude;
+		mPictureUri = builder.mPictureUri;
+		mAudioUri = builder.mAudioUri;
+		mName = builder.mName;
+		mDescription = builder.mDescription;
+		mHours = builder.mHours;
+		mUniqueId = builder.mUniqueId;
+		mCategory = builder.mCategory;
 	}
 	
 	public static class Builder {
@@ -55,6 +36,7 @@ public class Place {
 		private String mName;
 		private String mDescription;
 		private String mHours;
+		private String mCategory;
 		private int mUniqueId;
 		
 		public Builder() { }
@@ -89,6 +71,11 @@ public class Place {
 			return this;
 		}
 		
+		public Builder setCategory(String category) {
+			mCategory = category;
+			return this;
+		}
+		
 		public Builder setHours(String hours) {
 			mHours = hours;
 			return this;
@@ -100,15 +87,7 @@ public class Place {
 		}
 		
 		public Place build() {
-			return new Place(
-					mLatitude,
-					mLongitude,
-					mPictureUri,
-					mAudioUri,
-					mName,
-					mDescription,
-					mHours,
-					mUniqueId);
+			return new Place(this);
 		}
 		
 	}
@@ -139,6 +118,10 @@ public class Place {
 
 	public String getHours() {
 		return mHours;
+	}
+	
+	public String getCategory() {
+		return mCategory;
 	}
 	
 	public int getUniqueId() {
