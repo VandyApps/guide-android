@@ -25,6 +25,8 @@ public class JsonUtils {
 		InputStream in = context.getContentResolver().openInputStream(uri);
 		BufferedReader buf = new BufferedReader(new InputStreamReader(in));
 		
+		return null;
+		// incomplete code
 		
 		
 	}
