@@ -8,88 +8,103 @@ public class Place {
 	private double mLongitude;
 	private Uri mPictureUri;
 	private Uri mAudioUri;
+	private Uri mVideoUri;
 	private String mName;
 	private String mDescription;
 	private String mHours;
 	private String mCategory;
 	private int mUniqueId;
-	
-	/* package */ Place() { }
-	
+
+	/* package */Place() {
+	}
+
 	private Place(Place.Builder builder) {
+		if (builder.mUniqueId == -1) {
+			throw new IllegalArgumentException(
+					"Unique ID must not be default value (-1)");
+		}
 		mLatitude = builder.mLatitude;
 		mLongitude = builder.mLongitude;
 		mPictureUri = builder.mPictureUri;
 		mAudioUri = builder.mAudioUri;
+		mVideoUri = builder.mVideoUri;
 		mName = builder.mName;
 		mDescription = builder.mDescription;
 		mHours = builder.mHours;
 		mUniqueId = builder.mUniqueId;
 		mCategory = builder.mCategory;
 	}
-	
+
 	public static class Builder {
 		private double mLatitude = 0;
 		private double mLongitude = 0;
 		private Uri mPictureUri;
 		private Uri mAudioUri;
+		private Uri mVideoUri;
 		private String mName;
 		private String mDescription;
 		private String mHours;
 		private String mCategory;
-		private int mUniqueId;
-		
-		public Builder() { }
-		
+		private int mUniqueId = -1; // An exception will be thrown if this id is
+									// used
+
+		public Builder() {
+		}
+
 		public Builder setLatitude(double lat) {
 			mLatitude = lat;
 			return this;
 		}
-		
+
 		public Builder setLongitude(double lon) {
 			mLongitude = lon;
 			return this;
 		}
-		
+
 		public Builder setPictureUri(Uri pictureUri) {
 			mPictureUri = pictureUri;
 			return this;
 		}
-		
+
 		public Builder setAudioUri(Uri audioUri) {
 			mAudioUri = audioUri;
 			return this;
 		}
 		
+		public Builder setVideoUri(Uri videoUri) {
+			mVideoUri = videoUri;
+			return this;
+		}
+
 		public Builder setName(String name) {
 			mName = name;
 			return this;
 		}
-		
+
 		public Builder setDescription(String desc) {
 			mDescription = desc;
 			return this;
 		}
-		
+
 		public Builder setCategory(String category) {
 			mCategory = category;
 			return this;
 		}
-		
+
 		public Builder setHours(String hours) {
 			mHours = hours;
 			return this;
 		}
-		
+
 		public Builder setUniqueId(int uniqueId) {
 			mUniqueId = uniqueId;
 			return this;
 		}
-		
+
 		public Place build() {
 			return new Place(this);
 		}
-		
+
 	}
 
 	public double getLatitude() {
@@ -107,6 +122,10 @@ public class Place {
 	public Uri getAudioUri() {
 		return mAudioUri;
 	}
+	
+	public Uri getVideoUri() {
+		return mVideoUri;
+	}
 
 	public String getName() {
 		return mName;
@@ -119,24 +138,24 @@ public class Place {
 	public String getHours() {
 		return mHours;
 	}
-	
+
 	public String getCategory() {
 		return mCategory;
 	}
-	
+
 	public int getUniqueId() {
 		return mUniqueId;
 	}
-	
+
 	public int hashCode() {
 		// We just return the unique ID for efficiency,
 		// hoping that the client has actually made the ID unique
 		return mUniqueId;
 	}
-	
+
 	@Override
 	public boolean equals(Object other) {
-		if(!(other instanceof Place)) {
+		if (!(other instanceof Place)) {
 			return false;
 		}
 		Place otherPlace = (Place) other;
@@ -144,5 +163,5 @@ public class Place {
 		// unique ID.
 		return this.mUniqueId == otherPlace.mUniqueId;
 	}
-	
+
 }
