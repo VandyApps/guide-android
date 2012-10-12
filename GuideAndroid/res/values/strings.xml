@@ -1,8 +1,17 @@
 <resources>
 
     <string name="app_name">GuideAndroid</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    
     <string name="title_activity_guide_main">GuideMain</string>
-
+	<string name="title_activity_place_detail_activity">PlaceDetail</string>
+	<string name="title_activity_webmap">WebMap</string>
+	
+	<string name="main_current_location">This box shows your current location. Click to 
+	    Show the detail of this place</string>
+	<string name="main_current_location2">You are at:</string>
+	<string name="main_search">Search</string>
+	<string name="main_qr">QR</string>
+	<string name="main_serch_box">Search Box</string>    
+	
 </resources>
