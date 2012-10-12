@@ -1,5 +1,6 @@
 [
  {
+ 	"id": 1,
     "name": "Featheringill Hall",
     "category": "Academic",
     "hours": "9-5 PM",
@@ -8,6 +9,7 @@
     "videoPath": "1/1/11"
  },
  {
+ 	 "id": 2,
      "name": "Kissam Quad",
      "category": "Residence Hall",
      "hours": "9-5 PM",
@@ -16,6 +18,7 @@
      "videoPath": "1/1/11"
  },
  {
+ 	 "id": 3,
      "name": "Rand Hall",
      "category": "Dining",
      "hours": "9-5 PM",
@@ -24,6 +27,7 @@
      "videoPath": "1/1/11"
  },
  {
+ 	 "id": 4,
      "name": "Rec Center",
      "category": "Recreation",
      "hours": "9-5 PM",

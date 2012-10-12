@@ -3,43 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
+        android:layout_height="wrap_content"
         android:layout_margin="1mm"
-        android:layout_weight="10"
         android:gravity="center|left"
         android:text="@string/main_current_location2" />
-    
+
     <Button
         android:id="@+id/B_PlaceDetail2"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:layout_weight="50"
+        android:layout_weight="100"
         android:padding="@dimen/padding_medium"
         android:text="@string/main_current_location" />
-    
-    <EditText 
+
+    <EditText
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="10"
-        android:hint="@string/main_serch_box"/>
-    
-    <Button
-        android:id="@+id/B_Search"
-        android:layout_width="wrap_content"
-        android:layout_height="0dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="10"
-        android:text="@string/main_search" />
-    
-    <Button
-        android:id="@+id/B_QR"
-        android:layout_width="wrap_content"
-        android:layout_height="0dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="20"
-        android:text="@string/main_qr" />
+        android:layout_height="wrap_content"
+        android:hint="@string/main_serch_box" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/B_Search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="@string/main_search" />
+
+        <Button
+            android:id="@+id/B_QR"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="@string/main_qr" />
+    </LinearLayout>
 
 </LinearLayout>

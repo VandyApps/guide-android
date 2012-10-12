@@ -7,14 +7,20 @@ package edu.vanderbilt.vm.guide;
  * NavigateTo: WebMap
  */
 
+import java.io.IOException;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import edu.vanderbilt.vm.guide.util.JsonUtils;
 import edu.vanderbilt.vm.guide.util.Place;
 
 public class PlaceDetailActivity extends Activity implements OnClickListener {
@@ -54,6 +60,7 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 						"They called me Mr Glass.") // http://slipsum.com/ LOL
 				.setHours("7:00 - 22:00")
 				.setCategory("Academic")
+				.setUniqueId(1)
 				.build();
 	}
 	
@@ -61,6 +68,13 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle SavedInstanceState){
 		super.onCreate(SavedInstanceState);
 		setContentView(R.layout.activity_place_detail);
+		
+		List<Place> placeList = null;
+		try {
+			placeList = JsonUtils.readPlacesFromStream(getAssets().open("places.json"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		/**
 		 * Sets the content of the page based on data from Place

@@ -23,6 +23,10 @@ public class JsonUtils {
 	
 	public static List<Place> readPlacesFromFile(Uri uri, Context context) throws IOException {
 		InputStream in = context.getContentResolver().openInputStream(uri);
+		return readPlacesFromStream(in);
+	}
+	
+	public static List<Place> readPlacesFromStream(InputStream in) throws IOException {
 		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
 		List<Place> places = new ArrayList<Place>();
 		
