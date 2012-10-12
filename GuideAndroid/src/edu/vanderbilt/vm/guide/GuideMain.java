@@ -9,13 +9,15 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 @TargetApi(13)
-public class GuideMain extends Activity {
+public class GuideMain extends Activity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_main);
         setupActionBar();
+              
+        
     }
     
     private void setupActionBar() {
@@ -25,13 +27,17 @@ public class GuideMain extends Activity {
     	
     	Tab tab = ab.newTab()
     			.setText("Agenda")
-    			.setTabListener(new TabListener<AgendaFragment>(
-    					this, "agenda", AgendaFragment.class));
+    			.setTabListener(new TabListener<AgendaFragment>
+    				(this, "agenda", AgendaFragment.class));
     	ab.addTab(tab);
     	
-    	
+    	//Athran: Adding a tab into the main page with label "Places"
+    	tab = ab.newTab()
+    			.setText("Place")
+    			.setTabListener(new TabListener<PlaceMainFragment>
+    				(this, "Places", PlaceMainFragment.class));
+    	ab.addTab(tab);
     }
-
     
     /**
      * TabListener static inner class.  TabListeners handle callbacks resulting
@@ -86,4 +92,5 @@ public class GuideMain extends Activity {
         }
     }
     
+
 }
