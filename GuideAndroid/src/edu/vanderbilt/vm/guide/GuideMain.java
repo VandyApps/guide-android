@@ -16,8 +16,7 @@ public class GuideMain extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_main);
         setupActionBar();
-              
-        
+        setupGeolocation();
     }
     
     private void setupActionBar() {
@@ -92,5 +91,7 @@ public class GuideMain extends Activity{
         }
     }
     
-
+    private void setupGeolocation(){
+    	    
+    }
 }
