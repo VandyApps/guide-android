@@ -1,97 +1,110 @@
 package edu.vanderbilt.vm.guide;
 
+import java.io.IOException;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import edu.vanderbilt.vm.guide.util.ActivityTabListener;
+import edu.vanderbilt.vm.guide.util.FragmentTabListener;
+import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.Place;
 
 @TargetApi(13)
-public class GuideMain extends Activity{
+public class GuideMain extends Activity {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_guide_main);
-        setupActionBar();
-        setupGeolocation();
-    }
-    
-    private void setupActionBar() {
-    	ActionBar ab = getActionBar();
-    	ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-    	ab.setDisplayShowTitleEnabled(false);
-    	
-    	Tab tab = ab.newTab()
-    			.setText("Agenda")
-    			.setTabListener(new TabListener<AgendaFragment>
-    				(this, "agenda", AgendaFragment.class));
-    	ab.addTab(tab);
-    	
-    	//Athran: Adding a tab into the main page with label "Places"
-    	tab = ab.newTab()
-    			.setText("Place")
-    			.setTabListener(new TabListener<PlaceMainFragment>
-    				(this, "Places", PlaceMainFragment.class));
-    	ab.addTab(tab);
-    }
-    
-    /**
-     * TabListener static inner class.  TabListeners handle callbacks resulting
-     * from a tab click.  We will be using this to swap in and out fragments
-     * as a user interacts with the UI.  This code was borrowed from the Android
-     * API guides at http://developer.android.com/guide/topics/ui/actionbar.html#Tabs.
-     * @author nicholasking
-     *
-     * @param <T> The fragment's class
-     */
-    @TargetApi(13)
-	public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
-        private Fragment mFragment;
-        private final Activity mActivity;
-        private final String mTag;
-        private final Class<T> mClass;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_guide_main);
+		setupActionBar();
+		try {
+			for(Place place : GlobalState.getPlaceList(this)) {
+				GlobalState.getUserAgenda().add(place);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-        /** Constructor used each time a new tab is created.
-          * @param activity  The host Activity, used to instantiate the fragment
-          * @param tag  The identifier tag for the fragment
-          * @param clz  The fragment's Class, used to instantiate the fragment
-          */
-        public TabListener(Activity activity, String tag, Class<T> clz) {
-            mActivity = activity;
-            mTag = tag;
-            mClass = clz;
-        }
+	private void setupActionBar() {
+		ActionBar ab = getActionBar();
+		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		ab.setDisplayShowTitleEnabled(false);
 
-        /* The following are each of the ActionBar.TabListener callbacks */
+		Intent myIntent = getIntent();
+		final Integer selection;
+		if (myIntent != null && myIntent.hasExtra("selection")) {
+			selection = (Integer) myIntent.getExtras().get("selection");
+		} else {
+			selection = null;
+		}
 
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
-            // Check if the fragment is already initialized
-            if (mFragment == null) {
-                // If not, instantiate and add it to the activity
-                mFragment = Fragment.instantiate(mActivity, mClass.getName());
-                ft.add(android.R.id.content, mFragment, mTag);
-            } else {
-                // If it exists, simply attach it in order to show it
-                ft.attach(mFragment);
-            }
-        }
+		boolean toursSelected = isSelected(1, selection);
+		boolean placesSelected = isSelected(2, selection);
+		boolean agendaSelected = isSelected(3, selection)
+				|| (!toursSelected && !placesSelected);
 
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-            if (mFragment != null) {
-                // Detach the fragment, because another one is being attached
-                ft.detach(mFragment);
-            }
-        }
+		Tab tab = ab
+				.newTab()
+				.setText("Map")
+				.setTabListener(
+						new MyActivityTabListener(this, ViewMapActivity.class));
+		ab.addTab(tab, 0, false);
 
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
-            // User selected the already selected tab. Usually do nothing.
-        }
-    }
-    
-    private void setupGeolocation(){
-    	    
-    }
+		tab = ab.newTab()
+				.setText("Tours")
+				.setTabListener(
+						new FragmentTabListener<TourFragment>(this, "tours",
+								TourFragment.class));
+		ab.addTab(tab, 1, toursSelected);
+
+		tab = ab.newTab()
+				.setText("Places")
+				.setTabListener(
+						new FragmentTabListener<PlaceMainFragment>(this,
+								"places", PlaceMainFragment.class));
+		ab.addTab(tab, 2, placesSelected);
+
+		tab = ab.newTab()
+				.setText("Agenda")
+				.setTabListener(
+						new FragmentTabListener<AgendaFragment>(this, "agenda",
+								AgendaFragment.class));
+		ab.addTab(tab, 3, agendaSelected);
+
+	}
+
+	private boolean isSelected(int n, Integer selection) {
+		return selection != null && n == selection;
+	}
+
+	/**
+	 * Adds a little hack to "forward" the user on to the map activity when the
+	 * map tab is clicked. This effectively removes this activity from the back
+	 * stack.
+	 * 
+	 * @author nicholasking
+	 * 
+	 */
+	private class MyActivityTabListener extends ActivityTabListener {
+
+		public MyActivityTabListener(Context packageCtx, Class<?> target) {
+			super(packageCtx, target);
+		}
+
+		@Override
+		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+			super.onTabSelected(tab, ft);
+			finish();
+		}
+
+	}
+
 }
