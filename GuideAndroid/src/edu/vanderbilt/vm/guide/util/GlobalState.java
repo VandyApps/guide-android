@@ -34,5 +34,35 @@ public class GlobalState {
 		}
 		return placeList;
 	}
-
+	
+	public static void initPlaceList(Context context) {
+		try {
+			if (placeList == null) {
+				placeList = JsonUtils.readPlacesFromStream(context.getAssets()
+						.open("places.json"));
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static Place getPlaceById(int id){
+		
+		try {
+			if (id < 5 || id > -1 || placeList != null){ //assertion
+				for (int n = 0; n < placeList.size();n++){
+					if (placeList.get(n).getUniqueId() == id){
+						return placeList.get(n);
+					}
+				}
+			}
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return placeList.get(0); //If search failed
+	}
+	
 }
