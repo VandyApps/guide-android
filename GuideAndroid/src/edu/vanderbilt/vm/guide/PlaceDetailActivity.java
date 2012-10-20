@@ -79,20 +79,16 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 		/**
 		 * Sets the content of the page based on data from Place
 		 */
-		Place place = GlobalState.getPlaceById(1);
+		Place place = GlobalState.getPlaceById(2);
 		
 		PlaceName = (TextView)findViewById(R.id.PlaceName);
-		if (place != null){
-			PlaceName.setText(place.getName());
-		} else {
-			PlaceName.setText(DUMMY_PLACE.getName());
-		}
+		PlaceName.setText(place.getName());
 		
 		PlaceImage = (ImageView)findViewById(R.id.PlaceImage);
 		PlaceImage.setImageResource(R.drawable.ic_launcher);
 		
 		PlaceDescription = (TextView)findViewById(R.id.PlaceDescription);
-		PlaceDescription.setText(DUMMY_PLACE.getDescription());
+		PlaceDescription.setText(place.getDescription());
 		
 		/**
 		 * Set Behaviour
