@@ -8,11 +8,16 @@ package edu.vanderbilt.vm.guide;
  */
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,6 +34,8 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 	ImageView PlaceImage;
 	TextView PlaceDescription;
 	Button BMap;
+	Bitmap Image;
+	String url;
 	
 	//Build a prototype place for testing
 	private static final Place DUMMY_PLACE;
@@ -90,6 +97,27 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 		/**
 		 * Set Behaviour
 		 */
+		Thread downloadImage = new Thread() {
+		    @Override
+		    public void run() {
+		        try {
+    	            InputStream is = (InputStream) new URL(url).getContent();
+    	            Log.d(getClass().getSimpleName(), "Download succeeded");
+    	            Image = BitmapFactory.decodeStream(is);
+    	        } catch (Exception e) {
+    	            Log.d(getClass().getSimpleName(), "Download failed");
+    	            Image = null;
+    	        }
+		    }
+		};
+		downloadImage.start();
+        try {
+            downloadImage.join();
+            PlaceImage.setImageBitmap(Image);
+        } catch (InterruptedException e) {
+            Log.d(getClass().getSimpleName(), "Download failed", e);
+            //Error Handle
+        }
 		BMap = (Button)findViewById(R.id.BMap);
 		BMap.setOnClickListener(this);
 		
