@@ -21,6 +21,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.Place;
 
 public class PlaceDetailActivity extends Activity implements OnClickListener {
@@ -75,8 +77,14 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 		/**
 		 * Sets the content of the page based on data from Place
 		 */
+		Place place = GlobalState.getPlaceById(1);
+		
 		PlaceName = (TextView) findViewById(R.id.PlaceName);
-		PlaceName.setText(DUMMY_PLACE.getName());
+		if (place != null){
+			PlaceName.setText(place.getName());
+		} else {
+			PlaceName.setText(DUMMY_PLACE.getName());
+		}
 
 		PlaceImage = (ImageView) findViewById(R.id.PlaceImage);
 		PlaceImage.setImageResource(R.drawable.ic_launcher);
