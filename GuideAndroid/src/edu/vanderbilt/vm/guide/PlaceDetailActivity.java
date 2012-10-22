@@ -10,7 +10,6 @@ package edu.vanderbilt.vm.guide;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.vanderbilt.vm.guide.util.GlobalState;
-import edu.vanderbilt.vm.guide.util.JsonUtils;
 import edu.vanderbilt.vm.guide.util.Place;
 
 public class PlaceDetailActivity extends Activity implements OnClickListener {
@@ -119,13 +117,12 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 		
 	}
 	
-	public void onClick(View view){
-		Intent i = new Intent(this,WebMap.class);
-		i.putExtra("Lat",Double.toString(DUMMY_PLACE.getLatitude()));
-		i.putExtra("Long",Double.toString(DUMMY_PLACE.getLongitude()));
+	public void onClick(View view){ //fixed to go to MapView instead. Need cleanup
+		Intent i = new Intent(this,ViewMapActivity.class);
+		//i.putExtra("Lat",Double.toString(DUMMY_PLACE.getLatitude()));
+		//i.putExtra("Long",Double.toString(DUMMY_PLACE.getLongitude()));
 		startActivity(i);
 	}
-	
 	
 }
 
