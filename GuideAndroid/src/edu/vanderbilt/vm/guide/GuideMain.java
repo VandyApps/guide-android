@@ -23,7 +23,12 @@ public class GuideMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_guide_main);
 		setupActionBar();
-		GlobalState.initPlaceList(this);
+		try {
+			GlobalState.initPlaceList(this);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			for(Place place : GlobalState.getPlaceList(this)) {
 				GlobalState.getUserAgenda().add(place);
