@@ -22,23 +22,21 @@
         	    android:id="@+id/PlaceName"
         	    android:layout_width="0dip"
         	    android:layout_height="fill_parent"
-        	    android:layout_weight="70" 
+        	    android:layout_weight="100" 
         	    android:gravity="center_vertical"
         	    android:layout_marginLeft="1mm"/>
         	
         	<Button
         	    android:id="@+id/BMap"
-        	    android:layout_width="0dip"
+        	    android:layout_width="wrap_content"
         	    android:layout_height="fill_parent"
-        	    android:layout_weight="15"
         	    android:gravity="center"
         	    android:text="Map"/>
 
         	<Button
         	    android:id="@+id/BAddList"
-        	    android:layout_width="0dip"
+        	    android:layout_width="wrap_content"
         	    android:layout_height="fill_parent"
-        	    android:layout_weight="15"
         	    android:gravity="center"
         	    android:text="+" /> <!-- Need icon for "Add" -->
 
