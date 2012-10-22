@@ -1,6 +1,7 @@
 package edu.vanderbilt.vm.guide;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -24,13 +25,19 @@ public class GuideMain extends Activity {
 		setContentView(R.layout.activity_guide_main);
 		setupActionBar();
 		try {
-			for(Place place : GlobalState.getPlaceList(this)) {
-				GlobalState.getUserAgenda().add(place);
-			}
+			GlobalState.initPlaceList(this);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			List<Place> placeList = GlobalState.getPlaceList(this);
+			GlobalState.getUserAgenda().add(placeList.get(1));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	private void setupActionBar() {

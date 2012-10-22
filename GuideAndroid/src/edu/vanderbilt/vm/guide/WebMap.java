@@ -5,6 +5,8 @@ package edu.vanderbilt.vm.guide;
  * Contains a WebView to display the map overview of a Place
  * from http://maps.google.com/
  * Perhaps easier than trying to figure out the GoogleMap API licensing
+ * 
+ * Update: is deprecated. Subject to removal soon?
  */
 
 import android.app.Activity;

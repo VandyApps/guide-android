@@ -17,7 +17,7 @@ import android.content.Context;
 public class GlobalState {
 
 	private static Agenda userAgendaSingleton = new Agenda();
-	private static List<Place> placeList;
+	private static List<Place> sPlaceList;
 
 	private GlobalState() {
 		throw new AssertionError("Do not instantiate this class.");
@@ -28,11 +28,36 @@ public class GlobalState {
 	}
 
 	public static List<Place> getPlaceList(Context context) throws IOException {
-		if (placeList == null) {
-			placeList = JsonUtils.readPlacesFromStream(context.getAssets()
+		if (sPlaceList == null) {
+			sPlaceList = JsonUtils.readPlacesFromStream(context.getAssets()
 					.open("places.json"));
 		}
-		return placeList;
+		return sPlaceList;
+	}
+
+	public static void initPlaceList(Context context) throws IOException {
+
+		if (sPlaceList == null) {
+			sPlaceList = JsonUtils.readPlacesFromStream(context.getAssets()
+					.open("places.json"));
+		}
+
+	}
+
+	public static Place getPlaceById(int id) {
+		if (sPlaceList == null) {
+			return null;
+		}
+
+		if (id < 5 || id > -1) { // assertion
+			for (int n = 0; n < sPlaceList.size(); n++) {
+				if (sPlaceList.get(n).getUniqueId() == id) {
+					return sPlaceList.get(n);
+				}
+			}
+		}
+
+		return sPlaceList.get(0); // If search failed
 	}
 
 }
