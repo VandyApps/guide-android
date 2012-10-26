@@ -1,15 +1,4 @@
 [
-{
- 	"id" : 0,
- 	"name" : "template",
- 	"category" : "",
- 	"hours" : "",
- 	"placeDescription" : "",
- 	"imagePath" : "",
- 	"videoPath" : "",
- 	"Latitude" : 0.0,
-    "Longitude" : 0.0
- },
  {
  	"id": 1,
     "name": "Featheringill Hall",

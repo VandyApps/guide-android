@@ -50,7 +50,7 @@ public class JsonUtils {
 				bldr.setCategory(reader.nextString());
 			} else if(name.equals("hours")) {
 				bldr.setHours(reader.nextString());
-			} else if(name.equals("description")) {
+			} else if(name.equals("placeDescription")) {
 				bldr.setDescription(reader.nextString());
 			} else if(name.equals("imagePath")) {
 				bldr.setPictureUri(Uri.parse(reader.nextString()));

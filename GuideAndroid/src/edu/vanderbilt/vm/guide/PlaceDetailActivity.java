@@ -23,105 +23,119 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.GuideConstants;
 import edu.vanderbilt.vm.guide.util.Place;
 
 public class PlaceDetailActivity extends Activity implements OnClickListener {
 
-	TextView PlaceName;
-	ImageView PlaceImage;
-	TextView PlaceDescription;
-	Button BMap;
-	Bitmap Image;
-	String url;
-
-	// Build a prototype place for testing
-	private static final Place DUMMY_PLACE;
-	static {
-		Place.Builder pb = new Place.Builder();
-		DUMMY_PLACE = pb
-				.setLatitude(36.144371)
-				.setLongitude(-86.802442)
-				.setName("Featheringhill Hall")
-				.setDescription(
-						"The path of the righteous man is beset "
-								+ "on all sides by the iniquities of the selfish and "
-								+ "the tyranny of evil men. Blessed is he who, in "
-								+ "the name of charity and good will, shepherds "
-								+ "the weak through the valley of darkness, for "
-								+ "he is truly his brother's keeper and the "
-								+ "finder of lost children. And I will strike "
-								+ "down upon thee with great vengeance and "
-								+ "furious anger those who would attempt to "
-								+ "poison and destroy My brothers. And you "
-								+ "will know My name is the Lord when "
-								+ "I lay My vengeance upon \n thee. \n"
-								+ "Now that we know who you are, I know who "
-								+ "I am. I'm not a mistake! It all makes "
-								+ "sense! In a comic, you know how you can "
-								+ "tell who the arch-villain's going to be? "
-								+ "He's the exact opposite of the hero. And "
-								+ "most times they're friends, like you and "
-								+ "me! I should've known way back when... "
-								+ "You know why, David? Because of the kids. "
-								+ "They called me Mr Glass.")
-				// http://slipsum.com/ LOL
-				.setHours("7:00 - 22:00").setCategory("Academic")
-				.setUniqueId(1).build();
-	}
+	TextView mPlaceNameTv;
+	ImageView mPlaceIv;
+	TextView mPlaceDescTv;
+	TextView mPlaceHoursTv;
+	Button mMapButton;
+	Bitmap mPlaceBitmap;
+	Button mAgendaActionButton;
+	
+	private boolean mIsOnAgenda = false;
+	private Place mPlace;
+	
+	OnClickListener mAgendaButtonListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if(mIsOnAgenda) {
+				GlobalState.getUserAgenda().remove(mPlace);
+				mAgendaActionButton.setText(ADD_STR);
+			} else {
+				GlobalState.getUserAgenda().add(mPlace);
+				mAgendaActionButton.setText(REMOVE_STR);
+			}
+			mIsOnAgenda = !mIsOnAgenda;
+		}
+	};
+	
+	private static final String ADD_STR = "Add to Agenda";
+	private static final String REMOVE_STR = "Remove from Agenda";
 
 	@Override
 	public void onCreate(Bundle SavedInstanceState) {
 		super.onCreate(SavedInstanceState);
 		setContentView(R.layout.activity_place_detail);
-
-		/**
-		 * Sets the content of the page based on data from Place
-		 */
-		Place place = GlobalState.getPlaceById(2);
 		
-		PlaceName = (TextView) findViewById(R.id.PlaceName);
-		PlaceName.setText(place.getName());
-
-		PlaceImage = (ImageView) findViewById(R.id.PlaceImage);
-		PlaceImage.setImageResource(R.drawable.ic_launcher);
-
-		PlaceDescription = (TextView) findViewById(R.id.PlaceDescription);
-		PlaceDescription.setText(place.getDescription());
+		findViews();
 
 		/**
-		 * Set Behaviour
+		 * Sets the content of the page based on data from the place we got
 		 */
+		mPlace = getPlaceFromIntent();
+		// XXX: We can get a null place here right now.  This intentionally not
+		// being handled at the moment.  I want the app to crash if we get a
+		// null place so we'll get a stack trace and find out what went wrong.
+		// We'll handle null places at a later time (after we've switched to a
+		// Content Provider model instead of a list-based model).
+
+		mPlaceNameTv.setText(mPlace.getName());
+		mPlaceDescTv.setText(mPlace.getDescription());
+		mPlaceHoursTv.setText("Hours of operation: " + mPlace.getHours());
+		
 		Thread downloadImage = new Thread() {
 			@Override
 			public void run() {
 				try {
-					InputStream is = (InputStream) new URL(url).getContent();
+					InputStream is = (InputStream) new URL(mPlace.getPictureUri().getPath()).getContent();
 					Log.d(getClass().getSimpleName(), "Download succeeded");
-					Image = BitmapFactory.decodeStream(is);
+					mPlaceBitmap = BitmapFactory.decodeStream(is);
 				} catch (Exception e) {
 					Log.d(getClass().getSimpleName(), "Download failed");
-					Image = null;
+					mPlaceBitmap = null;
 				}
 			}
 		};
 		downloadImage.start();
 		try {
 			downloadImage.join();
-			PlaceImage.setImageBitmap(Image);
+			mPlaceIv.setImageBitmap(mPlaceBitmap);
 		} catch (InterruptedException e) {
 			Log.d(getClass().getSimpleName(), "Download failed", e);
 			// Error Handle
 		}
-		BMap = (Button) findViewById(R.id.BMap);
-		BMap.setOnClickListener(this);
+		
+		if(GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
+			mAgendaActionButton.setText(REMOVE_STR);
+			mIsOnAgenda = true;
+		} else {
+			mAgendaActionButton.setText(ADD_STR);
+			mIsOnAgenda = false;
+		}
+		mAgendaActionButton.setOnClickListener(mAgendaButtonListener);
+		
+		mMapButton.setOnClickListener(this);
 
 	}
 
-	public void onClick(View view){ //fixed to go to MapView instead. Need cleanup
-		Intent i = new Intent(this,ViewMapActivity.class);
-		//i.putExtra("Lat",Double.toString(DUMMY_PLACE.getLatitude()));
-		//i.putExtra("Long",Double.toString(DUMMY_PLACE.getLongitude()));
+	public void onClick(View view) { // fixed to go to MapView instead. Need
+										// cleanup
+		Intent i = new Intent(this, ViewMapActivity.class);
+		// i.putExtra("Lat",Double.toString(DUMMY_PLACE.getLatitude()));
+		// i.putExtra("Long",Double.toString(DUMMY_PLACE.getLongitude()));
 		startActivity(i);
+	}
+
+	private Place getPlaceFromIntent() {
+		Intent myIntent = getIntent();
+		if (myIntent == null)
+			return null;
+		int placeId = myIntent.getIntExtra(GuideConstants.PLACE_ID_EXTRA,
+				GuideConstants.BAD_PLACE_ID);
+		return GlobalState.getPlaceById(placeId);
+	}
+	
+	private void findViews() {
+		mPlaceNameTv = (TextView) findViewById(R.id.PlaceName);
+		mPlaceIv = (ImageView) findViewById(R.id.PlaceImage);
+		mPlaceDescTv = (TextView) findViewById(R.id.PlaceDescription);
+		mMapButton = (Button) findViewById(R.id.BMap);
+		mAgendaActionButton = (Button) findViewById(R.id.BAgendaAction);
+		mPlaceHoursTv = (TextView) findViewById(R.id.PlaceHours);
 	}
 
 }
