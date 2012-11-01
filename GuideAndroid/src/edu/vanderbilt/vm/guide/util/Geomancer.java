@@ -1,6 +1,5 @@
 package edu.vanderbilt.vm.guide.util;
 
-import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
