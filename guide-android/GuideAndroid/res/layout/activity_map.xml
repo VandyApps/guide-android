@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.maps.MapView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mapview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:apiKey="@string/maps_api_key"
+/>
+
+<!-- READ ME!!
+You will probably be getting an error in this file for the line
+containing "@string/maps_api_key.  This is intentional.  Every
+computer must have a different Google Maps API key.  If you want
+to use the map features of the app, you must get an API key yourself.
+Go to https://developers.google.com/maps/documentation/android/mapkey
+and follow the instructions there.  You will want to use the debug
+API key.
+
+NOTE:  If you can't figure out how to get an API key, then until you
+can work with me, just put some bogus value for the API key as
+described below.  This will allow the build to work, but you will
+not be able to use the Map tab on the app.
+
+When you get an API key, put it in a separate file in the values folder
+as a string resource.  You will need to create a new file to do this.
+Name the file maps_api_key.xml.  When you make this new file, make a new string
+resource called maps_api_key and put
+your API key as the value.  DO NOT COMMIT THIS NEW FILE TO THE GIT
+REPOSITORY!  If you do, then you will break everyone else's build.
+If you correctly named the file as "maps_api_key.xml" then this
+should not be an issue as it should already be in the .gitignore file.
+
+
+Thanks for reading,
+Nick
+-->
