@@ -69,8 +69,8 @@ public class GuideMain extends Activity {
 		tab = ab.newTab()
 				.setText("Places")
 				.setTabListener(
-						new FragmentTabListener<PlaceTabFragment>(this,
-								"places", PlaceTabFragment.class));
+						new FragmentTabListener<PlaceMainFragment>(this,
+								"places", PlaceMainFragment.class));
 		ab.addTab(tab, 2, placesSelected);
 
 		tab = ab.newTab()
