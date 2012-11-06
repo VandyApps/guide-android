@@ -19,15 +19,18 @@ import android.os.Bundle;
  */
 public class Geomancer {
 	private static Location CurrLocation;
-
-	public static Place findClosestPlace(Location location,
-			List<Place> placeList) {
+	private static LocationManager mLocationManager;
+	private static LocationListener mLocationListener;
+	
+	/* Returns a Place which has the closest coordinate to the given Location */
+	public static Place findClosestPlace(Location location, List<Place> placeList) {
 		double CurrDist = 0;
 		int count = 0;
 
 		for (int n = 0; n < placeList.size(); n++) {
 			double dist = findDistance(placeList.get(n).getLongitude(),
-					placeList.get(n).getLatitude(), location.getLatitude(),
+					placeList.get(n).getLatitude(), 
+					location.getLatitude(),
 					location.getLongitude());
 			if (dist < CurrDist) {
 				CurrDist = dist;
@@ -38,13 +41,15 @@ public class Geomancer {
 	}
 
 	public static Location locateDevice(Context context) {
-		/* Taken from /developer.android.com/ */
-		// Acquire a reference to the system Location Manager
-		LocationManager locationManager = (LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE);
-
-		// Define a listener that responds to location updates
-		LocationListener locationListener = new LocationListener() {
+		if (mLocationManager==null){
+			// Acquire a reference to the system Location Manager
+			mLocationManager = (LocationManager) context
+					.getSystemService(Context.LOCATION_SERVICE);
+		}
+		
+		if (mLocationListener==null){
+			// Define a listener that responds to location updates
+			mLocationListener = new LocationListener() {
 			public void onLocationChanged(Location location) {
 				// Called when a new location is found by the network location
 				// provider.
@@ -52,21 +57,16 @@ public class Geomancer {
 				CurrLocation = location;
 			}
 
-			public void onStatusChanged(String provider, int status,
-					Bundle extras) {
-			}
+			public void onStatusChanged(String provider, int status,Bundle extras) {}
 
-			public void onProviderEnabled(String provider) {
-			}
+			public void onProviderEnabled(String provider) {}
 
-			public void onProviderDisabled(String provider) {
-			}
-		};
+			public void onProviderDisabled(String provider) {}
+			};
+		}
 
-		// Register the listener with the Location Manager to receive location
-		// updates
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		// Register the listener with the Location Manager to receive location updates
+		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
 		return CurrLocation;
 	}
 

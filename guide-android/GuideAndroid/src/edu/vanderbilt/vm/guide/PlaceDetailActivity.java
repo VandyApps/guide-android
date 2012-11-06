@@ -17,7 +17,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
+//import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +26,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 import edu.vanderbilt.vm.guide.util.Place;
 
-public class PlaceDetailActivity extends Activity implements OnClickListener {
+public class PlaceDetailActivity extends Activity{
 
 	TextView mPlaceNameTv;
 	ImageView mPlaceIv;
@@ -38,24 +38,9 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 	
 	private boolean mIsOnAgenda = false;
 	private Place mPlace;
-	
-	OnClickListener mAgendaButtonListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if(mIsOnAgenda) {
-				GlobalState.getUserAgenda().remove(mPlace);
-				mAgendaActionButton.setText(ADD_STR);
-			} else {
-				GlobalState.getUserAgenda().add(mPlace);
-				mAgendaActionButton.setText(REMOVE_STR);
-			}
-			mIsOnAgenda = !mIsOnAgenda;
-		}
-	};
-	
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove from Agenda";
-
+	
 	@Override
 	public void onCreate(Bundle SavedInstanceState) {
 		super.onCreate(SavedInstanceState);
@@ -99,6 +84,7 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 			// Error Handle
 		}
 		
+		/* Check if this place is already on Agenda */
 		if(GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
 			mAgendaActionButton.setText(REMOVE_STR);
 			mIsOnAgenda = true;
@@ -106,18 +92,30 @@ public class PlaceDetailActivity extends Activity implements OnClickListener {
 			mAgendaActionButton.setText(ADD_STR);
 			mIsOnAgenda = false;
 		}
-		mAgendaActionButton.setOnClickListener(mAgendaButtonListener);
 		
-		mMapButton.setOnClickListener(this);
-
-	}
-
-	public void onClick(View view) { // fixed to go to MapView instead. Need
-										// cleanup
-		Intent i = new Intent(this, ViewMapActivity.class);
-		// i.putExtra("Lat",Double.toString(DUMMY_PLACE.getLatitude()));
-		// i.putExtra("Long",Double.toString(DUMMY_PLACE.getLongitude()));
-		startActivity(i);
+		/* Buttons' click definitions */
+		mAgendaActionButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(mIsOnAgenda) {
+					GlobalState.getUserAgenda().remove(mPlace);
+					mAgendaActionButton.setText(ADD_STR);
+				} else {
+					GlobalState.getUserAgenda().add(mPlace);
+					mAgendaActionButton.setText(REMOVE_STR);
+				}
+				mIsOnAgenda = !mIsOnAgenda;
+			}
+		});
+		
+		mMapButton.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v){
+				Intent i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
+				startActivity(i);
+			}
+		});
+		/* End of Buttons' click definitions */
 	}
 
 	private Place getPlaceFromIntent() {

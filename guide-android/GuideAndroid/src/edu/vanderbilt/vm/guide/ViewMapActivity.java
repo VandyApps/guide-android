@@ -5,10 +5,11 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.google.android.maps.MapActivity;
+import com.google.android.maps.*;
 
 import edu.vanderbilt.vm.guide.util.ActivityTabListener;
 
@@ -20,7 +21,18 @@ public class ViewMapActivity extends MapActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		setupActionBar();
-
+		
+		/* Begin customizing MapView [Athran] */
+		MapView MV = (MapView)findViewById(R.id.mapview);
+		MV.setBuiltInZoomControls(true);
+		MapController control = MV.getController();
+		
+		control.setZoom(17);	// set zoom level
+		
+		
+		setupDisplayMarkers();
+		/* End customizing MapView */
+		
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 //		Criteria criteria = new Criteria();
@@ -81,9 +93,10 @@ public class ViewMapActivity extends MapActivity {
 		tab = ab.newTab().setText("Agenda")
 				.setTabListener(new ActivityTabListener(this, GuideMain.class, 3));
 		ab.addTab(tab);
-
+	}
+	
+	private void setupDisplayMarkers(){
 		
-
 	}
 
 	@Override
@@ -113,5 +126,8 @@ public class ViewMapActivity extends MapActivity {
 		}
 
 	}
-
+	
+	private static GeoPoint getGeoPointFromLocation(Location loc){
+		return new GeoPoint((int)(loc.getLatitude()*1000000),(int)(loc.getLongitude()*1000000));
+	}
 }
