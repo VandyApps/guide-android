@@ -1,36 +1,51 @@
 package edu.vanderbilt.vm.guide;
 
+import java.io.IOException;
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.maps.*;
 
 import edu.vanderbilt.vm.guide.util.ActivityTabListener;
+import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.Place;
 
 @TargetApi(11)
 public class ViewMapActivity extends MapActivity {
-
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		setupActionBar();
 		
-		/* Begin customizing MapView [Athran] */
+		/* Begin customizing MapView [athran] */
 		MapView MV = (MapView)findViewById(R.id.mapview);
 		MV.setBuiltInZoomControls(true);
+		
+			// Controller set where and how the map points to
 		MapController control = MV.getController();
-		
 		control.setZoom(17);	// set zoom level
+		control.setCenter(convToGeoPoint()); // TODO set center to current.
 		
+			// Overlay creation
+		List<Overlay> master_overlay = MV.getOverlays();
+		master_overlay.add(new PlacesOverlay((Drawable)getResources().getDrawable(R.drawable.marker)));
 		
-		setupDisplayMarkers();
+		MyLocationOverlay self = new MyLocationOverlay(this, MV);
+		master_overlay.add(self);
+		
 		/* End customizing MapView */
 		
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -95,10 +110,57 @@ public class ViewMapActivity extends MapActivity {
 		ab.addTab(tab);
 	}
 	
-	private void setupDisplayMarkers(){
+	/* @author athran
+	 * this subclass defines the layer that contains
+	 * the Places pin on the map
+	 * code from page 454
+	 */
+	private class PlacesOverlay extends ItemizedOverlay<OverlayItem>{
+		private List<OverlayItem> mItemList;
+		private Drawable marker = null;
 		
+		public PlacesOverlay(Drawable marker){
+			super(marker);
+			this.marker = marker;
+			boundCenterBottom(marker);
+			
+			// get PlaceList from GlobalState
+			// TODO DB migration.
+			List<Place> pl = null;
+			try { pl = GlobalState.getPlaceList(null); }	
+			catch (IOException e) { e.printStackTrace();	
+				Log.e("ViewMapActivity.java", "Fail to get PlaceList");}
+			
+			// transcribing PlaceList into List of item
+			// may not be the best way to do it (?)
+			for (int j = 0;j<pl.size();j++){
+				mItemList.add(new OverlayItem(
+						convToGeoPoint(pl.get(j)),	// GeoPoint
+						pl.get(j).getName(),		// Pin tag
+						"A Place in Vanderbilt. This is a ShortDescription"));// Pin snippet
+			}
+			
+			populate();
+		}
+		
+		protected boolean onTap(int i){
+			/**
+			 * TODO clicking on the map pins should lead to the PlaceDetailActivity
+			 */
+			
+			return true;
+		}
+		
+		protected OverlayItem createItem(int i){
+			return mItemList.get(i);
+		}
+		
+		public int size(){
+			return mItemList.size();
+		}
 	}
-
+	/* End subclass */
+	
 	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
@@ -127,7 +189,20 @@ public class ViewMapActivity extends MapActivity {
 
 	}
 	
-	private static GeoPoint getGeoPointFromLocation(Location loc){
+	/* @author athran
+	 * Extracts the coordinate information from Location or Place
+	 * and create a GeoPoint from it
+	 */
+	private static GeoPoint convToGeoPoint(Location loc){
 		return new GeoPoint((int)(loc.getLatitude()*1000000),(int)(loc.getLongitude()*1000000));
 	}
+	
+	private static GeoPoint convToGeoPoint(Place place){
+		return new GeoPoint((int)(place.getLatitude()*1000000),(int)(place.getLongitude()*1000000));
+	}
+	
+	private static GeoPoint convToGeoPoint(){
+		return null; //TODO Remove this as soon as the CurrentLocation is available
+	}
+	/* End utility methods */
 }
