@@ -1,6 +1,7 @@
 package edu.vanderbilt.vm.guide;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -17,6 +18,7 @@ import android.util.Log;
 import com.google.android.maps.*;
 
 import edu.vanderbilt.vm.guide.util.ActivityTabListener;
+import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.Place;
 
@@ -37,31 +39,28 @@ public class ViewMapActivity extends MapActivity {
 			// Controller set where and how the map points to
 		MapController control = MV.getController();
 		control.setZoom(17);	// set zoom level
-		control.setCenter(convToGeoPoint()); // TODO set center to current.
+		
+			// Dummy place for testing
+		control.setCenter(convToGeoPoint(GlobalState.getPlaceById(1)));
+		Log.i("ViewMapActivity", "Place Info: " + GlobalState.getPlaceById(1).getLatitude()
+				+ " " + GlobalState.getPlaceById(1).getLatitude());
+		//control.setCenter(convToGeoPoint(Geomancer.locateDevice(this))); //TODO get GPS working
 		
 			// Overlay creation
 		List<Overlay> master_overlay = MV.getOverlays();
-		master_overlay.add(new PlacesOverlay((Drawable)getResources().getDrawable(R.drawable.marker)));
+		
+		Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker);
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+		master_overlay.add(new PlacesOverlay(marker));
 		
 		MyLocationOverlay self = new MyLocationOverlay(this, MV);
 		master_overlay.add(self);
 		
 		/* End customizing MapView */
 		
-		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		// LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-//		Criteria criteria = new Criteria();
-//		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-//		criteria.setPowerRequirement(Criteria.POWER_LOW);
-//		criteria.setAltitudeRequired(false);
-//		criteria.setBearingRequired(false);
-//		criteria.setSpeedRequired(false);
-//		criteria.setCostAllowed(true);
-//
-//		List<String> matchingProviders = lm.getProviders(criteria, false);
-//
-//		String provider = matchingProviders.get(0);
-//		// milliseconds
+		// milliseconds
 //		int t = 5000;
 //		// meters
 //		int distance = 5;
@@ -116,7 +115,7 @@ public class ViewMapActivity extends MapActivity {
 	 * code from page 454
 	 */
 	private class PlacesOverlay extends ItemizedOverlay<OverlayItem>{
-		private List<OverlayItem> mItemList;
+		private List<OverlayItem> mItemList = new ArrayList<OverlayItem>();
 		private Drawable marker = null;
 		
 		public PlacesOverlay(Drawable marker){
@@ -127,7 +126,7 @@ public class ViewMapActivity extends MapActivity {
 			// get PlaceList from GlobalState
 			// TODO DB migration.
 			List<Place> pl = null;
-			try { pl = GlobalState.getPlaceList(null); }	
+			try { pl = GlobalState.getPlaceList(ViewMapActivity.this); }	
 			catch (IOException e) { e.printStackTrace();	
 				Log.e("ViewMapActivity.java", "Fail to get PlaceList");}
 			
@@ -199,10 +198,6 @@ public class ViewMapActivity extends MapActivity {
 	
 	private static GeoPoint convToGeoPoint(Place place){
 		return new GeoPoint((int)(place.getLatitude()*1000000),(int)(place.getLongitude()*1000000));
-	}
-	
-	private static GeoPoint convToGeoPoint(){
-		return null; //TODO Remove this as soon as the CurrentLocation is available
 	}
 	/* End utility methods */
 }
