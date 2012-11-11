@@ -112,6 +112,7 @@ public class PlaceDetailActivity extends Activity{
 			@Override
 			public void onClick(View v){
 				Intent i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
+				i.putExtra("map_focus", mPlace.getUniqueId());
 				startActivity(i);
 			}
 		});

@@ -91,3 +91,30 @@ public class Geomancer {
 		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 }
+
+// milliseconds
+//int t = 5000;
+//// meters
+//int distance = 5;
+//
+//LocationListener myLocationListener = new LocationListener() {
+//	public void onLocationChanged(Location location) {
+//		// Update application based on new location.
+//	}
+//
+//	public void onProviderDisabled(String provider) {
+//		// Update application if provider disabled.
+//	}
+//
+//	public void onProviderEnabled(String provider) {
+//		// Update application if provider enabled.
+//	}
+//
+//	public void onStatusChanged(String provider, int status,
+//			Bundle extras) {
+//		// Update application if provider hardware status changed.
+//	}
+//};
+//lm.requestLocationUpdates(provider, t, distance,
+//		myLocationListener);
+
