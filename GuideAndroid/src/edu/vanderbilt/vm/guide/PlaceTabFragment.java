@@ -28,7 +28,6 @@ import edu.vanderbilt.vm.guide.util.PlaceListAdapter;
 
 @TargetApi(11)
 public class PlaceTabFragment extends Fragment {
-
 	private static final String LOG_TAG = "PlaceMainFragment";
 	private ListView mListView;
 	
