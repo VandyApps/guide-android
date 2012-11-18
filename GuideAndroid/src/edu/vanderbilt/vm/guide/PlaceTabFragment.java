@@ -4,7 +4,6 @@ package edu.vanderbilt.vm.guide;
  * @author Athran, Nick
  * This Fragment shows the categories of places and the user's current location
  */
-import java.io.IOException;
 
 import com.parse.FindCallback;
 
@@ -20,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 import edu.vanderbilt.vm.guide.util.Place;
@@ -30,7 +31,9 @@ import edu.vanderbilt.vm.guide.util.PlaceListAdapter;
 public class PlaceTabFragment extends Fragment {
 	private static final String LOG_TAG = "PlaceMainFragment";
 	private ListView mListView;
-	
+	private TextView mCurrPlaceName;
+	private TextView mCurrPlaceDesc;
+	private final int DESCRIPTION_LENGTH = 35;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,16 +47,8 @@ public class PlaceTabFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		
 		mListView = (ListView) getActivity().findViewById(R.id.placeTablistView);
-		
-		try {
-			mListView.setAdapter(new PlaceListAdapter(getActivity(),
-					GlobalState.getPlaceList(getActivity())));
-		} catch (IOException e) {
-			Toast.makeText(getActivity(), "Couldn't get list of places!",
-					Toast.LENGTH_LONG).show();
-			Log.e(LOG_TAG, "couldn't get list of places");
-		}
-		
+		mListView.setAdapter(new PlaceListAdapter(getActivity(),
+				GlobalState.getPlaceList(getActivity())));
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -67,6 +62,18 @@ public class PlaceTabFragment extends Fragment {
 			}
 
 		});
+		
+		/*
+		 * Tells you what is the closest building to your location right now
+		 */
+		Place currPlace = Geomancer.findClosestPlace(Geomancer.getDeviceLocation(), 
+				GlobalState.getPlaceList(getActivity()));
+		mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
+			mCurrPlaceName.setText(currPlace.getName());
+		
+		mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
+			mCurrPlaceDesc.setText(currPlace.getDescription().substring(0, DESCRIPTION_LENGTH) + "...");
+		
 	}
 
 }

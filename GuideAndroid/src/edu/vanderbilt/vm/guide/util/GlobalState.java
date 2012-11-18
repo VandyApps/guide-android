@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * This class holds singletons of certain objects we need to share throughout
@@ -27,10 +28,16 @@ public class GlobalState {
 		return userAgendaSingleton;
 	}
 
-	public static List<Place> getPlaceList(Context context) throws IOException {
+	public static List<Place> getPlaceList(Context context) {
 		if (sPlaceList == null) {
-			sPlaceList = JsonUtils.readPlacesFromStream(context.getAssets()
-					.open("places.json"));
+			try {
+				sPlaceList = JsonUtils.readPlacesFromStream(context.getAssets()
+						.open("places.json"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("GlobalState", "JSON import failed");
+			}
 		}
 		return sPlaceList;
 	}

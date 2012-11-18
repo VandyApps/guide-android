@@ -1,6 +1,5 @@
 package edu.vanderbilt.vm.guide.util;
 
-import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
@@ -9,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Provide methods related to Geolocation and positioning These are
@@ -23,10 +23,10 @@ public class Geomancer {
 	private static LocationManager mLocationManager;
 	private static LocationListener mLocationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
-			// Called when a new location is found by the network location
-			// provider.
-			// makeUseOfNewLocation(location);
+			// Called when a new location is found by the network location provider.
 			CurrLocation = location;
+			Log.i("LocationListener", "Receiving location at" 
+					+ CurrLocation.getLatitude() + " lat and " + CurrLocation.getLongitude() + " long.");
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -37,58 +37,79 @@ public class Geomancer {
 
 		public void onProviderDisabled(String provider) {
 		}
-	};;
+	};
+	private final static int DEFAULT_RADIUS = 5; // 5 meters, for you americans out there.
+	private final static int DEFAULT_TIMEOUT = 5000;
 
-	/* Returns a Place which has the closest coordinate to the given Location */
-	public static Place findClosestPlace(Location location,
-			List<Place> placeList) {
-		double CurrDist = 0;
+	public static Place findClosestPlace(Location location, List<Place> placeList) {
+		/* 
+		 * Returns a Place which has the closest coordinate to the given Location.
+		 * I made it take a List<Place> because someone might need to find a Place
+		 * 	in a custom List, like the nearest academic building or the nearest
+		 * 	buiding that has a tornado shelter (GASP!!!)
+		 */
+		double CurrDist = Double.MAX_VALUE;
 		int count = 0;
 
 		for (int n = 0; n < placeList.size(); n++) {
-			double dist = findDistance(placeList.get(n).getLongitude(),
-					placeList.get(n).getLatitude(), location.getLatitude(),
+			double dist = findDistance(
+					placeList.get(n).getLatitude(),
+					placeList.get(n).getLongitude(), 
+					location.getLatitude(),
 					location.getLongitude());
+			Log.i("Geomancer", "Calculated distance " + dist);
 			if (dist < CurrDist) {
 				CurrDist = dist;
 				count = n;
 			}
 		}
+		Place result = placeList.get(count);
+		Log.i("Geomancer", "Closest is " + result.getName() + " at position " + count);
 		return placeList.get(count);
 	}
 
-	public static Location locateDevice(Context context) {
+	public static void activateGeolocation(Context context) {
+		/*
+		 * Setup the mechanism for determining device location.
+		 * 	this method is called by GuideMain on application loading.
+		 * Any activity that needs the device's location simply need to
+		 * 	call getDeviceLocation()
+		 */
 		if (mLocationManager == null) {
 			// Acquire a reference to the system Location Manager
 			mLocationManager = (LocationManager) context
 					.getSystemService(Context.LOCATION_SERVICE);
-			Criteria criteria = new Criteria();
-			criteria.setAccuracy(Criteria.ACCURACY_FINE);
-			criteria.setPowerRequirement(Criteria.POWER_LOW);
-			criteria.setAltitudeRequired(false);
-			criteria.setBearingRequired(false);
-			criteria.setSpeedRequired(false);
-			criteria.setCostAllowed(true);
-
-			List<String> matchingProviders = mLocationManager.getProviders(
-					criteria, false);
-			if (!matchingProviders.isEmpty()) {
-				String provider = matchingProviders.get(0);
-
-				mLocationManager.requestLocationUpdates(provider, 0, 0,
-						mLocationListener);
-			} else {
-				mLocationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 0, 0,
-						mLocationListener);
-			}
 		}
-		return CurrLocation;
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+		//criteria.setPowerRequirement(Criteria.POWER_LOW);
+		criteria.setAltitudeRequired(false);
+		criteria.setBearingRequired(false);
+		criteria.setSpeedRequired(false);
+		criteria.setCostAllowed(true);
+
+		List<String> matchingProviders = mLocationManager.getProviders(criteria, false);
+			Log.i("Geomancer", "I got " + matchingProviders.size() + " providers.");
+		if (!matchingProviders.isEmpty()) {
+			String provider = matchingProviders.get(0);
+
+			mLocationManager.requestLocationUpdates(provider, DEFAULT_TIMEOUT, DEFAULT_RADIUS,
+					mLocationListener);
+		} else {
+			mLocationManager.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, DEFAULT_TIMEOUT, DEFAULT_RADIUS,
+					mLocationListener);
+		}
+		Log.i("Geomancer", "Geolocation init done.");
 	}
 
-	private static double findDistance(double x1, double y1, double x2,
-			double y2) {
+	private static double findDistance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	}
+	
+	public static Location getDeviceLocation(){
+		Log.i("Geomancer", "Reporting in at " + CurrLocation.getLatitude() + " lat and " + CurrLocation.getLongitude() + " long.");
+		return CurrLocation;
 	}
 }
 
