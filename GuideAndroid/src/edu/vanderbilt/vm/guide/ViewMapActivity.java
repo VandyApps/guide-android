@@ -318,14 +318,15 @@ public class ViewMapActivity extends MapActivity {
 		int n = crosshair.getIntrinsicHeight()/2;
 		crosshair.setBounds(-n, -n, n, n);
 		
+		List<Overlay> overlay = MV.getOverlays();
 		if (first){
-			UPDATE_ID = MV.getOverlays().size();
-			MV.getOverlays().add(new PlacesOverlay(marker_self, currPlace));
-			MV.getOverlays().add(new PlacesOverlay(crosshair, loc));
+			UPDATE_ID = overlay.size();
+			overlay.add(new PlacesOverlay(crosshair, loc));
+			overlay.add(new PlacesOverlay(marker_self, currPlace));
 		} else {
-			MV.getOverlays().set(UPDATE_ID, new PlacesOverlay(marker_self,currPlace));
-			MV.getOverlays().set(UPDATE_ID + 1, new PlacesOverlay(crosshair,loc));
-			Log.i("ViewMapActivity", "Overlay size: " + MV.getOverlays().size());
+			overlay.set(UPDATE_ID, new PlacesOverlay(crosshair, loc));
+			overlay.set(UPDATE_ID + 1, new PlacesOverlay(marker_self, currPlace));
+			Log.i("ViewMapActivity", "Overlay size: " + overlay.size());
 		}
 		
 	}

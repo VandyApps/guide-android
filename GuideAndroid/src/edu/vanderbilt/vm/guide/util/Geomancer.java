@@ -11,12 +11,16 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * Provide methods related to Geolocation and positioning These are
- * array-transversal procedures, so there may be conflicts with the SQL approach
- * Methods still untested as of 10/22/2012
+ * Provide methods related to Geolocation and positioning.
+ * - at the start of the application, call activateGeolocation()
+ * 		which returns void and accepts no argument.
+ * - when the device's location is needed, call getDeviceLocation()
+ * 		which accepts no argument. It returns a Location object which 
+ * 		can then be fed into findClosestPlace() which returns a Place object.
+ * 
+ * These are array-transversal procedures, so there may be conflicts with the SQL approach
  * 
  * @author abdulra1
- * 
  */
 public class Geomancer {
 	private static Location CurrLocation;
@@ -25,7 +29,7 @@ public class Geomancer {
 		public void onLocationChanged(Location location) {
 			// Called when a new location is found by the network location provider.
 			CurrLocation = location;
-			Log.i("LocationListener", "Receiving location at" 
+			Log.i("LocationListener", "Receiving location at " 
 					+ CurrLocation.getLatitude() + " lat and " + CurrLocation.getLongitude() + " long.");
 		}
 
@@ -57,7 +61,6 @@ public class Geomancer {
 					placeList.get(n).getLongitude(), 
 					location.getLatitude(),
 					location.getLongitude());
-			Log.i("Geomancer", "Calculated distance " + dist);
 			if (dist < CurrDist) {
 				CurrDist = dist;
 				count = n;
@@ -81,7 +84,7 @@ public class Geomancer {
 					.getSystemService(Context.LOCATION_SERVICE);
 		}
 		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		//criteria.setPowerRequirement(Criteria.POWER_LOW);
 		criteria.setAltitudeRequired(false);
 		criteria.setBearingRequired(false);
@@ -108,7 +111,6 @@ public class Geomancer {
 	}
 	
 	public static Location getDeviceLocation(){
-		//Log.i("Geomancer", "Reporting in at " + CurrLocation.getLatitude() + " lat and " + CurrLocation.getLongitude() + " long.");
 		return CurrLocation;
 	}
 }

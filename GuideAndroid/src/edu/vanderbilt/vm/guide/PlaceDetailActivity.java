@@ -4,7 +4,6 @@ package edu.vanderbilt.vm.guide;
  * @author Athran
  * Origin: GuideMain
  * Desc: A home page for interaction with Place
- * NavigateTo: WebMap
  */
 
 import java.io.InputStream;
