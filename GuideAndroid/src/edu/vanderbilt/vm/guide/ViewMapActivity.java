@@ -220,6 +220,16 @@ public class ViewMapActivity extends MapActivity {
 			populate();
 		}
 		
+		public PlacesOverlay(Drawable marker, Location loc){
+			super(marker);
+			this.marker = marker;
+			boundCenterBottom(marker);
+			mItemList.add(new OverlayItem(
+					convToGeoPoint(loc),
+					"Current Location",
+					""));
+		}
+		
 		protected boolean onTap(int i){
 			/**
 			 * TODO clicking on the map pins should lead to the PlaceDetailActivity
@@ -282,9 +292,9 @@ public class ViewMapActivity extends MapActivity {
 	private void setMapFocus(boolean first){
 		// Marker for CurrentLocation
 		Place currPlace = null;
-		Location gps = Geomancer.getDeviceLocation();
-		if (gps != null){
-			currPlace = Geomancer.findClosestPlace(gps, GlobalState.getPlaceList(this));
+		Location loc = Geomancer.getDeviceLocation();
+		if (loc != null){
+			currPlace = Geomancer.findClosestPlace(loc, GlobalState.getPlaceList(this));
 			Log.i("ViewMapActivity", "I found our location. We are in " + currPlace.getName());
 		} else {
 			Log.e("ViewMapActivity","Location service failed to get location data.");
@@ -302,12 +312,17 @@ public class ViewMapActivity extends MapActivity {
 		Drawable marker_self = (Drawable)getResources().getDrawable(R.drawable.marker_device);
 		marker_self.setBounds(0, 0, marker_self.getIntrinsicWidth(), 
 				marker_self.getIntrinsicHeight());
+		Drawable crosshair = (Drawable)getResources().getDrawable(R.drawable.device_location);
+		int n = crosshair.getIntrinsicHeight()/2;
+		crosshair.setBounds(-n, -n, n, n);
 		
 		if (first){
 			UPDATE_ID = MV.getOverlays().size();
-			MV.getOverlays().add(new PlacesOverlay(marker_self,currPlace));
+			MV.getOverlays().add(new PlacesOverlay(marker_self, currPlace));
+			MV.getOverlays().add(new PlacesOverlay(crosshair, loc));
 		} else {
 			MV.getOverlays().set(UPDATE_ID, new PlacesOverlay(marker_self,currPlace));
+			MV.getOverlays().set(UPDATE_ID + 1, new PlacesOverlay(marker_self,loc));
 			Log.i("ViewMapActivity", "Overlay size: " + MV.getOverlays().size());
 		}
 		

@@ -11,6 +11,7 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,14 +67,19 @@ public class PlaceTabFragment extends Fragment {
 		/*
 		 * Tells you what is the closest building to your location right now
 		 */
-		Place currPlace = Geomancer.findClosestPlace(Geomancer.getDeviceLocation(), 
-				GlobalState.getPlaceList(getActivity()));
-		mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
-			mCurrPlaceName.setText(currPlace.getName());
+		Location loc = Geomancer.getDeviceLocation();
+		Place currPlace = null;
+		if (loc != null){
+			currPlace = Geomancer.findClosestPlace(loc, GlobalState.getPlaceList(getActivity()));
+		}
 		
-		mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
-			mCurrPlaceDesc.setText(currPlace.getDescription().substring(0, DESCRIPTION_LENGTH) + "...");
-		
+		if (currPlace != null){
+			mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
+				mCurrPlaceName.setText(currPlace.getName());
+			
+			mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
+				mCurrPlaceDesc.setText(currPlace.getDescription().substring(0, DESCRIPTION_LENGTH) + "...");
+		}
 	}
 
 }

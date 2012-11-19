@@ -108,7 +108,7 @@ public class Geomancer {
 	}
 	
 	public static Location getDeviceLocation(){
-		Log.i("Geomancer", "Reporting in at " + CurrLocation.getLatitude() + " lat and " + CurrLocation.getLongitude() + " long.");
+		//Log.i("Geomancer", "Reporting in at " + CurrLocation.getLatitude() + " lat and " + CurrLocation.getLongitude() + " long.");
 		return CurrLocation;
 	}
 }

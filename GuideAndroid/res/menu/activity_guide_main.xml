@@ -3,4 +3,7 @@
         android:title="@string/menu_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/navigation_refresh" />
 </menu>
