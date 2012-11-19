@@ -228,6 +228,8 @@ public class ViewMapActivity extends MapActivity {
 					convToGeoPoint(loc),
 					"Current Location",
 					""));
+			
+			populate();
 		}
 		
 		protected boolean onTap(int i){
@@ -322,7 +324,7 @@ public class ViewMapActivity extends MapActivity {
 			MV.getOverlays().add(new PlacesOverlay(crosshair, loc));
 		} else {
 			MV.getOverlays().set(UPDATE_ID, new PlacesOverlay(marker_self,currPlace));
-			MV.getOverlays().set(UPDATE_ID + 1, new PlacesOverlay(marker_self,loc));
+			MV.getOverlays().set(UPDATE_ID + 1, new PlacesOverlay(crosshair,loc));
 			Log.i("ViewMapActivity", "Overlay size: " + MV.getOverlays().size());
 		}
 		
