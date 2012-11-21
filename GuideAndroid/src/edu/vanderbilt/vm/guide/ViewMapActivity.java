@@ -5,18 +5,27 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.maps.*;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 import edu.vanderbilt.vm.guide.util.ActivityTabListener;
 import edu.vanderbilt.vm.guide.util.Agenda;
@@ -27,11 +36,12 @@ import edu.vanderbilt.vm.guide.util.Place;
 
 @TargetApi(11)
 public class ViewMapActivity extends MapActivity {
-	private final int DEFAULT_ZOOM_LEVEL = 17;
-	private final int BUILDING_ZOOM = 20;
-	private final int WIDE_ZOOM = 15;
+	private static final int DEFAULT_ZOOM_LEVEL = 17;
+	private static final int BUILDING_ZOOM = 20;
+	private static final int WIDE_ZOOM = 15;
+	private static final Logger logger = LoggerFactory.getLogger("ui.ViewMapActivity");
 	private Timer mUpdateLocation;
-	private MapView MV;
+	private MapView mMapView;
 	private int UPDATE_ID;
 	
 	
@@ -42,12 +52,12 @@ public class ViewMapActivity extends MapActivity {
 		setupActionBar();
 		
 		/* Begin customizing MapView [athran] */
-		MV = (MapView)findViewById(R.id.mapview);
-		MV.setBuiltInZoomControls(true);
+		mMapView = (MapView)findViewById(R.id.mapview);
+		mMapView.setBuiltInZoomControls(true);
 		
 			// Controller set where and how the map points to
-		MapController control = MV.getController();
-		List<Overlay> masterOverlay = MV.getOverlays();
+		MapController control = mMapView.getController();
+		List<Overlay> masterOverlay = mMapView.getOverlays();
 		control.setZoom(DEFAULT_ZOOM_LEVEL);	//Default zoom level, covers about half of campus
 		
 		Intent i = this.getIntent();
@@ -82,13 +92,13 @@ public class ViewMapActivity extends MapActivity {
 					@Override
 					public void run(){
 						setMapFocus(false);
-						Log.i("Updater", "Focusing map to current location.");
+						logger.info("Updater", "Focusing map to current location.");
 					}
 				}, 5000L,5000L);
 
 		}
 		
-		MyLocationOverlay self = new MyLocationOverlay(this, MV);
+		MyLocationOverlay self = new MyLocationOverlay(this, mMapView);
 		masterOverlay.add(self);
 		/* End customizing MapView */
 		
@@ -113,7 +123,7 @@ public class ViewMapActivity extends MapActivity {
 	private void cancelUpdater(){
 		if (mUpdateLocation != null){
 			mUpdateLocation.cancel();
-			Log.i("ViewMapActivity", "Updater is cancelled.");
+			logger.trace("Updater is cancelled.");
 		}
 	}
 
@@ -297,20 +307,20 @@ public class ViewMapActivity extends MapActivity {
 		Location loc = Geomancer.getDeviceLocation();
 		if (loc != null){
 			currPlace = Geomancer.findClosestPlace(loc, GlobalState.getPlaceList(this));
-			Log.i("ViewMapActivity", "I found our location. We are in " + currPlace.getName());
+			logger.trace("I found our location. We are in {}", currPlace.getName());
 		} else {
-			Log.e("ViewMapActivity","Location service failed to get location data.");
+			logger.warn("ViewMapActivity","Location service failed to get location data.");
 		}
 		
 		if (currPlace == null){
 			/*
 			 * As a last resort, set default Place to FGH.
 			 */
-			Log.e("MapViewActivity","Failed to get Device location.");
+			logger.warn("MapViewActivity","Failed to get Device location.");
 			currPlace = GlobalState.getPlaceById(1);
 		}
 		
-		MV.getController().setCenter(convToGeoPoint(currPlace));
+		mMapView.getController().setCenter(convToGeoPoint(currPlace));
 		Drawable marker_self = (Drawable)getResources().getDrawable(R.drawable.marker_device);
 		marker_self.setBounds(0, 0, marker_self.getIntrinsicWidth(), 
 				marker_self.getIntrinsicHeight());
@@ -318,7 +328,7 @@ public class ViewMapActivity extends MapActivity {
 		int n = crosshair.getIntrinsicHeight()/2;
 		crosshair.setBounds(-n, -n, n, n);
 		
-		List<Overlay> overlay = MV.getOverlays();
+		List<Overlay> overlay = mMapView.getOverlays();
 		if (first){
 			UPDATE_ID = overlay.size();
 			overlay.add(new PlacesOverlay(crosshair, loc));
@@ -326,7 +336,7 @@ public class ViewMapActivity extends MapActivity {
 		} else {
 			overlay.set(UPDATE_ID, new PlacesOverlay(crosshair, loc));
 			overlay.set(UPDATE_ID + 1, new PlacesOverlay(marker_self, currPlace));
-			Log.i("ViewMapActivity", "Overlay size: " + overlay.size());
+			logger.trace("Overlay size: {}", overlay.size());
 		}
 		
 	}

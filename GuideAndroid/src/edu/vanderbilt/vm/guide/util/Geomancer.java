@@ -2,6 +2,9 @@ package edu.vanderbilt.vm.guide.util;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -23,14 +26,16 @@ import android.util.Log;
  * @author abdulra1
  */
 public class Geomancer {
+	
+	private static final Logger logger = LoggerFactory.getLogger("util.Geomancer");
+	
 	private static Location CurrLocation;
 	private static LocationManager mLocationManager;
 	private static LocationListener mLocationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			// Called when a new location is found by the network location provider.
 			CurrLocation = location;
-			Log.i("LocationListener", "Receiving location at " 
-					+ CurrLocation.getLatitude() + " lat and " + CurrLocation.getLongitude() + " long.");
+			logger.info("Receiving location at lat/lon {},{}", location.getLatitude(), location.getLongitude());
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -67,7 +72,7 @@ public class Geomancer {
 			}
 		}
 		Place result = placeList.get(count);
-		Log.i("Geomancer", "Closest is " + result.getName() + " at position " + count);
+		logger.trace("Closest is {} at position {}", result.getName(), count);
 		return placeList.get(count);
 	}
 
@@ -92,10 +97,9 @@ public class Geomancer {
 		criteria.setCostAllowed(true);
 
 		List<String> matchingProviders = mLocationManager.getProviders(criteria, false);
-			Log.i("Geomancer", "I got " + matchingProviders.size() + " providers.");
+		logger.trace("Found {} providers.", matchingProviders.size());
 		if (!matchingProviders.isEmpty()) {
 			String provider = matchingProviders.get(0);
-
 			mLocationManager.requestLocationUpdates(provider, DEFAULT_TIMEOUT, DEFAULT_RADIUS,
 					mLocationListener);
 		} else {
@@ -103,7 +107,7 @@ public class Geomancer {
 					LocationManager.NETWORK_PROVIDER, DEFAULT_TIMEOUT, DEFAULT_RADIUS,
 					mLocationListener);
 		}
-		Log.i("Geomancer", "Geolocation init done.");
+		logger.trace("Geolocation init done.");
 	}
 
 	private static double findDistance(double x1, double y1, double x2, double y2) {
