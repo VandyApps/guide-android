@@ -12,6 +12,8 @@
 	<string name="main_current_location2">You are at:</string>
 	<string name="main_search">Search</string>
 	<string name="main_qr">QR</string>
-	<string name="main_serch_box">Search Box</string>    
+	<string name="main_serch_box">Search Box</string>
 	
+	<string name="menu_add_agenda">Add to Agenda</string>	
+	<string name="refresh">Refresh</string>
 </resources>

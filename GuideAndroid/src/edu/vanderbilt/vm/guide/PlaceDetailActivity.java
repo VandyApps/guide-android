@@ -4,7 +4,6 @@ package edu.vanderbilt.vm.guide;
  * @author Athran
  * Origin: GuideMain
  * Desc: A home page for interaction with Place
- * NavigateTo: WebMap
  */
 
 import java.io.InputStream;
@@ -14,13 +13,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-//import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
@@ -35,11 +38,14 @@ public class PlaceDetailActivity extends Activity{
 	Button mMapButton;
 	Bitmap mPlaceBitmap;
 	Button mAgendaActionButton;
+	Menu mMenu;
 	
 	private boolean mIsOnAgenda = false;
 	private Place mPlace;
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove from Agenda";
+	
+	private final int MENU_ADD_AGENDA = Menu.FIRST;
 	
 	@Override
 	public void onCreate(Bundle SavedInstanceState) {
@@ -97,14 +103,7 @@ public class PlaceDetailActivity extends Activity{
 		mAgendaActionButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(mIsOnAgenda) {
-					GlobalState.getUserAgenda().remove(mPlace);
-					mAgendaActionButton.setText(ADD_STR);
-				} else {
-					GlobalState.getUserAgenda().add(mPlace);
-					mAgendaActionButton.setText(REMOVE_STR);
-				}
-				mIsOnAgenda = !mIsOnAgenda;
+				addRemoveToAgenda();
 			}
 		});
 		
@@ -117,6 +116,36 @@ public class PlaceDetailActivity extends Activity{
 			}
 		});
 		/* End of Buttons' click definitions */
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.place_detail_activity, menu);
+	    mMenu = menu;
+	    
+	    if (this.mIsOnAgenda){
+	    	/*
+	    	 * The default icon is a "+"
+	    	 * therefore change to "-"
+	    	 */
+	    	mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+	    } else {
+	    	// Use default icon "+" as defined in xml
+	    }
+	    
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item){
+//		switch (item.getItemId()){
+//		case MENU_ADD_AGENDA :
+//			addRemoveToAgenda();
+//			Toast.makeText(this, "Added to or removed from Agenda", Toast.LENGTH_SHORT);
+//			return true;
+//		default: return true;
+//		}
+		addRemoveToAgenda();
+		return true;
 	}
 
 	private Place getPlaceFromIntent() {
@@ -136,5 +165,20 @@ public class PlaceDetailActivity extends Activity{
 		mAgendaActionButton = (Button) findViewById(R.id.BAgendaAction);
 		mPlaceHoursTv = (TextView) findViewById(R.id.PlaceHours);
 	}
-
+	
+	private void addRemoveToAgenda(){
+		
+		if(mIsOnAgenda) {
+			GlobalState.getUserAgenda().remove(mPlace);
+			mAgendaActionButton.setText(ADD_STR);
+			mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
+			Toast.makeText(this, "Removed from Agenda", Toast.LENGTH_SHORT).show();
+		} else {
+			GlobalState.getUserAgenda().add(mPlace);
+			mAgendaActionButton.setText(REMOVE_STR);
+			mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+			Toast.makeText(this, "Added to from Agenda", Toast.LENGTH_SHORT).show();
+		}
+		mIsOnAgenda = !mIsOnAgenda;
+	}
 }

@@ -1,6 +1,5 @@
 package edu.vanderbilt.vm.guide;
 
-import java.io.IOException;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -13,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import edu.vanderbilt.vm.guide.util.ActivityTabListener;
 import edu.vanderbilt.vm.guide.util.FragmentTabListener;
+import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.Place;
 
@@ -24,14 +24,11 @@ public class GuideMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_guide_main);
 		setupActionBar();
-		try {
-			List<Place> placeList = GlobalState.getPlaceList(this);
-			GlobalState.getUserAgenda().add(placeList.get(1));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
+		List<Place> placeList = GlobalState.getPlaceList(this);
+		GlobalState.getUserAgenda().add(placeList.get(1));
+		
+		Geomancer.activateGeolocation(this);
 	}
 
 	private void setupActionBar() {

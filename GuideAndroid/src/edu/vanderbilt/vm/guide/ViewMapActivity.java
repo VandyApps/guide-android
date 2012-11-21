@@ -1,8 +1,9 @@
 package edu.vanderbilt.vm.guide;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -12,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -27,6 +27,13 @@ import edu.vanderbilt.vm.guide.util.Place;
 
 @TargetApi(11)
 public class ViewMapActivity extends MapActivity {
+	private final int DEFAULT_ZOOM_LEVEL = 17;
+	private final int BUILDING_ZOOM = 20;
+	private final int WIDE_ZOOM = 15;
+	private Timer mUpdateLocation;
+	private MapView MV;
+	private int UPDATE_ID;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,13 +42,13 @@ public class ViewMapActivity extends MapActivity {
 		setupActionBar();
 		
 		/* Begin customizing MapView [athran] */
-		MapView MV = (MapView)findViewById(R.id.mapview);
+		MV = (MapView)findViewById(R.id.mapview);
 		MV.setBuiltInZoomControls(true);
 		
 			// Controller set where and how the map points to
 		MapController control = MV.getController();
-		control.setZoom(17);	// set default zoom level
-		List<Overlay> master_overlay = MV.getOverlays();
+		List<Overlay> masterOverlay = MV.getOverlays();
+		control.setZoom(DEFAULT_ZOOM_LEVEL);	//Default zoom level, covers about half of campus
 		
 		Intent i = this.getIntent();
 		if (i.hasExtra("map_focus")){
@@ -52,27 +59,62 @@ public class ViewMapActivity extends MapActivity {
 			 */
 			Place MapFocus = GlobalState.getPlaceById(i.getExtras().getInt("map_focus"));
 			control.setCenter(convToGeoPoint(MapFocus));
+			control.setZoom(BUILDING_ZOOM);	// Higher zoom level for individual building
 			
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			master_overlay.add(new PlacesOverlay(marker,MapFocus));
+			masterOverlay.add(new PlacesOverlay(marker,MapFocus));
 		} else {
 			/*
 			 * If not, then:
 			 * - show markers for all places on the agenda
 			 * - center the map to current location
 			 */
-			control.setCenter(convToGeoPoint(GlobalState.getPlaceById(1)));
-			//control.setCenter(convToGeoPoint(Geomancer.locateDevice(this))); //TODO get GPS working
 			
+			control.setZoom(WIDE_ZOOM);
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker_agenda);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			master_overlay.add(new AgendaOverlay(marker));
+			masterOverlay.add(new AgendaOverlay(marker));
+			setMapFocus(true);
+			
+			mUpdateLocation = new Timer();
+			mUpdateLocation.schedule(new TimerTask(){
+					@Override
+					public void run(){
+						setMapFocus(false);
+						Log.i("Updater", "Focusing map to current location.");
+					}
+				}, 5000L,5000L);
+
 		}
 		
 		MyLocationOverlay self = new MyLocationOverlay(this, MV);
-		master_overlay.add(self);
+		masterOverlay.add(self);
 		/* End customizing MapView */
+		
+		
+	}
+	
+	public void onPause(){
+		super.onPause();
+		cancelUpdater();
+	}
+	
+	public void onStop(){
+		super.onStop();
+		cancelUpdater();
+	}
+	
+	public void onDestroy(){
+		super.onDestroy();
+		cancelUpdater();
+	}
+	
+	private void cancelUpdater(){
+		if (mUpdateLocation != null){
+			mUpdateLocation.cancel();
+			Log.i("ViewMapActivity", "Updater is cancelled.");
+		}
 	}
 
 	private void setupActionBar() {
@@ -80,7 +122,7 @@ public class ViewMapActivity extends MapActivity {
 		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		ab.setDisplayShowTitleEnabled(false);
 
-		Tab tab = ab.newTab().setText("Map")
+		Tab tab = ab.newTab().setText("Map") //TODO Enumerate these tab names maybe?
 				.setTabListener(new DummyTabListener());
 		ab.addTab(tab);
 
@@ -178,6 +220,18 @@ public class ViewMapActivity extends MapActivity {
 			populate();
 		}
 		
+		public PlacesOverlay(Drawable marker, Location loc){
+			super(marker);
+			this.marker = marker;
+			boundCenterBottom(marker);
+			mItemList.add(new OverlayItem(
+					convToGeoPoint(loc),
+					"Current Location",
+					""));
+			
+			populate();
+		}
+		
 		protected boolean onTap(int i){
 			/**
 			 * TODO clicking on the map pins should lead to the PlaceDetailActivity
@@ -236,4 +290,44 @@ public class ViewMapActivity extends MapActivity {
 		return new GeoPoint((int)(place.getLatitude()*1000000),(int)(place.getLongitude()*1000000));
 	}
 	/* End utility methods */
+	
+	private void setMapFocus(boolean first){
+		// Marker for CurrentLocation
+		Place currPlace = null;
+		Location loc = Geomancer.getDeviceLocation();
+		if (loc != null){
+			currPlace = Geomancer.findClosestPlace(loc, GlobalState.getPlaceList(this));
+			Log.i("ViewMapActivity", "I found our location. We are in " + currPlace.getName());
+		} else {
+			Log.e("ViewMapActivity","Location service failed to get location data.");
+		}
+		
+		if (currPlace == null){
+			/*
+			 * As a last resort, set default Place to FGH.
+			 */
+			Log.e("MapViewActivity","Failed to get Device location.");
+			currPlace = GlobalState.getPlaceById(1);
+		}
+		
+		MV.getController().setCenter(convToGeoPoint(currPlace));
+		Drawable marker_self = (Drawable)getResources().getDrawable(R.drawable.marker_device);
+		marker_self.setBounds(0, 0, marker_self.getIntrinsicWidth(), 
+				marker_self.getIntrinsicHeight());
+		Drawable crosshair = (Drawable)getResources().getDrawable(R.drawable.device_location);
+		int n = crosshair.getIntrinsicHeight()/2;
+		crosshair.setBounds(-n, -n, n, n);
+		
+		List<Overlay> overlay = MV.getOverlays();
+		if (first){
+			UPDATE_ID = overlay.size();
+			overlay.add(new PlacesOverlay(crosshair, loc));
+			overlay.add(new PlacesOverlay(marker_self, currPlace));
+		} else {
+			overlay.set(UPDATE_ID, new PlacesOverlay(crosshair, loc));
+			overlay.set(UPDATE_ID + 1, new PlacesOverlay(marker_self, currPlace));
+			Log.i("ViewMapActivity", "Overlay size: " + overlay.size());
+		}
+		
+	}
 }
