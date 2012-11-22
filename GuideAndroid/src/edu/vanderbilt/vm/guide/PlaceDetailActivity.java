@@ -9,6 +9,9 @@ package edu.vanderbilt.vm.guide;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,21 +34,22 @@ import edu.vanderbilt.vm.guide.util.Place;
 
 public class PlaceDetailActivity extends Activity{
 
-	TextView mPlaceNameTv;
-	ImageView mPlaceIv;
-	TextView mPlaceDescTv;
-	TextView mPlaceHoursTv;
-	Button mMapButton;
-	Bitmap mPlaceBitmap;
-	Button mAgendaActionButton;
-	Menu mMenu;
-	
+	private TextView mPlaceNameTv;
+	private ImageView mPlaceIv;
+	private TextView mPlaceDescTv;
+	private TextView mPlaceHoursTv;
+	private Button mMapButton;
+	private Bitmap mPlaceBitmap;
+	private Button mAgendaActionButton;
+	private Menu mMenu;
 	private boolean mIsOnAgenda = false;
 	private Place mPlace;
+	
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove from Agenda";
-	
 	private final int MENU_ADD_AGENDA = Menu.FIRST;
+	private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailActivity");
+	
 	
 	@Override
 	public void onCreate(Bundle SavedInstanceState) {
@@ -73,10 +77,10 @@ public class PlaceDetailActivity extends Activity{
 			public void run() {
 				try {
 					InputStream is = (InputStream) new URL(mPlace.getPictureUri().getPath()).getContent();
-					Log.d(getClass().getSimpleName(), "Download succeeded");
+					logger.trace("Download succeeded");
 					mPlaceBitmap = BitmapFactory.decodeStream(is);
 				} catch (Exception e) {
-					Log.d(getClass().getSimpleName(), "Download failed");
+					logger.error("Download failed", e);
 					mPlaceBitmap = null;
 				}
 			}
@@ -86,8 +90,7 @@ public class PlaceDetailActivity extends Activity{
 			downloadImage.join();
 			mPlaceIv.setImageBitmap(mPlaceBitmap);
 		} catch (InterruptedException e) {
-			Log.d(getClass().getSimpleName(), "Download failed", e);
-			// Error Handle
+			logger.error("Download failed", e);
 		}
 		
 		/* Check if this place is already on Agenda */
@@ -137,15 +140,13 @@ public class PlaceDetailActivity extends Activity{
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item){
-//		switch (item.getItemId()){
-//		case MENU_ADD_AGENDA :
-//			addRemoveToAgenda();
-//			Toast.makeText(this, "Added to or removed from Agenda", Toast.LENGTH_SHORT);
-//			return true;
-//		default: return true;
-//		}
-		addRemoveToAgenda();
-		return true;
+		switch (item.getItemId()){
+		case R.id.add_agenda:
+			addRemoveToAgenda();
+			return true;
+		default: 
+			return false;
+		}
 	}
 
 	private Place getPlaceFromIntent() {

@@ -3,6 +3,9 @@ package edu.vanderbilt.vm.guide.util;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -19,6 +22,7 @@ public class GlobalState {
 
 	private static Agenda userAgendaSingleton = new Agenda();
 	private static List<Place> sPlaceList;
+	private static Logger logger = LoggerFactory.getLogger("util.GlobalState");
 
 	private GlobalState() {
 		throw new AssertionError("Do not instantiate this class.");
@@ -34,9 +38,7 @@ public class GlobalState {
 				sPlaceList = JsonUtils.readPlacesFromStream(context.getAssets()
 						.open("places.json"));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				Log.e("GlobalState", "JSON import failed");
+				logger.error("JSON import failed", e);
 			}
 		}
 		return sPlaceList;
