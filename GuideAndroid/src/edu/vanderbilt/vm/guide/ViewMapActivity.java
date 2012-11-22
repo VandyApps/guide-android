@@ -125,15 +125,16 @@ public class ViewMapActivity extends MapActivity {
 		Tab tab = ab.newTab().setText("Map") //TODO Enumerate these tab names maybe?
 				.setTabListener(new DummyTabListener());
 		ab.addTab(tab);
-
-		tab = ab.newTab().setText("Tours").setTabListener(new ActivityTabListener(this, GuideMain.class, 1));
-		ab.addTab(tab);
 		
 		tab = ab.newTab().setText("Places")
-				.setTabListener(new ActivityTabListener(this, GuideMain.class, 2));
+				.setTabListener(new ActivityTabListener(this, GuideMain.class, 1));
 		ab.addTab(tab);
 		
 		tab = ab.newTab().setText("Agenda")
+				.setTabListener(new ActivityTabListener(this, GuideMain.class, 2));
+		ab.addTab(tab);
+		
+		tab = ab.newTab().setText("Tours")
 				.setTabListener(new ActivityTabListener(this, GuideMain.class, 3));
 		ab.addTab(tab);
 	}

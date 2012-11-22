@@ -44,10 +44,10 @@ public class GuideMain extends Activity {
 			selection = null;
 		}
 
-		boolean toursSelected = isSelected(1, selection);
-		boolean placesSelected = isSelected(2, selection);
-		boolean agendaSelected = isSelected(3, selection)
-				|| (!toursSelected && !placesSelected);
+		boolean toursSelected = isSelected(3, selection);
+		boolean agendaSelected = isSelected(2, selection);
+		boolean placesSelected = isSelected(1, selection)
+				|| (!toursSelected && !agendaSelected);
 
 		Tab tab = ab
 				.newTab()
@@ -57,25 +57,25 @@ public class GuideMain extends Activity {
 		ab.addTab(tab, 0, false);
 
 		tab = ab.newTab()
-				.setText("Tours")
-				.setTabListener(
-						new FragmentTabListener<TourFragment>(this, "tours",
-								TourFragment.class));
-		ab.addTab(tab, 1, toursSelected);
-
-		tab = ab.newTab()
 				.setText("Places")
 				.setTabListener(
 						new FragmentTabListener<PlaceTabFragment>(this,
 								"places", PlaceTabFragment.class));
-		ab.addTab(tab, 2, placesSelected);
+		ab.addTab(tab, 1, placesSelected);
 
 		tab = ab.newTab()
 				.setText("Agenda")
 				.setTabListener(
 						new FragmentTabListener<AgendaFragment>(this, "agenda",
 								AgendaFragment.class));
-		ab.addTab(tab, 3, agendaSelected);
+		ab.addTab(tab, 2, agendaSelected);
+		
+		tab = ab.newTab()
+				.setText("Tours")
+				.setTabListener(
+						new FragmentTabListener<TourFragment>(this, "tours",
+								TourFragment.class));
+		ab.addTab(tab, 3, toursSelected);
 
 	}
 

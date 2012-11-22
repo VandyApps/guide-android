@@ -1,5 +1,6 @@
 package edu.vanderbilt.vm.guide.util;
 
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -44,6 +45,7 @@ public class Geomancer {
 	};
 	private final static int DEFAULT_RADIUS = 5; // 5 meters, for you americans out there.
 	private final static int DEFAULT_TIMEOUT = 5000;
+	private static Location mDefault;
 
 	public static Place findClosestPlace(Location location, List<Place> placeList) {
 		/* 
@@ -111,7 +113,15 @@ public class Geomancer {
 	}
 	
 	public static Location getDeviceLocation(){
-		return CurrLocation;
+		if (CurrLocation == null){
+			mDefault = new Location("Me");
+			mDefault.setTime((new Date()).getTime());
+			mDefault.setLatitude(GlobalState.getPlaceById(10).getLatitude());
+			mDefault.setLongitude((GlobalState.getPlaceById(10).getLongitude()));
+			return mDefault;
+		} else {
+			return CurrLocation;
+		}
 	}
 }
 
