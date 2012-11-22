@@ -29,7 +29,7 @@ import edu.vanderbilt.vm.guide.util.Place;
 public class ViewMapActivity extends MapActivity {
 	private final int DEFAULT_ZOOM_LEVEL = 17;
 	private final int BUILDING_ZOOM = 20;
-	private final int WIDE_ZOOM = 15;
+	private final int WIDE_ZOOM = 18;
 	private Timer mUpdateLocation;
 	private MapView MV;
 	private int UPDATE_ID;
@@ -89,6 +89,8 @@ public class ViewMapActivity extends MapActivity {
 		}
 		
 		MyLocationOverlay self = new MyLocationOverlay(this, MV);
+		self.enableMyLocation();
+		self.enableCompass();
 		masterOverlay.add(self);
 		/* End customizing MapView */
 		
