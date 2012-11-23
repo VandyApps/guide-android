@@ -12,6 +12,8 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,6 +34,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 import edu.vanderbilt.vm.guide.util.Place;
 
+@TargetApi(11)
 public class PlaceDetailActivity extends Activity{
 
 	private TextView mPlaceNameTv;
@@ -46,7 +49,7 @@ public class PlaceDetailActivity extends Activity{
 	private Place mPlace;
 	
 	private static final String ADD_STR = "Add to Agenda";
-	private static final String REMOVE_STR = "Remove from Agenda";
+	private static final String REMOVE_STR = "Remove";
 	private final int MENU_ADD_AGENDA = Menu.FIRST;
 	private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailActivity");
 	
@@ -71,6 +74,10 @@ public class PlaceDetailActivity extends Activity{
 		mPlaceNameTv.setText(mPlace.getName());
 		mPlaceDescTv.setText(mPlace.getDescription());
 		mPlaceHoursTv.setText("Hours of operation: " + mPlace.getHours());
+		
+		ActionBar ab = getActionBar();
+		ab.setTitle("Place Detail");
+		ab.setDisplayHomeAsUpEnabled(true);
 		
 		Thread downloadImage = new Thread() {
 			@Override
@@ -144,6 +151,9 @@ public class PlaceDetailActivity extends Activity{
 		case R.id.add_agenda:
 			addRemoveToAgenda();
 			return true;
+		case android.R.id.home:
+			Intent i = new Intent(this, GuideMain.class);
+			startActivity(i);
 		default: 
 			return false;
 		}

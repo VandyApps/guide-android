@@ -13,10 +13,18 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -39,12 +47,14 @@ public class ViewMapActivity extends MapActivity {
 
 	private static final int DEFAULT_ZOOM_LEVEL = 17;
 	private static final int BUILDING_ZOOM = 20;
-	private static final int WIDE_ZOOM = 15;
+	private static final int WIDE_ZOOM = 16;
 	private static final Logger logger = LoggerFactory.getLogger("ui.ViewMapActivity");
+	private static int DESC_LENGTH = 150;
 
 	private Timer mUpdateLocation;
 	private MapView mMapView;
 	private int UPDATE_ID;
+	private MyLocationOverlay mDevice;
 	
 	
 	@Override
@@ -56,6 +66,7 @@ public class ViewMapActivity extends MapActivity {
 		/* Begin customizing MapView [athran] */
 		mMapView = (MapView)findViewById(R.id.mapview);
 		mMapView.setBuiltInZoomControls(true);
+		mDevice = new MyLocationOverlay(this, mMapView);
 		
 			// Controller set where and how the map points to
 		MapController control = mMapView.getController();
@@ -87,24 +98,41 @@ public class ViewMapActivity extends MapActivity {
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker_agenda);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			masterOverlay.add(new AgendaOverlay(marker));
-			setMapFocus(true);
 			
-			mUpdateLocation = new Timer();
-			mUpdateLocation.schedule(new TimerTask(){
-					@Override
-					public void run(){
-						setMapFocus(false);
-						logger.info("Updater", "Focusing map to current location.");
-					}
-				}, 5000L,5000L);
+			
+			mDevice.enableMyLocation();
+			mDevice.enableCompass();
+			mDevice.runOnFirstFix(new Runnable(){
+				@Override
+				public void run() {
+					/*
+					 * It seems that Google put some black magic into the MyLocationOverlay
+					 * because it can detect the current location faster and more accurately
+					 * than Geomancer.
+					 * 
+					 * Until Geomancer's accuracy is improved, this is the temporary
+					 * solution to get current location.
+					 */
+					Geomancer.setDeviceLocation(mDevice.getLastFix());
+					mMapView.getController().setCenter(mDevice.getMyLocation());
+				}
+			});
+			masterOverlay.add(mDevice);
+			
+//			setMapFocus(true);
+			
+//			mUpdateLocation = new Timer();
+//			mUpdateLocation.schedule(new TimerTask(){
+//					@Override
+//					public void run(){
+//						setMapFocus(false);
+//						logger.info("Updater", "Focusing map to current location.");
+//					}
+//				}, 5000L,5000L);
 
 		}
 		
-		MyLocationOverlay self = new MyLocationOverlay(this, MV);
-		self.enableMyLocation();
-		self.enableCompass();
 
-		masterOverlay.add(self);
 		/* End customizing MapView */
 		
 		
@@ -113,18 +141,20 @@ public class ViewMapActivity extends MapActivity {
 	public void onPause(){
 		super.onPause();
 		cancelUpdater();
+		mDevice.disableMyLocation();
+		mDevice.disableCompass();
 	}
 	
-	public void onStop(){
-		super.onStop();
-		cancelUpdater();
-	}
-	
-	public void onDestroy(){
-		super.onDestroy();
-		cancelUpdater();
-	}
-	
+//	public void onStop(){
+//		super.onStop();
+//		cancelUpdater();
+//	}
+//	
+//	public void onDestroy(){
+//		super.onDestroy();
+//		cancelUpdater();
+//	}
+//	
 	private void cancelUpdater(){
 		if (mUpdateLocation != null){
 			mUpdateLocation.cancel();
@@ -166,6 +196,8 @@ public class ViewMapActivity extends MapActivity {
 		private List<OverlayItem> mItemList = new ArrayList<OverlayItem>();
 		private Drawable marker = null;
 		private List<Place> mAgendaList = new ArrayList<Place>();
+		private Card card = new Card(R.layout.map_popup);
+		private int mClicked = -1;
 
 		public AgendaOverlay(Drawable marker){
 			super(marker);
@@ -199,11 +231,48 @@ public class ViewMapActivity extends MapActivity {
 		  * which they should
 		  */
 		protected boolean onTap(int index){
-			Intent i = new Intent()	.setClass(ViewMapActivity.this, PlaceDetailActivity.class)
-									.putExtra(GuideConstants.PLACE_ID_EXTRA, 
-											mAgendaList.get(index).getUniqueId());
-			startActivity(i);
+			if (mClicked == index){
+				mClicked = -1;
+				card.hide();
+				return true;
+			}
+			mClicked = index;
+			Place pl = mAgendaList.get(mClicked);
+			
+			// Setup what is on the popup card
+			View view = card.getView();
+			((TextView)view.findViewById(R.id.popup_name)).setText(pl.getName());
+			String desc = pl.getDescription();
+			if (desc.length() < DESC_LENGTH){
+				((TextView)view.findViewById(R.id.popup_desc)).setText(pl.getDescription());
+			} else {
+				((TextView)view.findViewById(R.id.popup_desc)).setText(pl.getDescription().substring(0,DESC_LENGTH) + "...");
+			}
+			Button btn = (Button)view.findViewById(R.id.popup_detail);
+			btn.setText("More Detail");
+			btn.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					openPlaceDetail();
+				}
+			});
+			
+			OverlayItem item = mItemList.get(mClicked);
+			mMapView.getController().animateTo(item.getPoint());
+//			Point point = mMapView.getProjection().toPixels(item.getPoint(), null);
+			card.show();
+			
 			return true;
+		}
+		
+		private void openPlaceDetail(){
+			if (mClicked == -1){
+				return;
+			}
+			Intent i = new Intent()	.setClass(ViewMapActivity.this, PlaceDetailActivity.class)
+					.putExtra(GuideConstants.PLACE_ID_EXTRA, 
+							mAgendaList.get(mClicked).getUniqueId());
+			startActivity(i);
 		}
 		
 		protected OverlayItem createItem(int i){
@@ -212,6 +281,52 @@ public class ViewMapActivity extends MapActivity {
 		
 		public int size(){
 			return mItemList.size();
+		}
+		
+		public class Card{
+			View mCardlein;
+			boolean isVisible = false;
+			
+			public Card(int layout){
+				ViewGroup parent = (ViewGroup)mMapView.getParent();
+				
+				mCardlein = getLayoutInflater().inflate(layout, parent, false);
+				
+				mCardlein.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View v) {
+						hide();
+					}
+				});
+			}
+			
+			public View getView(){
+				return mCardlein;
+			}
+			
+			public void show(){
+				RelativeLayout.LayoutParams parameter = new RelativeLayout.LayoutParams(
+						RelativeLayout.LayoutParams.WRAP_CONTENT,
+						RelativeLayout.LayoutParams.WRAP_CONTENT);
+			 	parameter.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+			 	parameter.addRule(RelativeLayout.CENTER_HORIZONTAL);
+			 	//parameter.setMargins(10, 10, 10, 10);
+			 	parameter.bottomMargin = mMapView.getHeight();
+			 	mCardlein.setLayoutParams(parameter);
+			 	
+				hide();
+			      
+				((ViewGroup)mMapView.getParent()).addView(mCardlein, parameter); // addView(mCardlein);
+				isVisible=true;
+			}
+			
+			public void hide(){
+				if (isVisible) {
+			        isVisible=false;
+			        ((ViewGroup)mCardlein.getParent()).removeView(mCardlein);
+			    }
+			}
+			
 		}
 	}
 	

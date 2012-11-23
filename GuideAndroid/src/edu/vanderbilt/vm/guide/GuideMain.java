@@ -26,7 +26,9 @@ public class GuideMain extends Activity {
 		setupActionBar();
 		
 		List<Place> placeList = GlobalState.getPlaceList(this);
-		GlobalState.getUserAgenda().add(placeList.get(1));
+		for (int i = 0; i < 7; i++){
+			GlobalState.getUserAgenda().add(placeList.get(i));
+		}
 		
 		Geomancer.activateGeolocation(this);
 	}

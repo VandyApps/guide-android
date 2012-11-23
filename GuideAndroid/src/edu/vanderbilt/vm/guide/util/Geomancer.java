@@ -118,14 +118,27 @@ public class Geomancer {
 	
 	public static Location getDeviceLocation(){
 		if (CurrLocation == null){
+			CurrLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
+		if (CurrLocation == null){
+			CurrLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+		if (CurrLocation == null){
+			CurrLocation = mLocationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+		}
+		if (CurrLocation == null){
 			mDefault = new Location("Me");
 			mDefault.setTime((new Date()).getTime());
 			mDefault.setLatitude(GlobalState.getPlaceById(10).getLatitude());
 			mDefault.setLongitude((GlobalState.getPlaceById(10).getLongitude()));
-			return mDefault;
-		} else {
-			return CurrLocation;
+			CurrLocation = mDefault;
 		}
+		
+		return CurrLocation;
+	}
+	
+	public static void setDeviceLocation(Location loc){
+		CurrLocation = loc;
 	}
 }
 
