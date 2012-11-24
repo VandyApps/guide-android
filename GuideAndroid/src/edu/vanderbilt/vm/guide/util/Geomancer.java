@@ -1,5 +1,6 @@
 package edu.vanderbilt.vm.guide.util;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -49,6 +50,7 @@ public class Geomancer {
 	};
 	private final static int DEFAULT_RADIUS = 5; // 5 meters, for you americans out there.
 	private final static int DEFAULT_TIMEOUT = 5000;
+	private static Location mDefault;
 
 	public static Place findClosestPlace(Location location, List<Place> placeList) {
 		/* 
@@ -115,7 +117,28 @@ public class Geomancer {
 	}
 	
 	public static Location getDeviceLocation(){
+		if (CurrLocation == null){
+			CurrLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
+		if (CurrLocation == null){
+			CurrLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+		if (CurrLocation == null){
+			CurrLocation = mLocationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+		}
+		if (CurrLocation == null){
+			mDefault = new Location("Me");
+			mDefault.setTime((new Date()).getTime());
+			mDefault.setLatitude(GlobalState.getPlaceById(10).getLatitude());
+			mDefault.setLongitude((GlobalState.getPlaceById(10).getLongitude()));
+			CurrLocation = mDefault;
+		}
+		
 		return CurrLocation;
+	}
+	
+	public static void setDeviceLocation(Location loc){
+		CurrLocation = loc;
 	}
 }
 

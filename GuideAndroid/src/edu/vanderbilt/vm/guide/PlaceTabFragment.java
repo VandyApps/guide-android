@@ -75,10 +75,16 @@ public class PlaceTabFragment extends Fragment {
 		
 		if (currPlace != null){
 			mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
-				mCurrPlaceName.setText(currPlace.getName());
+			mCurrPlaceName.setText(currPlace.getName());
 			
 			mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
-				mCurrPlaceDesc.setText(currPlace.getDescription().substring(0, DESCRIPTION_LENGTH) + "...");
+			String desc = currPlace.getDescription();
+			if (desc.length() > DESCRIPTION_LENGTH){
+				mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH) + "...");
+			} else {
+				mCurrPlaceDesc.setText(desc + "...");
+			}
+			
 		}
 	}
 

@@ -97,5 +97,16 @@
  	"videoPath" : "",
  	"latitude" : 36.14180835293044,
  	"longitude" : -86.79717421531677 
+},
+{
+	"id" : 10,
+ 	"name" : "Vanderbilt University",
+ 	"category" : "Everything",
+ 	"hours" : "24hr",
+ 	"placeDescription" : "Default Place",
+ 	"imagePath" : "",
+ 	"videoPath" : "",
+ 	"latitude" : 36.145205,
+ 	"longitude" : -86.803987
 }
 ]
