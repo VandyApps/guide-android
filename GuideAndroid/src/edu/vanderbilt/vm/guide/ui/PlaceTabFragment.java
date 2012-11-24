@@ -1,4 +1,4 @@
-package edu.vanderbilt.vm.guide;
+package edu.vanderbilt.vm.guide.ui;
 
 /**
  * @author Athran, Nick
@@ -22,11 +22,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.ui.adapter.PlaceListAdapter;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
-import edu.vanderbilt.vm.guide.util.Place;
-import edu.vanderbilt.vm.guide.util.PlaceListAdapter;
 
 @TargetApi(11)
 public class PlaceTabFragment extends Fragment {

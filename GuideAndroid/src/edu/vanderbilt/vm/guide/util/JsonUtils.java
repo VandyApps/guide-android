@@ -16,6 +16,7 @@ import android.net.Uri;
 
 import com.google.gson.stream.JsonReader;
 
+import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants.PlaceTable;

@@ -1,4 +1,4 @@
-package edu.vanderbilt.vm.guide;
+package edu.vanderbilt.vm.guide.ui;
 
 import java.util.List;
 
@@ -11,12 +11,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.util.ActivityTabListener;
-import edu.vanderbilt.vm.guide.util.FragmentTabListener;
+import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
+import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
-import edu.vanderbilt.vm.guide.util.Place;
 
 @TargetApi(13)
 public class GuideMain extends Activity {

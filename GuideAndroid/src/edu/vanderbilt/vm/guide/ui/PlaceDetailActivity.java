@@ -1,4 +1,4 @@
-package edu.vanderbilt.vm.guide;
+package edu.vanderbilt.vm.guide.ui;
 
 /**
  * @author Athran
@@ -30,9 +30,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
-import edu.vanderbilt.vm.guide.util.Place;
 
 @TargetApi(11)
 public class PlaceDetailActivity extends Activity{

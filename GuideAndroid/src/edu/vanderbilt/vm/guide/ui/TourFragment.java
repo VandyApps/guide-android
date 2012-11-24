@@ -1,4 +1,4 @@
-package edu.vanderbilt.vm.guide;
+package edu.vanderbilt.vm.guide.ui;
 
 import android.app.Fragment;
 
