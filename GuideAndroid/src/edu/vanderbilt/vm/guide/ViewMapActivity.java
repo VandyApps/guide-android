@@ -18,6 +18,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -49,13 +51,14 @@ public class ViewMapActivity extends MapActivity {
 	private static final int BUILDING_ZOOM = 20;
 	private static final int WIDE_ZOOM = 16;
 	private static final Logger logger = LoggerFactory.getLogger("ui.ViewMapActivity");
-	private static int DESC_LENGTH = 150;
+	private static int DESC_LENGTH = 50;
 
 	private Timer mUpdateLocation;
 	private MapView mMapView;
 	private int UPDATE_ID;
 	private MyLocationOverlay mDevice;
-	
+	private ActionBar mAction;
+	private Menu mMenu;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -163,25 +166,33 @@ public class ViewMapActivity extends MapActivity {
 	}
 
 	private void setupActionBar() {
-		ActionBar ab = getActionBar();
-		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		ab.setDisplayShowTitleEnabled(false);
+		mAction = getActionBar();
+		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		mAction.setDisplayShowTitleEnabled(false);
 
-		Tab tab = ab.newTab().setText("Map") //TODO Enumerate these tab names maybe?
+		Tab tab = mAction.newTab().setText("Map") //TODO Enumerate these tab names maybe?
 				.setTabListener(new DummyTabListener());
-		ab.addTab(tab);
+		mAction.addTab(tab);
 		
-		tab = ab.newTab().setText("Places")
+		tab = mAction.newTab().setText("Places")
 				.setTabListener(new ActivityTabListener(this, GuideMain.class, 1));
-		ab.addTab(tab);
+		mAction.addTab(tab);
 		
-		tab = ab.newTab().setText("Agenda")
+		tab = mAction.newTab().setText("Agenda")
 				.setTabListener(new ActivityTabListener(this, GuideMain.class, 2));
-		ab.addTab(tab);
+		mAction.addTab(tab);
 		
-		tab = ab.newTab().setText("Tours")
+		tab = mAction.newTab().setText("Tours")
 				.setTabListener(new ActivityTabListener(this, GuideMain.class, 3));
-		ab.addTab(tab);
+		mAction.addTab(tab);
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.place_detail_activity, menu);
+	    mMenu = menu;
+	    
+	    return true;
 	}
 	
 	/* @author athran
@@ -196,8 +207,8 @@ public class ViewMapActivity extends MapActivity {
 		private List<OverlayItem> mItemList = new ArrayList<OverlayItem>();
 		private Drawable marker = null;
 		private List<Place> mAgendaList = new ArrayList<Place>();
-		private Card card = new Card(R.layout.map_popup);
 		private int mClicked = -1;
+		private RelativeLayout mPopup = (RelativeLayout)findViewById(R.map.popup);
 
 		public AgendaOverlay(Drawable marker){
 			super(marker);
@@ -233,46 +244,49 @@ public class ViewMapActivity extends MapActivity {
 		protected boolean onTap(int index){
 			if (mClicked == index){
 				mClicked = -1;
-				card.hide();
+				mPopup.setVisibility(View.GONE);
 				return true;
 			}
+			
 			mClicked = index;
 			Place pl = mAgendaList.get(mClicked);
 			
 			// Setup what is on the popup card
-			View view = card.getView();
-			((TextView)view.findViewById(R.id.popup_name)).setText(pl.getName());
+			((TextView)mPopup.findViewById(R.map.popup_name)).setText(pl.getName());
 			String desc = pl.getDescription();
-			if (desc.length() < DESC_LENGTH){
-				((TextView)view.findViewById(R.id.popup_desc)).setText(pl.getDescription());
+			if(desc.length() < DESC_LENGTH){
+				((TextView)mPopup.findViewById(R.map.popup_desc)).setText(desc);
 			} else {
-				((TextView)view.findViewById(R.id.popup_desc)).setText(pl.getDescription().substring(0,DESC_LENGTH) + "...");
+				((TextView)mPopup.findViewById(R.map.popup_desc)).setText(desc.substring(0,DESC_LENGTH) + "...");
 			}
-			Button btn = (Button)view.findViewById(R.id.popup_detail);
-			btn.setText("More Detail");
-			btn.setOnClickListener(new OnClickListener(){
+
+            mPopup.setLayoutParams(new MapView.LayoutParams(
+            		MapView.LayoutParams.WRAP_CONTENT, 
+            		MapView.LayoutParams.WRAP_CONTENT, 
+                    getItem(index).getPoint(), 
+                    0, 
+                    -marker.getIntrinsicHeight(), 
+                    MapView.LayoutParams.BOTTOM_CENTER));
+            int mapWidth = mMapView.getWidth();
+            mPopup.setPadding(mapWidth/4, 9, mapWidth/4, 9);
+            mPopup.setVisibility(View.VISIBLE);
+            
+            // Clicking the bubble should bring you to the Detail page
+            OnClickListener listener = new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					openPlaceDetail();
+					Intent i = new Intent(ViewMapActivity.this, PlaceDetailActivity.class);
+					i.putExtra(GuideConstants.PLACE_ID_EXTRA , mAgendaList.get(mClicked).getUniqueId());
 				}
-			});
+    		};
+            mPopup.setOnClickListener(listener);
+            ((RelativeLayout)mPopup.findViewById(R.map.popup_inner)).setOnClickListener(listener);
 			
 			OverlayItem item = mItemList.get(mClicked);
 			mMapView.getController().animateTo(item.getPoint());
 //			Point point = mMapView.getProjection().toPixels(item.getPoint(), null);
-			card.show();
 			
 			return true;
-		}
-		
-		private void openPlaceDetail(){
-			if (mClicked == -1){
-				return;
-			}
-			Intent i = new Intent()	.setClass(ViewMapActivity.this, PlaceDetailActivity.class)
-					.putExtra(GuideConstants.PLACE_ID_EXTRA, 
-							mAgendaList.get(mClicked).getUniqueId());
-			startActivity(i);
 		}
 		
 		protected OverlayItem createItem(int i){
@@ -283,51 +297,6 @@ public class ViewMapActivity extends MapActivity {
 			return mItemList.size();
 		}
 		
-		public class Card{
-			View mCardlein;
-			boolean isVisible = false;
-			
-			public Card(int layout){
-				ViewGroup parent = (ViewGroup)mMapView.getParent();
-				
-				mCardlein = getLayoutInflater().inflate(layout, parent, false);
-				
-				mCardlein.setOnClickListener(new OnClickListener(){
-					@Override
-					public void onClick(View v) {
-						hide();
-					}
-				});
-			}
-			
-			public View getView(){
-				return mCardlein;
-			}
-			
-			public void show(){
-				RelativeLayout.LayoutParams parameter = new RelativeLayout.LayoutParams(
-						RelativeLayout.LayoutParams.WRAP_CONTENT,
-						RelativeLayout.LayoutParams.WRAP_CONTENT);
-			 	parameter.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-			 	parameter.addRule(RelativeLayout.CENTER_HORIZONTAL);
-			 	//parameter.setMargins(10, 10, 10, 10);
-			 	parameter.bottomMargin = mMapView.getHeight();
-			 	mCardlein.setLayoutParams(parameter);
-			 	
-				hide();
-			      
-				((ViewGroup)mMapView.getParent()).addView(mCardlein, parameter); // addView(mCardlein);
-				isVisible=true;
-			}
-			
-			public void hide(){
-				if (isVisible) {
-			        isVisible=false;
-			        ((ViewGroup)mCardlein.getParent()).removeView(mCardlein);
-			    }
-			}
-			
-		}
 	}
 	
 	private class PlacesOverlay extends ItemizedOverlay<OverlayItem>{
@@ -349,6 +318,13 @@ public class ViewMapActivity extends MapActivity {
 					"A Place in Vanderbilt. This is a ShortDescription"));
 			
 			populate();
+			
+			if (mMenu == null){
+				
+			} else {
+				mMenu.getItem(0).setVisible(true);
+			}
+			
 		}
 		
 		public PlacesOverlay(Drawable marker, Location loc){
