@@ -12,7 +12,8 @@
     <encoder>
        <pattern>[%method] %msg%n</pattern>
     </encoder>
-  </appender><root level="WARN">
+  </appender>
+  <root level="TRACE">
     <appender-ref ref="LOGCAT" />
   </root>
 

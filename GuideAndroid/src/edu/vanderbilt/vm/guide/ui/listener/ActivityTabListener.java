@@ -1,4 +1,4 @@
-package edu.vanderbilt.vm.guide.util;
+package edu.vanderbilt.vm.guide.ui.listener;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar.Tab;

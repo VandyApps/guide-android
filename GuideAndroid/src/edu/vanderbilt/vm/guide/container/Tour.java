@@ -1,6 +1,7 @@
-package edu.vanderbilt.vm.guide.util;
+package edu.vanderbilt.vm.guide.container;
 
 import java.util.List;
+
 
 public class Tour {
 

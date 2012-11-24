@@ -1,4 +1,4 @@
-package edu.vanderbilt.vm.guide.util;
+package edu.vanderbilt.vm.guide.container;
 
 import android.net.Uri;
 

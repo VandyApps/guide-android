@@ -1,8 +1,9 @@
-package edu.vanderbilt.vm.guide.util;
+package edu.vanderbilt.vm.guide.container;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 
 public class Agenda {
 

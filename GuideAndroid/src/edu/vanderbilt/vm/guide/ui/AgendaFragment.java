@@ -1,8 +1,9 @@
-package edu.vanderbilt.vm.guide;
+package edu.vanderbilt.vm.guide.ui;
 
 import android.annotation.TargetApi;
 import android.app.ListFragment;
 import android.os.Bundle;
+import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 
 @TargetApi(13)

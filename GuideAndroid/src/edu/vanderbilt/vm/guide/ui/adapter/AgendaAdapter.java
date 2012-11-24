@@ -1,6 +1,4 @@
-package edu.vanderbilt.vm.guide.util;
-
-import java.util.List;
+package edu.vanderbilt.vm.guide.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,30 +6,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import edu.vanderbilt.vm.guide.container.Agenda;
 
-public class PlaceListAdapter extends BaseAdapter {
-
-	private List<Place> mPlaceList;
+public class AgendaAdapter extends BaseAdapter {
+	
 	private Context mContext;
-
-	public PlaceListAdapter(Context context, List<Place> placeList) {
+	private Agenda mAgenda;
+	
+	public AgendaAdapter(Context context, Agenda agenda) {
 		mContext = context;
-		mPlaceList = placeList;
+		mAgenda = agenda;
 	}
 
 	@Override
 	public int getCount() {
-		return mPlaceList.size();
+		return mAgenda.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mPlaceList.get(position);
+		return mAgenda.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		return mPlaceList.get(position).getUniqueId();
+		return mAgenda.get(position).getUniqueId();
 	}
 
 	@Override
@@ -44,8 +43,10 @@ public class PlaceListAdapter extends BaseAdapter {
 		} else {
 			tv = (TextView) convertView.getTag();
 		}
-		tv.setText(mPlaceList.get(position).getName());
+		tv.setText(mAgenda.get(position).getName());
 		return tv;
 	}
 
+	
+	
 }
