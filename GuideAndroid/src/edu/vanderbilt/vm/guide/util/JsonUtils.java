@@ -35,14 +35,7 @@ public class JsonUtils {
 	}
 
 	@Deprecated
-	public static List<Place> readPlacesFromFile(Uri uri, Context context)
-			throws IOException {
-		InputStream in = context.getContentResolver().openInputStream(uri);
-		return readPlacesFromStream(in);
-	}
-
-	@Deprecated
-	public static List<Place> readPlacesFromStream(InputStream in)
+	public static List<Place> readPlacesFromInputStream(InputStream in)
 			throws IOException {
 		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
 		List<Place> places = new ArrayList<Place>();
@@ -88,17 +81,9 @@ public class JsonUtils {
 		return bldr.build();
 	}
 
-	public static SQLiteDatabase populateDatabaseFromFile(String tableName,
-			Uri uri, Context context) throws IOException {
-		InputStream in = context.getContentResolver().openInputStream(uri);
-		return populateDatabaseFromInputStream(tableName, in, context);
-	}
-
 	public static SQLiteDatabase populateDatabaseFromInputStream(
-			String tableName, InputStream in, Context context)
+			String tableName, InputStream in, SQLiteDatabase db)
 			throws IOException {
-		GuideDBOpenHelper helper = new GuideDBOpenHelper(context);
-		SQLiteDatabase db = helper.getWritableDatabase();
 		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
 
 		reader.beginArray();
@@ -157,6 +142,7 @@ public class JsonUtils {
 		}
 
 		cv.put(PlaceTable.ID_COL, id);
+		logger.trace("Inserting cv into places table: {}", cv);
 		db.insert(PlaceTable.PLACE_TABLE_NAME, null, cv);
 	}
 

@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -35,8 +37,8 @@ public class GlobalState {
 	public static List<Place> getPlaceList(Context context) {
 		if (sPlaceList == null) {
 			try {
-				sPlaceList = JsonUtils.readPlacesFromStream(context.getAssets()
-						.open("places.json"));
+				sPlaceList = JsonUtils.readPlacesFromInputStream(context.getAssets()
+						.open(GuideDBConstants.PLACES_JSON_NAME));
 			} catch (IOException e) {
 				logger.error("JSON import failed", e);
 			}

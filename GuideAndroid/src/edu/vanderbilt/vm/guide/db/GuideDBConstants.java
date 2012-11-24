@@ -9,7 +9,10 @@ package edu.vanderbilt.vm.guide.db;
 public interface GuideDBConstants {
 
 	// Remember that all of these fields are implicitly public, static, final
+	
 	String DATABASE_NAME = "guide.db";
+	String PLACES_JSON_NAME = "places.json";
+	String TOURS_JSON_NAME = "tours.json";
 	
 	public interface PlaceTable {
 		String PLACE_TABLE_NAME = "places";
