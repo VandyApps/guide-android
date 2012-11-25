@@ -50,11 +50,10 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 @TargetApi(11)
 public class ViewMapActivity extends MapActivity {
 
-	private static final int DEFAULT_ZOOM_LEVEL = 17;
-	private static final int BUILDING_ZOOM = 20;
-	private static final int WIDE_ZOOM = 16;
+	private static final int MEDIUM_ZOOM = 18;
+	private static final int BUILDING_ZOOM = 20;	// high zoom for viewing individual building
+	private static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
 	private static final Logger logger = LoggerFactory.getLogger("ui.ViewMapActivity");
-	private static int DESC_LENGTH = 50;
 
 	private Timer mUpdateLocation;
 	private MapView mMapView;
@@ -77,7 +76,9 @@ public class ViewMapActivity extends MapActivity {
 			// Controller set where and how the map points to
 		MapController control = mMapView.getController();
 		List<Overlay> masterOverlay = mMapView.getOverlays();
-		control.setZoom(DEFAULT_ZOOM_LEVEL);	//Default zoom level, covers about half of campus
+		control.setZoom(WIDE_ZOOM);
+		control.setCenter(convToGeoPoint(
+				GlobalState.getPlaceById(GuideConstants.DEFAULT_ID)));
 		
 		Intent i = this.getIntent();
 		if (i.hasExtra(GuideConstants.MAP_FOCUS)){
@@ -86,10 +87,13 @@ public class ViewMapActivity extends MapActivity {
 			 * - center the map to that place
 			 * - show marker for that place only
 			 */
-			Place MapFocus = GlobalState.getPlaceById(i.getExtras().getInt("map_focus"));
-			control.setCenter(convToGeoPoint(MapFocus));
-			control.setZoom(BUILDING_ZOOM);	// Higher zoom level for individual building
 			
+			// a little fancy animation
+			Place MapFocus = GlobalState.getPlaceById(i.getExtras().getInt(GuideConstants.MAP_FOCUS));
+			control.animateTo(convToGeoPoint(MapFocus));
+			control.setZoom(BUILDING_ZOOM);
+			
+			// drawing the marker for one Place
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			masterOverlay.add(new PlacesOverlay(marker,MapFocus));
@@ -101,12 +105,12 @@ public class ViewMapActivity extends MapActivity {
 			 * - center the map to current location
 			 */
 			
-			control.setZoom(WIDE_ZOOM);
+			// drawing the marker for everything in Agenda
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker_agenda);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			masterOverlay.add(new AgendaOverlay(marker));
 			
-			
+			// drawing the MyLocation dot
 			mDevice.enableMyLocation();
 			mDevice.enableCompass();
 			mDevice.runOnFirstFix(new Runnable(){
@@ -121,30 +125,20 @@ public class ViewMapActivity extends MapActivity {
 					 * solution to get current location.
 					 */
 					Geomancer.setDeviceLocation(mDevice.getLastFix());
-					mMapView.getController().setCenter(mDevice.getMyLocation());
+					mMapView.getController().animateTo(mDevice.getMyLocation());
+					mMapView.getController().setZoom(MEDIUM_ZOOM);
 				}
 			});
 			masterOverlay.add(mDevice);
 			
-//			setMapFocus(true);
-			
-//			mUpdateLocation = new Timer();
-//			mUpdateLocation.schedule(new TimerTask(){
-//					@Override
-//					public void run(){
-//						setMapFocus(false);
-//						logger.info("Updater", "Focusing map to current location.");
-//					}
-//				}, 5000L,5000L);
-
 		}
 		
-
 		/* End customizing MapView */
 		
-		
 	}
+	// ---------- END onCreate() ---------- //
 	
+	// ---------- BEGIN setup and lifecycle related methods ---------- //
 	public void onPause(){
 		super.onPause();
 		cancelUpdater();
@@ -152,16 +146,12 @@ public class ViewMapActivity extends MapActivity {
 		mDevice.disableCompass();
 	}
 	
-//	public void onStop(){
-//		super.onStop();
-//		cancelUpdater();
-//	}
-//	
-//	public void onDestroy(){
-//		super.onDestroy();
-//		cancelUpdater();
-//	}
-//	
+	public void onResume(){
+		super.onResume();
+		mDevice.enableMyLocation();
+		mDevice.enableCompass();
+	}
+	
 	private void cancelUpdater(){
 		if (mUpdateLocation != null){
 			mUpdateLocation.cancel();
@@ -199,7 +189,6 @@ public class ViewMapActivity extends MapActivity {
 	    if (getIntent().hasExtra(GuideConstants.MAP_FOCUS)){
 			MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
 			item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-			//item.setVisible(true);
 	    } else if (getIntent().hasExtra(GuideConstants.MAP_AGENDA)){
 	    	
 	    }
@@ -217,10 +206,17 @@ public class ViewMapActivity extends MapActivity {
 			return true;
 		default:
 			return false;
-		
 		}
-		
 	}
+	
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
+	
+	// ---------- END setup and lifecycle related methods ---------- //
+	
+	// ---------- BEGIN classes and other methods ---------- //
 	
 	/* @author athran
 	 * these subclasses defines the layer that contains
@@ -252,29 +248,29 @@ public class ViewMapActivity extends MapActivity {
 			// may not be the best way to do it (?)
 			for (int j = 0;j<mAgendaList.size();j++){
 				mItemList.add(new OverlayItem(
-						convToGeoPoint(mAgendaList.get(j)),	// GeoPoint
-						mAgendaList.get(j).getName(),		// Pin tag
-						"A Place in Vanderbilt. This is a ShortDescription"));// Pin snippet
+					convToGeoPoint(mAgendaList.get(j)),						// GeoPoint
+					mAgendaList.get(j).getName(),							// Pin tag
+					"A Place in Vanderbilt. This is a ShortDescription"));	// Pin snippet
 			}
 
 			populate();
 		}
 		
 		 /*
-		  * (non-Javadoc)
-		  * @see com.google.android.maps.ItemizedOverlay#onTap(int)
+		  * Tapping on a marker brings up a popup that tell the name of the Place
+		  * and its distance from current location.
 		  * 
-		  * Tapping on a marker brings you to the place's PlaceDetailActivity.
-		  * This is assuming that both list in this class share the same index
+		  * This assumes that both lists in this class share the same index
 		  * which they should
 		  */
 		protected boolean onTap(int index){
+			
+			// if the same marker is tapped again, the popup is dismissed
 			if (mClicked == index){
 				mClicked = -1;
 				mPopup.setVisibility(View.GONE);
 				return true;
 			}
-			
 			mClicked = index;
 			
 			Place pl = mAgendaList.get(mClicked);
@@ -284,9 +280,10 @@ public class ViewMapActivity extends MapActivity {
 			
 			// Setup what is on the popup card
 			((TextView)mPopup.findViewById(R.map.popup_name)).setText(pl.getName());
-			String desc = (int)(mDevice.getLastFix().distanceTo(locA)) + " yards away";
-			((TextView)mPopup.findViewById(R.map.popup_desc)).setText(desc);
-
+			String dist = (int)(mDevice.getLastFix().distanceTo(locA)) + " yards away";
+			((TextView)mPopup.findViewById(R.map.popup_desc)).setText(dist);
+			
+			// setup the popup's appearance
             mPopup.setLayoutParams(new MapView.LayoutParams(
             		MapView.LayoutParams.WRAP_CONTENT, 
             		MapView.LayoutParams.WRAP_CONTENT, 
@@ -296,7 +293,7 @@ public class ViewMapActivity extends MapActivity {
                     MapView.LayoutParams.BOTTOM_CENTER));
             mPopup.setVisibility(View.VISIBLE);
             
-            // Clicking the bubble should bring you to the Detail page
+            // Clicking the popup should bring you to the Detail page
             OnClickListener listener = new OnClickListener(){
 				@Override
 				public void onClick(View v) {
@@ -307,8 +304,8 @@ public class ViewMapActivity extends MapActivity {
             mPopup.setOnClickListener(listener);
             ((TextView)mPopup.findViewById(R.map.popup_name)).setOnClickListener(listener);
 			
-			OverlayItem item = mItemList.get(mClicked);
-			mMapView.getController().animateTo(item.getPoint());
+			mMapView.getController().animateTo(
+					mItemList.get(mClicked).getPoint());
 			
 			return true;
 		}
@@ -337,18 +334,11 @@ public class ViewMapActivity extends MapActivity {
 			boundCenterBottom(marker);
 			mFocus = pl;
 			mItemList.add(new OverlayItem(
-					convToGeoPoint(pl),
-					pl.getName(),
-					"A Place in Vanderbilt. This is a ShortDescription"));
+				convToGeoPoint(pl),			// Geopoint
+				pl.getName(),				// pin name
+				"A Place in Vanderbilt"));	// pin snippet
 			
 			populate();
-			
-			if (mMenu == null){
-				
-			} else {
-				mMenu.getItem(0).setVisible(true);
-			}
-			
 		}
 		
 		public PlacesOverlay(Drawable marker, Location loc){
@@ -356,15 +346,15 @@ public class ViewMapActivity extends MapActivity {
 			this.marker = marker;
 			boundCenterBottom(marker);
 			mItemList.add(new OverlayItem(
-					convToGeoPoint(loc),
-					"Current Location",
-					""));
+				convToGeoPoint(loc),		// Geopoint
+				"Current Location",			// pin name
+				"A Place in Vanderbilt"));	// pin snippet
 			
 			populate();
 		}
 		
 		protected boolean onTap(int i){
-			/**
+			/*
 			 * TODO clicking on the map pins should lead to the PlaceDetailActivity
 			 */
 			
@@ -380,12 +370,6 @@ public class ViewMapActivity extends MapActivity {
 		}
 	}
 	/* End subclass */
-	
-	@Override
-	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	private static class DummyTabListener implements ActionBar.TabListener {
 
@@ -409,7 +393,8 @@ public class ViewMapActivity extends MapActivity {
 
 	}
 	
-	/* @author athran
+	/* 
+	 * @author athran
 	 * Extracts the coordinate information from Location or Place
 	 * and create a GeoPoint from it
 	 */
@@ -420,7 +405,6 @@ public class ViewMapActivity extends MapActivity {
 	private static GeoPoint convToGeoPoint(Place place){
 		return new GeoPoint((int)(place.getLatitude()*1000000),(int)(place.getLongitude()*1000000));
 	}
-	/* End utility methods */
 	
 	private void setMapFocus(boolean first){
 		// Marker for CurrentLocation
@@ -461,4 +445,6 @@ public class ViewMapActivity extends MapActivity {
 		}
 		
 	}
+	// ---------- END classes and other methods ---------- //
+	
 }
