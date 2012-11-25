@@ -19,7 +19,7 @@
         <uses-library android:required="true" android:name="com.google.android.maps" />
         
         <activity
-            android:name=".GuideMain"
+            android:name=".ui.GuideMain"
             android:label="@string/title_activity_guide_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +28,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlaceDetailActivity"
+            android:name=".ui.PlaceDetailActivity"
             android:label="@string/title_activity_place_detail_activity" >
         </activity>
         <activity
-            android:name=".WebMap"
+            android:name=".ui.WebMap"
             android:label="@string/title_activity_webmap" >
         </activity>
         
         <activity
-            android:name=".ViewMapActivity"
+            android:name=".ui.ViewMapActivity"
             android:label="Map" >
         </activity>
     </application>

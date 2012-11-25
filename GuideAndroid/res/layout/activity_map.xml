@@ -12,34 +12,28 @@
 	    android:clickable="true"
 	    android:apiKey="@string/maps_api_key" >
 	
-	    <RelativeLayout
+        <RelativeLayout
 	        android:id="@+map/popup"
-			android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
+	        android:layout_width="wrap_content"
+	        android:padding="9dp"
+	        android:background="@drawable/popup_panel"
 	        android:visibility="gone">
 	        
-	        <RelativeLayout
-		        android:id="@+map/popup_inner"
-				android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:padding="9dp"
-		        android:background="@drawable/popup_panel"
-		        android:visibility="visible">
-		        <TextView 
-		            android:id="@+map/popup_name"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:textSize="18dp"
-		            android:textColor="@android:color/primary_text_light" />
-		        <TextView 
-		            android:id="@+map/popup_desc"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:textColor="@android:color/secondary_text_light"
-		            android:layout_below="@map/popup_name" />
-    </RelativeLayout>
-	        
-    </RelativeLayout>
+	        <TextView 
+	            android:id="@+map/popup_name"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textSize="18dp"
+	            android:textColor="@android:color/primary_text_light" />
+	        <TextView 
+	            android:id="@+map/popup_desc"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textColor="@android:color/secondary_text_light"
+	            android:layout_below="@map/popup_name" />
+
+    	</RelativeLayout>
 	    
 	</com.google.android.maps.MapView>
 	 

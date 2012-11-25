@@ -51,7 +51,7 @@ public class PlaceDetailActivity extends Activity{
 	
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove";
-	private final int MENU_ADD_AGENDA = Menu.FIRST;
+	private final int MENU_ADD_AGENDA = Menu.FIRST;	//
 	private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailActivity");
 	
 	
@@ -76,10 +76,13 @@ public class PlaceDetailActivity extends Activity{
 		mPlaceDescTv.setText(mPlace.getDescription());
 		mPlaceHoursTv.setText("Hours of operation: " + mPlace.getHours());
 		
+		// Setup ActionBar
 		ActionBar ab = getActionBar();
 		ab.setTitle("Place Detail");
 		ab.setDisplayHomeAsUpEnabled(true);
+		ab.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
 		
+		// Download image
 		Thread downloadImage = new Thread() {
 			@Override
 			public void run() {
@@ -122,7 +125,7 @@ public class PlaceDetailActivity extends Activity{
 			@Override
 			public void onClick(View v){
 				Intent i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
-				i.putExtra("map_focus", mPlace.getUniqueId());
+				i.putExtra(GuideConstants.MAP_FOCUS, mPlace.getUniqueId());
 				startActivity(i);
 			}
 		});
@@ -139,7 +142,7 @@ public class PlaceDetailActivity extends Activity{
 	    	 * The default icon is a "+"
 	    	 * therefore change to "-"
 	    	 */
-	    	mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+	    	mMenu.findItem(R.id.add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
 	    } else {
 	    	// Use default icon "+" as defined in xml
 	    }
@@ -148,13 +151,21 @@ public class PlaceDetailActivity extends Activity{
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item){
+		Intent i;
+		
 		switch (item.getItemId()){
 		case R.id.add_agenda:
 			addRemoveToAgenda();
 			return true;
-		case android.R.id.home:
-			Intent i = new Intent(this, GuideMain.class);
+		case R.id.menu_map:
+			i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
+			i.putExtra("map_focus", mPlace.getUniqueId());
 			startActivity(i);
+			return true;
+		case android.R.id.home:
+			i = new Intent(this, GuideMain.class);
+			startActivity(i);
+			return true;
 		default: 
 			return false;
 		}

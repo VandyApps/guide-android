@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -78,7 +80,7 @@ public class ViewMapActivity extends MapActivity {
 		control.setZoom(DEFAULT_ZOOM_LEVEL);	//Default zoom level, covers about half of campus
 		
 		Intent i = this.getIntent();
-		if (i.hasExtra("map_focus")){
+		if (i.hasExtra(GuideConstants.MAP_FOCUS)){
 			/*
 			 * If the intent come with a PlaceId:
 			 * - center the map to that place
@@ -91,7 +93,8 @@ public class ViewMapActivity extends MapActivity {
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			masterOverlay.add(new PlacesOverlay(marker,MapFocus));
-		} else {
+			
+		} else {//if (i.hasExtra(GuideConstants.MAP_AGENDA)){
 			/*
 			 * If not, then:
 			 * - show markers for all places on the agenda
@@ -190,10 +193,33 @@ public class ViewMapActivity extends MapActivity {
 	
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.place_detail_activity, menu);
+	    inflater.inflate(R.menu.map_view_activity, menu);
 	    mMenu = menu;
 	    
+	    if (getIntent().hasExtra(GuideConstants.MAP_FOCUS)){
+			MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
+			item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			//item.setVisible(true);
+	    } else if (getIntent().hasExtra(GuideConstants.MAP_AGENDA)){
+	    	
+	    }
+	    
 	    return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item){
+		
+		switch (item.getItemId()){
+		case R.id.map_menu_add_agenda:
+			// TODO add the place to agenda
+			// Must coordinate with AgendaOverlay
+			Toast.makeText(this, "Added to Agenda", Toast.LENGTH_SHORT).show();
+			return true;
+		default:
+			return false;
+		
+		}
+		
 	}
 	
 	/* @author athran
@@ -213,7 +239,7 @@ public class ViewMapActivity extends MapActivity {
 
 		public AgendaOverlay(Drawable marker){
 			super(marker);
-			this.marker = marker;
+			this.marker = marker;	
 			boundCenterBottom(marker);
 			Agenda agenda = GlobalState.getUserAgenda();
 			
@@ -250,16 +276,16 @@ public class ViewMapActivity extends MapActivity {
 			}
 			
 			mClicked = index;
+			
 			Place pl = mAgendaList.get(mClicked);
+			Location locA = new Location("pointA");
+			locA.setLatitude(pl.getLatitude());
+			locA.setLongitude(pl.getLongitude());
 			
 			// Setup what is on the popup card
 			((TextView)mPopup.findViewById(R.map.popup_name)).setText(pl.getName());
-			String desc = pl.getDescription();
-			if(desc.length() < DESC_LENGTH){
-				((TextView)mPopup.findViewById(R.map.popup_desc)).setText(desc);
-			} else {
-				((TextView)mPopup.findViewById(R.map.popup_desc)).setText(desc.substring(0,DESC_LENGTH) + "...");
-			}
+			String desc = (int)(mDevice.getLastFix().distanceTo(locA)) + " yards away";
+			((TextView)mPopup.findViewById(R.map.popup_desc)).setText(desc);
 
             mPopup.setLayoutParams(new MapView.LayoutParams(
             		MapView.LayoutParams.WRAP_CONTENT, 
@@ -268,8 +294,6 @@ public class ViewMapActivity extends MapActivity {
                     0, 
                     -marker.getIntrinsicHeight(), 
                     MapView.LayoutParams.BOTTOM_CENTER));
-            int mapWidth = mMapView.getWidth();
-            mPopup.setPadding(mapWidth/4, 9, mapWidth/4, 9);
             mPopup.setVisibility(View.VISIBLE);
             
             // Clicking the bubble should bring you to the Detail page
@@ -281,11 +305,10 @@ public class ViewMapActivity extends MapActivity {
 				}
     		};
             mPopup.setOnClickListener(listener);
-            ((RelativeLayout)mPopup.findViewById(R.map.popup_inner)).setOnClickListener(listener);
+            ((TextView)mPopup.findViewById(R.map.popup_name)).setOnClickListener(listener);
 			
 			OverlayItem item = mItemList.get(mClicked);
 			mMapView.getController().animateTo(item.getPoint());
-//			Point point = mMapView.getProjection().toPixels(item.getPoint(), null);
 			
 			return true;
 		}

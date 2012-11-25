@@ -16,9 +16,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,12 +34,16 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(11)
-public class PlaceTabFragment extends Fragment {
+public class PlaceTabFragment extends Fragment implements OnClickListener{
 	private static final String LOG_TAG = "PlaceMainFragment";
+	private final int DESCRIPTION_LENGTH = 35;
+	
 	private ListView mListView;
 	private TextView mCurrPlaceName;
 	private TextView mCurrPlaceDesc;
-	private final int DESCRIPTION_LENGTH = 35;
+	private EditText mSearchBox;
+	private LinearLayout mCurrentPlaceBar;
+	private Place mCurrPlace;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +60,6 @@ public class PlaceTabFragment extends Fragment {
 		mListView.setAdapter(new PlaceListAdapter(getActivity(),
 				GlobalState.getPlaceList(getActivity())));
 		mListView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -62,24 +69,23 @@ public class PlaceTabFragment extends Fragment {
 						GuideConstants.PLACE_ID_EXTRA, place.getUniqueId());
 				startActivity(i);
 			}
-
 		});
 		
 		/*
 		 * Tells you what is the closest building to your location right now
 		 */
 		Location loc = Geomancer.getDeviceLocation();
-		Place currPlace = null;
+		mCurrPlace = null;
 		if (loc != null){
-			currPlace = Geomancer.findClosestPlace(loc, GlobalState.getPlaceList(getActivity()));
+			mCurrPlace = Geomancer.findClosestPlace(loc, GlobalState.getPlaceList(getActivity()));
 		}
 		
-		if (currPlace != null){
+		if (mCurrPlace != null){
 			mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
-			mCurrPlaceName.setText(currPlace.getName());
+			mCurrPlaceName.setText(mCurrPlace.getName());
 			
 			mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
-			String desc = currPlace.getDescription();
+			String desc = mCurrPlace.getDescription();
 			if (desc.length() > DESCRIPTION_LENGTH){
 				mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH) + "...");
 			} else {
@@ -87,6 +93,29 @@ public class PlaceTabFragment extends Fragment {
 			}
 			
 		}
+		
+		// Prevent the soft keyboard from popping up at startup.
+		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		
+		mSearchBox = (EditText)getActivity().findViewById(R.id.placeTabSearchEdit);
+		mSearchBox.setOnClickListener(this);
+		
+		mCurrentPlaceBar = (LinearLayout) getActivity().findViewById(R.id.current_place_bar);
+		mCurrentPlaceBar.setOnClickListener(this);
+
+	}
+	
+	// this method of setting up OnClickListener seems to be necessary when you want to access class variables
+	@Override
+	public void onClick(View v) {
+		if (v == mCurrPlaceDesc || v == mCurrPlaceName || v == mCurrentPlaceBar){
+			Intent i = new Intent(getActivity(), PlaceDetailActivity.class);
+			i.putExtra(GuideConstants.PLACE_ID_EXTRA, mCurrPlace.getUniqueId());
+			startActivity(i);
+		} else if (v == mSearchBox){
+//			mSearchBox.setFocusable(true);
+		}
+		
 	}
 
 }

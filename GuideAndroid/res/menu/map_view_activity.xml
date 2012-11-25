@@ -3,7 +3,6 @@
     <item 
         android:id="@+id/map_menu_add_agenda"
         android:title="@string/menu_add_agenda"
-        android:icon="@drawable/content_new"
-        android:showAsAction="never"/>
+        android:icon="@drawable/content_new" />
 
 </menu>
