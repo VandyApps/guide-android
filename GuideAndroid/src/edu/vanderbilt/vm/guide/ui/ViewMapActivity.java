@@ -287,7 +287,7 @@ public class ViewMapActivity extends MapActivity {
             mPopup.setLayoutParams(new MapView.LayoutParams(
             		MapView.LayoutParams.WRAP_CONTENT, 
             		MapView.LayoutParams.WRAP_CONTENT, 
-                    getItem(index).getPoint(), 
+                    mItemList.get(index).getPoint(), 
                     0, 
                     -marker.getIntrinsicHeight(), 
                     MapView.LayoutParams.BOTTOM_CENTER));

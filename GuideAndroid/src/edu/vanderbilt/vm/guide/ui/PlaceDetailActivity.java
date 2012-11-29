@@ -194,12 +194,12 @@ public class PlaceDetailActivity extends Activity{
 		if(mIsOnAgenda) {
 			GlobalState.getUserAgenda().remove(mPlace);
 			mAgendaActionButton.setText(ADD_STR);
-			mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
+			mMenu.findItem(R.id.map_menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
 			Toast.makeText(this, "Removed from Agenda", Toast.LENGTH_SHORT).show();
 		} else {
 			GlobalState.getUserAgenda().add(mPlace);
 			mAgendaActionButton.setText(REMOVE_STR);
-			mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+			mMenu.findItem(R.id.map_menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
 			Toast.makeText(this, "Added to from Agenda", Toast.LENGTH_SHORT).show();
 		}
 		mIsOnAgenda = !mIsOnAgenda;
