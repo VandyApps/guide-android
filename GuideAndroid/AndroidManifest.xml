@@ -32,11 +32,6 @@
             android:label="@string/title_activity_place_detail_activity" >
         </activity>
         <activity
-            android:name=".ui.WebMap"
-            android:label="@string/title_activity_webmap" >
-        </activity>
-        
-        <activity
             android:name=".ui.ViewMapActivity"
             android:label="Map" >
         </activity>

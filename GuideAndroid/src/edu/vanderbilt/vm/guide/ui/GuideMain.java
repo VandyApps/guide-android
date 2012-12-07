@@ -11,6 +11,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
@@ -18,13 +21,17 @@ import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(13)
 public class GuideMain extends Activity {
+	private ActionBar mAction;
+	private Menu mMenu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTheme(R.style.AppTheme);
 		setContentView(R.layout.activity_guide_main);
 		setupActionBar();
 		
@@ -35,12 +42,15 @@ public class GuideMain extends Activity {
 		
 		Geomancer.activateGeolocation(this);
 	}
-
+	// ---------- END onCreate() ---------- //
+	
+	// ---------- BEGIN setup and lifecycle related methods ---------- //
 	private void setupActionBar() {
-		ActionBar ab = getActionBar();
-		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		ab.setDisplayShowTitleEnabled(false);
-
+		mAction = getActionBar();
+		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		mAction.setDisplayShowTitleEnabled(false);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		
 		Intent myIntent = getIntent();
 		final Integer selection;
 		if (myIntent != null && myIntent.hasExtra("selection")) {
@@ -54,36 +64,57 @@ public class GuideMain extends Activity {
 		boolean placesSelected = isSelected(1, selection)
 				|| (!toursSelected && !agendaSelected);
 
-		Tab tab = ab
-				.newTab()
-				.setText("Map")
-				.setTabListener(
-						new MyActivityTabListener(this, ViewMapActivity.class));
-		ab.addTab(tab, 0, false);
+//		Tab tab = ab;
+//				.newTab()
+//				.setText("Map")
+//				.setTabListener(
+//						new MyActivityTabListener(this, ViewMapActivity.class));
+//		ab.addTab(tab, 0, false);
 
-		tab = ab.newTab()
+		Tab tab = mAction.newTab()
 				.setText("Places")
 				.setTabListener(
 						new FragmentTabListener<PlaceTabFragment>(this,
 								"places", PlaceTabFragment.class));
-		ab.addTab(tab, 1, placesSelected);
+		mAction.addTab(tab, 1, placesSelected);
 
-		tab = ab.newTab()
+		tab = mAction.newTab()
 				.setText("Agenda")
 				.setTabListener(
 						new FragmentTabListener<AgendaFragment>(this, "agenda",
 								AgendaFragment.class));
-		ab.addTab(tab, 2, agendaSelected);
+		mAction.addTab(tab, 2, agendaSelected);
 		
-		tab = ab.newTab()
+		tab = mAction.newTab()
 				.setText("Tours")
 				.setTabListener(
 						new FragmentTabListener<TourFragment>(this, "tours",
 								TourFragment.class));
-		ab.addTab(tab, 3, toursSelected);
+		mAction.addTab(tab, 3, toursSelected);
 
 	}
-
+	
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.activity_guide_main, menu);
+	    mMenu = menu;
+	    return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item){
+		
+		switch (item.getItemId()){
+		case R.id.menu_map:
+			Intent i = new Intent(this, ViewMapActivity.class);
+			i.putExtra(GuideConstants.SELECTION, 1);	//TODO change to appropriate tab number
+			return true;
+		
+			default:
+				return false;
+		}
+	}
+	// ---------- END setup and lifecycle related methods ---------- //
+	
 	private boolean isSelected(int n, Integer selection) {
 		return selection != null && n == selection;
 	}
@@ -96,18 +127,19 @@ public class GuideMain extends Activity {
 	 * @author nicholasking
 	 * 
 	 */
-	private class MyActivityTabListener extends ActivityTabListener {
-
-		public MyActivityTabListener(Context packageCtx, Class<?> target) {
-			super(packageCtx, target);
-		}
-
-		@Override
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			super.onTabSelected(tab, ft);
-			finish();
-		}
-
-	}
+//	private class MyActivityTabListener extends ActivityTabListener {
+//
+//		public MyActivityTabListener(Context packageCtx, Class<?> target) {
+//			super(packageCtx, target);
+//		}
+//
+//		@Override
+//		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+//			super.onTabSelected(tab, ft);
+//			finish();
+//		}
+//
+//	}
+	
 
 }

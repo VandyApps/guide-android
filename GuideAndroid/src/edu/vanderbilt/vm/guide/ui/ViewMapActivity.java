@@ -161,24 +161,25 @@ public class ViewMapActivity extends MapActivity {
 
 	private void setupActionBar() {
 		mAction = getActionBar();
-		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		mAction.setDisplayShowTitleEnabled(false);
+		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		mAction.setDisplayShowTitleEnabled(true);
+		mAction.setDisplayHomeAsUpEnabled(true);
 
-		Tab tab = mAction.newTab().setText("Map") //TODO Enumerate these tab names maybe?
-				.setTabListener(new DummyTabListener());
-		mAction.addTab(tab);
-		
-		tab = mAction.newTab().setText("Places")
-				.setTabListener(new ActivityTabListener(this, GuideMain.class, 1));
-		mAction.addTab(tab);
-		
-		tab = mAction.newTab().setText("Agenda")
-				.setTabListener(new ActivityTabListener(this, GuideMain.class, 2));
-		mAction.addTab(tab);
-		
-		tab = mAction.newTab().setText("Tours")
-				.setTabListener(new ActivityTabListener(this, GuideMain.class, 3));
-		mAction.addTab(tab);
+//		Tab tab = mAction.newTab().setText("Map") //TODO Enumerate these tab names maybe?
+//				.setTabListener(new DummyTabListener());
+//		mAction.addTab(tab);
+//		
+//		tab = mAction.newTab().setText("Places")
+//				.setTabListener(new ActivityTabListener(this, GuideMain.class, 1));
+//		mAction.addTab(tab);
+//		
+//		tab = mAction.newTab().setText("Agenda")
+//				.setTabListener(new ActivityTabListener(this, GuideMain.class, 2));
+//		mAction.addTab(tab);
+//		
+//		tab = mAction.newTab().setText("Tours")
+//				.setTabListener(new ActivityTabListener(this, GuideMain.class, 3));
+//		mAction.addTab(tab);
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -203,6 +204,21 @@ public class ViewMapActivity extends MapActivity {
 			// TODO add the place to agenda
 			// Must coordinate with AgendaOverlay
 			Toast.makeText(this, "Added to Agenda", Toast.LENGTH_SHORT).show();
+			return true;
+		case android.R.id.home:
+			Intent i = getIntent();
+			
+			if (i.hasExtra(GuideConstants.SELECTION)){
+				int selection = i.getIntExtra(GuideConstants.SELECTION, 1);
+				
+				if (selection < GuideConstants.LIMIT){
+					Intent j = new Intent(this, GuideMain.class);
+					j.putExtra(GuideConstants.SELECTION, selection);
+				} else {
+					Intent k = new Intent(this, PlaceDetailActivity.class);
+					k.putExtra(GuideConstants.PLACE_ID_EXTRA, selection - GuideConstants.LIMIT);
+				}
+			}
 			return true;
 		default:
 			return false;
@@ -371,27 +387,27 @@ public class ViewMapActivity extends MapActivity {
 	}
 	/* End subclass */
 
-	private static class DummyTabListener implements ActionBar.TabListener {
-
-		@Override
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
+//	private static class DummyTabListener implements ActionBar.TabListener {
+//
+//		@Override
+//		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+//			// TODO Auto-generated method stub
+//
+//		}
+//
+//		@Override
+//		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+//			// TODO Auto-generated method stub
+//
+//		}
+//
+//		@Override
+//		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+//			// TODO Auto-generated method stub
+//
+//		}
+//
+//	}
 	
 	/* 
 	 * @author athran
