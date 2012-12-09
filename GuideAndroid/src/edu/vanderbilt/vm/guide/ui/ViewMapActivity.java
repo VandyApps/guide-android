@@ -104,7 +104,7 @@ public class ViewMapActivity extends MapActivity {
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			masterOverlay.add(new PlacesOverlay(marker,MapFocus));
 			
-		} else {//if (i.hasExtra(GuideConstants.MAP_AGENDA)){
+		} else if (i.hasExtra(GuideConstants.MAP_AGENDA)){
 			/*
 			 * If not, then:
 			 * - show markers for all places on the agenda

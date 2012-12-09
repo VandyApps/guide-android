@@ -15,7 +15,7 @@
 	<string name="main_serch_box">Search Box</string>
 	
 	<string name="menu_add_agenda">Agenda</string>	
-	<string name="refresh">Refresh</string>
+	<string name="menu_refresh">Refresh</string>
 	<string name="menu_map">Map</string>
 	
 </resources>
