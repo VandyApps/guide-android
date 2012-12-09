@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
@@ -97,7 +98,7 @@ public class GuideMain extends Activity {
 	
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.place_detail_activity, menu);
+	    inflater.inflate(R.menu.activity_guide_main, menu);
 	    mMenu = menu;
 	    return true;
 	}
@@ -111,6 +112,8 @@ public class GuideMain extends Activity {
 			startActivity(i);
 			return true;
 		case R.id.menu_refresh:
+			//TODO
+			Toast.makeText(this, "Current Location Updated", Toast.LENGTH_SHORT).show();
 			return true;
 		
 		default: return false;
