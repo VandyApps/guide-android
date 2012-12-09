@@ -42,9 +42,7 @@ public class PlaceDetailActivity extends Activity{
 	private ImageView mPlaceIv;
 	private TextView mPlaceDescTv;
 	private TextView mPlaceHoursTv;
-	private Button mMapButton;
 	private Bitmap mPlaceBitmap;
-	private Button mAgendaActionButton;
 	private Menu mMenu;
 	private boolean mIsOnAgenda = false;
 	private Place mPlace;
@@ -107,29 +105,14 @@ public class PlaceDetailActivity extends Activity{
 		
 		/* Check if this place is already on Agenda */
 		if(GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
-			mAgendaActionButton.setText(REMOVE_STR);
 			mIsOnAgenda = true;
 		} else {
-			mAgendaActionButton.setText(ADD_STR);
 			mIsOnAgenda = false;
 		}
 		
 		/* Buttons' click definitions */
-		mAgendaActionButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				addRemoveToAgenda();
-			}
-		});
 		
-		mMapButton.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View v){
-				Intent i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
-				i.putExtra(GuideConstants.MAP_FOCUS, mPlace.getUniqueId());
-				startActivity(i);
-			}
-		});
+		
 		/* End of Buttons' click definitions */
 	}
 	
@@ -143,7 +126,7 @@ public class PlaceDetailActivity extends Activity{
 	    	 * The default icon is a "+"
 	    	 * therefore change to "-"
 	    	 */
-	    	mMenu.findItem(R.id.add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+	    	mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
 	    } else {
 	    	// Use default icon "+" as defined in xml
 	    }
@@ -155,7 +138,7 @@ public class PlaceDetailActivity extends Activity{
 		Intent i;
 		
 		switch (item.getItemId()){
-		case R.id.add_agenda:
+		case R.id.menu_add_agenda:
 			addRemoveToAgenda();
 			return true;
 		case R.id.menu_map:
@@ -185,8 +168,6 @@ public class PlaceDetailActivity extends Activity{
 		mPlaceNameTv = (TextView) findViewById(R.id.PlaceName);
 		mPlaceIv = (ImageView) findViewById(R.id.PlaceImage);
 		mPlaceDescTv = (TextView) findViewById(R.id.PlaceDescription);
-		mMapButton = (Button) findViewById(R.id.BMap);
-		mAgendaActionButton = (Button) findViewById(R.id.BAgendaAction);
 		mPlaceHoursTv = (TextView) findViewById(R.id.PlaceHours);
 	}
 	
@@ -194,13 +175,11 @@ public class PlaceDetailActivity extends Activity{
 		
 		if(mIsOnAgenda) {
 			GlobalState.getUserAgenda().remove(mPlace);
-			mAgendaActionButton.setText(ADD_STR);
-			mMenu.findItem(R.id.map_menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
+			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
 			Toast.makeText(this, "Removed from Agenda", Toast.LENGTH_SHORT).show();
 		} else {
 			GlobalState.getUserAgenda().add(mPlace);
-			mAgendaActionButton.setText(REMOVE_STR);
-			mMenu.findItem(R.id.map_menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
 			Toast.makeText(this, "Added to from Agenda", Toast.LENGTH_SHORT).show();
 		}
 		mIsOnAgenda = !mIsOnAgenda;
