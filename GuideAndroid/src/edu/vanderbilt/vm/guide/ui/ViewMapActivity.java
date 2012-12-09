@@ -66,7 +66,13 @@ public class ViewMapActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		setupActionBar();
+		
+		// setup action bar
+		mAction = getActionBar();
+		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		mAction.setDisplayShowTitleEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		mAction.setDisplayHomeAsUpEnabled(true);
 		
 		/* Begin customizing MapView [athran] */
 		mMapView = (MapView)findViewById(R.id.mapview);
@@ -205,6 +211,9 @@ public class ViewMapActivity extends MapActivity {
 			// Must coordinate with AgendaOverlay
 			Toast.makeText(this, "Added to Agenda", Toast.LENGTH_SHORT).show();
 			return true;
+		case android.R.id.home:
+			Intent i = new Intent(this, GuideMain.class);
+			startActivity(i);
 		default:
 			return false;
 		}
