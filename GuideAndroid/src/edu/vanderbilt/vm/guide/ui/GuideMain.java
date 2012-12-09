@@ -21,6 +21,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 
 @TargetApi(13)
 public class GuideMain extends Activity {
+	private ActionBar mAction;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,11 @@ public class GuideMain extends Activity {
 	}
 
 	private void setupActionBar() {
-		ActionBar ab = getActionBar();
-		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		ab.setDisplayShowTitleEnabled(false);
-
+		mAction = getActionBar();
+		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		mAction.setDisplayShowTitleEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		
 		Intent myIntent = getIntent();
 		final Integer selection;
 		if (myIntent != null && myIntent.hasExtra("selection")) {
@@ -54,33 +56,33 @@ public class GuideMain extends Activity {
 		boolean placesSelected = isSelected(1, selection)
 				|| (!toursSelected && !agendaSelected);
 
-		Tab tab = ab
+		Tab tab = mAction
 				.newTab()
 				.setText("Map")
 				.setTabListener(
 						new MyActivityTabListener(this, ViewMapActivity.class));
-		ab.addTab(tab, 0, false);
+		mAction.addTab(tab, 0, false);
 
-		tab = ab.newTab()
+		tab = mAction.newTab()
 				.setText("Places")
 				.setTabListener(
 						new FragmentTabListener<PlaceTabFragment>(this,
 								"places", PlaceTabFragment.class));
-		ab.addTab(tab, 1, placesSelected);
+		mAction.addTab(tab, 1, placesSelected);
 
-		tab = ab.newTab()
+		tab = mAction.newTab()
 				.setText("Agenda")
 				.setTabListener(
 						new FragmentTabListener<AgendaFragment>(this, "agenda",
 								AgendaFragment.class));
-		ab.addTab(tab, 2, agendaSelected);
+		mAction.addTab(tab, 2, agendaSelected);
 		
-		tab = ab.newTab()
+		tab = mAction.newTab()
 				.setText("Tours")
 				.setTabListener(
 						new FragmentTabListener<TourFragment>(this, "tours",
 								TourFragment.class));
-		ab.addTab(tab, 3, toursSelected);
+		mAction.addTab(tab, 3, toursSelected);
 
 	}
 

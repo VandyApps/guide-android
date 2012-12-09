@@ -48,6 +48,7 @@ public class PlaceDetailActivity extends Activity{
 	private Menu mMenu;
 	private boolean mIsOnAgenda = false;
 	private Place mPlace;
+	private ActionBar mAction;
 	
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove";
@@ -77,10 +78,10 @@ public class PlaceDetailActivity extends Activity{
 		mPlaceHoursTv.setText("Hours of operation: " + mPlace.getHours());
 		
 		// Setup ActionBar
-		ActionBar ab = getActionBar();
-		ab.setTitle("Place Detail");
-		ab.setDisplayHomeAsUpEnabled(true);
-		ab.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		mAction = getActionBar();
+		mAction.setTitle("Place Detail");
+		mAction.setDisplayHomeAsUpEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
 		
 		// Download image
 		Thread downloadImage = new Thread() {

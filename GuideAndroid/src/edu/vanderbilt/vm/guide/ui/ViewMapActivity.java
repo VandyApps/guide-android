@@ -162,7 +162,8 @@ public class ViewMapActivity extends MapActivity {
 	private void setupActionBar() {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		mAction.setDisplayShowTitleEnabled(false);
+		mAction.setDisplayShowTitleEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
 
 		Tab tab = mAction.newTab().setText("Map") //TODO Enumerate these tab names maybe?
 				.setTabListener(new DummyTabListener());
