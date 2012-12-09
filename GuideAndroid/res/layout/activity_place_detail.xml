@@ -20,7 +20,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:text="Place name"
-        android:padding="5dp" />
+        android:layout_margin="16dp" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -31,13 +31,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp" >
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp" >
 
             <TextView
                 android:id="@+id/PlaceDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Place description text" />
+                android:text="Place description text"
+                android:layout_margin="8dp" />
 
             <View 
                 android:layout_width="match_parent"
@@ -50,32 +52,8 @@
                 android:id="@+id/PlaceHours"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hours of operation: " />
+                android:text="Hours of operation: "
+                android:layout_margin="8dp" />
         </LinearLayout>
     </ScrollView>
-<!--
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="10"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/BMap"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="50"
-            android:gravity="center"
-            android:text="Show on Map" />
-
-        <Button
-            android:id="@+id/BAgendaAction"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="50"
-            android:gravity="center"
-            android:text="Remove from Agenda" />
-    </LinearLayout>
- -->
 </LinearLayout>

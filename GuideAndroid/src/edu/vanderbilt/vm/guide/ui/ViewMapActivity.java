@@ -66,7 +66,13 @@ public class ViewMapActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		setupActionBar();
+		
+		// setup action bar
+		mAction = getActionBar();
+		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		mAction.setDisplayShowTitleEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		mAction.setDisplayHomeAsUpEnabled(true);
 		
 		/* Begin customizing MapView [athran] */
 		mMapView = (MapView)findViewById(R.id.mapview);
@@ -98,7 +104,7 @@ public class ViewMapActivity extends MapActivity {
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			masterOverlay.add(new PlacesOverlay(marker,MapFocus));
 			
-		} else {//if (i.hasExtra(GuideConstants.MAP_AGENDA)){
+		} else if (i.hasExtra(GuideConstants.MAP_AGENDA)){
 			/*
 			 * If not, then:
 			 * - show markers for all places on the agenda
@@ -164,6 +170,7 @@ public class ViewMapActivity extends MapActivity {
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setDisplayHomeAsUpEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
 
 //		Tab tab = mAction.newTab().setText("Map") //TODO Enumerate these tab names maybe?
 //				.setTabListener(new DummyTabListener());
@@ -206,20 +213,8 @@ public class ViewMapActivity extends MapActivity {
 			Toast.makeText(this, "Added to Agenda", Toast.LENGTH_SHORT).show();
 			return true;
 		case android.R.id.home:
-			Intent i = getIntent();
-			
-			if (i.hasExtra(GuideConstants.SELECTION)){
-				int selection = i.getIntExtra(GuideConstants.SELECTION, 1);
-				
-				if (selection < GuideConstants.LIMIT){
-					Intent j = new Intent(this, GuideMain.class);
-					j.putExtra(GuideConstants.SELECTION, selection);
-				} else {
-					Intent k = new Intent(this, PlaceDetailActivity.class);
-					k.putExtra(GuideConstants.PLACE_ID_EXTRA, selection - GuideConstants.LIMIT);
-				}
-			}
-			return true;
+			Intent i = new Intent(this, GuideMain.class);
+			startActivity(i);
 		default:
 			return false;
 		}

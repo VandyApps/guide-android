@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
@@ -35,6 +36,7 @@ public class GuideMain extends Activity {
 		setContentView(R.layout.activity_guide_main);
 		setupActionBar();
 		
+		// TODO
 		List<Place> placeList = GlobalState.getPlaceList(this);
 		for (int i = 0; i < 7; i++){
 			GlobalState.getUserAgenda().add(placeList.get(i));
@@ -48,7 +50,7 @@ public class GuideMain extends Activity {
 	private void setupActionBar() {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		mAction.setDisplayShowTitleEnabled(false);
+		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
 		
 		Intent myIntent = getIntent();
@@ -64,34 +66,34 @@ public class GuideMain extends Activity {
 		boolean placesSelected = isSelected(1, selection)
 				|| (!toursSelected && !agendaSelected);
 
-//		Tab tab = ab;
-//				.newTab()
-//				.setText("Map")
-//				.setTabListener(
-//						new MyActivityTabListener(this, ViewMapActivity.class));
-//		ab.addTab(tab, 0, false);
-
 		Tab tab = mAction.newTab()
 				.setText("Places")
 				.setTabListener(
 						new FragmentTabListener<PlaceTabFragment>(this,
 								"places", PlaceTabFragment.class));
-		mAction.addTab(tab, 1, placesSelected);
+		mAction.addTab(tab, 0, placesSelected);
 
 		tab = mAction.newTab()
 				.setText("Agenda")
 				.setTabListener(
 						new FragmentTabListener<AgendaFragment>(this, "agenda",
 								AgendaFragment.class));
-		mAction.addTab(tab, 2, agendaSelected);
+		mAction.addTab(tab, 1, agendaSelected);
 		
 		tab = mAction.newTab()
 				.setText("Tours")
 				.setTabListener(
 						new FragmentTabListener<TourFragment>(this, "tours",
 								TourFragment.class));
-		mAction.addTab(tab, 3, toursSelected);
-
+		mAction.addTab(tab, 2, toursSelected);
+		
+		tab = mAction.newTab()
+				.setText("Stats")
+				.setTabListener( //TODO
+						new FragmentTabListener<TourFragment>(this, "stats",
+								TourFragment.class));
+		mAction.addTab(tab, 3, false);
+		
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -106,11 +108,15 @@ public class GuideMain extends Activity {
 		switch (item.getItemId()){
 		case R.id.menu_map:
 			Intent i = new Intent(this, ViewMapActivity.class);
-			i.putExtra(GuideConstants.SELECTION, 1);	//TODO change to appropriate tab number
+			i.putExtra(GuideConstants.MAP_AGENDA, "");
+			startActivity(i);
+			return true;
+		case R.id.menu_refresh:
+			//TODO
+			Toast.makeText(this, "Current Location Updated", Toast.LENGTH_SHORT).show();
 			return true;
 		
-			default:
-				return false;
+		default: return false;
 		}
 	}
 	// ---------- END setup and lifecycle related methods ---------- //
@@ -118,7 +124,7 @@ public class GuideMain extends Activity {
 	private boolean isSelected(int n, Integer selection) {
 		return selection != null && n == selection;
 	}
-
+	
 	/**
 	 * Adds a little hack to "forward" the user on to the map activity when the
 	 * map tab is clicked. This effectively removes this activity from the back
@@ -127,19 +133,20 @@ public class GuideMain extends Activity {
 	 * @author nicholasking
 	 * 
 	 */
-//	private class MyActivityTabListener extends ActivityTabListener {
-//
-//		public MyActivityTabListener(Context packageCtx, Class<?> target) {
-//			super(packageCtx, target);
-//		}
-//
-//		@Override
-//		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-//			super.onTabSelected(tab, ft);
-//			finish();
-//		}
-//
-//	}
+	private class MyActivityTabListener extends ActivityTabListener {
+
+		public MyActivityTabListener(Context packageCtx, Class<?> target) {
+			super(packageCtx, target);
+		}
+
+		@Override
+		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+			super.onTabSelected(tab, ft);
+			finish();
+		}
+
+	}
+	
 	
 
 }
