@@ -214,6 +214,7 @@ public class ViewMapActivity extends MapActivity {
 			return true;
 		case android.R.id.home:
 			Intent i = new Intent(this, GuideMain.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		default:
 			return false;

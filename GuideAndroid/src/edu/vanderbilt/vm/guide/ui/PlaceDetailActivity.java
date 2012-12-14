@@ -150,6 +150,7 @@ public class PlaceDetailActivity extends Activity{
 			return true;
 		case android.R.id.home:
 			i = new Intent(this, GuideMain.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 			return true;
 		default: 
