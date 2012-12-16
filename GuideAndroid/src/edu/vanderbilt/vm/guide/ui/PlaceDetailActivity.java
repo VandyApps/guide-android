@@ -101,6 +101,7 @@ public class PlaceDetailActivity extends Activity{
 		} catch (InterruptedException e) {
 			logger.error("Download failed", e);
 		}
+		// END Download image
 		
 		/* Check if this place is already on Agenda */
 		if(GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
@@ -108,6 +109,9 @@ public class PlaceDetailActivity extends Activity{
 		} else {
 			mIsOnAgenda = false;
 		}
+		
+		// add to History
+		GlobalState.addHistory(mPlace);
 		
 		/* Buttons' click definitions */
 

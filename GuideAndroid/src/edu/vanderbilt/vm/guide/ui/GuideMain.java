@@ -90,8 +90,8 @@ public class GuideMain extends Activity {
 		tab = mAction.newTab()
 				.setText("Stats")
 				.setTabListener( //TODO
-						new FragmentTabListener<TourFragment>(this, "stats",
-								TourFragment.class));
+						new FragmentTabListener<StatsFragment>(this, "stats",
+								StatsFragment.class));
 		mAction.addTab(tab, 3, false);
 		
 	}

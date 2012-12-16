@@ -58,7 +58,7 @@ public class Agenda {
 	 */
 	public void overwrite(Agenda agenda) {
 		this.mPlaces.clear();
-		Collections.copy(this.mPlaces, agenda.mPlaces);
+		Collections.copy(agenda.mPlaces, this.mPlaces);
 	}
 	
 	
