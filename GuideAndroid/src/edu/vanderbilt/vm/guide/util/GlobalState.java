@@ -81,11 +81,14 @@ public class GlobalState {
 			userHistory.add(plc);
 		} else if (userHistory.isOnAgenda(plc)){
 			// bring this place to the top
-			// userHistory.remove(plc);
+
 			Agenda temp = new Agenda();
 			temp.add(plc);
-			temp.coalesce(userHistory);
-			userHistory.overwrite(temp); // TODO
+			
+			for (int i = 0; i < userHistory.size(); i++){
+				temp.add(userHistory.get(i));
+			} // TODO
+			
 		} else {
 			userHistory.add(plc);
 		}
