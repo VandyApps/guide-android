@@ -1,7 +1,5 @@
 package edu.vanderbilt.vm.guide.ui;
 
-import java.util.List;
-
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -9,16 +7,18 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.container.Place;
-import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
-import edu.vanderbilt.vm.guide.util.GlobalState;
 
+/**
+ * The main Activity of the Guide app.  Contains the 4 main tabs:
+ * Map, Tours, Places, and Agenda.  Currently the launch activity.
+ * @author nicholasking
+ *
+ */
 @TargetApi(13)
 public class GuideMain extends Activity {
 
@@ -27,15 +27,12 @@ public class GuideMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_guide_main);
 		setupActionBar();
-		
-		List<Place> placeList = GlobalState.getPlaceList(this);
-		for (int i = 0; i < 7; i++){
-			GlobalState.getUserAgenda().add(placeList.get(i));
-		}
-		
 		Geomancer.activateGeolocation(this);
 	}
 
+	/**
+	 * Configure the action bar with the appropriate tabs and options
+	 */
 	private void setupActionBar() {
 		ActionBar ab = getActionBar();
 		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -84,6 +81,13 @@ public class GuideMain extends Activity {
 
 	}
 
+	/**
+	 * Determine whether a tab is selected
+	 * @param n The number of the tab to test for (ex: 
+	 * 			if Tours tab is #3, then n=3)
+	 * @param selection The Integer that has the selected tab
+	 * @return True if tab number n is selected, false otherwise
+	 */
 	private boolean isSelected(int n, Integer selection) {
 		return selection != null && n == selection;
 	}

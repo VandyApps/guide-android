@@ -16,11 +16,11 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,12 +29,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
+/**
+ * The activity that shows the details page for a place.  This activity shows
+ * the place name, description, picture, hours, etc.  It also allows the user to
+ * add or remove the place from the agenda and pin the place on the map.
+ * @author nicholasking, athran
+ *
+ */
 @TargetApi(11)
 public class PlaceDetailActivity extends Activity{
 
@@ -51,7 +58,6 @@ public class PlaceDetailActivity extends Activity{
 	
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove";
-	private final int MENU_ADD_AGENDA = Menu.FIRST;
 	private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailActivity");
 	
 	
@@ -84,7 +90,7 @@ public class PlaceDetailActivity extends Activity{
 			@Override
 			public void run() {
 				try {
-					InputStream is = (InputStream) new URL(mPlace.getPictureUri().getPath()).getContent();
+					InputStream is = (InputStream) new URL(mPlace.getPictureLoc()).getContent();
 					logger.trace("Download succeeded");
 					mPlaceBitmap = BitmapFactory.decodeStream(is);
 				} catch (Exception e) {
@@ -160,13 +166,22 @@ public class PlaceDetailActivity extends Activity{
 		}
 	}
 
+	/**
+	 * Get the id of the place from the intent and query the SQLite database for
+	 * that place
+	 * @return The place we were given
+	 */
 	private Place getPlaceFromIntent() {
 		Intent myIntent = getIntent();
 		if (myIntent == null)
 			return null;
 		int placeId = myIntent.getIntExtra(GuideConstants.PLACE_ID_EXTRA,
 				GuideConstants.BAD_PLACE_ID);
-		return GlobalState.getPlaceById(placeId);
+		GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Place place = Place.getPlaceById(placeId, db);
+		db.close();
+		return place;
 	}
 	
 	private void findViews() {

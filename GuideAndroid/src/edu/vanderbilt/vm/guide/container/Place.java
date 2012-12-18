@@ -1,14 +1,30 @@
 package edu.vanderbilt.vm.guide.container;
 
-import android.net.Uri;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+
+/**
+ * In-memory representation of a place.  Use this class when you want to deal
+ * with a nicer interface than SQLite cursors.  This class is also useful for
+ * data transactions between other Guide container classes.
+ * @author nicholasking
+ *
+ */
 public class Place {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger("container.Place");
+	private static final int DEFAULT_ID = -1;
 
 	private double mLatitude;
 	private double mLongitude;
-	private Uri mPictureUri;
-	private Uri mAudioUri;
-	private Uri mVideoUri;
+	private String mImageLoc;
+	private String mAudioLoc;
+	private String mVideoLoc;
 	private String mName;
 	private String mDescription;
 	private String mHours;
@@ -19,15 +35,15 @@ public class Place {
 	}
 
 	private Place(Place.Builder builder) {
-		if (builder.mUniqueId == -1) {
+		if (builder.mUniqueId == DEFAULT_ID) {
 			throw new IllegalArgumentException(
-					"Unique ID must not be default value (-1)");
+					"Unique ID must not be default value (" + DEFAULT_ID + ")");
 		}
 		mLatitude = builder.mLatitude;
 		mLongitude = builder.mLongitude;
-		mPictureUri = builder.mPictureUri;
-		mAudioUri = builder.mAudioUri;
-		mVideoUri = builder.mVideoUri;
+		mImageLoc = builder.mImageLoc;
+		mAudioLoc = builder.mAudioLoc;
+		mVideoLoc = builder.mVideoLoc;
 		mName = builder.mName;
 		mDescription = builder.mDescription;
 		mHours = builder.mHours;
@@ -35,19 +51,29 @@ public class Place {
 		mCategory = builder.mCategory;
 	}
 
+	/**
+	 * A class for creating Place objects.  You must use this
+	 * class in order to create a place.  Chain setter method calls where
+	 * appropriate.  Call build() when you have finished setting all of the
+	 * fields.  Any unset fields will be given a default value.
+	 * <p/>
+	 * <b>Note:</b> You must set a uniqueId for every place.  Failing to do
+	 * so will result in an exception.
+	 * @author nicholasking
+	 *
+	 */
 	public static class Builder {
 		private double mLatitude = 0;
 		private double mLongitude = 0;
-		private Uri mPictureUri;
-		private Uri mAudioUri;
-		private Uri mVideoUri;
+		private String mImageLoc;
+		private String mAudioLoc;
+		private String mVideoLoc;
 		private String mName;
 		private String mDescription;
 		private String mHours;
 		private String mCategory;
-		private int mUniqueId = -1; // An exception will be thrown if this id is
-									// used
-
+		private int mUniqueId = DEFAULT_ID;
+		
 		public Builder() {
 		}
 
@@ -61,18 +87,18 @@ public class Place {
 			return this;
 		}
 
-		public Builder setPictureUri(Uri pictureUri) {
-			mPictureUri = pictureUri;
+		public Builder setImageLoc(String imageLoc) {
+			mImageLoc = imageLoc;
 			return this;
 		}
 
-		public Builder setAudioUri(Uri audioUri) {
-			mAudioUri = audioUri;
+		public Builder setAudioLoc(String audioLoc) {
+			mAudioLoc = audioLoc;
 			return this;
 		}
-		
-		public Builder setVideoUri(Uri videoUri) {
-			mVideoUri = videoUri;
+
+		public Builder setVideoLoc(String videoLoc) {
+			mVideoLoc = videoLoc;
 			return this;
 		}
 
@@ -107,6 +133,114 @@ public class Place {
 
 	}
 
+	/**
+	 * Queries db for the place with the given uniqueId and creates a Place
+	 * object to hold the result of the query.
+	 * @param uniqueId The unique id of the place
+	 * @param db The database to query
+	 * @return The Place with the given uniqueId
+	 */
+	public static Place getPlaceById(int uniqueId, SQLiteDatabase db) {
+		Cursor cursor = db.query(GuideDBConstants.PlaceTable.PLACE_TABLE_NAME,
+				null, GuideDBConstants.PlaceTable.ID_COL + "=" + uniqueId,
+				null, null, null, null);
+
+		Place place = getPlaceFromCursor(cursor);
+		if(place == null) {
+			logger.warn("Could not find place with id {}", uniqueId);
+		}
+		return place;
+	}
+	
+	/**
+	 * Creates a Place object from a cursor.  The cursor should have come from
+	 * a query to the places table in the sqlite database.
+	 * @param cursor The cursor to use to create the place
+	 * @return The place created with the data in the cursor
+	 */
+	public static Place getPlaceFromCursor(Cursor cursor) {
+		if (!cursor.moveToFirst()) {
+			logger.warn("Got an empty cursor");
+			return null;
+		}
+		Place.Builder bldr = new Place.Builder();
+		try {
+			int index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
+			if (index != -1) {
+				bldr.setUniqueId(cursor.getInt(index));
+			} else {
+				// This should never happen. We should always get an ID column
+				// back. If it does happen, something went wrong, so we want
+				// to abort and log an error message
+				logger.error(
+						"Got a cursor with no ID column!");
+				return null;
+			}
+
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.AUDIO_LOC_COL);
+			if (index != -1) {
+				bldr.setAudioLoc(cursor.getString(index));
+			}
+
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.CATEGORY_COL);
+			if (index != -1) {
+				bldr.setCategory(cursor.getString(index));
+			}
+
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.DESCRIPTION_COL);
+			if (index != -1) {
+				bldr.setDescription(cursor.getString(index));
+			}
+
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.HOURS_COL);
+			if (index != -1) {
+				bldr.setHours(cursor.getString(index));
+			}
+			
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.IMAGE_LOC_COL);
+			if(index != -1) {
+				bldr.setImageLoc(cursor.getString(index));
+			}
+			
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.LATITUDE_COL);
+			if(index != -1) {
+				bldr.setLatitude(cursor.getDouble(index));
+			}
+			
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.LONGITUDE_COL);
+			if(index != -1) {
+				bldr.setLongitude(cursor.getDouble(index));
+			}
+			
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.NAME_COL);
+			if(index != -1) {
+				bldr.setName(cursor.getString(index));
+			}
+			
+			index = cursor
+					.getColumnIndex(GuideDBConstants.PlaceTable.VIDEO_LOC_COL);
+			if(index != -1) {
+				bldr.setVideoLoc(cursor.getString(index));
+			}
+
+		} catch (Exception e) {
+			logger.error("Caught exception while trying to " +
+					"create place from a cursor: ", e);
+			return null;
+		}
+		
+		return bldr.build();
+	}
+
 	public double getLatitude() {
 		return mLatitude;
 	}
@@ -115,16 +249,16 @@ public class Place {
 		return mLongitude;
 	}
 
-	public Uri getPictureUri() {
-		return mPictureUri;
+	public String getPictureLoc() {
+		return mImageLoc;
 	}
 
-	public Uri getAudioUri() {
-		return mAudioUri;
+	public String getAudioLoc() {
+		return mAudioLoc;
 	}
-	
-	public Uri getVideoUri() {
-		return mVideoUri;
+
+	public String getVideoLoc() {
+		return mVideoLoc;
 	}
 
 	public String getName() {
