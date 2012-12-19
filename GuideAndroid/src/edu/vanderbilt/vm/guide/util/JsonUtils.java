@@ -35,6 +35,15 @@ public class JsonUtils {
 		throw new AssertionError("Do not instantiate this class.");
 	}
 
+	/**
+	 * Makes a list of places from a JSON-formatted input stream.
+	 * 
+	 * @param in The InputStream with the JSON-formatted data
+	 * @return a list of places created
+	 * @throws IOException 
+	 * @deprecated Use the SQLite database methods instead to read in
+	 * new places from an input stream and store them in the database
+	 */
 	@Deprecated
 	public static List<Place> readPlacesFromInputStream(InputStream in)
 			throws IOException {
@@ -48,6 +57,7 @@ public class JsonUtils {
 		return places;
 	}
 
+	
 	@Deprecated
 	public static Place readPlace(JsonReader reader) throws IOException {
 		Place.Builder bldr = new Place.Builder();
@@ -65,11 +75,11 @@ public class JsonUtils {
 			} else if (name.equals("placeDescription")) {
 				bldr.setDescription(reader.nextString());
 			} else if (name.equals("imagePath")) {
-				bldr.setPictureUri(Uri.parse(reader.nextString()));
+				bldr.setImageLoc(reader.nextString());
 			} else if (name.equals("videoPath")) {
-				bldr.setVideoUri(Uri.parse(reader.nextString()));
+				bldr.setVideoLoc(reader.nextString());
 			} else if (name.equals("audioPath")) {
-				bldr.setAudioUri(Uri.parse(reader.nextString()));
+				bldr.setAudioLoc(reader.nextString());
 			} else if (name.equals("latitude")) {
 				bldr.setLatitude(reader.nextDouble());
 			} else if (name.equals("longitude")) {
@@ -82,6 +92,22 @@ public class JsonUtils {
 		return bldr.build();
 	}
 
+	/**
+	 * Adds tuples to a SQLite database from a JSON-formatted input stream.
+	 * The table name lets this method determine which type of JSON it is
+	 * dealing with, so use
+	 * GuideDbConstants.PlaceTable.PLACE_TABLE_NAME
+	 * or
+	 * GuideDBConstants.TourTable.TOUR_TABLE_NAME
+	 * to inform this method of which type of JSON parsing to do.
+	 * 
+	 * @param tableName Name of table to populate; used to determine how the JSON
+	 * is formatted
+	 * @param in  The InputStream that contains the JSON to read
+	 * @param db  The opened SQLiteDatabase to be populated
+	 * @return The populated database (a reference to db)
+	 * @throws IOException
+	 */
 	public static SQLiteDatabase populateDatabaseFromInputStream(
 			String tableName, InputStream in, SQLiteDatabase db)
 			throws IOException {
