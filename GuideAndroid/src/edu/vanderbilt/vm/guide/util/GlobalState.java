@@ -81,5 +81,51 @@ public class GlobalState {
 
 		return null; // If search failed
 	}
+	
+	// History Singleton
+	private static Agenda userHistory = new Agenda();
+	
+	static {
+		resetHistory();
+	}
+	
+	public static Agenda getUserHistory() {
+		return userHistory;
+	}
+	
+	public static void addHistory(Place plc){
+		if (userHistory.size() == 0){
+			userHistory.add(plc);
+		} else if (userHistory.get(0).getUniqueId() == 1000) {
+			userHistory.overwrite(new Agenda());
+			userHistory.add(plc);
+		} else if (userHistory.isOnAgenda(plc)){
+			// bring this place to the top
 
+			Agenda temp = new Agenda();
+			temp.add(plc);
+			
+			for (int i = 0; i < userHistory.size(); i++){
+				temp.add(userHistory.get(i));
+			} // TODO
+			
+		} else {
+			userHistory.add(plc);
+		}
+		
+	}
+	
+	public static void resetHistory(){
+		if (userHistory == null){
+			userHistory = new Agenda();
+		} else {
+			userHistory.overwrite(new Agenda());
+		}
+		
+		Place temp = (new Place.Builder())
+				.setName("History is Empty")
+				.setUniqueId(1000).build(); // TODO
+		userHistory.add(temp);
+	}
+	// END History Singleton
 }

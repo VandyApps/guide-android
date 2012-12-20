@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item 
-        android:id="@+id/add_agenda"
+        android:id="@+id/menu_add_agenda"
         android:title="@string/menu_add_agenda"
         android:icon="@drawable/content_new"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom|withText"/>
+    
+    <item
+        android:id="@+id/menu_map"
+        android:title="@string/menu_map"
+        android:icon="@drawable/location_map"
+        android:showAsAction="always|withText"/>
 
 </menu>

@@ -1,5 +1,7 @@
 package edu.vanderbilt.vm.guide.ui;
 
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -7,11 +9,20 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
+import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
  * The main Activity of the Guide app.  Contains the 4 main tabs:
@@ -22,6 +33,8 @@ import edu.vanderbilt.vm.guide.util.Geomancer;
 @TargetApi(13)
 public class GuideMain extends Activity {
 
+	private ActionBar mAction;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,10 +47,11 @@ public class GuideMain extends Activity {
 	 * Configure the action bar with the appropriate tabs and options
 	 */
 	private void setupActionBar() {
-		ActionBar ab = getActionBar();
-		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		ab.setDisplayShowTitleEnabled(false);
-
+		mAction = getActionBar();
+		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		mAction.setDisplayShowTitleEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		
 		Intent myIntent = getIntent();
 		final Integer selection;
 		if (myIntent != null && myIntent.hasExtra("selection")) {
@@ -51,35 +65,60 @@ public class GuideMain extends Activity {
 		boolean placesSelected = isSelected(1, selection)
 				|| (!toursSelected && !agendaSelected);
 
-		Tab tab = ab
-				.newTab()
-				.setText("Map")
-				.setTabListener(
-						new MyActivityTabListener(this, ViewMapActivity.class));
-		ab.addTab(tab, 0, false);
-
-		tab = ab.newTab()
+		Tab tab = mAction.newTab()
 				.setText("Places")
 				.setTabListener(
 						new FragmentTabListener<PlaceTabFragment>(this,
 								"places", PlaceTabFragment.class));
-		ab.addTab(tab, 1, placesSelected);
+		mAction.addTab(tab, 0, placesSelected);
 
-		tab = ab.newTab()
+		tab = mAction.newTab()
 				.setText("Agenda")
 				.setTabListener(
 						new FragmentTabListener<AgendaFragment>(this, "agenda",
 								AgendaFragment.class));
-		ab.addTab(tab, 2, agendaSelected);
+		mAction.addTab(tab, 1, agendaSelected);
 		
-		tab = ab.newTab()
+		tab = mAction.newTab()
 				.setText("Tours")
 				.setTabListener(
 						new FragmentTabListener<TourFragment>(this, "tours",
 								TourFragment.class));
-		ab.addTab(tab, 3, toursSelected);
-
+		mAction.addTab(tab, 2, toursSelected);
+		
+		tab = mAction.newTab()
+				.setText("Stats")
+				.setTabListener( //TODO
+						new FragmentTabListener<StatsFragment>(this, "stats",
+								StatsFragment.class));
+		mAction.addTab(tab, 3, false);
+		
 	}
+	
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.activity_guide_main, menu);
+	    return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item){
+		
+		switch (item.getItemId()){
+		case R.id.menu_map:
+			Intent i = new Intent(this, ViewMapActivity.class);
+			i.putExtra(GuideConstants.MAP_AGENDA, "");
+			startActivity(i);
+			return true;
+		case R.id.menu_refresh:
+			//TODO
+			Toast.makeText(this, "Current Location Updated", Toast.LENGTH_SHORT).show();
+			return true;
+		
+		default: return false;
+		}
+	}
+	// ---------- END setup and lifecycle related methods ---------- //
+	
 
 	/**
 	 * Determine whether a tab is selected

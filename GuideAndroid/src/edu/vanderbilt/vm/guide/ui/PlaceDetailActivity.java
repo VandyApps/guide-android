@@ -49,12 +49,11 @@ public class PlaceDetailActivity extends Activity{
 	private ImageView mPlaceIv;
 	private TextView mPlaceDescTv;
 	private TextView mPlaceHoursTv;
-	private Button mMapButton;
 	private Bitmap mPlaceBitmap;
-	private Button mAgendaActionButton;
 	private Menu mMenu;
 	private boolean mIsOnAgenda = false;
 	private Place mPlace;
+	private ActionBar mAction;
 	
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove";
@@ -82,10 +81,13 @@ public class PlaceDetailActivity extends Activity{
 		mPlaceDescTv.setText(mPlace.getDescription());
 		mPlaceHoursTv.setText("Hours of operation: " + mPlace.getHours());
 		
-		ActionBar ab = getActionBar();
-		ab.setTitle("Place Detail");
-		ab.setDisplayHomeAsUpEnabled(true);
+		// Setup ActionBar
+		mAction = getActionBar();
+		mAction.setTitle("Place Detail");
+		mAction.setDisplayHomeAsUpEnabled(true);
+		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
 		
+		// Download image
 		Thread downloadImage = new Thread() {
 			@Override
 			public void run() {
@@ -106,35 +108,26 @@ public class PlaceDetailActivity extends Activity{
 		} catch (InterruptedException e) {
 			logger.error("Download failed", e);
 		}
+		// END Download image
 		
 		/* Check if this place is already on Agenda */
 		if(GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
-			mAgendaActionButton.setText(REMOVE_STR);
 			mIsOnAgenda = true;
 		} else {
-			mAgendaActionButton.setText(ADD_STR);
 			mIsOnAgenda = false;
 		}
 		
-		/* Buttons' click definitions */
-		mAgendaActionButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				addRemoveToAgenda();
-			}
-		});
+		// add to History
+		GlobalState.addHistory(mPlace);
 		
-		mMapButton.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View v){
-				Intent i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
-				i.putExtra("map_focus", mPlace.getUniqueId());
-				startActivity(i);
-			}
-		});
+		/* Buttons' click definitions */
+
+		
 		/* End of Buttons' click definitions */
 	}
+	// ---------- END onCreate() ---------- //
 	
+	// ---------- BEGIN setup and lifecycle related methods ---------- //
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.place_detail_activity, menu);
@@ -145,7 +138,7 @@ public class PlaceDetailActivity extends Activity{
 	    	 * The default icon is a "+"
 	    	 * therefore change to "-"
 	    	 */
-	    	mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+	    	mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
 	    } else {
 	    	// Use default icon "+" as defined in xml
 	    }
@@ -154,13 +147,23 @@ public class PlaceDetailActivity extends Activity{
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item){
+		Intent i;
+		
 		switch (item.getItemId()){
-		case R.id.add_agenda:
+		case R.id.menu_add_agenda:
 			addRemoveToAgenda();
 			return true;
-		case android.R.id.home:
-			Intent i = new Intent(this, GuideMain.class);
+		case R.id.menu_map:
+			i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
+			i.putExtra(GuideConstants.MAP_FOCUS, mPlace.getUniqueId());
+			i.putExtra(GuideConstants.SELECTION, 100 + mPlace.getUniqueId());
 			startActivity(i);
+			return true;
+		case android.R.id.home:
+			i = new Intent(this, GuideMain.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			return true;
 		default: 
 			return false;
 		}
@@ -188,8 +191,6 @@ public class PlaceDetailActivity extends Activity{
 		mPlaceNameTv = (TextView) findViewById(R.id.PlaceName);
 		mPlaceIv = (ImageView) findViewById(R.id.PlaceImage);
 		mPlaceDescTv = (TextView) findViewById(R.id.PlaceDescription);
-		mMapButton = (Button) findViewById(R.id.BMap);
-		mAgendaActionButton = (Button) findViewById(R.id.BAgendaAction);
 		mPlaceHoursTv = (TextView) findViewById(R.id.PlaceHours);
 	}
 	
@@ -197,13 +198,11 @@ public class PlaceDetailActivity extends Activity{
 		
 		if(mIsOnAgenda) {
 			GlobalState.getUserAgenda().remove(mPlace);
-			mAgendaActionButton.setText(ADD_STR);
-			mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
+			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
 			Toast.makeText(this, "Removed from Agenda", Toast.LENGTH_SHORT).show();
 		} else {
 			GlobalState.getUserAgenda().add(mPlace);
-			mAgendaActionButton.setText(REMOVE_STR);
-			mMenu.getItem(0).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
 			Toast.makeText(this, "Added to from Agenda", Toast.LENGTH_SHORT).show();
 		}
 		mIsOnAgenda = !mIsOnAgenda;
