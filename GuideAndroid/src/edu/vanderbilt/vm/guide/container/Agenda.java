@@ -2,10 +2,15 @@ package edu.vanderbilt.vm.guide.container;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
-
-public class Agenda {
+/**
+ * Represents a list of places that the user plans to visit.
+ * @author nick
+ *
+ */
+public class Agenda implements Iterable<Place> {
 
 	private List<Place> mPlaces = new ArrayList<Place>();
 	
@@ -91,6 +96,11 @@ public class Agenda {
 	 */
 	public int size() {
 		return mPlaces.size();
+	}
+
+	@Override
+	public Iterator<Place> iterator() {
+		return mPlaces.iterator();
 	}
 	
 }
