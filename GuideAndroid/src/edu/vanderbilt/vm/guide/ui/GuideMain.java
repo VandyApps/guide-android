@@ -1,7 +1,5 @@
 package edu.vanderbilt.vm.guide.ui;
 
-import java.util.List;
-
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -9,19 +7,15 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.container.Place;
-import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
-import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
@@ -60,6 +54,8 @@ public class GuideMain extends Activity {
 			selection = null;
 		}
 
+		// TODO: Remove this crap.  It's not necessary now that we don't need
+		// the map tab hack anymore.
 		boolean toursSelected = isSelected(3, selection);
 		boolean agendaSelected = isSelected(2, selection);
 		boolean placesSelected = isSelected(1, selection)

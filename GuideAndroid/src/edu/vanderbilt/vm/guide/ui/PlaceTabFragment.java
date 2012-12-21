@@ -5,15 +5,11 @@ package edu.vanderbilt.vm.guide.ui;
  * This Fragment shows the categories of places and the user's current location
  */
 
-import com.parse.FindCallback;
-
 import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.app.ListFragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +21,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.ui.adapter.PlaceListAdapter;
@@ -35,7 +30,6 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(11)
 public class PlaceTabFragment extends Fragment implements OnClickListener{
-	private static final String LOG_TAG = "PlaceMainFragment";
 	private final int DESCRIPTION_LENGTH = 35;
 	
 	private ListView mListView;

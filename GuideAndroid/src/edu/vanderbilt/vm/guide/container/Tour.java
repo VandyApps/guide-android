@@ -5,11 +5,21 @@ import java.util.List;
 
 public class Tour {
 
+	/**
+	 * The agenda that contains the places on the tour
+	 */
 	private Agenda mAgenda;
+	
 	private String mTimeRequired;
 	private String mDistance;
 	private String mDescription;
 	private String mName;
+	
+	/**
+	 * A string containing a URI that points to the location of the icon for
+	 * this tour
+	 */
+	private String mIconLoc;
 	
 	/* package */ Tour() { }
 	
@@ -23,6 +33,7 @@ public class Tour {
 		this.mDescription = builder.mDescription;
 		this.mDistance = builder.mDistance;
 		this.mName = builder.mName;
+		this.mIconLoc = builder.mIconLoc;
 	}
 	
 	public Tour(List<Place> placesOnTour) {
@@ -65,12 +76,17 @@ public class Tour {
 		return mAgenda;
 	}
 	
+	public String getIconLoc() {
+		return mIconLoc;
+	}
+	
 	public static class Builder {
 		private Agenda mAgenda;
 		private String mTimeRequired;
 		private String mDistance;
 		private String mDescription;
 		private String mName;
+		private String mIconLoc;
 		
 		public Builder() { }
 		
@@ -96,6 +112,11 @@ public class Tour {
 		
 		public Builder setName(String name) {
 			mName = name;
+			return this;
+		}
+		
+		public Builder setIconLoc(String iconLoc) {
+			mIconLoc = iconLoc;
 			return this;
 		}
 		
