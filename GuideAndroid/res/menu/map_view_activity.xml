@@ -4,5 +4,11 @@
         android:id="@+id/map_menu_add_agenda"
         android:title="@string/menu_add_agenda"
         android:icon="@drawable/content_new" />
+    
+    <item
+        android:id="@+id/menu_about"
+        android:title="@string/menu_about"
+        android:icon="@drawable/action_about"
+        android:showAsAction="ifRoom" />
 
 </menu>

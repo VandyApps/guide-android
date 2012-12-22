@@ -10,6 +10,8 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -36,22 +38,21 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 public class GuideMain extends Activity {
 
 	private ActionBar mAction;
-	ViewPager mViewPager;
-    SwipingTabsAdapter mTabsAdapter;
+	private ViewPager mViewPager;
+    private SwipingTabsAdapter mTabsAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Geomancer.activateGeolocation(this);
-		
-		mViewPager = new ViewPager(this);
-        mViewPager.setId(R.id.swiper_1);
-        setContentView(mViewPager);
+		setContentView(R.layout.activity_guide_main);
 
         mAction = getActionBar();
         mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mAction.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
-
+        mAction.setBackgroundDrawable(new ColorDrawable(Color.rgb(189, 187, 14)));
+        
+        mViewPager = (ViewPager) findViewById(R.id.swiper_1);
         mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);
         mTabsAdapter.addTab(mAction.newTab().setText("Places"),
         		PlaceTabFragment.class, null);
@@ -137,7 +138,9 @@ public class GuideMain extends Activity {
 			//TODO
 			Toast.makeText(this, "Current Location Updated", Toast.LENGTH_SHORT).show();
 			return true;
-		
+		case R.id.menu_about:
+			About.open(this);
+			return true;
 		default: return false;
 		}
 	}

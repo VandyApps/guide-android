@@ -13,7 +13,9 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -71,7 +73,7 @@ public class ViewMapActivity extends MapActivity {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mAction.setDisplayShowTitleEnabled(true);
-		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		mAction.setBackgroundDrawable(new ColorDrawable(Color.rgb(189, 187, 14)));
 		mAction.setDisplayHomeAsUpEnabled(true);
 		
 		/* Begin customizing MapView [athran] */
@@ -216,6 +218,9 @@ public class ViewMapActivity extends MapActivity {
 			Intent i = new Intent(this, GuideMain.class);
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
+			return true;
+		case R.id.menu_about:
+			About.open(this);
 		default:
 			return false;
 		}
@@ -225,6 +230,8 @@ public class ViewMapActivity extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
+	
+	
 	
 	// ---------- END setup and lifecycle related methods ---------- //
 	

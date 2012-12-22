@@ -17,5 +17,6 @@
 	<string name="menu_add_agenda">Agenda</string>	
 	<string name="menu_refresh">Refresh</string>
 	<string name="menu_map">Map</string>
+	<string name="menu_about">About</string>
 	
 </resources>

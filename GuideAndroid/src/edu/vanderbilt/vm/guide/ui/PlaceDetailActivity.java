@@ -19,6 +19,8 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -85,7 +87,7 @@ public class PlaceDetailActivity extends Activity{
 		mAction = getActionBar();
 		mAction.setTitle("Place Detail");
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
+		mAction.setBackgroundDrawable(new ColorDrawable(Color.rgb(189, 187, 14)));
 		
 		// Download image
 		Thread downloadImage = new Thread() {
@@ -163,6 +165,9 @@ public class PlaceDetailActivity extends Activity{
 			i = new Intent(this, GuideMain.class);
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
+			return true;
+		case R.id.menu_about:
+			About.open(this);
 			return true;
 		default: 
 			return false;

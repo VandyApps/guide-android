@@ -11,5 +11,11 @@
         android:title="@string/menu_map"
         android:icon="@drawable/location_map"
         android:showAsAction="always|withText"/>
+    
+    <item
+        android:id="@+id/menu_about"
+        android:title="@string/menu_about"
+        android:icon="@drawable/action_about"
+        android:showAsAction="ifRoom" />
 
 </menu>
