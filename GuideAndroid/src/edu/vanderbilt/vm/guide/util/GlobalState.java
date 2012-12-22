@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
@@ -20,6 +21,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBConstants;
  * @author nicholasking
  * 
  */
+@NeedsTesting(lastModifiedDate = "12/22/12")
 public class GlobalState {
 
 	private static Agenda userAgendaSingleton = new Agenda();

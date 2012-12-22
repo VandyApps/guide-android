@@ -5,11 +5,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
+
 /**
  * Represents a list of places that the user plans to visit.
  * @author nick
  *
  */
+@NeedsTesting(lastModifiedDate = "12/22/12")
 public class Agenda implements Iterable<Place> {
 
 	private List<Place> mPlaces = new ArrayList<Place>();

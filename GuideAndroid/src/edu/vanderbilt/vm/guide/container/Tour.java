@@ -2,7 +2,9 @@ package edu.vanderbilt.vm.guide.container;
 
 import java.util.List;
 
+import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 
+@NeedsTesting(lastModifiedDate = "12/22/12")
 public class Tour {
 
 	/**

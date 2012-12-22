@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Place;
 
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.util.Log;
  * 
  * @author abdulra1
  */
+@NeedsTesting(lastModifiedDate = "12/22/12")
 public class Geomancer {
 	
 	private static final Logger logger = LoggerFactory.getLogger("util.Geomancer");
