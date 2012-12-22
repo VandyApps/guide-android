@@ -54,12 +54,12 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(11)
-public class ViewMapActivity extends MapActivity {
+public class MapViewer extends MapActivity {
 
 	private static final int MEDIUM_ZOOM = 18;
 	private static final int BUILDING_ZOOM = 20;	// high zoom for viewing individual building
 	private static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
-	private static final Logger logger = LoggerFactory.getLogger("ui.ViewMapActivity");
+	private static final Logger logger = LoggerFactory.getLogger("ui.MapViewer");
 	private static final String MAP_AGENDA = "map_agenda";
 	private static final String MAP_FOCUS = "map_focus";
 	private static final int VIEWING_PLACE = 666;
@@ -268,7 +268,7 @@ public class ViewMapActivity extends MapActivity {
 	 * @param ctx
 	 */
 	public static void openAgenda(Context ctx){
-		Intent i = new Intent(ctx, ViewMapActivity.class);
+		Intent i = new Intent(ctx, MapViewer.class);
 		i.putExtra(MAP_AGENDA, "");
 		ctx.startActivity(i);
 	}
@@ -279,13 +279,13 @@ public class ViewMapActivity extends MapActivity {
 	 * @param placeid
 	 */
 	public static void openPlace(Context ctx, int placeid){
-		Intent i = new Intent(ctx, ViewMapActivity.class);
+		Intent i = new Intent(ctx, MapViewer.class);
 		i.putExtra(MAP_FOCUS, placeid);
 		ctx.startActivity(i);
 	}
 	
 	public static void openList(Context ctx, Bundle list){
-		Intent i = new Intent(ctx, ViewMapActivity.class);
+		Intent i = new Intent(ctx, MapViewer.class);
 		i.putExtras(list);
 		ctx.startActivity(i);
 	}
@@ -388,7 +388,7 @@ public class ViewMapActivity extends MapActivity {
             OnClickListener listener = new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					Intent i = new Intent(ViewMapActivity.this, PlaceDetailActivity.class);
+					Intent i = new Intent(MapViewer.this, PlaceDetailer.class);
 					i.putExtra(GuideConstants.PLACE_ID_EXTRA , mAgendaList.get(mClicked).getUniqueId());
 				}
     		};
@@ -469,7 +469,7 @@ public class ViewMapActivity extends MapActivity {
 		
 		protected boolean onTap(int i){
 			/*
-			 * TODO clicking on the map pins should lead to the PlaceDetailActivity
+			 * TODO clicking on the map pins should lead to the PlaceDetailer
 			 */
 			
 			return true;

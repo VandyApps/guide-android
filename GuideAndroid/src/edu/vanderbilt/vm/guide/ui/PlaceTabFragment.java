@@ -67,7 +67,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Place place = (Place) mListView.getItemAtPosition(position);
-				PlaceDetailActivity.open(getActivity(), place.getUniqueId());
+				PlaceDetailer.open(getActivity(), place.getUniqueId());
 			}
 		});
 
@@ -117,7 +117,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v == mCurrPlaceDesc || v == mCurrPlaceName || v == mCurrentPlaceBar) {
-			Intent i = new Intent(getActivity(), PlaceDetailActivity.class);
+			Intent i = new Intent(getActivity(), PlaceDetailer.class);
 			i.putExtra(GuideConstants.PLACE_ID_EXTRA, mCurrPlace.getUniqueId());
 			startActivity(i);
 		} else if (v == mSearchBox) {

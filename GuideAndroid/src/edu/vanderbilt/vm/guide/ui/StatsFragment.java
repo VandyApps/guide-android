@@ -52,7 +52,7 @@ public class StatsFragment extends Fragment {
 					return;
 				}
 				Intent i = new Intent()
-						.setClass(getActivity(), PlaceDetailActivity.class)
+						.setClass(getActivity(), PlaceDetailer.class)
 						.putExtra(GuideConstants.PLACE_ID_EXTRA, 
 								place.getUniqueId());
 				startActivity(i);

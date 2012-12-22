@@ -30,11 +30,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PlaceDetailActivity"
+            android:name="edu.vanderbilt.vm.guide.ui.PlaceDetailer"
             android:label="@string/title_activity_place_detail_activity" >
         </activity>
         <activity
-            android:name=".ui.ViewMapActivity"
+            android:name="edu.vanderbilt.vm.guide.ui.MapViewer"
             android:label="Map" >
         </activity>
         <activity

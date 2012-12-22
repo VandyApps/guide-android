@@ -47,7 +47,7 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  *
  */
 @TargetApi(11)
-public class PlaceDetailActivity extends Activity{
+public class PlaceDetailer extends Activity{
 
 	private TextView mPlaceNameTv;
 	private ImageView mPlaceIv;
@@ -62,7 +62,7 @@ public class PlaceDetailActivity extends Activity{
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove";
 	private static final Logger logger = LoggerFactory
-			.getLogger("ui.PlaceDetailActivity");
+			.getLogger("ui.PlaceDetailer");
 	private static final String PLACE_ID_EXTRA = "placeId";
 	
 	@Override
@@ -158,7 +158,7 @@ public class PlaceDetailActivity extends Activity{
 			addRemoveToAgenda();
 			return true;
 		case R.id.menu_map:
-			ViewMapActivity.openPlace(this, mPlace.getUniqueId());
+			MapViewer.openPlace(this, mPlace.getUniqueId());
 			return true;
 		case android.R.id.home:
 			GuideMain.open(this);
@@ -218,7 +218,7 @@ public class PlaceDetailActivity extends Activity{
 	 * @param placeid The Id of the Place that you want to detail
 	 */
 	public static void open(Context ctx, int placeid){
-		Intent i = new Intent(ctx, PlaceDetailActivity.class);
+		Intent i = new Intent(ctx, PlaceDetailer.class);
 		i.putExtra(PLACE_ID_EXTRA, placeid);
 		ctx.startActivity(i);
 	}

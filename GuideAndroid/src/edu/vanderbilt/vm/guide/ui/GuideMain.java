@@ -79,7 +79,7 @@ public class GuideMain extends Activity {
 		
 		switch (item.getItemId()){
 		case R.id.menu_map:
-			ViewMapActivity.openAgenda(this);
+			MapViewer.openAgenda(this);
 			return true;
 		case R.id.menu_refresh:
 			//TODO
