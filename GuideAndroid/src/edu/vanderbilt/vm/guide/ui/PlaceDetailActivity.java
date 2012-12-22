@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -59,8 +60,9 @@ public class PlaceDetailActivity extends Activity{
 	
 	private static final String ADD_STR = "Add to Agenda";
 	private static final String REMOVE_STR = "Remove";
-	private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailActivity");
-	
+	private static final Logger logger = LoggerFactory
+			.getLogger("ui.PlaceDetailActivity");
+	private static final String PLACE_ID_EXTRA = "placeId";
 	
 	@Override
 	public void onCreate(Bundle SavedInstanceState) {
@@ -149,22 +151,16 @@ public class PlaceDetailActivity extends Activity{
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item){
-		Intent i;
 		
 		switch (item.getItemId()){
 		case R.id.menu_add_agenda:
 			addRemoveToAgenda();
 			return true;
 		case R.id.menu_map:
-			i = new Intent(PlaceDetailActivity.this, ViewMapActivity.class);
-			i.putExtra(GuideConstants.MAP_FOCUS, mPlace.getUniqueId());
-			i.putExtra(GuideConstants.SELECTION, 100 + mPlace.getUniqueId());
-			startActivity(i);
+			ViewMapActivity.openPlace(this, mPlace.getUniqueId());
 			return true;
 		case android.R.id.home:
-			i = new Intent(this, GuideMain.class);
-			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(i);
+			GuideMain.open(this);
 			return true;
 		case R.id.menu_about:
 			About.open(this);
@@ -203,13 +199,27 @@ public class PlaceDetailActivity extends Activity{
 		
 		if(mIsOnAgenda) {
 			GlobalState.getUserAgenda().remove(mPlace);
-			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_new));
-			Toast.makeText(this, "Removed from Agenda", Toast.LENGTH_SHORT).show();
+			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)
+					getResources().getDrawable(R.drawable.content_new));
+			Toast.makeText(this,"Removed from Agenda",Toast.LENGTH_SHORT).show();
 		} else {
 			GlobalState.getUserAgenda().add(mPlace);
-			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
-			Toast.makeText(this, "Added to from Agenda", Toast.LENGTH_SHORT).show();
+			mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)
+					getResources().getDrawable(R.drawable.content_remove));
+			Toast.makeText(this,"Added to from Agenda",Toast.LENGTH_SHORT).show();
 		}
 		mIsOnAgenda = !mIsOnAgenda;
 	}
+	
+	/**
+	 * Use this method to open the Details page
+	 * @param ctx The starting Activity
+	 * @param placeid The Id of the Place that you want to detail
+	 */
+	public static void open(Context ctx, int placeid){
+		Intent i = new Intent(ctx, PlaceDetailActivity.class);
+		i.putExtra(PLACE_ID_EXTRA, placeid);
+		ctx.startActivity(i);
+	}
+	
 }

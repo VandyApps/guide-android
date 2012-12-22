@@ -58,16 +58,13 @@ public class PlaceTabFragment extends Fragment implements OnClickListener{
 		
 		mListView = (ListView) getActivity().findViewById(R.id.placeTablistView);
 		mListView.setAdapter(new PlaceListAdapter(getActivity(),
-				GlobalState.getPlaceList(getActivity())));
+				GlobalState.getPlaceList(getActivity()))); // TODO convert to DB code
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Place place = (Place) mListView.getItemAtPosition(position);
-				Intent i = new Intent().setClass(getActivity(),
-						PlaceDetailActivity.class).putExtra(
-						GuideConstants.PLACE_ID_EXTRA, place.getUniqueId());
-				startActivity(i);
+				PlaceDetailActivity.open(getActivity(), place.getUniqueId());
 			}
 		});
 		

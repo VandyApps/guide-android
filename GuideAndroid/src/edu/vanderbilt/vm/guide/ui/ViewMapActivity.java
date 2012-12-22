@@ -12,7 +12,9 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -44,6 +46,7 @@ import com.google.android.maps.OverlayItem;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
@@ -56,25 +59,25 @@ public class ViewMapActivity extends MapActivity {
 	private static final int BUILDING_ZOOM = 20;	// high zoom for viewing individual building
 	private static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
 	private static final Logger logger = LoggerFactory.getLogger("ui.ViewMapActivity");
+	private static final String MAP_AGENDA = "map_agenda";
+	private static final String MAP_FOCUS = "map_focus";
+	private static final int VIEWING_PLACE = 666;
+	private static final int VIEWING_AGENDA = 999;
 
 	private Timer mUpdateLocation;
 	private MapView mMapView;
-	private int UPDATE_ID;
 	private MyLocationOverlay mDevice;
 	private ActionBar mAction;
 	private Menu mMenu;
+	private int mPlaceIdFocused;
+	private int mMapState;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		
-		// setup action bar
-		mAction = getActionBar();
-		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		mAction.setDisplayShowTitleEnabled(true);
-		mAction.setBackgroundDrawable(new ColorDrawable(Color.rgb(189, 187, 14)));
-		mAction.setDisplayHomeAsUpEnabled(true);
+		setupActionBar();
 		
 		/* Begin customizing MapView [athran] */
 		mMapView = (MapView)findViewById(R.id.mapview);
@@ -89,7 +92,7 @@ public class ViewMapActivity extends MapActivity {
 				GlobalState.getPlaceById(GuideConstants.DEFAULT_ID)));
 		
 		Intent i = this.getIntent();
-		if (i.hasExtra(GuideConstants.MAP_FOCUS)){
+		if (i.hasExtra(MAP_FOCUS)){
 			/*
 			 * If the intent come with a PlaceId:
 			 * - center the map to that place
@@ -97,16 +100,21 @@ public class ViewMapActivity extends MapActivity {
 			 */
 			
 			// a little fancy animation
-			Place MapFocus = GlobalState.getPlaceById(i.getExtras().getInt(GuideConstants.MAP_FOCUS));
-			control.animateTo(convToGeoPoint(MapFocus));
+			Place mapFocus = GlobalState.getPlaceById(i.getExtras()
+					.getInt(GuideConstants.MAP_FOCUS));
+			control.animateTo(convToGeoPoint(mapFocus));
 			control.setZoom(BUILDING_ZOOM);
 			
 			// drawing the marker for one Place
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			masterOverlay.add(new PlacesOverlay(marker,MapFocus));
+			masterOverlay.add(new PlacesOverlay(marker,mapFocus));
 			
-		} else if (i.hasExtra(GuideConstants.MAP_AGENDA)){
+			// We got a badass state machine here
+			mMapState = VIEWING_PLACE;
+			mPlaceIdFocused = mapFocus.getUniqueId();
+			
+		} else if (i.hasExtra(MAP_AGENDA)){
 			/*
 			 * If not, then:
 			 * - show markers for all places on the agenda
@@ -114,8 +122,10 @@ public class ViewMapActivity extends MapActivity {
 			 */
 			
 			// drawing the marker for everything in Agenda
-			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker_agenda);
-			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+			Drawable marker = (Drawable)getResources()
+					.getDrawable(R.drawable.marker_agenda);
+			marker.setBounds(0, 0, marker.getIntrinsicWidth(), 
+					marker.getIntrinsicHeight());
 			masterOverlay.add(new AgendaOverlay(marker));
 			
 			// drawing the MyLocation dot
@@ -139,6 +149,9 @@ public class ViewMapActivity extends MapActivity {
 			});
 			masterOverlay.add(mDevice);
 			
+			// Give it the bad Place Id
+			mPlaceIdFocused = -1;
+			mMapState = VIEWING_AGENDA;
 		}
 		
 		/* End customizing MapView */
@@ -172,23 +185,8 @@ public class ViewMapActivity extends MapActivity {
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
-
-//		Tab tab = mAction.newTab().setText("Map") //TODO Enumerate these tab names maybe?
-//				.setTabListener(new DummyTabListener());
-//		mAction.addTab(tab);
-//		
-//		tab = mAction.newTab().setText("Places")
-//				.setTabListener(new ActivityTabListener(this, GuideMain.class, 1));
-//		mAction.addTab(tab);
-//		
-//		tab = mAction.newTab().setText("Agenda")
-//				.setTabListener(new ActivityTabListener(this, GuideMain.class, 2));
-//		mAction.addTab(tab);
-//		
-//		tab = mAction.newTab().setText("Tours")
-//				.setTabListener(new ActivityTabListener(this, GuideMain.class, 3));
-//		mAction.addTab(tab);
+		mAction.setBackgroundDrawable(
+				new ColorDrawable(Color.rgb(189, 187, 14)));
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -196,10 +194,25 @@ public class ViewMapActivity extends MapActivity {
 	    inflater.inflate(R.menu.map_view_activity, menu);
 	    mMenu = menu;
 	    
-	    if (getIntent().hasExtra(GuideConstants.MAP_FOCUS)){
+	    if (mMapState == VIEWING_PLACE){
 			MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
-			item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-	    } else if (getIntent().hasExtra(GuideConstants.MAP_AGENDA)){
+			item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | 
+					MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			
+			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
+			SQLiteDatabase db = helper.getReadableDatabase();
+			Place place = Place.getPlaceById(mPlaceIdFocused, db);
+			db.close();
+			
+			if (GlobalState.getUserAgenda().isOnAgenda(place)){
+				// Option to remove
+				
+				
+			} else {
+				// Option to add
+			}
+			
+	    } else if (mMapState == VIEWING_AGENDA){
 	    	
 	    }
 	    
@@ -212,15 +225,33 @@ public class ViewMapActivity extends MapActivity {
 		case R.id.map_menu_add_agenda:
 			// TODO add the place to agenda
 			// Must coordinate with AgendaOverlay
+			
+			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
+			SQLiteDatabase db = helper.getReadableDatabase();
+			Place place = Place.getPlaceById(mPlaceIdFocused, db);
+			db.close();
+			
+			GlobalState.getUserAgenda().add(place);
+			
 			Toast.makeText(this, "Added to Agenda", Toast.LENGTH_SHORT).show();
 			return true;
+		case R.id.map_menu_remove_agenda:
+			
+			GuideDBOpenHelper helper2 = new GuideDBOpenHelper(this);
+			SQLiteDatabase db2 = helper2.getReadableDatabase();
+			Place place2 = Place.getPlaceById(mPlaceIdFocused, db2);
+			db2.close();
+			
+			GlobalState.getUserAgenda().remove(place2);
+			Toast.makeText(this, "Removed from Agenda", Toast.LENGTH_SHORT)
+				.show();
+			return true;
 		case android.R.id.home:
-			Intent i = new Intent(this, GuideMain.class);
-			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(i);
+			GuideMain.open(this);
 			return true;
 		case R.id.menu_about:
 			About.open(this);
+			return true;
 		default:
 			return false;
 		}
@@ -231,7 +262,32 @@ public class ViewMapActivity extends MapActivity {
 		return false;
 	}
 	
+	/**
+	 * Open the map, with markers on each Places in the Agenda
+	 * @param ctx
+	 */
+	public static void openAgenda(Context ctx){
+		Intent i = new Intent(ctx, ViewMapActivity.class);
+		i.putExtra(MAP_AGENDA, "");
+		ctx.startActivity(i);
+	}
 	
+	/**
+	 * Open the map, focused on a Place with high zoom.
+	 * @param ctx
+	 * @param placeid
+	 */
+	public static void openPlace(Context ctx, int placeid){
+		Intent i = new Intent(ctx, ViewMapActivity.class);
+		i.putExtra(MAP_FOCUS, placeid);
+		ctx.startActivity(i);
+	}
+	
+	public static void openList(Context ctx, Bundle list){
+		Intent i = new Intent(ctx, ViewMapActivity.class);
+		i.putExtras(list);
+		ctx.startActivity(i);
+	}
 	
 	// ---------- END setup and lifecycle related methods ---------- //
 	
@@ -288,11 +344,26 @@ public class ViewMapActivity extends MapActivity {
 			if (mClicked == index){
 				mClicked = -1;
 				mPopup.setVisibility(View.GONE);
+				mPlaceIdFocused = -1;
 				return true;
 			}
 			mClicked = index;
 			
 			Place pl = mAgendaList.get(mClicked);
+			mPlaceIdFocused = pl.getUniqueId();
+			
+			if (GlobalState.getUserAgenda().isOnAgenda(pl)){
+				// Option to remove
+				(mMenu.findItem(R.id.map_menu_remove_agenda))
+					.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS |
+							MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			} else {
+				// Option to add
+				(mMenu.findItem(R.id.map_menu_add_agenda))
+					.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS |
+							MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			}
+			
 			Location locA = new Location("pointA");
 			locA.setLatitude(pl.getLatitude());
 			locA.setLongitude(pl.getLongitude());
@@ -358,6 +429,29 @@ public class ViewMapActivity extends MapActivity {
 				"A Place in Vanderbilt"));	// pin snippet
 			
 			populate();
+			
+			Location locA = new Location("pointA");
+			locA.setLatitude(pl.getLatitude());
+			locA.setLongitude(pl.getLongitude());
+			
+			// Also add a popup
+			RelativeLayout popup = (RelativeLayout) findViewById(R.map.popup);
+			
+			// Setup what is on the popup card
+			((TextView)popup.findViewById(R.map.popup_name)).setText(pl.getName());
+			String dist = (int)(Geomancer.getDeviceLocation()
+					.distanceTo(locA)) + " yards away";
+			((TextView)popup.findViewById(R.map.popup_desc)).setText(dist);
+			
+			// setup the popup's appearance
+            popup.setLayoutParams(new MapView.LayoutParams(
+            		MapView.LayoutParams.WRAP_CONTENT, 
+            		MapView.LayoutParams.WRAP_CONTENT, 
+                    convToGeoPoint(mFocus), 
+                    0, 
+                    -marker.getIntrinsicHeight(), 
+                    MapView.LayoutParams.BOTTOM_CENTER));
+            popup.setVisibility(View.VISIBLE);
 		}
 		
 		public PlacesOverlay(Drawable marker, Location loc){
@@ -389,28 +483,6 @@ public class ViewMapActivity extends MapActivity {
 		}
 	}
 	/* End subclass */
-
-//	private static class DummyTabListener implements ActionBar.TabListener {
-//
-//		@Override
-//		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-//			// TODO Auto-generated method stub
-//
-//		}
-//
-//		@Override
-//		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-//			// TODO Auto-generated method stub
-//
-//		}
-//
-//		@Override
-//		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-//			// TODO Auto-generated method stub
-//
-//		}
-//
-//	}
 	
 	/* 
 	 * @author athran
@@ -425,45 +497,7 @@ public class ViewMapActivity extends MapActivity {
 		return new GeoPoint((int)(place.getLatitude()*1000000),(int)(place.getLongitude()*1000000));
 	}
 	
-	private void setMapFocus(boolean first){
-		// Marker for CurrentLocation
-		Place currPlace = null;
-		Location loc = Geomancer.getDeviceLocation();
-		if (loc != null){
-			currPlace = Geomancer.findClosestPlace(loc, GlobalState.getPlaceList(this));
-			logger.trace("I found our location. We are in {}", currPlace.getName());
-		} else {
-			logger.warn("ViewMapActivity","Location service failed to get location data.");
-		}
-		
-		if (currPlace == null){
-			/*
-			 * As a last resort, set default Place to FGH.
-			 */
-			logger.warn("MapViewActivity","Failed to get Device location.");
-			currPlace = GlobalState.getPlaceById(1);
-		}
-		
-		mMapView.getController().setCenter(convToGeoPoint(currPlace));
-		Drawable marker_self = (Drawable)getResources().getDrawable(R.drawable.marker_device);
-		marker_self.setBounds(0, 0, marker_self.getIntrinsicWidth(), 
-				marker_self.getIntrinsicHeight());
-		Drawable crosshair = (Drawable)getResources().getDrawable(R.drawable.device_location);
-		int n = crosshair.getIntrinsicHeight()/2;
-		crosshair.setBounds(-n, -n, n, n);
-		
-		List<Overlay> overlay = mMapView.getOverlays();
-		if (first){
-			UPDATE_ID = overlay.size();
-			overlay.add(new PlacesOverlay(crosshair, loc));
-			overlay.add(new PlacesOverlay(marker_self, currPlace));
-		} else {
-			overlay.set(UPDATE_ID, new PlacesOverlay(crosshair, loc));
-			overlay.set(UPDATE_ID + 1, new PlacesOverlay(marker_self, currPlace));
-			logger.trace("Overlay size: {}", overlay.size());
-		}
-		
-	}
+	
 	// ---------- END classes and other methods ---------- //
 	
 }

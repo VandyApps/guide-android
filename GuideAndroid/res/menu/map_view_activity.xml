@@ -3,12 +3,19 @@
     <item 
         android:id="@+id/map_menu_add_agenda"
         android:title="@string/menu_add_agenda"
-        android:icon="@drawable/content_new" />
+        android:icon="@drawable/content_new"
+        android:showAsAction="never" />
     
     <item
         android:id="@+id/menu_about"
         android:title="@string/menu_about"
         android:icon="@drawable/action_about"
-        android:showAsAction="ifRoom" />
-
+        android:showAsAction="never" />
+	
+    <item 
+        android:id="@+id/map_menu_remove_agenda"
+        android:title="@string/menu_add_agenda"
+        android:icon="@drawable/content_remove"
+        android:showAsAction="never" />
+        
 </menu>

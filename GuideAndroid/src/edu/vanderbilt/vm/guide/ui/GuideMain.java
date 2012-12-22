@@ -34,7 +34,7 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  * @author nicholasking
  *
  */
-@TargetApi(13)
+@TargetApi(16)
 public class GuideMain extends Activity {
 
 	private ActionBar mAction;
@@ -47,10 +47,7 @@ public class GuideMain extends Activity {
 		Geomancer.activateGeolocation(this);
 		setContentView(R.layout.activity_guide_main);
 
-        mAction = getActionBar();
-        mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        mAction.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
-        mAction.setBackgroundDrawable(new ColorDrawable(Color.rgb(189, 187, 14)));
+        setupActionBar();
         
         mViewPager = (ViewPager) findViewById(R.id.swiper_1);
         mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);
@@ -75,49 +72,7 @@ public class GuideMain extends Activity {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mAction.setDisplayShowTitleEnabled(true);
-		mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
-		
-		Intent myIntent = getIntent();
-		final Integer selection;
-		if (myIntent != null && myIntent.hasExtra("selection")) {
-			selection = (Integer) myIntent.getExtras().get("selection");
-		} else {
-			selection = null;
-		}
-
-		boolean toursSelected = isSelected(3, selection);
-		boolean agendaSelected = isSelected(2, selection);
-		boolean placesSelected = isSelected(1, selection)
-				|| (!toursSelected && !agendaSelected);
-
-		Tab tab = mAction.newTab()
-				.setText("Places")
-				.setTabListener(
-						new FragmentTabListener<PlaceTabFragment>(this,
-								"places", PlaceTabFragment.class));
-		mAction.addTab(tab, 0, placesSelected);
-
-		tab = mAction.newTab()
-				.setText("Agenda")
-				.setTabListener(
-						new FragmentTabListener<AgendaFragment>(this, "agenda",
-								AgendaFragment.class));
-		mAction.addTab(tab, 1, agendaSelected);
-		
-		tab = mAction.newTab()
-				.setText("Tours")
-				.setTabListener(
-						new FragmentTabListener<TourFragment>(this, "tours",
-								TourFragment.class));
-		mAction.addTab(tab, 2, toursSelected);
-		
-		tab = mAction.newTab()
-				.setText("Stats")
-				.setTabListener( //TODO
-						new FragmentTabListener<StatsFragment>(this, "stats",
-								StatsFragment.class));
-		mAction.addTab(tab, 3, false);
-		
+		mAction.setBackgroundDrawable(new ColorDrawable(Color.rgb(189, 187, 14)));
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -130,9 +85,7 @@ public class GuideMain extends Activity {
 		
 		switch (item.getItemId()){
 		case R.id.menu_map:
-			Intent i = new Intent(this, ViewMapActivity.class);
-			i.putExtra(GuideConstants.MAP_AGENDA, "");
-			startActivity(i);
+			ViewMapActivity.openAgenda(this);
 			return true;
 		case R.id.menu_refresh:
 			//TODO
@@ -183,5 +136,17 @@ public class GuideMain extends Activity {
 		}
 
 	}
-
+	
+	/**
+	 * Use this method to return to the Main. This will clear all
+	 * in the stack
+	 * 
+	 * @param ctx
+	 */
+	public static void open(Context ctx){
+		Intent i = new Intent(ctx, GuideMain.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		ctx.startActivity(i);
+	}
+	
 }
