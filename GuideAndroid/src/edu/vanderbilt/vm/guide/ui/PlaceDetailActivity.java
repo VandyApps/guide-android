@@ -35,6 +35,7 @@ import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
+import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
@@ -183,7 +184,7 @@ public class PlaceDetailActivity extends Activity{
 				GuideConstants.BAD_PLACE_ID);
 		GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
 		SQLiteDatabase db = helper.getReadableDatabase();
-		Place place = Place.getPlaceById(placeId, db);
+		Place place = DBUtils.getPlaceById(placeId, db);
 		db.close();
 		return place;
 	}

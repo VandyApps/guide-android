@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.google.gson.stream.JsonReader;
 
+import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants.PlaceTable;
@@ -26,6 +27,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBConstants.TourTable;
  * 
  * @author nick
  */
+@NeedsTesting(lastModifiedDate = "12/22/12")
 public class JsonUtils {
 
 	private static final int BAD_ID = -1;
@@ -82,7 +84,11 @@ public class JsonUtils {
 			} else if (name.equals("name")) {
 				bldr.setName(reader.nextString());
 			} else if (name.equals("category")) {
-				bldr.setCategory(reader.nextString());
+				reader.beginArray();
+				while(reader.hasNext()) {
+					bldr.addCategory(reader.nextString());
+				}
+				reader.endArray();
 			} else if (name.equals("hours")) {
 				bldr.setHours(reader.nextString());
 			} else if (name.equals("placeDescription")) {

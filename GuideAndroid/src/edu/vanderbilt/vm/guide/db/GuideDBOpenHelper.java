@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.util.JsonUtils;
 
 /**
@@ -22,6 +23,7 @@ import edu.vanderbilt.vm.guide.util.JsonUtils;
  * @author nicholasking
  *
  */
+@NeedsTesting(lastModifiedDate = "12/22/12")
 public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConstants {
 	
 	// These Strings are SQL commands to create the Places and Tours tables
