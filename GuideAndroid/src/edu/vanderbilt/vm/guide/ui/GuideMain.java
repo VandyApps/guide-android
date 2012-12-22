@@ -8,11 +8,13 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
@@ -28,13 +30,35 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 public class GuideMain extends Activity {
 
 	private ActionBar mAction;
+	ViewPager mViewPager;
+    SwipingTabsAdapter mTabsAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_main);
-		setupActionBar();
 		Geomancer.activateGeolocation(this);
+		
+		mViewPager = new ViewPager(this);
+        mViewPager.setId(R.id.swiper_1);
+        setContentView(mViewPager);
+
+        mAction = getActionBar();
+        mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        mAction.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+
+        mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);
+        mTabsAdapter.addTab(mAction.newTab().setText("Places"),
+        		PlaceTabFragment.class, null);
+        mTabsAdapter.addTab(mAction.newTab().setText("Agenda"),
+        		AgendaFragment.class, null);
+        mTabsAdapter.addTab(mAction.newTab().setText("Tours"),
+        		TourFragment.class, null);
+        mTabsAdapter.addTab(mAction.newTab().setText("Stats"),
+        		StatsFragment.class, null);
+        
+        if (savedInstanceState != null) {
+            mAction.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+        }
 	}
 
 	/**
@@ -112,6 +136,10 @@ public class GuideMain extends Activity {
 		
 		default: return false;
 		}
+	}
+	
+	public void onSaveInstanceState(Bundle state){
+		state.putInt("tab", mAction.getSelectedTab().getPosition());
 	}
 	// ---------- END setup and lifecycle related methods ---------- //
 	
