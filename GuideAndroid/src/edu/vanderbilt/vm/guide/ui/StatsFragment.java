@@ -5,6 +5,7 @@ import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("NewApi")
 public class StatsFragment extends Fragment {
 	TextView tvHistory;
 	ListView listHistory;
@@ -28,6 +30,7 @@ public class StatsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_stats, container, false);
     }
 	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		

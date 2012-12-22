@@ -35,6 +35,7 @@ public interface GuideDBConstants {
 		String TIME_REQUIRED_COL = "time_required";
 		String DISTANCE_COL = "distance";
 		String NAME_COL = "name";
+		String ICON_LOC_COL = "icon_loc";
 	}
 	
 }

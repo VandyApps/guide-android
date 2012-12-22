@@ -44,6 +44,7 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 					TourTable.NAME_COL + " TEXT, " +
 					TourTable.DISTANCE_COL + " TEXT, " +
 					TourTable.PLACES_ON_TOUR_COL + " TEXT, " +
+					TourTable.ICON_LOC_COL + " TEXT, " +
 					TourTable.TIME_REQUIRED_COL + " TEXT);";
 	
 	private static final int DB_VERSION = 1;
@@ -62,14 +63,47 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 		logger.trace("Populating " + 
 				GuideDBConstants.PlaceTable.PLACE_TABLE_NAME + 
 				" table from JSON file " + GuideDBConstants.PLACES_JSON_NAME);
+		InputStream in = null;
 		try {
-			InputStream in = mContext.getAssets().open(
+			in = mContext.getAssets().open(
 					GuideDBConstants.PLACES_JSON_NAME);
 			JsonUtils.populateDatabaseFromInputStream(
 					GuideDBConstants.PlaceTable.PLACE_TABLE_NAME, in, db);
 		} catch (IOException e) {
 			logger.error("Error processing file " + 
 					GuideDBConstants.PLACES_JSON_NAME, e);
+		} finally {
+			if(in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.error("Error closing input stream for file " 
+							+ GuideDBConstants.PLACES_JSON_NAME, e);
+				}
+			}
+		}
+		
+		logger.trace("Populating " + 
+				GuideDBConstants.TourTable.TOUR_TABLE_NAME + 
+				" table from JSON file " + GuideDBConstants.TOURS_JSON_NAME);
+		in = null;
+		try {
+			in = mContext.getAssets().open(
+					GuideDBConstants.TOURS_JSON_NAME);
+			JsonUtils.populateDatabaseFromInputStream(
+					GuideDBConstants.TourTable.TOUR_TABLE_NAME, in, db);
+		} catch (IOException e) {
+			logger.error("Error processing file " + 
+					GuideDBConstants.TOURS_JSON_NAME, e);
+		} finally {
+			if(in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.error("Error closing input stream for file " 
+							+ GuideDBConstants.TOURS_JSON_NAME, e);
+				}
+			}
 		}
 		
 	}
