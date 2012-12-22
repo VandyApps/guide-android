@@ -59,6 +59,8 @@ public class GuideMain extends Activity {
         		AgendaFragment.class, null);
         mTabsAdapter.addTab(mAction.newTab().setText("Tours"),
         		TourFragment.class, null);
+        mTabsAdapter.addTab(mAction.newTab().setText("Stats"),
+        		StatsFragment.class, null);
         
         if (savedInstanceState != null) {
             mAction.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -138,6 +140,10 @@ public class GuideMain extends Activity {
 		
 		default: return false;
 		}
+	}
+	
+	public void onSaveInstanceState(Bundle state){
+		state.putInt("tab", mAction.getSelectedTab().getPosition());
 	}
 	// ---------- END setup and lifecycle related methods ---------- //
 	
