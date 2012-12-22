@@ -45,6 +45,7 @@ public class GuideMain extends Activity {
         mAction = getActionBar();
         mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mAction.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+        mAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg));
 
         mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);
         mTabsAdapter.addTab(mAction.newTab().setText("Places"),
