@@ -48,6 +48,7 @@ import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
+import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
@@ -101,7 +102,7 @@ public class ViewMapActivity extends MapActivity {
 			
 			// a little fancy animation
 			Place mapFocus = GlobalState.getPlaceById(i.getExtras()
-					.getInt(GuideConstants.MAP_FOCUS));
+					.getInt(MAP_FOCUS));
 			control.animateTo(convToGeoPoint(mapFocus));
 			control.setZoom(BUILDING_ZOOM);
 			
@@ -201,7 +202,7 @@ public class ViewMapActivity extends MapActivity {
 			
 			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
 			SQLiteDatabase db = helper.getReadableDatabase();
-			Place place = Place.getPlaceById(mPlaceIdFocused, db);
+			Place place = DBUtils.getPlaceById(mPlaceIdFocused, db);
 			db.close();
 			
 			if (GlobalState.getUserAgenda().isOnAgenda(place)){
@@ -228,7 +229,7 @@ public class ViewMapActivity extends MapActivity {
 			
 			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
 			SQLiteDatabase db = helper.getReadableDatabase();
-			Place place = Place.getPlaceById(mPlaceIdFocused, db);
+			Place place = DBUtils.getPlaceById(mPlaceIdFocused, db);
 			db.close();
 			
 			GlobalState.getUserAgenda().add(place);
@@ -239,7 +240,7 @@ public class ViewMapActivity extends MapActivity {
 			
 			GuideDBOpenHelper helper2 = new GuideDBOpenHelper(this);
 			SQLiteDatabase db2 = helper2.getReadableDatabase();
-			Place place2 = Place.getPlaceById(mPlaceIdFocused, db2);
+			Place place2 = DBUtils.getPlaceById(mPlaceIdFocused, db2);
 			db2.close();
 			
 			GlobalState.getUserAgenda().remove(place2);
