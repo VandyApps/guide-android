@@ -23,4 +23,14 @@
         android:icon="@drawable/action_about"
         android:showAsAction="ifRoom" />
     
+    <item
+        android:id="@+id/menu_sort_alphabetic"
+        android:title="@string/menu_sort_alphabetic"
+        android:showAsAction="never" />
+    
+    <item 
+        android:id="@+id/menu_sort_distance"
+        android:title="@string/menu_sort_distance"
+        android:showAsAction="never" />
+    
 </menu>

@@ -91,10 +91,20 @@ public class GlobalState {
 		resetHistory();
 	}
 	
+	/**
+	 * Returns the user's history.
+	 * 
+	 * @return user History
+	 */
 	public static Agenda getUserHistory() {
 		return userHistory;
 	}
 	
+	/**
+	 * Add a place to history. The list is arranged most recent first
+	 * 
+	 * @param plc
+	 */
 	public static void addHistory(Place plc){
 		if (userHistory.size() == 0){
 			userHistory.add(plc);
@@ -117,6 +127,9 @@ public class GlobalState {
 		
 	}
 	
+	/**
+	 * Empties the history.
+	 */
 	public static void resetHistory(){
 		if (userHistory == null){
 			userHistory = new Agenda();

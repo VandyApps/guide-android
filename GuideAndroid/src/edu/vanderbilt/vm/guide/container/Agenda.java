@@ -2,10 +2,13 @@ package edu.vanderbilt.vm.guide.container;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
+import edu.vanderbilt.vm.guide.util.DBUtils;
+import edu.vanderbilt.vm.guide.util.Geomancer;
 
 /**
  * Represents a list of places that the user plans to visit.
@@ -104,6 +107,36 @@ public class Agenda implements Iterable<Place> {
 	@Override
 	public Iterator<Place> iterator() {
 		return mPlaces.iterator();
+	}
+	
+	/**
+	 * Sort the agenda alphabetically, by place name
+	 */
+	public void sortAlphabetically(){
+		Collections.sort(mPlaces, new AlphabeticPlaceComparator());
+	}
+	
+	public void sortByDistance(){
+		Collections.sort(mPlaces, new DistancePlaceComparator());
+	}
+	
+	private class AlphabeticPlaceComparator implements Comparator<Place> {
+
+		@Override
+		public int compare(Place plc1, Place plc2) {
+			return plc1.getName().compareTo(plc2.getName());
+		}
+		
+	}
+	
+	private class DistancePlaceComparator implements Comparator<Place>{
+
+		@Override
+		public int compare(Place arg0, Place arg1) {
+			//TODO
+			return 0;
+		}
+		
 	}
 	
 }

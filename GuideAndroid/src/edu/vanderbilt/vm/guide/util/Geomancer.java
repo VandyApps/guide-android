@@ -15,7 +15,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
 /**
  * Provide methods related to Geolocation and positioning.
@@ -55,14 +54,17 @@ public class Geomancer {
 	private final static int DEFAULT_RADIUS = 5; // 5 meters, for you americans out there.
 	private final static int DEFAULT_TIMEOUT = 5000;
 	private static Location mDefault;
-
+	
+	/**
+	 * Returns a Place which has the closest coordinate to the given Location.
+	 * I made it take a List<Place> because someone might need to find a Place
+	 * in a custom List, like the nearest academic building or the nearest
+	 * buiding that has a tornado shelter (GASP!!!)
+	 * @param location
+	 * @param placeList
+	 * @return
+	 */
 	public static Place findClosestPlace(Location location, List<Place> placeList) {
-		/* 
-		 * Returns a Place which has the closest coordinate to the given Location.
-		 * I made it take a List<Place> because someone might need to find a Place
-		 * 	in a custom List, like the nearest academic building or the nearest
-		 * 	buiding that has a tornado shelter (GASP!!!)
-		 */
 		double CurrDist = Double.MAX_VALUE;
 		int count = 0;
 

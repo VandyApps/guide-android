@@ -59,8 +59,6 @@ public class PlaceDetailer extends Activity{
 	private Place mPlace;
 	private ActionBar mAction;
 	
-	private static final String ADD_STR = "Add to Agenda";
-	private static final String REMOVE_STR = "Remove";
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceDetailer");
 	private static final String PLACE_ID_EXTRA = "placeId";

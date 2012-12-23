@@ -5,9 +5,11 @@ package edu.vanderbilt.vm.guide.ui;
  * This Fragment shows the categories of places and the user's current location
  */
 
+import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.content.Intent;
+import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,9 +31,8 @@ import edu.vanderbilt.vm.guide.ui.adapter.PlaceListAdapter;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
-import edu.vanderbilt.vm.guide.util.GuideConstants;
 
-@TargetApi(11)
+@TargetApi(16)
 public class PlaceTabFragment extends Fragment implements OnClickListener {
 	private final int DESCRIPTION_LENGTH = 35;
 
@@ -46,22 +47,40 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_place_list, container, false);
+		
+		View fragView = inflater.inflate(R.layout.fragment_place_list, container, false);
+		fragView.setId(2012);
+		return fragView;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
+		
+		mCurrPlaceName = (TextView) getActivity().findViewById(
+				R.id.currentPlaceName);
+		mCurrPlaceDesc = (TextView) getActivity().findViewById(
+				R.id.currentPlaceDesc);
+		
 		mListView = (ListView) getActivity()
 				.findViewById(R.id.placeTablistView);
+		
 		GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
 		String[] columns = { GuideDBConstants.PlaceTable.NAME_COL,
 				GuideDBConstants.PlaceTable.CATEGORY_COL,
 				GuideDBConstants.PlaceTable.ID_COL };
-		DBUtils.getAllPlaces(columns, helper.getReadableDatabase());
-		mListView.setAdapter(new PlaceListAdapter(getActivity(), GlobalState
-				.getPlaceList(getActivity())));
+		Cursor cursor = DBUtils.getAllPlaces(columns, helper.getReadableDatabase());
+		
+		ArrayList<Place> placeList = new ArrayList<Place>();
+		cursor.moveToFirst();
+		while (!cursor.isLast()) {
+			placeList.add(DBUtils.getPlaceFromCursor(cursor));
+			cursor.moveToNext();
+		}
+		placeList.add(DBUtils.getPlaceFromCursor(cursor));
+		helper.close();
+		
+		mListView.setAdapter(new PlaceListAdapter(getActivity(), placeList));
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -77,27 +96,10 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		Location loc = Geomancer.getDeviceLocation();
 		mCurrPlace = null;
 		if (loc != null) {
-			mCurrPlace = Geomancer.findClosestPlace(loc,
-					GlobalState.getPlaceList(getActivity()));
+			setCurrentPlace(Geomancer.findClosestPlace(loc,
+					GlobalState.getPlaceList(getActivity())));
 		}
-
-		if (mCurrPlace != null) {
-			mCurrPlaceName = (TextView) getActivity().findViewById(
-					R.id.currentPlaceName);
-			mCurrPlaceName.setText(mCurrPlace.getName());
-
-			mCurrPlaceDesc = (TextView) getActivity().findViewById(
-					R.id.currentPlaceDesc);
-			String desc = mCurrPlace.getDescription();
-			if (desc.length() > DESCRIPTION_LENGTH) {
-				mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH)
-						+ "...");
-			} else {
-				mCurrPlaceDesc.setText(desc + "...");
-			}
-
-		}
-
+		
 		// Prevent the soft keyboard from popping up at startup.
 		getActivity().getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -117,13 +119,24 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v == mCurrPlaceDesc || v == mCurrPlaceName || v == mCurrentPlaceBar) {
-			Intent i = new Intent(getActivity(), PlaceDetailer.class);
-			i.putExtra(GuideConstants.PLACE_ID_EXTRA, mCurrPlace.getUniqueId());
-			startActivity(i);
+			PlaceDetailer.open(getActivity(), mCurrPlace.getUniqueId());
 		} else if (v == mSearchBox) {
 			// mSearchBox.setFocusable(true);
 		}
 
 	}
-
+	
+	public void setCurrentPlace(Place plc) {
+		mCurrPlace = plc;
+		mCurrPlaceName.setText(mCurrPlace.getName());
+		
+		String desc = mCurrPlace.getDescription();
+		if (desc.length() > DESCRIPTION_LENGTH) {
+			mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH)
+					+ "...");
+		} else {
+			mCurrPlaceDesc.setText(desc + "...");
+		}
+	}
+	
 }

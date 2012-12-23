@@ -2,34 +2,25 @@ package edu.vanderbilt.vm.guide.ui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +38,6 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
@@ -65,7 +55,6 @@ public class MapViewer extends MapActivity {
 	private static final int VIEWING_PLACE = 666;
 	private static final int VIEWING_AGENDA = 999;
 
-	private Timer mUpdateLocation;
 	private MapView mMapView;
 	private MyLocationOverlay mDevice;
 	private ActionBar mAction;
@@ -174,12 +163,7 @@ public class MapViewer extends MapActivity {
 		mDevice.enableCompass();
 	}
 	
-	private void cancelUpdater(){
-		if (mUpdateLocation != null){
-			mUpdateLocation.cancel();
-			logger.trace("Updater is cancelled.");
-		}
-	}
+	private void cancelUpdater(){	}
 
 	private void setupActionBar() {
 		mAction = getActionBar();
@@ -192,7 +176,7 @@ public class MapViewer extends MapActivity {
 	
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.map_view_activity, menu);
+	    inflater.inflate(R.menu.map_viewer, menu);
 	    mMenu = menu;
 	    
 	    if (mMapState == VIEWING_PLACE){
@@ -267,7 +251,7 @@ public class MapViewer extends MapActivity {
 	 * Open the map, with markers on each Places in the Agenda
 	 * @param ctx
 	 */
-	public static void openAgenda(Context ctx){
+	public static void openAgenda(Context ctx) {
 		Intent i = new Intent(ctx, MapViewer.class);
 		i.putExtra(MAP_AGENDA, "");
 		ctx.startActivity(i);
@@ -278,16 +262,22 @@ public class MapViewer extends MapActivity {
 	 * @param ctx
 	 * @param placeid
 	 */
-	public static void openPlace(Context ctx, int placeid){
+	public static void openPlace(Context ctx, int placeid) {
 		Intent i = new Intent(ctx, MapViewer.class);
 		i.putExtra(MAP_FOCUS, placeid);
 		ctx.startActivity(i);
 	}
 	
-	public static void openList(Context ctx, Bundle list){
-		Intent i = new Intent(ctx, MapViewer.class);
-		i.putExtras(list);
-		ctx.startActivity(i);
+	public static void openTour(Context ctx, int tourId) {
+		//TODO
+	}
+	
+	public static void getTourMapFragment(Context ctx, int touId) {
+		//TODO
+	}
+	
+	public static void getPlaceMapFragment(Context ctx, int placeId) {
+		//TODO
 	}
 	
 	// ---------- END setup and lifecycle related methods ---------- //
