@@ -44,6 +44,7 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 			"CREATE TABLE " + TourTable.TOUR_TABLE_NAME + " (" +
 					TourTable.ID_COL + " INTEGER PRIMARY KEY, " +
 					TourTable.NAME_COL + " TEXT, " +
+					TourTable.DESCRIPTION_COL + " TEXT, " +
 					TourTable.DISTANCE_COL + " TEXT, " +
 					TourTable.PLACES_ON_TOUR_COL + " TEXT, " +
 					TourTable.ICON_LOC_COL + " TEXT, " +
