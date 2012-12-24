@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -220,5 +221,9 @@ public class PlaceDetailer extends Activity{
 		i.putExtra(PLACE_ID_EXTRA, placeid);
 		ctx.startActivity(i);
 	}
+	
+	/*public static Fragment getPlaceDetailerFragment(Context ctx, int plcId){
+		Fragment.instantiate(ctx, );
+	}*/
 	
 }

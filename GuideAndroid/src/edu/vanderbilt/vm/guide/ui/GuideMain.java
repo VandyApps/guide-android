@@ -127,6 +127,12 @@ public class GuideMain extends Activity {
 				// Agenda tab is selected
 				// sort the list in agenda alphabetically
 				GlobalState.getUserAgenda().sortAlphabetically();
+				
+				// Refresh view
+				((AgendaFragment)getFragmentManager().findFragmentByTag(
+						"android:switcher:"+R.id.swiper_1+":1"))
+						.getListView().invalidateViews();
+				
 				Toast.makeText(this, "Agenda is arranged alphabetically",
 						Toast.LENGTH_SHORT).show();
 				break;
