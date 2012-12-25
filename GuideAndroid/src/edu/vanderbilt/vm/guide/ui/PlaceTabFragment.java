@@ -13,6 +13,8 @@ import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
@@ -42,6 +45,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	private EditText mSearchBox;
 	private LinearLayout mCurrentPlaceBar;
 	private Place mCurrPlace;
+	private Menu mMenu;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,7 +115,9 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		mCurrentPlaceBar = (LinearLayout) getActivity().findViewById(
 				R.id.current_place_bar);
 		mCurrentPlaceBar.setOnClickListener(this);
-
+		
+		setHasOptionsMenu(true);
+		
 	}
 
 	// this method of setting up OnClickListener seems to be necessary when you
@@ -136,6 +142,34 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 					+ "...");
 		} else {
 			mCurrPlaceDesc.setText(desc + "...");
+		}
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu){
+		mMenu = menu;
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_refresh:
+			
+			Toast.makeText(getActivity(), "Place list refreshed", 
+					Toast.LENGTH_SHORT).show();
+			return true;
+		
+		case R.id.menu_sort_alphabetic:
+			
+			Toast.makeText(getActivity(), "PlacesList is sorted alphabetically",
+					Toast.LENGTH_SHORT).show();
+			return true;
+			
+		case R.id.menu_sort_distance:
+			
+			Toast.makeText(getActivity(), "PlacesList is sorted by distance",
+					Toast.LENGTH_SHORT).show();
+			return true;
+		default: return false;
 		}
 	}
 	
