@@ -25,10 +25,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -67,6 +69,8 @@ public class PlaceDetailer extends Activity{
 	@Override
 	public void onCreate(Bundle SavedInstanceState) {
 		super.onCreate(SavedInstanceState);
+		
+		// Set layout using fragment
 		setContentView(R.layout.activity_place_detail);
 		
 		findViews();
@@ -142,7 +146,9 @@ public class PlaceDetailer extends Activity{
 	    	 * The default icon is a "+"
 	    	 * therefore change to "-"
 	    	 */
-	    	mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)getResources().getDrawable(R.drawable.content_remove));
+	    	mMenu.findItem(R.id.menu_add_agenda).setIcon(
+	    			(Drawable)getResources().getDrawable(
+	    					R.drawable.content_remove));
 	    } else {
 	    	// Use default icon "+" as defined in xml
 	    }
@@ -226,4 +232,15 @@ public class PlaceDetailer extends Activity{
 		Fragment.instantiate(ctx, );
 	}*/
 	
+	class PlaceDetailerFrag extends Fragment {
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			return inflater.inflate(R.layout.activity_place_detail,container,
+					false);
+		}
+		
+		
+		
+	}
 }

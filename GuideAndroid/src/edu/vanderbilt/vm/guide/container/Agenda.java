@@ -139,4 +139,8 @@ public class Agenda implements Iterable<Place> {
 		
 	}
 	
+	public void addToTop(Place plc) {
+		mPlaces.add(0, plc);
+	}
+	
 }

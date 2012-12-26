@@ -111,18 +111,8 @@ public class GlobalState {
 		} else if (userHistory.get(0).getUniqueId() == 1000) {
 			userHistory.overwrite(new Agenda());
 			userHistory.add(plc);
-		} else if (userHistory.isOnAgenda(plc)){
-			// bring this place to the top
-
-			Agenda temp = new Agenda();
-			temp.add(plc);
-			
-			for (int i = 0; i < userHistory.size(); i++){
-				temp.add(userHistory.get(i));
-			} // TODO
-			
 		} else {
-			userHistory.add(plc);
+			userHistory.addToTop(plc);
 		}
 		
 	}
