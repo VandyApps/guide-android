@@ -1,0 +1,13 @@
+===============================================================================
+DIAGRAMLY HELP
+===============================================================================
+
+To open and view:
+1.	Go to [www.draw.io]
+2.	File >> Import >> Choose File >> 
+	[path to git directory]/Docs/Activity_Map.xml
+
+To save changes, 
+1.	File >> Export
+2.	Save as Diagramly xml
+3.	Download the file and replace the one in the git directory

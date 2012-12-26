@@ -85,74 +85,11 @@ public class GuideMain extends Activity {
 		case R.id.menu_map:
 			MapViewer.openAgenda(this);
 			return true;
-		case R.id.menu_refresh:
-			Place temp = Geomancer.findClosestPlace(Geomancer
-					.getDeviceLocation(),GlobalState.getPlaceList(this));
-			try {
-				/*
-				 * This is a hack to get the reference to ViewPager's child
-				 * Fragments. It is not in the official documentation,
-				 * so there is a possibility that they change it in the future.
-				 * http://stackoverflow.com/questions/7379165
-				 * /update-data-in-listfragment-as-part-of-viewpager
-				 */
-				PlaceTabFragment frag = (PlaceTabFragment) getFragmentManager()
-						.findFragmentByTag("android:switcher:"
-								+R.id.swiper_1+":0");
-				frag.setCurrentPlace(temp);
-				Toast.makeText(this, "Current Location Updated", 
-						Toast.LENGTH_SHORT).show();
-				
-			} catch (NullPointerException e){
-				Toast.makeText(this, "Update failed =(", Toast.LENGTH_SHORT)
-					.show();
-			}
 			
-			
-			return true;
 		case R.id.menu_about:
 			About.open(this);
 			return true;
-		case R.id.menu_sort_alphabetic:
-			// this is a bit spagetti, so bear with me.
-			switch (mAction.getSelectedTab().getPosition()) {
-			case 0:
-				// Place tab is selected
-				// sort the place list alphabetically
-				
-				Toast.makeText(this, "PlacesList is arranged alphabetically",
-						Toast.LENGTH_SHORT).show();
-				break;
-			case 1:
-				// Agenda tab is selected
-				// sort the list in agenda alphabetically
-				GlobalState.getUserAgenda().sortAlphabetically();
-				Toast.makeText(this, "Agenda is arranged alphabetically",
-						Toast.LENGTH_SHORT).show();
-				break;
-			default: return false;
-			}
-			return true;
-		case R.id.menu_sort_distance:
 			
-			switch (mAction.getSelectedTab().getPosition()){
-			case 0:
-				// Place tab is selected
-				// sort the place list by distance away
-				
-				Toast.makeText(this, "PlacesList is arranged by distance",
-						Toast.LENGTH_SHORT).show();
-				break;
-			case 1:
-				// Agenda tab is selected
-				// sort the list in agenda by distance away
-				
-				Toast.makeText(this, "Agenda is arranged by distance",
-						Toast.LENGTH_SHORT).show();
-				break;
-			default: return false;
-			}
-			return true;	
 		default: return false;
 		}
 	}

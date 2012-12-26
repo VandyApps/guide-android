@@ -133,10 +133,7 @@ public class Geomancer {
 			CurrLocation = mLocationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 		}
 		if (CurrLocation == null){
-			mDefault = new Location("Me");
 			mDefault.setTime((new Date()).getTime());
-			mDefault.setLatitude(GlobalState.getPlaceById(10).getLatitude());
-			mDefault.setLongitude((GlobalState.getPlaceById(10).getLongitude()));
 			CurrLocation = mDefault;
 		}
 		
@@ -145,6 +142,19 @@ public class Geomancer {
 	
 	public static void setDeviceLocation(Location loc){
 		CurrLocation = loc;
+	}
+	
+	static {
+		mDefault = new Location("Dummy");
+		
+		try {
+			mDefault.setLatitude(GlobalState.getPlaceById(10).getLatitude());
+			mDefault.setLongitude((GlobalState.getPlaceById(10).getLongitude()));
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			mDefault.setLatitude(36.145205);
+			mDefault.setLongitude(-86.803987);
+		}
 	}
 }
 
