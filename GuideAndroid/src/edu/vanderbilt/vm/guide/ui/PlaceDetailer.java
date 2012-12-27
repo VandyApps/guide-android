@@ -222,7 +222,7 @@ public class PlaceDetailer extends Activity {
 		
 		private void addRemoveToAgenda() {
 			
-			if(isOnAgenda) {
+			if (isOnAgenda) {
 				GlobalState.getUserAgenda().remove(mPlace);
 				mMenu.findItem(R.id.menu_add_agenda).setIcon((Drawable)
 						getResources().getDrawable(R.drawable.content_new));
@@ -236,6 +236,10 @@ public class PlaceDetailer extends Activity {
 						Toast.LENGTH_SHORT).show();
 			}
 			isOnAgenda = !isOnAgenda;
+		}
+		
+		void setPlaceDetailed(Place plc) {
+			mPlace = plc;
 		}
 	}
 }
