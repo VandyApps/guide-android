@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,10 +52,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		
-		View fragView = inflater.inflate(R.layout.fragment_place_list, container, false);
-		fragView.setId(2012);
-		return fragView;
+		return inflater.inflate(R.layout.fragment_place_list, container, false);
 	}
 
 	@Override
@@ -145,9 +143,9 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		}
 	}
 	
-	public boolean onCreateOptionsMenu(Menu menu){
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 		mMenu = menu;
-		return true;
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
