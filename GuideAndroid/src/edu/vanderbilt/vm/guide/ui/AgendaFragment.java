@@ -18,6 +18,7 @@ public class AgendaFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 		setListAdapter(new AgendaAdapter(getActivity(), 
 				GlobalState.getUserAgenda()));
+		setHasOptionsMenu(true);
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {

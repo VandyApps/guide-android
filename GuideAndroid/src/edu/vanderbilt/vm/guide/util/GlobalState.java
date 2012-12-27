@@ -133,4 +133,9 @@ public class GlobalState {
 		userHistory.add(temp);
 	}
 	// END History Singleton
+	
+	public interface DetailerParent {
+		public int getUniqueId();
+	}
+	
 }
