@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/current_place_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/currentPlaceThumbnail"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_margin="5dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="100"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="You are at:"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/currentPlaceName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PlaceName"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/currentPlaceDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PlaceDesc"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/placeTabSearchEdit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="100" />
+
+            <ImageButton
+                android:id="@+id/placeTabSearchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/placeTablistView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="100" />
+    </LinearLayout>
+
+    <fragment
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        class="edu.vanderbilt.vm.guide.ui.PlaceDetailerFragment"
+        android:tag="detailer_fragment"
+        tools:layout="@layout/fragment_place_detailer" />
+
+</LinearLayout>
