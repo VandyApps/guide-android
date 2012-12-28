@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,17 +23,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
-import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 import edu.vanderbilt.vm.guide.R;
@@ -44,7 +50,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(11)
-public class MapViewer extends MapActivity {
+public class MapViewer extends Activity {
 
 	private static final int MEDIUM_ZOOM = 18;
 	private static final int BUILDING_ZOOM = 20;	// high zoom for viewing individual building
@@ -52,6 +58,7 @@ public class MapViewer extends MapActivity {
 	private static final Logger logger = LoggerFactory.getLogger("ui.MapViewer");
 	private static final String MAP_AGENDA = "map_agenda";
 	private static final String MAP_FOCUS = "map_focus";
+	private static final String MAP_CURRENT = "map_current";
 	private static final int VIEWING_PLACE = 666;
 	private static final int VIEWING_AGENDA = 999;
 
@@ -61,25 +68,48 @@ public class MapViewer extends MapActivity {
 	private Menu mMenu;
 	private int mPlaceIdFocused;
 	private int mMapState;
+	private GoogleMap mMap;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_map);
+		//setContentView(R.layout.activity_map);
 		
+		MapFragment frag = MapFragment.newInstance();
+		
+		LinearLayout layout = new LinearLayout(this);
+		layout.setId(1001);
+		{
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			ft.add(1001, frag, "map_fragment");
+			ft.commit();
+		}
+		setContentView(layout);
 		setupActionBar();
 		
-		/* Begin customizing MapView [athran] */
-		mMapView = (MapView)findViewById(R.id.mapview);
-		mMapView.setBuiltInZoomControls(true);
-		mDevice = new MyLocationOverlay(this, mMapView);
+		// Begin customizing Map
+		frag = (MapFragment) getFragmentManager()
+				.findFragmentByTag("map_fragment");
+		if (frag == null) {
+			Toast.makeText(this, "Map is not available. Please contact the" 
+					+ " developer as noted in the (!) page for troubleshooting"
+					, Toast.LENGTH_LONG).show();
+			return;
+		}
+		mMap = frag.getMap();
 		
-			// Controller set where and how the map points to
-		MapController control = mMapView.getController();
-		List<Overlay> masterOverlay = mMapView.getOverlays();
-		control.setZoom(WIDE_ZOOM);
-		control.setCenter(convToGeoPoint(
-				GlobalState.getPlaceById(GuideConstants.DEFAULT_ID)));
+		if (mMap == null) {
+			Toast.makeText(this, "Map is not available. Please contact the" 
+					+ " developer as noted in the (!) page for troubleshooting"
+					, Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		// Set camera to middle the of the campus initially
+		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
+				new LatLng(36.145205, -86.803987),
+				WIDE_ZOOM);
+		mMap.moveCamera(update);
 		
 		Intent i = this.getIntent();
 		if (i.hasExtra(MAP_FOCUS)){
@@ -89,20 +119,22 @@ public class MapViewer extends MapActivity {
 			 * - show marker for that place only
 			 */
 			
-			// a little fancy animation
 			Place mapFocus = GlobalState.getPlaceById(i.getExtras()
 					.getInt(MAP_FOCUS));
-			control.animateTo(convToGeoPoint(mapFocus));
-			control.setZoom(BUILDING_ZOOM);
+			update = CameraUpdateFactory.newLatLngZoom(toLatLng(mapFocus), 
+					BUILDING_ZOOM);
+			mMap.animateCamera(update);
 			
+			/*
 			// drawing the marker for one Place
 			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			masterOverlay.add(new PlacesOverlay(marker,mapFocus));
+			*/
 			
 			// We got a badass state machine here
 			mMapState = VIEWING_PLACE;
-			mPlaceIdFocused = mapFocus.getUniqueId();
+			//mPlaceIdFocused = mapFocus.getUniqueId();
 			
 		} else if (i.hasExtra(MAP_AGENDA)){
 			/*
@@ -111,6 +143,48 @@ public class MapViewer extends MapActivity {
 			 * - center the map to current location
 			 */
 			
+			// Extract the location data from Agenda
+			ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
+			for (Place plc : GlobalState.getUserAgenda()) {
+				geopointList.add(toLatLng(plc));
+			}
+			
+			// Calculate the bounds that cover all places in Agenda
+			if (geopointList.size() == 0) {
+				
+			} else {
+				double minLat = Double.MAX_VALUE;
+				double maxLat = Double.MIN_VALUE;
+				double minLng = Double.MAX_VALUE;
+				double maxLng = Double.MIN_VALUE;
+				
+				for (LatLng point : geopointList) {
+					if (point.latitude < minLat) {
+						minLat = point.latitude;
+					}
+					if (point.latitude > maxLat) {
+						maxLat = point.latitude;
+					}
+					if (point.longitude < minLng) {
+						minLng = point.longitude;
+					}
+					if (point.longitude > minLng) {
+						maxLng = point.longitude;
+					}
+				}
+				
+				// Sanitize that shit
+				if (minLat > 90 || minLat < -90) { minLat = 0; }
+				if (maxLat > 90 || maxLat < -90) { maxLat = 0; }
+				if (minLng > 180 || minLng < -180) { minLng = 0; }
+				if (maxLng > 180 || maxLng < -180) { maxLng = 0; }
+				
+				LatLngBounds bounds = new LatLngBounds(
+						new LatLng(minLat, minLng),new LatLng(maxLat, maxLng));
+				update = CameraUpdateFactory.newLatLngBounds(bounds, 10);
+				mMap.animateCamera(update);
+			}
+			/*
 			// drawing the marker for everything in Agenda
 			Drawable marker = (Drawable)getResources()
 					.getDrawable(R.drawable.marker_agenda);
@@ -124,24 +198,27 @@ public class MapViewer extends MapActivity {
 			mDevice.runOnFirstFix(new Runnable(){
 				@Override
 				public void run() {
-					/*
+					
 					 * It seems that Google put some black magic into the MyLocationOverlay
 					 * because it can detect the current location faster and more accurately
 					 * than Geomancer.
 					 * 
 					 * Until Geomancer's accuracy is improved, this is the temporary
 					 * solution to get current location.
-					 */
+					 
 					Geomancer.setDeviceLocation(mDevice.getLastFix());
 					mMapView.getController().animateTo(mDevice.getMyLocation());
 					mMapView.getController().setZoom(MEDIUM_ZOOM);
 				}
 			});
 			masterOverlay.add(mDevice);
+			*/
 			
 			// Give it the bad Place Id
 			mPlaceIdFocused = -1;
 			mMapState = VIEWING_AGENDA;
+		} else if (i.hasExtra(MAP_CURRENT)) {
+			
 		}
 		
 		/* End customizing MapView */
@@ -153,14 +230,14 @@ public class MapViewer extends MapActivity {
 	public void onPause(){
 		super.onPause();
 		cancelUpdater();
-		mDevice.disableMyLocation();
-		mDevice.disableCompass();
+		//mDevice.disableMyLocation();
+		//mDevice.disableCompass();
 	}
 	
 	public void onResume(){
 		super.onResume();
-		mDevice.enableMyLocation();
-		mDevice.enableCompass();
+		//mDevice.enableMyLocation();
+		//mDevice.enableCompass();
 	}
 	
 	private void cancelUpdater(){	}
@@ -242,10 +319,6 @@ public class MapViewer extends MapActivity {
 		}
 	}
 	
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
 	
 	/**
 	 * Open the map, with markers on each Places in the Agenda
@@ -253,7 +326,7 @@ public class MapViewer extends MapActivity {
 	 */
 	public static void openAgenda(Context ctx) {
 		Intent i = new Intent(ctx, MapViewer.class);
-		i.putExtra(MAP_AGENDA, "");
+		i.putExtra(MAP_AGENDA, 0);
 		ctx.startActivity(i);
 	}
 	
@@ -265,6 +338,16 @@ public class MapViewer extends MapActivity {
 	public static void openPlace(Context ctx, int placeid) {
 		Intent i = new Intent(ctx, MapViewer.class);
 		i.putExtra(MAP_FOCUS, placeid);
+		ctx.startActivity(i);
+	}
+	
+	/**
+	 * Open the map showing the device's current location
+	 * @param ctx
+	 */
+	public static void openCurrent(Context ctx) {
+		Intent i = new Intent(ctx, MapViewer.class);
+		i.putExtra(MAP_CURRENT, 0);
 		ctx.startActivity(i);
 	}
 	
@@ -488,7 +571,13 @@ public class MapViewer extends MapActivity {
 		return new GeoPoint((int)(place.getLatitude()*1000000),(int)(place.getLongitude()*1000000));
 	}
 	
+	private static LatLng toLatLng(Place plc) {
+		return new LatLng(plc.getLatitude(), plc.getLongitude());
+	}
 	
+	private static LatLng toLatLng(Location loc) {
+		return new LatLng(loc.getLatitude(), loc.getLongitude());
+	}
 	// ---------- END classes and other methods ---------- //
 	
 }

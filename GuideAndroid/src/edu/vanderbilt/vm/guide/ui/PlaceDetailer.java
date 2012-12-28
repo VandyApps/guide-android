@@ -1,8 +1,5 @@
 package edu.vanderbilt.vm.guide.ui;
 
-import java.io.InputStream;
-import java.net.URL;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,27 +11,14 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
-import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
@@ -46,7 +30,6 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  */
 @TargetApi(16)
 public class PlaceDetailer extends Activity {
-	private Menu mMenu;
 	private ActionBar mAction;
 	
 	private static final Logger logger = LoggerFactory
@@ -57,12 +40,8 @@ public class PlaceDetailer extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Bundle idBundle = new Bundle();
-		idBundle.putInt(GuideConstants.PLACE_ID_EXTRA, getIntent()
+		Fragment frag = PlaceDetailerFragment.newInstance(getIntent()
 				.getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
-		
-		Fragment frag = Fragment.instantiate(this, 
-				"edu.vanderbilt.vm.guide.ui.PlaceDetailerFragment", idBundle);
 		
 		LinearLayout layout = new LinearLayout(this);
 		layout.setId(1000);
@@ -111,10 +90,5 @@ public class PlaceDetailer extends Activity {
 		Intent i = new Intent(ctx, PlaceDetailer.class);
 		i.putExtra(PLACE_ID_EXTRA, placeid);
 		ctx.startActivity(i);
-	}
-	
-	public static Fragment getPlaceDetailFragment(int PlaceId) {
-		//TODO
-		return null;
 	}
 }

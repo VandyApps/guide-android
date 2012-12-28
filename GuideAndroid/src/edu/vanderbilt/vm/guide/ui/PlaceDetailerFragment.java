@@ -42,6 +42,22 @@ public class PlaceDetailerFragment extends Fragment{
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceDetailerFragment");
 	
+	/**
+	 * Create a new instance of the PlaceDetail fragment. This method returns a
+	 * Fragment which you can add to a ViewGroup.
+	 * 
+	 * @param placeId the UniqueId of the place to be detailed.
+	 * @return
+	 */
+	public static Fragment newInstance(int placeId) {
+		Bundle idBundle = new Bundle();
+		idBundle.putInt(GuideConstants.PLACE_ID_EXTRA, placeId);
+		
+		Fragment frag = new PlaceDetailerFragment();
+		frag.setArguments(idBundle);
+		return frag;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -78,8 +94,6 @@ public class PlaceDetailerFragment extends Fragment{
 			// We'll handle null places at a later time (after we've switched to a
 			// Content Provider model instead of a list-based model).
 			
-			
-			
 			updateInformation();
 			
 			/* Check if this place is already on Agenda */
@@ -94,6 +108,7 @@ public class PlaceDetailerFragment extends Fragment{
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		menu.clear();
 	    inflater.inflate(R.menu.place_detail_activity, menu);
 	    this.mMenu = menu;
 	    
@@ -157,6 +172,9 @@ public class PlaceDetailerFragment extends Fragment{
 		updateInformation();
 	}
 	
+	/*
+	 * Update the information showed in the various Views based on mPlace
+	 */
 	private void updateInformation() {
 		tvPlaceName.setText(mPlace.getName());
 		tvPlaceHours.setText(mPlace.getHours());
