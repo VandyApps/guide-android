@@ -12,13 +12,12 @@
 
         <TextView
             android:id="@+id/PlaceName"
+            style="@style/detail_name_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="center_vertical"
-            android:text="Place name"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="Place name" />
 
         <ImageView
             android:id="@+id/PlaceImage"
@@ -47,12 +46,7 @@
                 android:layout_margin="8dp"
                 android:text="Place description text" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="1dp"
-                android:layout_marginTop="1dp"
-                android:background="@android:color/darker_gray" />
+            <include layout="@layout/horizontal_line" />
 
             <TextView
                 android:id="@+id/PlaceHours"

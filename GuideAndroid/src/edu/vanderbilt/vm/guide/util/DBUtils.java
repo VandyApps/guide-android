@@ -212,31 +212,15 @@ public class DBUtils {
 
 		index = cursor.getColumnIndex(TourTable.PLACES_ON_TOUR_COL);
 		if (index != -1) {
-			String placesOnTour = cursor.getString(index);
-			String[] placeIdStrings = placesOnTour.split(",");
-			int[] placeIdInts = new int[placeIdStrings.length];
-			{
-				int i = 0;
-				try {
-					for (; i < placeIdStrings.length; i++) {
-						placeIdInts[i] = Integer.parseInt(placeIdStrings[i]);
-					}
-				} catch (NumberFormatException e) {
-					logger.error(
-							"A place ID stored in the cursor of tour with id: "
-									+ tourId
-									+ " is not formatted as an integer", e);
-					logger.error("String that caused error: {}",
-							placeIdStrings[i]);
-					return null;
-				}
+			String placeIds = cursor.getString(index);
+			try {
+				bldr.setAgenda(getAgendaFromIds(placeIds, db));
+			} catch (NumberFormatException e) {
+				logger.error(
+						"A place ID stored in the cursor of tour with id: "
+								+ tourId + " is not formatted as an integer", e);
+				logger.error("String that caused error: {}", placeIds);
 			}
-			Place[] placeArr = getPlaceArrayById(placeIdInts, db);
-			Agenda tourAgenda = new Agenda();
-			for (Place place : placeArr) {
-				tourAgenda.add(place);
-			}
-			bldr.setAgenda(tourAgenda);
 		}
 
 		index = cursor.getColumnIndex(TourTable.DESCRIPTION_COL);
@@ -270,6 +254,50 @@ public class DBUtils {
 		}
 
 		return bldr.build();
+	}
+
+	/**
+	 * Makes an Agenda from a comma delimited String of place ids
+	 * 
+	 * @param placeIds
+	 *            The comma delimited String of place ids
+	 * @param db
+	 *            The database to query for the places
+	 * @return an Agenda filled with places matching the given ids
+	 */
+	public static Agenda getAgendaFromIds(String placeIds, SQLiteDatabase db) {
+		if (placeIds == null || placeIds.equals("")) {
+			return null;
+		}
+		String[] placeIdStrings = placeIds.split(",");
+		int[] placeIdInts = new int[placeIdStrings.length];
+		{
+			for (int i = 0; i < placeIdStrings.length; i++) {
+				placeIdInts[i] = Integer.parseInt(placeIdStrings[i]);
+			}
+		}
+		return getAgendaFromIds(placeIdInts, db);
+	}
+
+	/**
+	 * Makes an Agenda from an integer array of place ids
+	 * 
+	 * @param placeIds
+	 *            The array of place ids
+	 * @param db
+	 *            The database to query for the places
+	 * @return an Agenda filled with places matching the given ids
+	 */
+	public static Agenda getAgendaFromIds(int[] placeIds, SQLiteDatabase db) {
+		if (placeIds == null || placeIds.length == 0) {
+			return null;
+		}
+		Place[] placeArr = getPlaceArrayById(placeIds, db);
+		Agenda agenda = new Agenda();
+		for (Place place : placeArr) {
+			agenda.add(place);
+		}
+		return agenda;
 	}
 
 	/**

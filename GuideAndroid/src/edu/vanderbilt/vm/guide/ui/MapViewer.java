@@ -170,8 +170,7 @@ public class MapViewer extends MapActivity {
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(
-				new ColorDrawable(Color.rgb(189, 187, 14)));
+		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){

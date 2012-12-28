@@ -44,7 +44,6 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  */
 @TargetApi(16)
 public class PlaceDetailer extends Activity {
-	private Menu mMenu;
 	private ActionBar mAction;
 	
 	private static final Logger logger = LoggerFactory
@@ -58,10 +57,9 @@ public class PlaceDetailer extends Activity {
 		
 		// Setup ActionBar
 		mAction = getActionBar();
-		mAction.setTitle("Place Detail");
+		mAction.setTitle("Place Details");
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(new ColorDrawable(
-				Color.rgb(189, 187, 14)));
+		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
 		
 	}
 	// ---------- END onCreate() ---------- //

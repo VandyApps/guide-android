@@ -21,6 +21,7 @@ import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
  * The main Activity of the Guide app.  Contains the 4 main tabs:
@@ -56,8 +57,7 @@ public class GuideMain extends Activity {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mAction.setDisplayShowTitleEnabled(true);
-		mAction.setBackgroundDrawable(new ColorDrawable(
-				Color.rgb(189, 187, 14)));
+		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
 		mAction.setSplitBackgroundDrawable(new ColorDrawable(
 				Color.rgb(189, 187, 14)));
 		
