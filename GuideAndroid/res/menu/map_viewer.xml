@@ -4,7 +4,7 @@
         android:id="@+id/map_menu_add_agenda"
         android:title="@string/menu_add_agenda"
         android:icon="@drawable/content_new"
-        android:showAsAction="never" />
+        android:showAsAction="always" />
     
     <item
         android:id="@+id/menu_about"
@@ -16,6 +16,6 @@
         android:id="@+id/map_menu_remove_agenda"
         android:title="@string/menu_add_agenda"
         android:icon="@drawable/content_remove"
-        android:showAsAction="never" />
+        android:showAsAction="always" />
         
 </menu>

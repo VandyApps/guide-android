@@ -97,6 +97,8 @@ public class MapViewer extends Activity {
 	public void onResume() {
 		super.onResume();
 		// Begin customizing Map
+		// This is necessary because Fragments are only attached after 
+		// onCreate()
 		MapFragment frag = (MapFragment) getFragmentManager()
 				.findFragmentByTag("map_fragment");
 		if (frag == null) {
@@ -114,12 +116,13 @@ public class MapViewer extends Activity {
 			return;
 		}
 		
-		// Set camera to middle the of the campus initially
+		// Set camera to the middle the of the campus initially
 		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
 				new LatLng(36.145205, -86.803987),
 				WIDE_ZOOM);
 		mMap.moveCamera(update);
 		
+		// Customize map as requested
 		Intent i = this.getIntent();
 		if (i.hasExtra(MAP_FOCUS)){
 			/*
@@ -134,16 +137,15 @@ public class MapViewer extends Activity {
 					BUILDING_ZOOM);
 			mMap.animateCamera(update);
 			
-			/*
 			// drawing the marker for one Place
-			Drawable marker = (Drawable)getResources().getDrawable(R.drawable.marker);
-			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			masterOverlay.add(new PlacesOverlay(marker,mapFocus));
-			*/
+			mMap.addMarker(new MarkerOptions()
+					.position(toLatLng(mapFocus))
+					.title(mapFocus.getName())
+					.draggable(false));
 			
-			// We got a badass state machine here
+			// We got a badass state machine over here
 			mMapState = VIEWING_PLACE;
-			//mPlaceIdFocused = mapFocus.getUniqueId();
+			mPlaceIdFocused = mapFocus.getUniqueId();
 			
 		} else if (i.hasExtra(MAP_AGENDA)){
 			/*
@@ -161,6 +163,9 @@ public class MapViewer extends Activity {
 				plcLoc.setLatitude(plc.getLatitude());
 				plcLoc.setLongitude(plc.getLongitude());
 				
+				// Set the marker for each Place
+				// Title must be exactly as the PlaceName, in order to match
+				// them later on
 				mMap.addMarker(new MarkerOptions()
 					.position(toLatLng(plc))
 					.title(plc.getName())
@@ -207,18 +212,51 @@ public class MapViewer extends Activity {
 				mMap.animateCamera(update);
 				*/
 				
+				// Set the camera at the center of the points
+				// (sort of)
 				update = CameraUpdateFactory.newLatLng(
 						new LatLng((minLat + maxLat)/2, (minLng + maxLng)/2));
 				mMap.animateCamera(update);
 				
+				// What happens when a marker is tapped
 				mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-
 					@Override
 					public boolean onMarkerClick(Marker marker) {
 						if (marker.isInfoWindowShown()) {
 							marker.hideInfoWindow();
+							mPlaceIdFocused = -1;
 						} else {
 							marker.showInfoWindow();
+							
+							Place plc = null;
+							Agenda agenda = GlobalState.getUserAgenda();
+							for (Place agndPlc : agenda) {
+								if (marker.getTitle().equals(agndPlc.getName())) {
+									plc = agndPlc;
+									break;
+								}
+							}
+							
+							if (plc != null) {
+								if (agenda.isOnAgenda(plc)) {
+									// Option to remove
+									
+									mMenu.findItem(R.id.map_menu_remove_agenda)
+										.setVisible(true);
+									mMenu.findItem(R.id.map_menu_add_agenda)
+										.setVisible(false);
+									
+								} else {
+									// Option to add
+									
+									mMenu.findItem(R.id.map_menu_remove_agenda)
+										.setVisible(false);
+									mMenu.findItem(R.id.map_menu_add_agenda)
+										.setVisible(true);
+									
+								}
+								mPlaceIdFocused = plc.getUniqueId();
+							}
 						}
 						return true;
 					}
@@ -231,10 +269,9 @@ public class MapViewer extends Activity {
 			mMapState = VIEWING_AGENDA;
 		} else if (i.hasExtra(MAP_CURRENT)) {
 			
+			mMap.setMyLocationEnabled(true);
 		}
-		
 		/* End customizing MapView */
-		
 	}
 	// ---------- END onCreate() ---------- //
 	
@@ -262,11 +299,8 @@ public class MapViewer extends Activity {
 	    inflater.inflate(R.menu.map_viewer, menu);
 	    mMenu = menu;
 	    
+	    // Setup the menu for all Map state
 	    if (mMapState == VIEWING_PLACE){
-			MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
-			item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | 
-					MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-			
 			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
 			SQLiteDatabase db = helper.getReadableDatabase();
 			Place place = DBUtils.getPlaceById(mPlaceIdFocused, db);
@@ -274,15 +308,20 @@ public class MapViewer extends Activity {
 			
 			if (GlobalState.getUserAgenda().isOnAgenda(place)){
 				// Option to remove
+				mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
+				mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
+				
 				
 			} else {
 				// Option to add
+				mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
+				mMenu.findItem(R.id.map_menu_add_agenda).setVisible(true);
 			}
 			
 	    } else if (mMapState == VIEWING_AGENDA){
-	    	
+	    	mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
+			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
 	    }
-	    
 	    return true;
 	}
 	
@@ -290,8 +329,6 @@ public class MapViewer extends Activity {
 		
 		switch (item.getItemId()){
 		case R.id.map_menu_add_agenda:
-			// TODO add the place to agenda
-			// Must coordinate with AgendaOverlay
 			
 			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
 			SQLiteDatabase db = helper.getReadableDatabase();
