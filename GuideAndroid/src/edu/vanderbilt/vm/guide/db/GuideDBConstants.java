@@ -50,6 +50,7 @@ public interface GuideDBConstants {
 		String DISTANCE_COL = "distance";
 		String NAME_COL = "name";
 		String ICON_LOC_COL = "icon_loc";
+		String DESCRIPTION_COL = "description";
 
 		// For use with the ContentProvider
 		String PATH_SINGLE = "tours/#";

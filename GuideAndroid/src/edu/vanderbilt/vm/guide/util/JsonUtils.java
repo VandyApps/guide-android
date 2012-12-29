@@ -263,6 +263,9 @@ public class JsonUtils {
 
 			} else if (propertyName.equals("distance")) {
 				cv.put(TourTable.DISTANCE_COL, reader.nextString());
+				
+			} else if (propertyName.equals("description")) {
+				cv.put(TourTable.DESCRIPTION_COL, reader.nextString());
 
 			} else if (propertyName.equals("iconPath")) {
 				cv.put(TourTable.ICON_LOC_COL, reader.nextString());

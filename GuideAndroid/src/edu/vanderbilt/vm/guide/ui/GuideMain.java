@@ -20,7 +20,7 @@ import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
-import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
  * The main Activity of the Guide app.  Contains the 4 main tabs:
@@ -56,8 +56,7 @@ public class GuideMain extends Activity {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mAction.setDisplayShowTitleEnabled(true);
-		mAction.setBackgroundDrawable(new ColorDrawable(
-				Color.rgb(189, 187, 14)));
+		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
 		mAction.setSplitBackgroundDrawable(new ColorDrawable(
 				Color.rgb(189, 187, 14)));
 		
@@ -98,18 +97,6 @@ public class GuideMain extends Activity {
 		state.putInt("tab", mAction.getSelectedTab().getPosition());
 	}
 	// ---------- END setup and lifecycle related methods ---------- //
-	
-
-	/**
-	 * Determine whether a tab is selected
-	 * @param n The number of the tab to test for (ex: 
-	 * 			if Tours tab is #3, then n=3)
-	 * @param selection The Integer that has the selected tab
-	 * @return True if tab number n is selected, false otherwise
-	 */
-	private boolean isSelected(int n, Integer selection) {
-		return selection != null && n == selection;
-	}
 
 	/**
 	 * Adds a little hack to "forward" the user on to the map activity when the

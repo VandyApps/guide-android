@@ -17,15 +17,22 @@ public class Tour {
 	private String mDescription;
 	private String mName;
 	
+	private final int mUniqueId;
+	
+	private static final int DEFAULT_ID = -1;
+	
 	/**
 	 * A string containing a URI that points to the location of the icon for
 	 * this tour
 	 */
 	private String mIconLoc;
 	
-	/* package */ Tour() { }
+	/* package */ Tour() { 
+		mUniqueId = DEFAULT_ID;
+	}
 	
 	public Tour(Agenda agenda) {
+		this();
 		mAgenda = agenda;
 	}
 	
@@ -36,9 +43,11 @@ public class Tour {
 		this.mDistance = builder.mDistance;
 		this.mName = builder.mName;
 		this.mIconLoc = builder.mIconLoc;
+		this.mUniqueId = builder.mUniqueId;
 	}
 	
 	public Tour(List<Place> placesOnTour) {
+		this();
 		mAgenda = new Agenda(placesOnTour);
 	}
 	
@@ -82,6 +91,10 @@ public class Tour {
 		return mIconLoc;
 	}
 	
+	public int getUniqueId() {
+		return mUniqueId;
+	}
+	
 	public static class Builder {
 		private Agenda mAgenda;
 		private String mTimeRequired;
@@ -89,6 +102,7 @@ public class Tour {
 		private String mDescription;
 		private String mName;
 		private String mIconLoc;
+		private int mUniqueId = DEFAULT_ID;
 		
 		public Builder() { }
 		
@@ -119,6 +133,11 @@ public class Tour {
 		
 		public Builder setIconLoc(String iconLoc) {
 			mIconLoc = iconLoc;
+			return this;
+		}
+		
+		public Builder setUniqueId(int uniqueId) {
+			mUniqueId = uniqueId;
 			return this;
 		}
 		

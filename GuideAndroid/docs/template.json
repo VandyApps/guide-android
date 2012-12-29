@@ -20,10 +20,12 @@ Tour JSON template:
 	"name" : "template",
 	"timeRequired" : "",
 	"placesOnTour" : [0, 1, 2],
+	"description" : "",
 	"distance" : "",
 	"iconPath" : ""
 }
 ]
 
-Note that placesOnTour expects an array of place IDs
-	
+Notes: 
+placesOnTour expects an array of place IDs
+iconPath should be the name of the file without the extension (for now).  For example, "tourIcon.png" should just be written in the JSON as "tourIcon"	

@@ -13,8 +13,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -36,7 +34,6 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
@@ -290,8 +287,7 @@ public class MapViewer extends Activity {
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(
-				new ColorDrawable(Color.rgb(189, 187, 14)));
+		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){

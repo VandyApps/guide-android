@@ -45,6 +45,10 @@
             android:label="@string/title_activity_place_detail_activity" >
         </activity>
         <activity
+            android:name="edu.vanderbilt.vm.guide.ui.TourDetailer"
+            android:label="@string/title_activity_tour_detail_activity" >
+        </activity>
+        <activity
             android:name="edu.vanderbilt.vm.guide.ui.MapViewer"
             android:label="Map" >
         </activity>

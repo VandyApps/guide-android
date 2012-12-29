@@ -5,9 +5,13 @@ import org.slf4j.LoggerFactory;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
+import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.container.Tour;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants.TourTable;
 
 /**
  * Static helper methods to make querying the database easier
@@ -185,17 +189,131 @@ public class DBUtils {
 	}
 
 	/**
+	 * Creates a Tour object from a cursor containing a query to the Tour table.
+	 * Uses the Cursor at its current position.
+	 * <p/>
+	 * Precondition: cursor must contain an id column
+	 * 
+	 * @param cursor
+	 *            The cursor to use
+	 * @param db
+	 *            The database to inflate the Places on the tour from
+	 * @return a Tour containing the attributes in the cursor
+	 */
+	@NeedsTesting(lastModifiedDate = "12/23/12")
+	public static Tour getTourFromCursor(Cursor cursor, SQLiteDatabase db) {
+		Tour.Builder bldr = new Tour.Builder();
+		int index = cursor.getColumnIndex(TourTable.ID_COL);
+		if (index == -1) {
+			throw new SQLiteException("Your cursor must contain an id column");
+		}
+		int tourId = cursor.getInt(index);
+		bldr.setUniqueId(tourId);
+
+		index = cursor.getColumnIndex(TourTable.PLACES_ON_TOUR_COL);
+		if (index != -1) {
+			String placeIds = cursor.getString(index);
+			try {
+				bldr.setAgenda(getAgendaFromIds(placeIds, db));
+			} catch (NumberFormatException e) {
+				logger.error(
+						"A place ID stored in the cursor of tour with id: "
+								+ tourId + " is not formatted as an integer", e);
+				logger.error("String that caused error: {}", placeIds);
+			}
+		}
+
+		index = cursor.getColumnIndex(TourTable.DESCRIPTION_COL);
+		if (index != -1) {
+			String description = cursor.getString(index);
+			bldr.setDescription(description);
+		}
+
+		index = cursor.getColumnIndex(TourTable.DISTANCE_COL);
+		if (index != -1) {
+			String distance = cursor.getString(index);
+			bldr.setDistance(distance);
+		}
+
+		index = cursor.getColumnIndex(TourTable.ICON_LOC_COL);
+		if (index != -1) {
+			String iconLoc = cursor.getString(index);
+			bldr.setIconLoc(iconLoc);
+		}
+
+		index = cursor.getColumnIndex(TourTable.NAME_COL);
+		if (index != -1) {
+			String name = cursor.getString(index);
+			bldr.setName(name);
+		}
+
+		index = cursor.getColumnIndex(TourTable.TIME_REQUIRED_COL);
+		if (index != -1) {
+			String timeReq = cursor.getString(index);
+			bldr.setTimeReq(timeReq);
+		}
+
+		return bldr.build();
+	}
+
+	/**
+	 * Makes an Agenda from a comma delimited String of place ids
+	 * 
+	 * @param placeIds
+	 *            The comma delimited String of place ids
+	 * @param db
+	 *            The database to query for the places
+	 * @return an Agenda filled with places matching the given ids
+	 */
+	public static Agenda getAgendaFromIds(String placeIds, SQLiteDatabase db) {
+		if (placeIds == null || placeIds.equals("")) {
+			return null;
+		}
+		String[] placeIdStrings = placeIds.split(",");
+		int[] placeIdInts = new int[placeIdStrings.length];
+		{
+			for (int i = 0; i < placeIdStrings.length; i++) {
+				placeIdInts[i] = Integer.parseInt(placeIdStrings[i]);
+			}
+		}
+		return getAgendaFromIds(placeIdInts, db);
+	}
+
+	/**
+	 * Makes an Agenda from an integer array of place ids
+	 * 
+	 * @param placeIds
+	 *            The array of place ids
+	 * @param db
+	 *            The database to query for the places
+	 * @return an Agenda filled with places matching the given ids
+	 */
+	public static Agenda getAgendaFromIds(int[] placeIds, SQLiteDatabase db) {
+		if (placeIds == null || placeIds.length == 0) {
+			return null;
+		}
+		Place[] placeArr = getPlaceArrayById(placeIds, db);
+		Agenda agenda = new Agenda();
+		for (Place place : placeArr) {
+			agenda.add(place);
+		}
+		return agenda;
+	}
+
+	/**
 	 * Convenience method to query the places table of the database for all
-	 * places.  Ask for only the columns needed; passing null will return all
+	 * places. Ask for only the columns needed; passing null will return all
 	 * columns, which will most likely just waste memory.
 	 * 
-	 * @param columns The columns to query for
-	 * @param db The database to query
+	 * @param columns
+	 *            The columns to query for
+	 * @param db
+	 *            The database to query
 	 * @return A Cursor of call places in the database with the given columns
 	 */
 	public static Cursor getAllPlaces(String[] columns, SQLiteDatabase db) {
-		return db.query(GuideDBConstants.PlaceTable.PLACE_TABLE_NAME, columns, null, null,
-				null, null, GuideDBConstants.PlaceTable.NAME_COL);
+		return db.query(GuideDBConstants.PlaceTable.PLACE_TABLE_NAME, columns,
+				null, null, null, null, GuideDBConstants.PlaceTable.NAME_COL);
 	}
 
 }

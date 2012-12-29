@@ -11,8 +11,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import edu.vanderbilt.vm.guide.R;
@@ -55,31 +53,12 @@ public class PlaceDetailer extends Activity {
 		
 		//Setup ActionBar
 		mAction = getActionBar();
-		mAction.setTitle("Place Detail");
+		mAction.setTitle("Place Details");
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(new ColorDrawable(
-				Color.rgb(189, 187, 14)));
+		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
 		
 	}
 	// ---------- END onCreate() ---------- //
-
-	/**
-	 * Get the id of the place from the intent and query the SQLite database for
-	 * that place
-	 * @return The place we were given
-	 */
-	private Place getPlaceFromIntent() {
-		Intent myIntent = getIntent();
-		if (myIntent == null)
-			return null;
-		int placeId = myIntent.getIntExtra(GuideConstants.PLACE_ID_EXTRA,
-				GuideConstants.BAD_PLACE_ID);
-		GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
-		SQLiteDatabase db = helper.getReadableDatabase();
-		Place place = DBUtils.getPlaceById(placeId, db);
-		db.close();
-		return place;
-	}
 	
 	/**
 	 * Use this method to open the Details page
