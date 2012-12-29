@@ -31,9 +31,14 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
@@ -53,14 +58,14 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 public class MapViewer extends Activity {
 
 	private static final int MEDIUM_ZOOM = 18;
-	private static final int BUILDING_ZOOM = 20;	// high zoom for viewing individual building
+	private static final int BUILDING_ZOOM = 19;	// high zoom for viewing individual building
 	private static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
 	private static final Logger logger = LoggerFactory.getLogger("ui.MapViewer");
 	private static final String MAP_AGENDA = "map_agenda";
 	private static final String MAP_FOCUS = "map_focus";
 	private static final String MAP_CURRENT = "map_current";
-	private static final int VIEWING_PLACE = 666;
-	private static final int VIEWING_AGENDA = 999;
+	private static final int VIEWING_PLACE = 1;
+	private static final int VIEWING_AGENDA = 2;
 
 	private MapView mMapView;
 	private MyLocationOverlay mDevice;
@@ -86,12 +91,16 @@ public class MapViewer extends Activity {
 		}
 		setContentView(layout);
 		setupActionBar();
-		
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
 		// Begin customizing Map
-		frag = (MapFragment) getFragmentManager()
+		MapFragment frag = (MapFragment) getFragmentManager()
 				.findFragmentByTag("map_fragment");
 		if (frag == null) {
-			Toast.makeText(this, "Map is not available. Please contact the" 
+			Toast.makeText(this, "MapFrag is not available. Please contact the" 
 					+ " developer as noted in the (!) page for troubleshooting"
 					, Toast.LENGTH_LONG).show();
 			return;
@@ -147,6 +156,18 @@ public class MapViewer extends Activity {
 			ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
 			for (Place plc : GlobalState.getUserAgenda()) {
 				geopointList.add(toLatLng(plc));
+				
+				Location plcLoc = new Location("temp");
+				plcLoc.setLatitude(plc.getLatitude());
+				plcLoc.setLongitude(plc.getLongitude());
+				
+				mMap.addMarker(new MarkerOptions()
+					.position(toLatLng(plc))
+					.title(plc.getName())
+					.draggable(false)
+					.snippet(Geomancer.getDeviceLocation().distanceTo(plcLoc) 
+							+ " yards away")
+				);
 			}
 			
 			// Calculate the bounds that cover all places in Agenda
@@ -173,46 +194,37 @@ public class MapViewer extends Activity {
 					}
 				}
 				
-				// Sanitize that shit
+				// Sanitize
 				if (minLat > 90 || minLat < -90) { minLat = 0; }
 				if (maxLat > 90 || maxLat < -90) { maxLat = 0; }
 				if (minLng > 180 || minLng < -180) { minLng = 0; }
 				if (maxLng > 180 || maxLng < -180) { maxLng = 0; }
 				
+				/*
 				LatLngBounds bounds = new LatLngBounds(
 						new LatLng(minLat, minLng),new LatLng(maxLat, maxLng));
 				update = CameraUpdateFactory.newLatLngBounds(bounds, 10);
 				mMap.animateCamera(update);
-			}
-			/*
-			// drawing the marker for everything in Agenda
-			Drawable marker = (Drawable)getResources()
-					.getDrawable(R.drawable.marker_agenda);
-			marker.setBounds(0, 0, marker.getIntrinsicWidth(), 
-					marker.getIntrinsicHeight());
-			masterOverlay.add(new AgendaOverlay(marker));
-			
-			// drawing the MyLocation dot
-			mDevice.enableMyLocation();
-			mDevice.enableCompass();
-			mDevice.runOnFirstFix(new Runnable(){
-				@Override
-				public void run() {
+				*/
+				
+				update = CameraUpdateFactory.newLatLng(
+						new LatLng((minLat + maxLat)/2, (minLng + maxLng)/2));
+				mMap.animateCamera(update);
+				
+				mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+					@Override
+					public boolean onMarkerClick(Marker marker) {
+						if (marker.isInfoWindowShown()) {
+							marker.hideInfoWindow();
+						} else {
+							marker.showInfoWindow();
+						}
+						return true;
+					}
 					
-					 * It seems that Google put some black magic into the MyLocationOverlay
-					 * because it can detect the current location faster and more accurately
-					 * than Geomancer.
-					 * 
-					 * Until Geomancer's accuracy is improved, this is the temporary
-					 * solution to get current location.
-					 
-					Geomancer.setDeviceLocation(mDevice.getLastFix());
-					mMapView.getController().animateTo(mDevice.getMyLocation());
-					mMapView.getController().setZoom(MEDIUM_ZOOM);
-				}
-			});
-			masterOverlay.add(mDevice);
-			*/
+				});
+			}
 			
 			// Give it the bad Place Id
 			mPlaceIdFocused = -1;
@@ -232,12 +244,6 @@ public class MapViewer extends Activity {
 		cancelUpdater();
 		//mDevice.disableMyLocation();
 		//mDevice.disableCompass();
-	}
-	
-	public void onResume(){
-		super.onResume();
-		//mDevice.enableMyLocation();
-		//mDevice.enableCompass();
 	}
 	
 	private void cancelUpdater(){	}
@@ -268,7 +274,6 @@ public class MapViewer extends Activity {
 			
 			if (GlobalState.getUserAgenda().isOnAgenda(place)){
 				// Option to remove
-				
 				
 			} else {
 				// Option to add
@@ -359,8 +364,21 @@ public class MapViewer extends Activity {
 		//TODO
 	}
 	
-	public static void getPlaceMapFragment(Context ctx, int placeId) {
-		//TODO
+	/**
+	 * Creates a MapFragment which centers over the Place specified in the
+	 * argument
+	 * 
+	 * @param ctx
+	 * @param placeId
+	 * @return
+	 */
+	public static MapFragment getPlaceMapFragment(Context ctx, int placeId) {
+		Place plc = GlobalState.getPlaceById(placeId);
+		CameraPosition position = new CameraPosition(toLatLng(plc),
+				BUILDING_ZOOM, 0, 0);
+		
+		return MapFragment.newInstance(new GoogleMapOptions()
+			.camera(position));
 	}
 	
 	// ---------- END setup and lifecycle related methods ---------- //
