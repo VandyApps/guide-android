@@ -38,7 +38,8 @@ public class PlaceDetailer extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Fragment frag = PlaceDetailerFragment.newInstance(getIntent()
+		// Adding the fragment to layout
+		Fragment frag = PlaceDetailerFragment.newInstance(this, getIntent()
 				.getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
 		
 		LinearLayout layout = new LinearLayout(this);
@@ -49,13 +50,12 @@ public class PlaceDetailer extends Activity {
 			ft.commit();
 		}
 		setContentView(layout);
-		//setContentView(R.layout.activity_place_detail);
 		
 		//Setup ActionBar
 		mAction = getActionBar();
 		mAction.setTitle("Place Details");
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
+		mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
 		
 	}
 	// ---------- END onCreate() ---------- //

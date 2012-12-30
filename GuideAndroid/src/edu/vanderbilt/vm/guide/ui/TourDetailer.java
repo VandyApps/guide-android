@@ -46,7 +46,7 @@ public class TourDetailer extends Activity {
 		mAction = getActionBar();
 		mAction.setTitle("Tour Details");
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
+		mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
 
 		mHelper = new GuideDBOpenHelper(this);
 		long tourId = getIntent().getExtras().getLong(TOUR_ID_EXTRA, NO_ID);

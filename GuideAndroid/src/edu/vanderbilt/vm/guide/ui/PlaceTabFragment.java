@@ -5,9 +5,13 @@ package edu.vanderbilt.vm.guide.ui;
  * This Fragment shows the categories of places and the user's current location
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,10 +35,11 @@ import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(16)
 public class PlaceTabFragment extends Fragment implements OnClickListener {
-	private final int DESCRIPTION_LENGTH = 35;
+	private final int DESCRIPTION_LENGTH = 100;
 
 	private ListView mListView;
 	private TextView mCurrPlaceName;
@@ -41,7 +47,12 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	private EditText mSearchBox;
 	private LinearLayout mCurrentPlaceBar;
 	private Place mCurrPlace;
-
+	private ImageView ivCurrent;
+	private Bitmap mPlaceBitmap;
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger("ui.PlaceTabFragment");
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -57,6 +68,8 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 				R.id.currentPlaceName);
 		mCurrPlaceDesc = (TextView) getActivity().findViewById(
 				R.id.currentPlaceDesc);
+		ivCurrent = (ImageView) getActivity().findViewById(
+				R.id.currentPlaceThumbnail);
 		
 		mListView = (ListView) getActivity()
 				.findViewById(R.id.placeTablistView);
@@ -69,7 +82,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		
 		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
 		mListView.setOnItemClickListener(new PlaceListClickListener(getActivity()));
-
+		
 		/*
 		 * Tells you what is the closest building to your location right now
 		 */
@@ -91,6 +104,9 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		mCurrentPlaceBar = (LinearLayout) getActivity().findViewById(
 				R.id.current_place_bar);
 		mCurrentPlaceBar.setOnClickListener(this);
+		
+		// setBackground() throws NoSuchMethodError
+		mCurrentPlaceBar.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
 		
 		setHasOptionsMenu(true);
 		
@@ -119,24 +135,28 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		} else {
 			mCurrPlaceDesc.setText(desc + "...");
 		}
+		
+		ivCurrent.setImageBitmap(GlobalState.getBitmapForPlace(mCurrPlace));
+		
 	}
 	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_refresh:
-			
+			//TODO
 			Toast.makeText(getActivity(), "Place list refreshed", 
 					Toast.LENGTH_SHORT).show();
 			return true;
 		
 		case R.id.menu_sort_alphabetic:
-			
+			//TODO
 			Toast.makeText(getActivity(), "PlacesList is sorted alphabetically",
 					Toast.LENGTH_SHORT).show();
 			return true;
 			
 		case R.id.menu_sort_distance:
-			
+			//TODO
 			Toast.makeText(getActivity(), "PlacesList is sorted by distance",
 					Toast.LENGTH_SHORT).show();
 			return true;

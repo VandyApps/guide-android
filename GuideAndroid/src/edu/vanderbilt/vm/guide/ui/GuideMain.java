@@ -56,9 +56,8 @@ public class GuideMain extends Activity {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mAction.setDisplayShowTitleEnabled(true);
-		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
-		mAction.setSplitBackgroundDrawable(new ColorDrawable(
-				Color.rgb(189, 187, 14)));
+		mAction.setBackgroundDrawable(GuideConstants.OLD_GOLD);
+		mAction.setSplitBackgroundDrawable(GuideConstants.OLD_GOLD);
 		
 		mViewPager = (ViewPager) findViewById(R.id.swiper_1);
         mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);

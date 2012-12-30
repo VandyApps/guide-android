@@ -55,7 +55,7 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 public class MapViewer extends Activity {
 
 	private static final int MEDIUM_ZOOM = 18;
-	private static final int BUILDING_ZOOM = 19;	// high zoom for viewing individual building
+	static final int BUILDING_ZOOM = 19;	// high zoom for viewing individual building
 	private static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
 	private static final Logger logger = LoggerFactory.getLogger("ui.MapViewer");
 	private static final String MAP_AGENDA = "map_agenda";
@@ -287,7 +287,7 @@ public class MapViewer extends Activity {
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(GuideConstants.ACTION_BAR_BG);
+		mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){

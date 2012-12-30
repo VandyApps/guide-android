@@ -8,7 +8,8 @@
         android:id="@+id/current_place_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_margin="8dip" >
 
         <ImageView
             android:id="@+id/currentPlaceThumbnail"
@@ -18,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="100"
             android:orientation="vertical" >
 
@@ -50,7 +51,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         android:orientation="horizontal" >
 
         <EditText

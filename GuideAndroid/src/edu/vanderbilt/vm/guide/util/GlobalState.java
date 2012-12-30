@@ -1,16 +1,22 @@
 package edu.vanderbilt.vm.guide.util;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import android.widget.ImageView;
 
 /**
  * This class holds singletons of certain objects we need to share throughout
@@ -133,4 +139,69 @@ public class GlobalState {
 		userHistory.add(temp);
 	}
 	// END History Singleton
+	
+	// Bitmap store
+	public static ArrayList<BitmapRecord> mBitmapStore = 
+			new ArrayList<BitmapRecord>();
+	
+	private static final int STORE_LIMIT = 10;
+	
+	private static class BitmapRecord {
+		Bitmap mImage;
+		int mPlaceId;
+	}
+	
+	/**
+	 * Downloads the image associated with a Place for you and 
+	 * 
+	 * @param plc
+	 * @return a bitmap which is associated with the Place
+	 */
+	public static Bitmap getBitmapForPlace(final Place plc) {
+		// make sure the cache is not too big
+		// discard older entry if it exceeds a limit
+		if (mBitmapStore.size() > STORE_LIMIT) {
+			mBitmapStore.subList(5, mBitmapStore.size());
+		}
+		
+		// check for existing cache
+		for (BitmapRecord record : mBitmapStore) {
+			if (plc.getUniqueId() == record.mPlaceId) {
+				logger.debug("image found in store.");
+				return record.mImage;
+			}
+		}
+		
+		// cache not found. Download image and add to cache
+		logger.debug("No image found in store. Downloading a new Image.");
+		
+		mBitmapStore.add(new BitmapRecord());
+		final int i = mBitmapStore.size() - 1; // the final element's index
+		
+		Thread downloadImage = new Thread() {
+			@Override
+			public void run() {
+				try {
+					InputStream is = (InputStream) new URL(plc.getPictureLoc()).getContent();
+					logger.trace("Download succeeded");
+					mBitmapStore.get(i).mImage = BitmapFactory.decodeStream(is);
+					mBitmapStore.get(i).mPlaceId = plc.getUniqueId();
+				} catch (Exception e) {
+					logger.error("Download failed", e);
+					mBitmapStore.get(i).mImage = null;
+				}
+			}
+		};
+		downloadImage.start();
+		try {
+			downloadImage.join();
+			return mBitmapStore.get(i).mImage;
+		} catch (InterruptedException e) {
+			logger.error("Download failed", e);
+			return null;
+		}
+		
+	}
+	// END Bitmap store
+	
 }

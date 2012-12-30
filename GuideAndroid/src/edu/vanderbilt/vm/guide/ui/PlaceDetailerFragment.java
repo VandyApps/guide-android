@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,6 +59,14 @@ public class PlaceDetailerFragment extends Fragment{
 		return frag;
 	}
 	
+	public static PlaceDetailerFragment newInstance(Context ctx, int id) {
+		PlaceDetailerFragment frag = (PlaceDetailerFragment) Fragment
+				.instantiate(ctx, 
+				"edu.vanderbilt.vm.guide.ui.PlaceDetailerFragment");
+		frag.mPlace = getPlaceById(ctx, id);
+		return frag;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -77,33 +86,26 @@ public class PlaceDetailerFragment extends Fragment{
 		
 		setHasOptionsMenu(true);
 		
-		Bundle args = getArguments();
-		
-		if (args != null) {
-			int placeId = args.getInt(GuideConstants.PLACE_ID_EXTRA, 
-					GuideConstants.BAD_PLACE_ID);
-			
-			GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
-			SQLiteDatabase db = helper.getReadableDatabase();
-			Place place = DBUtils.getPlaceById(placeId, db);
-			db.close();
-			mPlace = place;
-			// XXX: We can get a null place here right now.  This intentionally not
-			// being handled at the moment.  I want the app to crash if we get a
-			// null place so we'll get a stack trace and find out what went wrong.
-			// We'll handle null places at a later time (after we've switched to a
-			// Content Provider model instead of a list-based model).
-			
-			updateInformation();
-			
-			/* Check if this place is already on Agenda */
-			if(GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
-				isOnAgenda = true;
-			} else {
-				isOnAgenda = false;
+		if (mPlace == null) {
+			Bundle args = getArguments();
+			logger.debug("Using information from argument");
+			if (args != null) {
+				int placeId = args.getInt(GuideConstants.PLACE_ID_EXTRA, 
+						GuideConstants.BAD_PLACE_ID);
+				mPlace = getPlaceById(getActivity(), placeId);
 			}
-		
 		}
+		
+		updateInformation();
+		
+		/* Check if this place is already on Agenda */
+		if(GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
+			isOnAgenda = true;
+		} else {
+			isOnAgenda = false;
+		}
+		
+		
 	}
 	
 	@Override
@@ -125,6 +127,7 @@ public class PlaceDetailerFragment extends Fragment{
 	    }
 	}
 	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch (item.getItemId()){
@@ -179,32 +182,23 @@ public class PlaceDetailerFragment extends Fragment{
 		tvPlaceName.setText(mPlace.getName());
 		tvPlaceHours.setText(mPlace.getHours());
 		tvPlaceDesc.setText(mPlace.getDescription());
-		
-		// Download image
-		Thread downloadImage = new Thread() {
-			@Override
-			public void run() {
-				try {
-					InputStream is = (InputStream) new URL(mPlace.getPictureLoc()).getContent();
-					logger.trace("Download succeeded");
-					mPlaceBitmap = BitmapFactory.decodeStream(is);
-				} catch (Exception e) {
-					logger.error("Download failed", e);
-					mPlaceBitmap = null;
-				}
-			}
-		};
-		downloadImage.start();
-		try {
-			downloadImage.join();
-			ivPlaceImage.setImageBitmap(mPlaceBitmap);
-		} catch (InterruptedException e) {
-			logger.error("Download failed", e);
-		}
-		// END Download image
+		ivPlaceImage.setImageBitmap(GlobalState.getBitmapForPlace(mPlace));
 		
 		// add to History
 		GlobalState.addHistory(mPlace);
+	}
+	
+	private static Place getPlaceById(Context ctx, int id) {
+		// XXX: We can get a null place here right now.  This intentionally not
+		// being handled at the moment.  I want the app to crash if we get a
+		// null place so we'll get a stack trace and find out what went wrong.
+		// We'll handle null places at a later time (after we've switched to a
+		// Content Provider model instead of a list-based model).
+		GuideDBOpenHelper helper = new GuideDBOpenHelper(ctx);
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Place place = DBUtils.getPlaceById(id, db);
+		db.close();
+		return place;
 	}
 	
 }
