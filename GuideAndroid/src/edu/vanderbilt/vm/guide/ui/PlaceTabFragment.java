@@ -5,6 +5,9 @@ package edu.vanderbilt.vm.guide.ui;
  * This Fragment shows the categories of places and the user's current location
  */
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +52,9 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	private Place mCurrPlace;
 	private ImageView ivCurrent;
 	private Bitmap mPlaceBitmap;
+	private Timer mSearchFaerie;
+	
+	private static final int SEARCH_DELAY = 5000;
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceTabFragment");
@@ -83,9 +89,8 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
 		mListView.setOnItemClickListener(new PlaceListClickListener(getActivity()));
 		helper.close();
-		/*
-		 * Tells you what is the closest building to your location right now
-		 */
+		
+		// Tells you what is the closest building to your location right now
 		Location loc = Geomancer.getDeviceLocation();
 		mCurrPlace = null;
 		if (loc != null) {
@@ -109,6 +114,16 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		mCurrentPlaceBar.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
 		
 		setHasOptionsMenu(true);
+	}
+	
+	private class SearchLogic extends TimerTask {
+
+		@Override
+		public void run() {
+			String query = mSearchBox.getText().toString();
+			
+			//TODO
+		}
 		
 	}
 
@@ -162,6 +177,21 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 			return true;
 		default: return false;
 		}
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		mSearchFaerie = new Timer();
+		mSearchFaerie.schedule(new SearchLogic(), 0, SEARCH_DELAY);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		mSearchFaerie.cancel();
 	}
 	
 }
