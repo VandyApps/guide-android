@@ -82,7 +82,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		
 		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
 		mListView.setOnItemClickListener(new PlaceListClickListener(getActivity()));
-		
+		helper.close();
 		/*
 		 * Tells you what is the closest building to your location right now
 		 */

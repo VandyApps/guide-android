@@ -152,7 +152,7 @@ public class GlobalState {
 	}
 	
 	/**
-	 * Downloads the image associated with a Place for you and 
+	 * Downloads the image associated with a Place for you.
 	 * 
 	 * @param plc
 	 * @return a bitmap which is associated with the Place
@@ -182,7 +182,8 @@ public class GlobalState {
 			@Override
 			public void run() {
 				try {
-					InputStream is = (InputStream) new URL(plc.getPictureLoc()).getContent();
+					InputStream is = (InputStream) new URL(
+							plc.getPictureLoc()).getContent();
 					logger.trace("Download succeeded");
 					mBitmapStore.get(i).mImage = BitmapFactory.decodeStream(is);
 					mBitmapStore.get(i).mPlaceId = plc.getUniqueId();
@@ -192,6 +193,7 @@ public class GlobalState {
 				}
 			}
 		};
+		
 		downloadImage.start();
 		try {
 			downloadImage.join();
@@ -203,5 +205,10 @@ public class GlobalState {
 		
 	}
 	// END Bitmap store
+	
+	// Coordinate lookup table
+	
+	
+	
 	
 }

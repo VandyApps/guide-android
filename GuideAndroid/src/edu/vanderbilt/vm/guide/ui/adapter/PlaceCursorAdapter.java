@@ -7,9 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.util.DBUtils;
+import edu.vanderbilt.vm.guide.util.GlobalState;
 
 public class PlaceCursorAdapter extends BaseAdapter {
 
@@ -63,17 +67,21 @@ public class PlaceCursorAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		checkPosition(position);
-		TextView tv;
+		LinearLayout layout;
 		if (convertView == null) {
-			tv = (TextView) LayoutInflater.from(mContext).inflate(
-					android.R.layout.simple_list_item_1, null);
-			tv.setTag(tv);
+			layout = (LinearLayout) LayoutInflater.from(mContext).inflate(
+					R.layout.place_list_item, null);
+			layout.setTag(layout);
 		} else {
-			tv = (TextView) convertView.getTag();
+			layout = (LinearLayout) convertView.getTag();
 		}
 		mCursor.moveToPosition(position);
-		tv.setText(mCursor.getString(mNameColIx));
-		return tv;
+		((TextView) layout.findViewById(R.id.placelist_item_title))
+			.setText(mCursor.getString(mNameColIx));
+		/*((ImageView) layout.findViewById(R.id.placelist_item_thunbnail))
+			.setImageBitmap(GlobalState.getBitmapForPlace(
+					DBUtils.getPlaceFromCursor(mCursor)));*/
+		return layout;
 	}
 	
 	private void checkPosition(int position) {
