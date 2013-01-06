@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,6 +33,7 @@ import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
+import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
@@ -41,7 +41,8 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(16)
-public class PlaceTabFragment extends Fragment implements OnClickListener {
+public class PlaceTabFragment extends Fragment implements OnClickListener,
+		GeomancerListener {
 	private final int DESCRIPTION_LENGTH = 100;
 
 	private ListView mListView;
@@ -51,14 +52,13 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	private LinearLayout mCurrentPlaceBar;
 	private Place mCurrPlace;
 	private ImageView ivCurrent;
-	private Bitmap mPlaceBitmap;
 	private Timer mSearchFaerie;
-	
+
 	private static final int SEARCH_DELAY = 5000;
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceTabFragment");
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -69,38 +69,44 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
+		setupUI();
+
+		// Setup ListView
+		GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
+		String[] columns = { GuideDBConstants.PlaceTable.NAME_COL,
+				GuideDBConstants.PlaceTable.CATEGORY_COL,
+				GuideDBConstants.PlaceTable.ID_COL };
+		final Cursor cursor = DBUtils.getAllPlaces(columns,
+				helper.getReadableDatabase());
+		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
+		mListView.setOnItemClickListener(new PlaceListClickListener(
+				getActivity()));
+		helper.close();
+
+		// Tells you what is the closest building to your location right now
+		Location loc = Geomancer.getDeviceLocation();
+		setCurrentPlace(Geomancer.findClosestPlace(loc,
+				GlobalState.getPlaceList(getActivity())));
+
+		// Prevent the soft keyboard from popping up at startup.
+		getActivity().getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+		setHasOptionsMenu(true);
+
+	}
+
+	private void setupUI() {
 		mCurrPlaceName = (TextView) getActivity().findViewById(
 				R.id.currentPlaceName);
 		mCurrPlaceDesc = (TextView) getActivity().findViewById(
 				R.id.currentPlaceDesc);
 		ivCurrent = (ImageView) getActivity().findViewById(
 				R.id.currentPlaceThumbnail);
-		
+
 		mListView = (ListView) getActivity()
 				.findViewById(R.id.placeTablistView);
-		
-		GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
-		String[] columns = { GuideDBConstants.PlaceTable.NAME_COL,
-				GuideDBConstants.PlaceTable.CATEGORY_COL,
-				GuideDBConstants.PlaceTable.ID_COL };
-		final Cursor cursor = DBUtils.getAllPlaces(columns, helper.getReadableDatabase());
-		
-		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
-		mListView.setOnItemClickListener(new PlaceListClickListener(getActivity()));
-		helper.close();
-		
-		// Tells you what is the closest building to your location right now
-		Location loc = Geomancer.getDeviceLocation();
-		mCurrPlace = null;
-		if (loc != null) {
-			setCurrentPlace(Geomancer.findClosestPlace(loc,
-					GlobalState.getPlaceList(getActivity())));
-		}
-		
-		// Prevent the soft keyboard from popping up at startup.
-		getActivity().getWindow().setSoftInputMode(
-				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 		mSearchBox = (EditText) getActivity().findViewById(
 				R.id.placeTabSearchEdit);
@@ -109,22 +115,21 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		mCurrentPlaceBar = (LinearLayout) getActivity().findViewById(
 				R.id.current_place_bar);
 		mCurrentPlaceBar.setOnClickListener(this);
-		
+
 		// setBackground() throws NoSuchMethodError
+		// Had to use this one instead
 		mCurrentPlaceBar.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
-		
-		setHasOptionsMenu(true);
 	}
-	
+
 	private class SearchLogic extends TimerTask {
 
 		@Override
 		public void run() {
 			String query = mSearchBox.getText().toString();
-			
-			//TODO
+
+			// TODO
 		}
-		
+
 	}
 
 	// this method of setting up OnClickListener seems to be necessary when you
@@ -138,11 +143,11 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		}
 
 	}
-	
+
 	public void setCurrentPlace(Place plc) {
 		mCurrPlace = plc;
 		mCurrPlaceName.setText(mCurrPlace.getName());
-		
+
 		String desc = mCurrPlace.getDescription();
 		if (desc.length() > DESCRIPTION_LENGTH) {
 			mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH)
@@ -150,48 +155,56 @@ public class PlaceTabFragment extends Fragment implements OnClickListener {
 		} else {
 			mCurrPlaceDesc.setText(desc + "...");
 		}
-		
+
 		ivCurrent.setImageBitmap(GlobalState.getBitmapForPlace(mCurrPlace));
-		
+
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_refresh:
-			//TODO
-			Toast.makeText(getActivity(), "Place list refreshed", 
+			// TODO
+			Toast.makeText(getActivity(), "Place list refreshed",
 					Toast.LENGTH_SHORT).show();
 			return true;
-		
+
 		case R.id.menu_sort_alphabetic:
-			//TODO
-			Toast.makeText(getActivity(), "PlacesList is sorted alphabetically",
-					Toast.LENGTH_SHORT).show();
+			// TODO
+			Toast.makeText(getActivity(),
+					"PlacesList is sorted alphabetically", Toast.LENGTH_SHORT)
+					.show();
 			return true;
-			
+
 		case R.id.menu_sort_distance:
-			//TODO
+			// TODO
 			Toast.makeText(getActivity(), "PlacesList is sorted by distance",
 					Toast.LENGTH_SHORT).show();
 			return true;
-		default: return false;
+		default:
+			return false;
 		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+		Geomancer.registerGeomancerListener(this);
 		mSearchFaerie = new Timer();
 		mSearchFaerie.schedule(new SearchLogic(), 0, SEARCH_DELAY);
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
-		
+		Geomancer.removeGeomancerListener(this);
 		mSearchFaerie.cancel();
 	}
-	
+
+	@Override
+	public void updateLocation(Location loc) {
+		setCurrentPlace(Geomancer.findClosestPlace(loc,
+				GlobalState.getPlaceList(getActivity())));
+	}
+
 }

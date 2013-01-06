@@ -1,8 +1,5 @@
 package edu.vanderbilt.vm.guide.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,41 +10,24 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
-import com.google.android.maps.MyLocationOverlay;
-import com.google.android.maps.OverlayItem;
 
 import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
-import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
@@ -56,28 +36,44 @@ public class MapViewer extends Activity {
 
 	private static final int MEDIUM_ZOOM = 18;
 	static final int BUILDING_ZOOM = 19;	// high zoom for viewing individual building
-	private static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
+	static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
 	private static final Logger logger = LoggerFactory.getLogger("ui.MapViewer");
 	private static final String MAP_AGENDA = "map_agenda";
 	private static final String MAP_FOCUS = "map_focus";
 	private static final String MAP_CURRENT = "map_current";
-	private static final int VIEWING_PLACE = 1;
-	private static final int VIEWING_AGENDA = 2;
 
-	private MapView mMapView;
-	private MyLocationOverlay mDevice;
 	private ActionBar mAction;
 	private Menu mMenu;
-	private int mPlaceIdFocused;
-	private int mMapState;
-	private GoogleMap mMap;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_map);
 		
-		MapFragment frag = MapFragment.newInstance();
+		MapFragment frag = null;
+		
+		Intent i = this.getIntent();
+		if (i.hasExtra(MAP_FOCUS)) {
+			/* 
+			 * If the intent come with a PlaceId:
+			 * - center the map to that place
+			 * - show marker for that place only
+			 */
+			
+			Place plc = getPlaceById(this, i.getIntExtra(MAP_FOCUS, -1));
+			frag = PlaceMapFrag.newInstance(this, plc);
+			
+		} else if (i.hasExtra(MAP_AGENDA)) {
+			/*
+			 * If not, then:
+			 * - show markers for all places on the agenda
+			 * - center the map to current location
+			 */
+			
+			frag = AgendaMapFrag.newInstance(this,GlobalState.getUserAgenda());
+			
+		} else if (i.hasExtra(MAP_CURRENT)) {
+			frag = SelfMapFragment.newInstance(this);
+		}
 		
 		LinearLayout layout = new LinearLayout(this);
 		layout.setId(1001);
@@ -89,199 +85,9 @@ public class MapViewer extends Activity {
 		setContentView(layout);
 		setupActionBar();
 	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		// Begin customizing Map
-		// This is necessary because Fragments are only attached after 
-		// onCreate()
-		MapFragment frag = (MapFragment) getFragmentManager()
-				.findFragmentByTag("map_fragment");
-		if (frag == null) {
-			Toast.makeText(this, "MapFrag is not available. Please contact the" 
-					+ " developer as noted in the (!) page for troubleshooting"
-					, Toast.LENGTH_LONG).show();
-			return;
-		}
-		mMap = frag.getMap();
-		
-		if (mMap == null) {
-			Toast.makeText(this, "Map is not available. Please contact the" 
-					+ " developer as noted in the (!) page for troubleshooting"
-					, Toast.LENGTH_LONG).show();
-			return;
-		}
-		
-		// Set camera to the middle the of the campus initially
-		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
-				new LatLng(36.145205, -86.803987),
-				WIDE_ZOOM);
-		mMap.moveCamera(update);
-		
-		// Customize map as requested
-		Intent i = this.getIntent();
-		if (i.hasExtra(MAP_FOCUS)){
-			/*
-			 * If the intent come with a PlaceId:
-			 * - center the map to that place
-			 * - show marker for that place only
-			 */
-			
-			Place mapFocus = GlobalState.getPlaceById(i.getExtras()
-					.getInt(MAP_FOCUS));
-			update = CameraUpdateFactory.newLatLngZoom(toLatLng(mapFocus), 
-					BUILDING_ZOOM);
-			mMap.animateCamera(update);
-			
-			// drawing the marker for one Place
-			mMap.addMarker(new MarkerOptions()
-					.position(toLatLng(mapFocus))
-					.title(mapFocus.getName())
-					.draggable(false));
-			
-			// We got a badass state machine over here
-			mMapState = VIEWING_PLACE;
-			mPlaceIdFocused = mapFocus.getUniqueId();
-			
-		} else if (i.hasExtra(MAP_AGENDA)){
-			/*
-			 * If not, then:
-			 * - show markers for all places on the agenda
-			 * - center the map to current location
-			 */
-			
-			// Extract the location data from Agenda
-			ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
-			for (Place plc : GlobalState.getUserAgenda()) {
-				geopointList.add(toLatLng(plc));
-				
-				Location plcLoc = new Location("temp");
-				plcLoc.setLatitude(plc.getLatitude());
-				plcLoc.setLongitude(plc.getLongitude());
-				
-				// Set the marker for each Place
-				// Title must be exactly as the PlaceName, in order to match
-				// them later on
-				mMap.addMarker(new MarkerOptions()
-					.position(toLatLng(plc))
-					.title(plc.getName())
-					.draggable(false)
-					.snippet(Geomancer.getDeviceLocation().distanceTo(plcLoc) 
-							+ " yards away")
-				);
-			}
-			
-			// Calculate the bounds that cover all places in Agenda
-			if (geopointList.size() == 0) {
-				
-			} else {
-				double minLat = Double.MAX_VALUE;
-				double maxLat = Double.MIN_VALUE;
-				double minLng = Double.MAX_VALUE;
-				double maxLng = Double.MIN_VALUE;
-				
-				for (LatLng point : geopointList) {
-					if (point.latitude < minLat) {
-						minLat = point.latitude;
-					}
-					if (point.latitude > maxLat) {
-						maxLat = point.latitude;
-					}
-					if (point.longitude < minLng) {
-						minLng = point.longitude;
-					}
-					if (point.longitude > minLng) {
-						maxLng = point.longitude;
-					}
-				}
-				
-				// Sanitize
-				if (minLat > 90 || minLat < -90) { minLat = 0; }
-				if (maxLat > 90 || maxLat < -90) { maxLat = 0; }
-				if (minLng > 180 || minLng < -180) { minLng = 0; }
-				if (maxLng > 180 || maxLng < -180) { maxLng = 0; }
-				
-				/*
-				LatLngBounds bounds = new LatLngBounds(
-						new LatLng(minLat, minLng),new LatLng(maxLat, maxLng));
-				update = CameraUpdateFactory.newLatLngBounds(bounds, 10);
-				mMap.animateCamera(update);
-				*/
-				
-				// Set the camera at the center of the points
-				// (sort of)
-				update = CameraUpdateFactory.newLatLng(
-						new LatLng((minLat + maxLat)/2, (minLng + maxLng)/2));
-				mMap.animateCamera(update);
-				
-				// What happens when a marker is tapped
-				mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-					@Override
-					public boolean onMarkerClick(Marker marker) {
-						if (marker.isInfoWindowShown()) {
-							marker.hideInfoWindow();
-							mPlaceIdFocused = -1;
-						} else {
-							marker.showInfoWindow();
-							
-							Place plc = null;
-							Agenda agenda = GlobalState.getUserAgenda();
-							for (Place agndPlc : agenda) {
-								if (marker.getTitle().equals(agndPlc.getName())) {
-									plc = agndPlc;
-									break;
-								}
-							}
-							
-							if (plc != null) {
-								if (agenda.isOnAgenda(plc)) {
-									// Option to remove
-									
-									mMenu.findItem(R.id.map_menu_remove_agenda)
-										.setVisible(true);
-									mMenu.findItem(R.id.map_menu_add_agenda)
-										.setVisible(false);
-									
-								} else {
-									// Option to add
-									
-									mMenu.findItem(R.id.map_menu_remove_agenda)
-										.setVisible(false);
-									mMenu.findItem(R.id.map_menu_add_agenda)
-										.setVisible(true);
-									
-								}
-								mPlaceIdFocused = plc.getUniqueId();
-							}
-						}
-						return true;
-					}
-					
-				});
-			}
-			
-			// Give it the bad Place Id
-			mPlaceIdFocused = -1;
-			mMapState = VIEWING_AGENDA;
-		} else if (i.hasExtra(MAP_CURRENT)) {
-			
-			mMap.setMyLocationEnabled(true);
-		}
-		/* End customizing MapView */
-	}
 	// ---------- END onCreate() ---------- //
 	
 	// ---------- BEGIN setup and lifecycle related methods ---------- //
-	public void onPause(){
-		super.onPause();
-		cancelUpdater();
-		//mDevice.disableMyLocation();
-		//mDevice.disableCompass();
-	}
-	
-	private void cancelUpdater(){	}
-
 	private void setupActionBar() {
 		mAction = getActionBar();
 		mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -294,58 +100,14 @@ public class MapViewer extends Activity {
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.map_viewer, menu);
 	    mMenu = menu;
-	    
-	    // Setup the menu for all Map state
-	    if (mMapState == VIEWING_PLACE){
-			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
-			SQLiteDatabase db = helper.getReadableDatabase();
-			Place place = DBUtils.getPlaceById(mPlaceIdFocused, db);
-			db.close();
-			
-			if (GlobalState.getUserAgenda().isOnAgenda(place)){
-				// Option to remove
-				mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
-				mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
-				
-				
-			} else {
-				// Option to add
-				mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
-				mMenu.findItem(R.id.map_menu_add_agenda).setVisible(true);
-			}
-			
-	    } else if (mMapState == VIEWING_AGENDA){
-	    	mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
-			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
-	    }
+	    mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
+		mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
 	    return true;
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item){
 		
 		switch (item.getItemId()){
-		case R.id.map_menu_add_agenda:
-			
-			GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
-			SQLiteDatabase db = helper.getReadableDatabase();
-			Place place = DBUtils.getPlaceById(mPlaceIdFocused, db);
-			db.close();
-			
-			GlobalState.getUserAgenda().add(place);
-			
-			Toast.makeText(this, "Added to Agenda", Toast.LENGTH_SHORT).show();
-			return true;
-		case R.id.map_menu_remove_agenda:
-			
-			GuideDBOpenHelper helper2 = new GuideDBOpenHelper(this);
-			SQLiteDatabase db2 = helper2.getReadableDatabase();
-			Place place2 = DBUtils.getPlaceById(mPlaceIdFocused, db2);
-			db2.close();
-			
-			GlobalState.getUserAgenda().remove(place2);
-			Toast.makeText(this, "Removed from Agenda", Toast.LENGTH_SHORT)
-				.show();
-			return true;
 		case android.R.id.home:
 			GuideMain.open(this);
 			return true;
@@ -356,7 +118,6 @@ public class MapViewer extends Activity {
 			return false;
 		}
 	}
-	
 	
 	/**
 	 * Open the map, with markers on each Places in the Agenda
@@ -389,11 +150,21 @@ public class MapViewer extends Activity {
 		ctx.startActivity(i);
 	}
 	
+	/**
+	 * 
+	 * @param ctx
+	 * @param tourId
+	 */
 	public static void openTour(Context ctx, int tourId) {
 		//TODO
 	}
 	
-	public static void getTourMapFragment(Context ctx, int touId) {
+	/**
+	 * 
+	 * @param ctx
+	 * @param tourId
+	 */
+	public static void getTourMapFragment(Context ctx, int tourId) {
 		//TODO
 	}
 	
@@ -405,229 +176,73 @@ public class MapViewer extends Activity {
 	 * @param placeId
 	 * @return
 	 */
-	public static MapFragment getPlaceMapFragment(Context ctx, int placeId) {
-		Place plc = GlobalState.getPlaceById(placeId);
-		CameraPosition position = new CameraPosition(toLatLng(plc),
-				BUILDING_ZOOM, 0, 0);
+	public static PlaceMapFrag getPlaceMapFragment(Context ctx, int placeId) {
+		Place plc = getPlaceById(ctx, placeId);
 		
-		return MapFragment.newInstance(new GoogleMapOptions()
-			.camera(position));
+		return PlaceMapFrag.newInstance(ctx, plc);
+	}
+	
+	/**
+	 * Creates a MapFragment with markers on each Places in the Agenda
+	 * 
+	 * @param ctx
+	 * @return
+	 */
+	public static AgendaMapFrag getAgendaMapFragment(Context ctx) {
+		return AgendaMapFrag.newInstance(ctx, GlobalState.getUserAgenda());
 	}
 	
 	// ---------- END setup and lifecycle related methods ---------- //
-	
+
 	// ---------- BEGIN classes and other methods ---------- //
-	
-	/* @author athran
-	 * these subclasses defines the layer that contains
-	 * the Place pins on the map
-	 * code from page 454
-	 */
-	private class AgendaOverlay extends ItemizedOverlay<OverlayItem>{
-		/*
-		 * Show all places on the agenda as pins on the map
-		 */
-		private List<OverlayItem> mItemList = new ArrayList<OverlayItem>();
-		private Drawable marker = null;
-		private List<Place> mAgendaList = new ArrayList<Place>();
-		private int mClicked = -1;
-		private RelativeLayout mPopup = (RelativeLayout)findViewById(R.map.popup);
-
-		public AgendaOverlay(Drawable marker){
-			super(marker);
-			this.marker = marker;	
-			boundCenterBottom(marker);
-			Agenda agenda = GlobalState.getUserAgenda();
-			
-			// Why don't Agenda have a getList() ? TODO
-			for (int i = 0; i<agenda.size();i++){
-				mAgendaList.add(agenda.get(i));
-			}
-			
-			// transcribing AgendaList into ItemList
-			// may not be the best way to do it (?)
-			for (int j = 0;j<mAgendaList.size();j++){
-				mItemList.add(new OverlayItem(
-					convToGeoPoint(mAgendaList.get(j)),						// GeoPoint
-					mAgendaList.get(j).getName(),							// Pin tag
-					"A Place in Vanderbilt. This is a ShortDescription"));	// Pin snippet
-			}
-
-			populate();
-		}
-		
-		 /*
-		  * Tapping on a marker brings up a popup that tell the name of the Place
-		  * and its distance from current location.
-		  * 
-		  * This assumes that both lists in this class share the same index
-		  * which they should
-		  */
-		protected boolean onTap(int index){
-			
-			// if the same marker is tapped again, the popup is dismissed
-			if (mClicked == index){
-				mClicked = -1;
-				mPopup.setVisibility(View.GONE);
-				mPlaceIdFocused = -1;
-				return true;
-			}
-			mClicked = index;
-			
-			Place pl = mAgendaList.get(mClicked);
-			mPlaceIdFocused = pl.getUniqueId();
-			
-			if (GlobalState.getUserAgenda().isOnAgenda(pl)){
-				// Option to remove
-				(mMenu.findItem(R.id.map_menu_remove_agenda))
-					.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS |
-							MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-			} else {
-				// Option to add
-				(mMenu.findItem(R.id.map_menu_add_agenda))
-					.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS |
-							MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-			}
-			
-			Location locA = new Location("pointA");
-			locA.setLatitude(pl.getLatitude());
-			locA.setLongitude(pl.getLongitude());
-			
-			// Setup what is on the popup card
-			((TextView)mPopup.findViewById(R.map.popup_name)).setText(pl.getName());
-			String dist = (int)(mDevice.getLastFix().distanceTo(locA)) + " yards away";
-			((TextView)mPopup.findViewById(R.map.popup_desc)).setText(dist);
-			
-			// setup the popup's appearance
-            mPopup.setLayoutParams(new MapView.LayoutParams(
-            		MapView.LayoutParams.WRAP_CONTENT, 
-            		MapView.LayoutParams.WRAP_CONTENT, 
-                    mItemList.get(index).getPoint(), 
-                    0, 
-                    -marker.getIntrinsicHeight(), 
-                    MapView.LayoutParams.BOTTOM_CENTER));
-            mPopup.setVisibility(View.VISIBLE);
-            
-            // Clicking the popup should bring you to the Detail page
-            OnClickListener listener = new OnClickListener(){
-				@Override
-				public void onClick(View v) {
-					Intent i = new Intent(MapViewer.this, PlaceDetailer.class);
-					i.putExtra(GuideConstants.PLACE_ID_EXTRA , mAgendaList.get(mClicked).getUniqueId());
-				}
-    		};
-            mPopup.setOnClickListener(listener);
-            ((TextView)mPopup.findViewById(R.map.popup_name)).setOnClickListener(listener);
-			
-			mMapView.getController().animateTo(
-					mItemList.get(mClicked).getPoint());
-			
-			return true;
-		}
-		
-		protected OverlayItem createItem(int i){
-			return mItemList.get(i);
-		}
-		
-		public int size(){
-			return mItemList.size();
-		}
-		
-	}
-	
-	private class PlacesOverlay extends ItemizedOverlay<OverlayItem>{
-		/*
-		 * Place one marker on the Place only
-		 */
-		private List<OverlayItem> mItemList = new ArrayList<OverlayItem>();
-		private Drawable marker = null;
-		private Place mFocus;
-		
-		public PlacesOverlay(Drawable marker,Place pl){
-			super(marker);
-			this.marker = marker;
-			boundCenterBottom(marker);
-			mFocus = pl;
-			mItemList.add(new OverlayItem(
-				convToGeoPoint(pl),			// Geopoint
-				pl.getName(),				// pin name
-				"A Place in Vanderbilt"));	// pin snippet
-			
-			populate();
-			
-			Location locA = new Location("pointA");
-			locA.setLatitude(pl.getLatitude());
-			locA.setLongitude(pl.getLongitude());
-			
-			// Also add a popup
-			RelativeLayout popup = (RelativeLayout) findViewById(R.map.popup);
-			
-			// Setup what is on the popup card
-			((TextView)popup.findViewById(R.map.popup_name)).setText(pl.getName());
-			String dist = (int)(Geomancer.getDeviceLocation()
-					.distanceTo(locA)) + " yards away";
-			((TextView)popup.findViewById(R.map.popup_desc)).setText(dist);
-			
-			// setup the popup's appearance
-            popup.setLayoutParams(new MapView.LayoutParams(
-            		MapView.LayoutParams.WRAP_CONTENT, 
-            		MapView.LayoutParams.WRAP_CONTENT, 
-                    convToGeoPoint(mFocus), 
-                    0, 
-                    -marker.getIntrinsicHeight(), 
-                    MapView.LayoutParams.BOTTOM_CENTER));
-            popup.setVisibility(View.VISIBLE);
-		}
-		
-		public PlacesOverlay(Drawable marker, Location loc){
-			super(marker);
-			this.marker = marker;
-			boundCenterBottom(marker);
-			mItemList.add(new OverlayItem(
-				convToGeoPoint(loc),		// Geopoint
-				"Current Location",			// pin name
-				"A Place in Vanderbilt"));	// pin snippet
-			
-			populate();
-		}
-		
-		protected boolean onTap(int i){
-			/*
-			 * TODO clicking on the map pins should lead to the PlaceDetailer
-			 */
-			
-			return true;
-		}
-		
-		protected OverlayItem createItem(int i){
-			return mItemList.get(i);
-		}
-		
-		public int size(){
-			return mItemList.size();
-		}
-	}
-	/* End subclass */
 	
 	/* 
 	 * @author athran
 	 * Extracts the coordinate information from Location or Place
 	 * and create a GeoPoint from it
 	 */
-	private static GeoPoint convToGeoPoint(Location loc){
-		return new GeoPoint((int)(loc.getLatitude()*1000000),(int)(loc.getLongitude()*1000000));
-	}
-	
-	private static GeoPoint convToGeoPoint(Place place){
-		return new GeoPoint((int)(place.getLatitude()*1000000),(int)(place.getLongitude()*1000000));
-	}
-	
-	private static LatLng toLatLng(Place plc) {
+	static LatLng toLatLng(Place plc) {
 		return new LatLng(plc.getLatitude(), plc.getLongitude());
 	}
 	
-	private static LatLng toLatLng(Location loc) {
+	static LatLng toLatLng(Location loc) {
 		return new LatLng(loc.getLatitude(), loc.getLongitude());
+	}
+	
+	/*
+	 * Static utility methods commonly used by all the MapFragments
+	 */
+	static void addToAgenda(Context ctx, int placeId) {
+		GlobalState.getUserAgenda().add(getPlaceById(ctx, placeId));
+		
+		if (ctx != null) {
+			Toast.makeText(ctx, "Added to Agenda", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	static void removeFromAgenda(Context ctx, int placeId) {
+		GlobalState.getUserAgenda().remove(getPlaceById(ctx, placeId));
+		
+		if (ctx != null) {
+			Toast.makeText(ctx, "Removed from Agenda", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	static Place getPlaceById(Context ctx, int placeId) {
+		GuideDBOpenHelper helper = new GuideDBOpenHelper(ctx);
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Place place = DBUtils.getPlaceById(placeId, db);
+		db.close();
+		
+		return place;
+	}
+	
+	// Centers the camera in the middle of the campus on a wide zoom
+	static void resetCamera(GoogleMap map) {
+		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
+				new LatLng(36.145205, -86.803987),
+				MapViewer.WIDE_ZOOM);
+		map.moveCamera(update);
 	}
 	// ---------- END classes and other methods ---------- //
 	

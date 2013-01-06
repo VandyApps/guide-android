@@ -28,4 +28,7 @@ public interface GuideConstants {
 	// The color of pure gold, according to Wikipedia
 	public static final ColorDrawable PURE_GOLD = new ColorDrawable(
 			Color.rgb(240, 206, 46));
+	// white
+	public static final ColorDrawable WHITE = new ColorDrawable(
+			Color.WHITE);
 }

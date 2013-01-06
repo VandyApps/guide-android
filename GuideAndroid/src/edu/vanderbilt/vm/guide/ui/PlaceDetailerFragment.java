@@ -50,15 +50,6 @@ public class PlaceDetailerFragment extends Fragment{
 	 * @param placeId the UniqueId of the place to be detailed.
 	 * @return
 	 */
-	public static Fragment newInstance(int placeId) {
-		Bundle idBundle = new Bundle();
-		idBundle.putInt(GuideConstants.PLACE_ID_EXTRA, placeId);
-		
-		Fragment frag = new PlaceDetailerFragment();
-		frag.setArguments(idBundle);
-		return frag;
-	}
-	
 	public static PlaceDetailerFragment newInstance(Context ctx, int id) {
 		PlaceDetailerFragment frag = (PlaceDetailerFragment) Fragment
 				.instantiate(ctx, 
