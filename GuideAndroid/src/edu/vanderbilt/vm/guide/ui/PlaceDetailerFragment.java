@@ -101,6 +101,8 @@ public class PlaceDetailerFragment extends Fragment{
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		
 		menu.clear();
 	    inflater.inflate(R.menu.place_detail_activity, menu);
 	    this.mMenu = menu;
@@ -120,7 +122,7 @@ public class PlaceDetailerFragment extends Fragment{
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+		super.onOptionsItemSelected(item);
 		switch (item.getItemId()){
 		case R.id.menu_add_agenda:
 			addRemoveToAgenda();

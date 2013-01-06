@@ -7,8 +7,6 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -49,7 +47,7 @@ public class GuideMain extends Activity {
         }
 	}
 
-	/**
+	/*
 	 * Configure the action bar with the appropriate tabs and options
 	 */
 	private void setupActionBar() {
@@ -71,14 +69,17 @@ public class GuideMain extends Activity {
         		StatsFragment.class, null);
 	}
 	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
+		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.activity_guide_main, menu);
 	    return true;
 	}
 	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
-		
+		super.onOptionsItemSelected(item);
 		switch (item.getItemId()){
 		case R.id.menu_map:
 			MapViewer.openAgenda(this);

@@ -96,7 +96,9 @@ public class MapViewer extends Activity {
 		mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
 	}
 	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
+		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.map_viewer, menu);
 	    mMenu = menu;
@@ -105,8 +107,9 @@ public class MapViewer extends Activity {
 	    return true;
 	}
 	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
-		
+		super.onOptionsItemSelected(item);
 		switch (item.getItemId()){
 		case android.R.id.home:
 			GuideMain.open(this);

@@ -82,6 +82,7 @@ public class PlaceMapFrag extends MapFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
 		case R.id.map_menu_add_agenda:
 			MapViewer.addToAgenda(getActivity(), mPlace.getUniqueId());
