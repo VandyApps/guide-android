@@ -16,7 +16,6 @@ import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
-import android.widget.ImageView;
 
 /**
  * This class holds singletons of certain objects we need to share throughout

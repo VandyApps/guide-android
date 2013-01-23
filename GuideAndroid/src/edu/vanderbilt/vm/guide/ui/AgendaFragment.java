@@ -3,7 +3,6 @@ package edu.vanderbilt.vm.guide.ui;
 import android.annotation.TargetApi;
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;

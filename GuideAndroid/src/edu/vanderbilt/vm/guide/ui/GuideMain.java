@@ -1,24 +1,20 @@
 package edu.vanderbilt.vm.guide.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
-import edu.vanderbilt.vm.guide.ui.listener.ActivityTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
@@ -31,6 +27,9 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 @TargetApi(16)
 public class GuideMain extends Activity {
 
+	@SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger("ui.GuideMain");
+	
 	private ActionBar mAction;
 	private ViewPager mViewPager;
     private SwipingTabsAdapter mTabsAdapter;
@@ -96,28 +95,6 @@ public class GuideMain extends Activity {
 		state.putInt("tab", mAction.getSelectedTab().getPosition());
 	}
 	// ---------- END setup and lifecycle related methods ---------- //
-
-	/**
-	 * Adds a little hack to "forward" the user on to the map activity when the
-	 * map tab is clicked. This effectively removes this activity from the back
-	 * stack.
-	 * 
-	 * @author nicholasking
-	 * 
-	 */
-	private class MyActivityTabListener extends ActivityTabListener {
-
-		public MyActivityTabListener(Context packageCtx, Class<?> target) {
-			super(packageCtx, target);
-		}
-
-		@Override
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			super.onTabSelected(tab, ft);
-			finish();
-		}
-
-	}
 	
 	/**
 	 * Use this method to return to the Main. This will clear all

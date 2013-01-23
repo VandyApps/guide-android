@@ -1,16 +1,12 @@
 package edu.vanderbilt.vm.guide.container;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
-import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 
 /**
  * In-memory representation of a place. Use this class when you want to deal
@@ -23,6 +19,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 @NeedsTesting(lastModifiedDate = "12/22/12")
 public class Place {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger("container.Place");
 	private static final int DEFAULT_ID = -1;
