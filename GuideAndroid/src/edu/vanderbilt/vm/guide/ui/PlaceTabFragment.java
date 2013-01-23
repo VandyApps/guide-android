@@ -75,13 +75,14 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 		setupUI();
 
-		// Setup ListView
+		// Query for places and setup ListView
 		GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
 		String[] columns = { GuideDBConstants.PlaceTable.NAME_COL,
 				GuideDBConstants.PlaceTable.CATEGORY_COL,
 				GuideDBConstants.PlaceTable.LATITUDE_COL,
 				GuideDBConstants.PlaceTable.LONGITUDE_COL,
-				GuideDBConstants.PlaceTable.ID_COL };
+				GuideDBConstants.PlaceTable.ID_COL,
+				GuideDBConstants.PlaceTable.DESCRIPTION_COL };
 		mAllPlacesCursor = DBUtils.getAllPlaces(columns,
 				helper.getReadableDatabase());
 		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), mAllPlacesCursor));
