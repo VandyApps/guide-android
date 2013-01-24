@@ -113,7 +113,9 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// Do nothing for now
+		db.execSQL("DROP TABLE " + PlaceTable.PLACE_TABLE_NAME);
+		db.execSQL("DROP TABLE " + TourTable.TOUR_TABLE_NAME);
+		onCreate(db);
 	}
 	
 	public GuideDBOpenHelper(Context context) {

@@ -9,9 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,34 +22,37 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 /**
- * Provide methods related to Geolocation and positioning.
- * - at the start of the application, call activateGeolocation()
- * 		which returns void and accepts no argument.
- * - when the device's location is needed, call getDeviceLocation()
- * 		which accepts no argument. It returns a Location object which 
- * 		can then be fed into findClosestPlace() which returns a Place object.
+ * Provide methods related to Geolocation and positioning. - at the start of the
+ * application, call activateGeolocation() which returns void and accepts no
+ * argument. - when the device's location is needed, call getDeviceLocation()
+ * which accepts no argument. It returns a Location object which can then be fed
+ * into findClosestPlace() which returns a Place object.
  * 
- * These are array-transversal procedures, so there may be conflicts with the SQL approach
+ * These are array-transversal procedures, so there may be conflicts with the
+ * SQL approach
  * 
  * @author abdulra1
  */
 @NeedsTesting(lastModifiedDate = "12/22/12")
 public class Geomancer {
-	
-	private static final Logger logger = LoggerFactory.getLogger("util.Geomancer");
-	
-	private static Location CurrLocation;
-	private static LocationManager mLocationManager;
+
+	private static final Logger logger = LoggerFactory
+			.getLogger("util.Geomancer");
+	private static final double DEFAULT_LONGITUDE = -86.803889;
+	private static final double DEFAULT_LATITUDE = 36.147381;
+
+	private static Location sCurrLocation;
+	private static LocationManager sLocationManager;
 	private static LocationListener mLocListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
-			// Called when a new location is found 
+			// Called when a new location is found
 			// by the network location provider.
-			CurrLocation = location;
-			logger.info("Receiving location at lat/lon {},{}", 
+			sCurrLocation = location;
+			logger.info("Receiving location at lat/lon {},{}",
 					location.getLatitude(), location.getLongitude());
-			
+
 			alertTheGuards(location);
-			
+
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -58,73 +64,133 @@ public class Geomancer {
 		public void onProviderDisabled(String provider) {
 		}
 	};
-	private final static int DEFAULT_RADIUS = 5; // 5 meters, for you americans out there.
+	private final static int DEFAULT_RADIUS = 5; // 5 meters, for you americans
+													// out there.
 	private final static int DEFAULT_TIMEOUT = 5000;
-	private static Location mDefault;
-	private static ArrayList<GeomancerListener> mPadawan = 
-			new ArrayList<GeomancerListener>();
-	
+	private static Location sDefaultLocation;
+	private static ArrayList<GeomancerListener> mPadawan = new ArrayList<GeomancerListener>();
+
 	/**
-	 * Returns a Place which has the closest coordinate to the given Location.
-	 * I made it take a List<Place> because someone might need to find a Place
-	 * in a custom List, like the nearest academic building or the nearest
-	 * buiding that has a tornado shelter (GASP!!!)
+	 * Returns a Place which has the closest coordinate to the given Location. I
+	 * made it take a List<Place> because someone might need to find a Place in
+	 * a custom List, like the nearest academic building or the nearest buiding
+	 * that has a tornado shelter (GASP!!!)
+	 * 
 	 * @param location
 	 * @param placeList
 	 * @return
+	 * @deprecated Use the version of findClosestPlace() that takes a
+	 *             placeCursor instead. Note that this version returns the index of
+	 *             the place, not the place itself.
 	 */
-	public static Place findClosestPlace(Location location, List<Place> placeList) {
-		double CurrDist = Double.MAX_VALUE;
-		int count = 0;
+	@Deprecated
+	public static Place findClosestPlace(Location location,
+			List<Place> placeList) {
+		if (placeList.size() == 0) {
+			return null;
+		}
 
-		for (int n = 0; n < placeList.size(); n++) {
-			double dist = findDistance(
-					placeList.get(n).getLatitude(),
-					placeList.get(n).getLongitude(), 
-					location.getLatitude(),
+		Place currPlace = placeList.get(0);
+		double currDist = findDistance(currPlace.getLatitude(),
+				currPlace.getLongitude(), location.getLatitude(),
+				location.getLongitude());
+		int closestIx = 0;
+
+		for (int i = 1; i < placeList.size(); i++) {
+			currPlace = placeList.get(i);
+			double dist = findDistance(currPlace.getLatitude(),
+					currPlace.getLongitude(), location.getLatitude(),
 					location.getLongitude());
-			if (dist < CurrDist) {
-				CurrDist = dist;
-				count = n;
+			if (dist < currDist) {
+				currDist = dist;
+				closestIx = i;
 			}
 		}
-		Place result = placeList.get(count);
-		logger.trace("Closest is {} at position {}", result.getName(), count);
-		return placeList.get(count);
+
+		Place result = placeList.get(closestIx);
+		logger.debug("Closest is {} at position {}", result.getName(),
+				closestIx);
+		return placeList.get(closestIx);
 	}
-	
+
 	/**
-	 * Setup the mechanism for determining device location.
-	 * this method is called by GuideMain on application loading.
+	 * Find the closest place in the placeCursor to the given location
 	 * 
-	 * Any activity that needs the device's location simply need to
-	 * call getDeviceLocation()
+	 * @param location
+	 *            The location to find the closest place to
+	 * @param placeCursor
+	 *            The cursor containing the places to search for
+	 * @return The position in the cursor of the closest place
+	 */
+	public static int findClosestPlace(Location location, Cursor placeCursor) {
+		if (!placeCursor.moveToFirst()) {
+			// Cursor was empty
+			return -1;
+		}
+
+		int latIx = placeCursor
+				.getColumnIndex(GuideDBConstants.PlaceTable.LATITUDE_COL);
+		int lonIx = placeCursor
+				.getColumnIndex(GuideDBConstants.PlaceTable.LONGITUDE_COL);
+
+		if (latIx == -1 || lonIx == -1) {
+			throw new SQLException(
+					"Place cursor must have a lat and lon column");
+		}
+
+		double lat = placeCursor.getDouble(latIx);
+		double lon = placeCursor.getDouble(lonIx);
+		double shortestDist = findDistance(location.getLatitude(),
+				location.getLongitude(), lat, lon);
+		int closestIx = 0;
+
+		while (placeCursor.moveToNext()) {
+			lat = placeCursor.getDouble(latIx);
+			lon = placeCursor.getDouble(lonIx);
+			double dist = findDistance(location.getLatitude(),
+					location.getLongitude(), lat, lon);
+			if (dist < shortestDist) {
+				shortestDist = dist;
+				closestIx = placeCursor.getPosition();
+			}
+		}
+
+		return closestIx;
+	}
+
+	/**
+	 * Setup the mechanism for determining device location. this method is
+	 * called by GuideMain on application loading.
+	 * 
+	 * Any activity that needs the device's location simply need to call
+	 * getDeviceLocation()
 	 */
 	public static void activateGeolocation(Context context) {
-		
-		if (mLocationManager == null) {
+
+		if (sLocationManager == null) {
 			// Acquire a reference to the system Location Manager
-			mLocationManager = (LocationManager) context
+			sLocationManager = (LocationManager) context
 					.getSystemService(Context.LOCATION_SERVICE);
 		}
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		//criteria.setPowerRequirement(Criteria.POWER_LOW);
+		// criteria.setPowerRequirement(Criteria.POWER_LOW);
 		criteria.setAltitudeRequired(false);
 		criteria.setBearingRequired(false);
 		criteria.setSpeedRequired(false);
 		criteria.setCostAllowed(true);
 
-		List<String> matchingProviders = mLocationManager.getProviders(criteria, false);
+		List<String> matchingProviders = sLocationManager.getProviders(
+				criteria, false);
 		logger.trace("Found {} providers.", matchingProviders.size());
 		if (!matchingProviders.isEmpty()) {
 			String provider = matchingProviders.get(0);
-			mLocationManager.requestLocationUpdates(provider, DEFAULT_TIMEOUT, DEFAULT_RADIUS,
-					mLocListener);
+			sLocationManager.requestLocationUpdates(provider, DEFAULT_TIMEOUT,
+					DEFAULT_RADIUS, mLocListener);
 		} else {
-			mLocationManager.requestLocationUpdates(
-					LocationManager.NETWORK_PROVIDER, DEFAULT_TIMEOUT, DEFAULT_RADIUS,
-					mLocListener);
+			sLocationManager.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, DEFAULT_TIMEOUT,
+					DEFAULT_RADIUS, mLocListener);
 		}
 		logger.trace("Geolocation init done.");
 	}
@@ -132,75 +198,71 @@ public class Geomancer {
 	public static double findDistance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
-	
+
 	/**
-	 * Gives the device location. The method is guaranteed to never return
-	 * null. It always delivers d=(^o^d=)
+	 * Gives the device location. The method is guaranteed to never return null.
+	 * It always delivers d=(^o^d=)
 	 * 
 	 * @return device's location
 	 */
-	public static Location getDeviceLocation(){
-		if (CurrLocation == null){
-			CurrLocation = mLocationManager.getLastKnownLocation(
-					LocationManager.GPS_PROVIDER);
+	public static Location getDeviceLocation() {
+		if (sCurrLocation == null) {
+			sCurrLocation = sLocationManager
+					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		}
-		if (CurrLocation == null){
-			CurrLocation = mLocationManager.getLastKnownLocation(
-					LocationManager.NETWORK_PROVIDER);
+		if (sCurrLocation == null) {
+			sCurrLocation = sLocationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
-		if (CurrLocation == null){
-			CurrLocation = mLocationManager.getLastKnownLocation(
-					LocationManager.PASSIVE_PROVIDER);
+		if (sCurrLocation == null) {
+			sCurrLocation = sLocationManager
+					.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 		}
-		if (CurrLocation == null){
-			mDefault.setTime((new Date()).getTime());
-			CurrLocation = mDefault;
+		if (sCurrLocation == null) {
+			sDefaultLocation.setTime((new Date()).getTime());
+			sCurrLocation = sDefaultLocation;
 		}
-		
-		return CurrLocation;
+
+		return sCurrLocation;
 	}
-	
+
 	/**
-	 * Provide Geomancer with fresh information on device location.
-	 * This is intended for later on when we may have alternative
-	 * methods to get that information other than GPS and radio.
+	 * Provide Geomancer with fresh information on device location. This is
+	 * intended for later on when we may have alternative methods to get that
+	 * information other than GPS and radio.
 	 * 
-	 * @param loc Current device Location
+	 * @param loc
+	 *            Current device Location
 	 */
-	public static void setDeviceLocation(Location loc){
-		CurrLocation = loc;
+	public static void setDeviceLocation(Location loc) {
+		sCurrLocation = loc;
 		alertTheGuards(loc);
 	}
-	
+
 	static {
-		mDefault = new Location("Dummy");
-		
-		try {
-			mDefault.setLatitude(GlobalState.getPlaceById(10).getLatitude());
-			mDefault.setLongitude((GlobalState.getPlaceById(10).getLongitude()));
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			mDefault.setLatitude(36.145205);
-			mDefault.setLongitude(-86.803987);
-		}
+		// Set up the default location
+		sDefaultLocation = new Location("Dummy");
+		sDefaultLocation.setLatitude(DEFAULT_LATITUDE);
+		sDefaultLocation.setLongitude(DEFAULT_LONGITUDE);
 	}
-	
+
 	/**
-	 * In order to get update on device location, make the Activity
-	 * implement GeomancerListener and call 
+	 * In order to get update on device location, make the Activity implement
+	 * GeomancerListener and call
 	 * 
 	 * Geomancer.registerGeomancerListener(this)
 	 * 
-	 * @param listener The Activity that implements GeomancerListener
+	 * @param listener
+	 *            The Activity that implements GeomancerListener
 	 */
 	public static void registerGeomancerListener(GeomancerListener listener) {
 		mPadawan.add(listener);
 	}
-	
+
 	public static void removeGeomancerListener(GeomancerListener listener) {
 		mPadawan.remove(listener);
 	}
-	
+
 	private static void alertTheGuards(Location loc) {
 		for (GeomancerListener anakin : mPadawan) {
 			anakin.updateLocation(loc);

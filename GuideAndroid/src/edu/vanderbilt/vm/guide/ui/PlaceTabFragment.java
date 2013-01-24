@@ -53,9 +53,12 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 	private Place mCurrPlace;
 	private ImageView ivCurrent;
 	private Timer mSearchFaerie;
+	
+	private Cursor mAllPlacesCursor; // A cursor holding all places in the db
 
 	private static final int SEARCH_DELAY = 5000;
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceTabFragment");
 
@@ -72,22 +75,24 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 		setupUI();
 
-		// Setup ListView
+		// Query for places and setup ListView
 		GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
 		String[] columns = { GuideDBConstants.PlaceTable.NAME_COL,
 				GuideDBConstants.PlaceTable.CATEGORY_COL,
-				GuideDBConstants.PlaceTable.ID_COL };
-		final Cursor cursor = DBUtils.getAllPlaces(columns,
+				GuideDBConstants.PlaceTable.LATITUDE_COL,
+				GuideDBConstants.PlaceTable.LONGITUDE_COL,
+				GuideDBConstants.PlaceTable.ID_COL,
+				GuideDBConstants.PlaceTable.DESCRIPTION_COL };
+		mAllPlacesCursor = DBUtils.getAllPlaces(columns,
 				helper.getReadableDatabase());
-		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
+		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), mAllPlacesCursor));
 		mListView.setOnItemClickListener(new PlaceListClickListener(
 				getActivity()));
 		helper.close();
 
 		// Tells you what is the closest building to your location right now
 		Location loc = Geomancer.getDeviceLocation();
-		setCurrentPlace(Geomancer.findClosestPlace(loc,
-				GlobalState.getPlaceList(getActivity())));
+		findAndSetClosestPlace(loc);
 
 		// Prevent the soft keyboard from popping up at startup.
 		getActivity().getWindow().setSoftInputMode(
@@ -145,13 +150,19 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 	}
 
 	public void setCurrentPlace(Place plc) {
+		if(plc == null) {
+			return;
+		}
+		
 		mCurrPlace = plc;
 		mCurrPlaceName.setText(mCurrPlace.getName());
 
 		String desc = mCurrPlace.getDescription();
-		if (desc.length() > DESCRIPTION_LENGTH) {
+		if (desc != null && desc.length() > DESCRIPTION_LENGTH) {
 			mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH)
 					+ "...");
+		} else if(desc == null) {
+			mCurrPlaceDesc.setText("No description available");
 		} else {
 			mCurrPlaceDesc.setText(desc + "...");
 		}
@@ -203,8 +214,21 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void updateLocation(Location loc) {
-		setCurrentPlace(Geomancer.findClosestPlace(loc,
-				GlobalState.getPlaceList(getActivity())));
+		findAndSetClosestPlace(loc);
+	}
+	
+	private void findAndSetClosestPlace(Location loc) {
+		if(loc == null) {
+			return;
+		}
+		
+		int closestIx = Geomancer.findClosestPlace(loc, mAllPlacesCursor);
+		if(closestIx == -1) {
+			Toast.makeText(getActivity(), "Couldn't find closest place", Toast.LENGTH_LONG).show();
+		} else {
+			mAllPlacesCursor.moveToPosition(closestIx);
+			setCurrentPlace(DBUtils.getPlaceFromCursor(mAllPlacesCursor));
+		}
 	}
 
 }

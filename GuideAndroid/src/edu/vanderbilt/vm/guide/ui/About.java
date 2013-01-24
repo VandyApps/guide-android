@@ -1,6 +1,5 @@
 package edu.vanderbilt.vm.guide.ui;
 
-import edu.vanderbilt.vm.guide.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +16,7 @@ public class About extends Activity{
 		super.onCreate(savedInstanceState);
 		
 		if (getIntent().hasExtra(MAP_TIPS)) {
+			@SuppressWarnings("unused")
 			LinearLayout layout = new LinearLayout(this);
 		} else {
 			TextView tvAbout = new TextView(this);

@@ -10,13 +10,8 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.LinearLayout;
-import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.container.Place;
-import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
@@ -30,6 +25,7 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 public class PlaceDetailer extends Activity {
 	private ActionBar mAction;
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceDetailer");
 	private static final String PLACE_ID_EXTRA = "placeId";

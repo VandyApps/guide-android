@@ -29,6 +29,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 
 public class AgendaMapFrag extends MapFragment {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.AgendaMapFrag");
 	private Agenda mAgenda;

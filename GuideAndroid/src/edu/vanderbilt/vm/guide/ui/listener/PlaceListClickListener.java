@@ -1,7 +1,6 @@
 package edu.vanderbilt.vm.guide.ui.listener;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.View;
 import android.widget.AdapterView;
 import edu.vanderbilt.vm.guide.ui.PlaceDetailer;

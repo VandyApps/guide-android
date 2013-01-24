@@ -34,9 +34,11 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 @TargetApi(11)
 public class MapViewer extends Activity {
 
+	@SuppressWarnings("unused")
 	private static final int MEDIUM_ZOOM = 18;
 	static final int BUILDING_ZOOM = 19;	// high zoom for viewing individual building
 	static final int WIDE_ZOOM = 16;		// wider zoom for viewing whole campus
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger("ui.MapViewer");
 	private static final String MAP_AGENDA = "map_agenda";
 	private static final String MAP_FOCUS = "map_focus";

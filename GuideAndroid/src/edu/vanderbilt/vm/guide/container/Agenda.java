@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
-import edu.vanderbilt.vm.guide.util.DBUtils;
-import edu.vanderbilt.vm.guide.util.Geomancer;
 
 /**
  * Represents a list of places that the user plans to visit.
