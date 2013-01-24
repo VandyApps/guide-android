@@ -189,7 +189,8 @@ public class MapViewer extends Activity {
 	}
 	
 	/**
-	 * Creates a MapFragment with markers on each Places in the Agenda
+	 * Creates a MapFragment with markers on each Places in the Agenda.
+	 * If no Agenda object is passed, it will grab the one in GlobalState.
 	 * 
 	 * @param ctx
 	 * @return
