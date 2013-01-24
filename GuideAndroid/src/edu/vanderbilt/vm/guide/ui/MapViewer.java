@@ -25,6 +25,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
@@ -195,6 +196,10 @@ public class MapViewer extends Activity {
 	 */
 	public static AgendaMapFrag getAgendaMapFragment(Context ctx) {
 		return AgendaMapFrag.newInstance(ctx, GlobalState.getUserAgenda());
+	}
+	
+	public static AgendaMapFrag getAgendaMapFragment(Context ctx, Agenda a) {
+		return AgendaMapFrag.newInstance(ctx, a);
 	}
 	
 	// ---------- END setup and lifecycle related methods ---------- //
