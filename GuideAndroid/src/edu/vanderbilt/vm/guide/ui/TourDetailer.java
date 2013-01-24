@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,9 +15,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.MapFragment;
+
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
@@ -69,6 +75,17 @@ public class TourDetailer extends Activity {
 		}
 
 		fillViews(mCursor);
+
+		int placesIx = mCursor
+				.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
+		Agenda tourAgenda = DBUtils.getAgendaFromIds(
+				mCursor.getString(placesIx), mHelper.getReadableDatabase());
+		MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
+		LinearLayout mapContainer = (LinearLayout) findViewById(R.id.tour_detail_map_container);
+		FragmentManager fm = getFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.add(mapContainer.getId(), mapFrag, "tour_map_Fragment");
+		ft.commit();
 
 	}
 
