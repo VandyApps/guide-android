@@ -35,7 +35,8 @@ public class AgendaMapFrag extends MapFragment {
 	private Agenda mAgenda;
 	private int mPlaceIdFocused;
 	private Menu mMenu;
-
+	private boolean showSelf = true;
+	
 	/**
 	 * Instantiate a Map Fragment and puts markers on all the places on the
 	 * Agenda
@@ -176,6 +177,9 @@ public class AgendaMapFrag extends MapFragment {
 			});
 
 		}
+		
+		map.setMyLocationEnabled(showSelf);
+		
 	}
 
 	@Override
@@ -201,4 +205,14 @@ public class AgendaMapFrag extends MapFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		mMenu = menu;
 	}
+	
+	/**
+	 * Set whether the map has a current location marker. Default is true.
+	 * 
+	 * @param show
+	 */
+	public void setShowCurrentLocation(boolean show) {
+		showSelf = show;
+	}
+	
 }
