@@ -188,6 +188,9 @@ public class TourDetailer extends Activity {
 						Toast.LENGTH_LONG).show();
 			}
 			return true;
+		case android.R.id.home:
+			GuideMain.open(this);
+			return true;
 		default:
 			logger.warn("Clicked menu item does not match any known ids");
 			return false;

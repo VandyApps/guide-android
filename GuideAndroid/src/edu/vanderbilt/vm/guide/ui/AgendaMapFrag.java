@@ -215,4 +215,10 @@ public class AgendaMapFrag extends MapFragment {
 		showSelf = show;
 	}
 	
+	@Override
+	public void onPause() {
+		super.onPause();
+		this.getMap().setMyLocationEnabled(false);
+	}
+	
 }

@@ -66,7 +66,7 @@ public class PlaceMapFrag extends MapFragment {
 		map.addMarker(new MarkerOptions().draggable(false)
 				.position(MapViewer.toLatLng(mPlace))
 				.title(mPlace.getName()).snippet(mPlace.getCategories().get(0)));
-		
+		/*
 		if (GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
 			// Option to remove
 			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
@@ -78,6 +78,7 @@ public class PlaceMapFrag extends MapFragment {
 			item = mMenu.findItem(R.id.map_menu_remove_agenda);
 			item.setVisible(false);
 		}
+		*/
 	}
 
 	@Override
@@ -103,6 +104,19 @@ public class PlaceMapFrag extends MapFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		mMenu = menu;
+		
+		if (GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
+			// Option to remove
+			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
+			mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
+		} else {
+			// Option to add
+			MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
+			item.setVisible(true);
+			item = mMenu.findItem(R.id.map_menu_remove_agenda);
+			item.setVisible(false);
+		}
+		
 	}
 
 }

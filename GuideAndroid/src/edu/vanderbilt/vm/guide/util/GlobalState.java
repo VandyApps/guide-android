@@ -89,8 +89,10 @@ public class GlobalState {
 		return null; // If search failed
 	}
 	
-	// History Singleton
+	// ---------- History Singleton ---------- //
 	private static Agenda userHistory = new Agenda();
+	private static final int BOGUS_ID = 1000;
+	private static final int HISTORY_LIMIT = 10;
 	
 	static {
 		resetHistory();
@@ -113,10 +115,15 @@ public class GlobalState {
 	public static void addHistory(Place plc){
 		if (userHistory.size() == 0){
 			userHistory.add(plc);
-		} else if (userHistory.get(0).getUniqueId() == 1000) {
+		} else if (userHistory.get(0).getUniqueId() == BOGUS_ID) {
 			userHistory.overwrite(new Agenda());
 			userHistory.add(plc);
 		} else {
+			
+			if (userHistory.size() > HISTORY_LIMIT) {
+				// TODO
+			}
+			
 			userHistory.addToTop(plc);
 		}
 		
@@ -134,12 +141,12 @@ public class GlobalState {
 		
 		Place temp = (new Place.Builder())
 				.setName("History is Empty")
-				.setUniqueId(1000).build(); // TODO
+				.setUniqueId(BOGUS_ID).build(); // TODO
 		userHistory.add(temp);
 	}
-	// END History Singleton
+	// ---------- END History Singleton ---------- //
 	
-	// Bitmap store
+	// ---------- Bitmap store ---------- //
 	public static ArrayList<BitmapRecord> mBitmapStore = 
 			new ArrayList<BitmapRecord>();
 	
@@ -160,7 +167,8 @@ public class GlobalState {
 		// make sure the cache is not too big
 		// discard older entry if it exceeds a limit
 		if (mBitmapStore.size() > STORE_LIMIT) {
-			mBitmapStore.subList(5, mBitmapStore.size());
+			mBitmapStore = (ArrayList<BitmapRecord>) 
+					mBitmapStore.subList(5, mBitmapStore.size());
 		}
 		
 		// check for existing cache
@@ -203,7 +211,8 @@ public class GlobalState {
 		}
 		
 	}
-	// END Bitmap store
+	
+	// ---------- END Bitmap store ---------- //
 	
 	// Coordinate lookup table
 	

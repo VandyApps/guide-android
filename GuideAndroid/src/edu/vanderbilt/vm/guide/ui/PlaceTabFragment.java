@@ -82,7 +82,8 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 				GuideDBConstants.PlaceTable.LATITUDE_COL,
 				GuideDBConstants.PlaceTable.LONGITUDE_COL,
 				GuideDBConstants.PlaceTable.ID_COL,
-				GuideDBConstants.PlaceTable.DESCRIPTION_COL };
+				GuideDBConstants.PlaceTable.DESCRIPTION_COL,
+				GuideDBConstants.PlaceTable.IMAGE_LOC_COL};
 		mAllPlacesCursor = DBUtils.getAllPlaces(columns,
 				helper.getReadableDatabase());
 		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), mAllPlacesCursor));
@@ -130,7 +131,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 		@Override
 		public void run() {
-			String query = mSearchBox.getText().toString();
+			// String query = mSearchBox.getText().toString();
 
 			// TODO
 		}

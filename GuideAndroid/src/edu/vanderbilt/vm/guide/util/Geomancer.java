@@ -248,9 +248,10 @@ public class Geomancer {
 
 	/**
 	 * In order to get update on device location, make the Activity implement
-	 * GeomancerListener and call
+	 * GeomancerListener and call: Geomancer.registerGeomancerListener(this)
 	 * 
-	 * Geomancer.registerGeomancerListener(this)
+	 * Make sure to call removeGeomancerListener() inside the onPause() 
+	 * callback in order to avoid memory leak.
 	 * 
 	 * @param listener
 	 *            The Activity that implements GeomancerListener

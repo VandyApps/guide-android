@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,10 +30,10 @@ public class PlaceDetailerFragment extends Fragment{
 	private TextView tvPlaceDesc;
 	private TextView tvPlaceHours;
 	private ImageView ivPlaceImage;
-	private Bitmap mPlaceBitmap;
 	private View mView;
-	private boolean isOnAgenda = false;
 	private Menu mMenu;
+	
+	private boolean isOnAgenda = false;
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceDetailerFragment");
@@ -46,7 +45,7 @@ public class PlaceDetailerFragment extends Fragment{
 	 * @param placeId the UniqueId of the place to be detailed.
 	 * @return
 	 */
-	public static PlaceDetailerFragment newInstance(Context ctx, int id) {
+	static PlaceDetailerFragment newInstance(Context ctx, int id) {
 		PlaceDetailerFragment frag = (PlaceDetailerFragment) Fragment
 				.instantiate(ctx, 
 				"edu.vanderbilt.vm.guide.ui.PlaceDetailerFragment");
