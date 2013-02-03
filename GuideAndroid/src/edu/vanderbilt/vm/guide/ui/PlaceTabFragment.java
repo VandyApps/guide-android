@@ -103,6 +103,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private void setupUI() {
 		mCurrPlaceName = (TextView) getActivity().findViewById(
 				R.id.currentPlaceName);
