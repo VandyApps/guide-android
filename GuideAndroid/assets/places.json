@@ -1071,7 +1071,7 @@
       "id":87,
       "name":"Phi Kappa Sigma",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Phi Kappa Sigma fraternity house.",
@@ -1082,9 +1082,9 @@
    },
    {
       "id":88,
-      "name":"Beta  Theta Pi",
+      "name":"Beta Theta Pi",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Beta Theta Pi fraternity house.",
@@ -1097,7 +1097,7 @@
       "id":89,
       "name":"Psychiatric Hospital",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"The Psychiatric Hospital at Vanderbilt is a full-service, 88-bed psychiatric facility that offers specialized services to children, adolescents and adults. The hospital includes specialty units which focus on chemical dependency, attention deficit disorders, affective disorders, sexual abuse and post-traumatic disorders.",
@@ -3146,5 +3146,18 @@
       "videoPath":"",
       "latitude":36.14345133863334,
       "longitude":-86.80043813691121
+   },
+   {
+      "id":247,
+      "name":"Blakemore House",
+      "category":[
+          "Residence Hall"
+      ],
+      "hours":"24 hours",
+      "placeDescription":"Purchased and renovated in 2012, Blakemore House houses Vanderbilt upperclassmen in doubles.",
+      "imagePath":""
+      "videoPath":"",
+      "latitude":36.142988,
+      "longitude":-86.811656
    }
 ]
