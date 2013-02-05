@@ -1,6 +1,7 @@
 package edu.vanderbilt.vm.guide.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -268,5 +269,74 @@ public class Geomancer {
 		for (GeomancerListener anakin : mPadawan) {
 			anakin.updateLocation(loc);
 		}
+		
 	}
+	
+	/*
+	static Graph findPath(Graph g, Node start, Node end) {
+		// Assert that "start" and "end" are elements of "g"
+		// Assert that Graph is a typedef of Arraylist<Node>
+		
+		// Initialization routine
+		for (Node node : g) {
+			if (node.getId() == start.getId()) {
+				node.setScore(0);
+			} else {
+				node.setScore(Double.MAX_VALUE);
+			}
+			node.setPrevious(null);
+		}
+		
+		// Create a set of nodes not yet examined. This initially contain all
+		// the nodes in "g"
+		Graph unvisited = g.clone();
+		
+		// This is the bulk of the algorithm
+		while (!unvisited.isEmpty()) {
+			
+			Node u = unvisited.getNodeWithLowestScore();
+			unvisited.remove(u);
+			if (u.getId() == end.getId()) {
+				break;
+			}
+			
+			if (u.getScore() == Double.MAX_VALUE) {
+				break;
+			}
+			
+			for (Node neigh : u.getNeighbours()) { // getNeighbours() returns a Graph object
+				
+				if (!unvisited.contains(neigh)) {
+					continue;
+				}
+				
+				double dist = u.getScore() + u.distanceTo(neigh);
+				if (dist < neigh.getScore()) {
+					neigh.setScore(dist);
+					neigh.setPrevious(u);
+					
+				}
+			}
+		}
+		
+		// backtracing the path
+		
+		// Since "start" and "end" are elements of "g", They should have received
+		// the result of the algorithm run
+		Graph path = Graph.getEmptySet(); 	// just use the default constructor
+											// here if there's no issue
+		Node prev = end.getPrevious();
+		while (prev != null) {
+			path.add(0, prev);
+			prev = prev.getPrevious();
+		}
+		
+		return path
+	}
+	*/
+	
+	
+	
+	
+	
 }

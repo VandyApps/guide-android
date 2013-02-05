@@ -103,7 +103,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 	}
 
-	@SuppressWarnings("deprecation")
+	// @SuppressWarnings("deprecation")
 	private void setupUI() {
 		mCurrPlaceName = (TextView) getActivity().findViewById(
 				R.id.currentPlaceName);
@@ -122,10 +122,11 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 		mCurrentPlaceBar = (LinearLayout) getActivity().findViewById(
 				R.id.current_place_bar);
 		mCurrentPlaceBar.setOnClickListener(this);
-
-		// setBackground() throws NoSuchMethodError
-		// Had to use this one instead
-		mCurrentPlaceBar.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
+		mCurrentPlaceBar.setBackground(GuideConstants.WHITE);
+		
+		((LinearLayout) getActivity().findViewById(R.id.placetab_root))
+			.setBackground(GuideConstants.LIGHT_GOLD);
+		
 	}
 
 	private class SearchLogic extends TimerTask {

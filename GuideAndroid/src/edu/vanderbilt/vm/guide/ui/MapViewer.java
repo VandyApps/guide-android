@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -51,7 +50,7 @@ public class MapViewer extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.single_pane);
 		MapFragment frag = null;
 		
 		Intent i = this.getIntent();
@@ -78,14 +77,11 @@ public class MapViewer extends Activity {
 			frag = SelfMapFragment.newInstance(this);
 		}
 		
-		LinearLayout layout = new LinearLayout(this);
-		layout.setId(1001);
-		{
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.add(1001, frag, "map_fragment");
-			ft.commit();
-		}
-		setContentView(layout);
+		
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.add(R.id.sp_pane1, frag, "map_fragment");
+		ft.commit();
+		
 		setupActionBar();
 	}
 	// ---------- END onCreate() ---------- //
