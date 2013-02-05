@@ -102,9 +102,10 @@ public class PlaceCursorAdapter extends BaseAdapter {
 		tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
 		tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
 		
+		int dist = (int) tmp.distanceTo(Geomancer.getDeviceLocation());
+		
 		((TextView) layout.findViewById(R.id.placelist_item_distance))
-			.setText(Double.toString((tmp.distanceTo(
-					Geomancer.getDeviceLocation()))));
+			.setText(Integer.toString(dist) + " m");
 		
 		return layout;
 	}
