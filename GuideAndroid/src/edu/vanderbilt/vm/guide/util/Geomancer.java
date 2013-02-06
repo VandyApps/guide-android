@@ -272,6 +272,34 @@ public class Geomancer {
 	}
 	
 	/*
+	 * SUMMARY OF PATH FINDING IMPLEMENTATION
+	 * 
+	 * 	class Node {
+	 * 	private:
+	 * 		double score
+	 * 		final int id
+	 * 		final double latitude
+	 * 		final double longitude
+	 * 		final int[] neighbours
+	 * 		int previous
+	 * 	public:
+	 * 		double getScore()
+	 * 		int getId()
+	 * 		Graph getNeighbours()
+	 * 		double distanceTo(Node)
+	 * 		
+	 * 		void setScore(double)
+	 * 		void setPrevious(Node)
+	 * 	}
+	 * 	
+	 * 	class Graph extends ArrayList<Node> {
+	 * 	public:
+	 * 		Node getNodeWithLowestScore()
+	 * 	}
+	 * 
+	 */
+	
+	/*
 	static Graph findPath(Graph g, Node start, Node end) {
 		// Assert that "start" and "end" are elements of "g"
 		// Assert that Graph is a typedef of Arraylist<Node>
