@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -103,7 +104,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 	}
 
-	// @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private void setupUI() {
 		mCurrPlaceName = (TextView) getActivity().findViewById(
 				R.id.currentPlaceName);
@@ -122,10 +123,10 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 		mCurrentPlaceBar = (LinearLayout) getActivity().findViewById(
 				R.id.current_place_bar);
 		mCurrentPlaceBar.setOnClickListener(this);
-		mCurrentPlaceBar.setBackground(GuideConstants.WHITE);
+		mCurrentPlaceBar.setBackgroundColor(Color.WHITE);
 		
 		((LinearLayout) getActivity().findViewById(R.id.placetab_root))
-			.setBackground(GuideConstants.LIGHT_GOLD);
+			.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
 		
 	}
 

@@ -38,10 +38,11 @@ public class GuideMain extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Geomancer.activateGeolocation(this);
+		
+		setTheme(R.style.AppTheme);
 		setContentView(R.layout.activity_guide_main);
-
+		
         setupActionBar();
-        
         if (savedInstanceState != null) {
             mAction.setSelectedNavigationItem(
             		savedInstanceState.getInt("tab", 0));
@@ -57,6 +58,7 @@ public class GuideMain extends Activity {
 		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setBackgroundDrawable(GuideConstants.OLD_GOLD);
 		mAction.setSplitBackgroundDrawable(GuideConstants.OLD_GOLD);
+		
 		
 		mViewPager = (ViewPager) findViewById(R.id.swiper_1);
         mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);

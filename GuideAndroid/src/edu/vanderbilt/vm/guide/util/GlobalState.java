@@ -167,8 +167,9 @@ public class GlobalState {
 		// make sure the cache is not too big
 		// discard older entry if it exceeds a limit
 		if (mBitmapStore.size() > STORE_LIMIT) {
-			mBitmapStore = (ArrayList<BitmapRecord>) 
-					mBitmapStore.subList(5, mBitmapStore.size());
+			for (int ix = 0; ix < 6; ix++) {
+				mBitmapStore.remove(0);
+			}
 		}
 		
 		// check for existing cache
