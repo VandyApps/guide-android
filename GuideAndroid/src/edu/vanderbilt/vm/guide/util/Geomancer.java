@@ -165,23 +165,23 @@ public class Geomancer {
 	 * Any activity that needs the device's location simply need to call
 	 * getDeviceLocation()
 	 */
-	public static void activateGeolocation(Context context) {
+	public static void activateGeolocation(Context ctx) {
 
 		if (sLocationManager == null) {
 			// Acquire a reference to the system Location Manager
-			sLocationManager = (LocationManager) context
+			sLocationManager = (LocationManager) ctx
 					.getSystemService(Context.LOCATION_SERVICE);
 		}
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		// criteria.setPowerRequirement(Criteria.POWER_LOW);
-		criteria.setAltitudeRequired(false);
-		criteria.setBearingRequired(false);
-		criteria.setSpeedRequired(false);
-		criteria.setCostAllowed(true);
-
+		
+		String provider = sLocationManager.getBestProvider(getCriteriaA(), true);
+		if (provider != null) {
+			sLocationManager.requestLocationUpdates(provider, 
+					DEFAULT_TIMEOUT, DEFAULT_RADIUS, mLocListener);
+		}
+		
+		/*
 		List<String> matchingProviders = sLocationManager.getProviders(
-				criteria, false);
+				getCriteriaA(), false);
 		logger.trace("Found {} providers.", matchingProviders.size());
 		if (!matchingProviders.isEmpty()) {
 			String provider = matchingProviders.get(0);
@@ -192,6 +192,9 @@ public class Geomancer {
 					LocationManager.NETWORK_PROVIDER, DEFAULT_TIMEOUT,
 					DEFAULT_RADIUS, mLocListener);
 		}
+		*/
+		
+		
 		logger.trace("Geolocation init done.");
 	}
 
@@ -206,6 +209,7 @@ public class Geomancer {
 	 * @return device's location
 	 */
 	public static Location getDeviceLocation() {
+		
 		if (sCurrLocation == null) {
 			sCurrLocation = sLocationManager
 					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -258,18 +262,41 @@ public class Geomancer {
 	 */
 	public static void registerGeomancerListener(GeomancerListener listener) {
 		mPadawan.add(listener);
+		
+		if (mPadawan.size() == 1) {
+			String provider = sLocationManager.getBestProvider(getCriteriaA(), true);
+			if (provider != null) {
+				sLocationManager.requestLocationUpdates(provider, 
+						DEFAULT_TIMEOUT, DEFAULT_RADIUS, mLocListener);
+			}
+		}
 	}
 
 	public static void removeGeomancerListener(GeomancerListener listener) {
 		mPadawan.remove(listener);
+		
+		if (mPadawan.isEmpty()) {
+			sLocationManager.removeUpdates(mLocListener);
+		}
 	}
 
 	private static void alertTheGuards(Location loc) {
 		for (GeomancerListener anakin : mPadawan) {
 			anakin.updateLocation(loc);
 		}
-		
 	}
+	
+	private static Criteria getCriteriaA() {
+		Criteria crit = new Criteria();
+		crit.setAccuracy(Criteria.ACCURACY_FINE);
+		crit.setAltitudeRequired(false);
+		crit.setBearingRequired(false);
+		crit.setSpeedRequired(false);
+		crit.setCostAllowed(true);
+		return crit;
+	}
+	
+	
 	
 	/*
 	 * SUMMARY OF PATH FINDING IMPLEMENTATION
