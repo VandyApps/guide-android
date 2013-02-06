@@ -6,7 +6,7 @@
          "Academic"
       ],
       "hours":"9-5 PM",
-      "placeDescription":"A distinctive tower marks the entrance of Featheringill Hall, one of four buildings housing the Vanderbilt School of Engineering. Inside, Featheringill features a three-story atrium, which serves as a focal for student interaction and social events, more than 50 teaching and research laboratories with the latest equpment and computer resources, and project rooms.",
+      "placeDescription":"When the Engineering Building opened for classes in the fall of 1950, it housed all School of Engineering departments. It was the first academic addition to the campus after World War II. Engineering alumnus A. J. Dyer, founder of Nashville bridge company, was a major contributor to the building fund and the principal donor of mechanical engineering laboratories, added in 1958. The building was renamed Jacobs Hall in 1996 in honor of Dillard Jacobs, Founder's medalist of the School of Engineering's class of 1932 and a professor of engineering at Vanderbilt for nearly 30 years. In 2001, construction was completed that transformed the old building into a new School of Engineering complex. The old central wing was demolished and replaced by Featheringill Hall, named for alumnus and lead donor William W. Featheringill, and the remaining wings of Jacobs were renovated.",
       "imagePath":"http://www.vanderbilt.edu/studentcenters/wp-content/uploads/FEA138.jpg?quick_view=1",
       "videoPath":"",
       "latitude":36.144782,
@@ -24,19 +24,6 @@
       "videoPath":"",
       "latitude":36.14624,
       "longitude":-86.80309
-   },
-   {
-      "id":4,
-      "name":"Rec Center",
-      "category":[
-         "Recreation"
-      ],
-      "hours":"9-5 PM",
-      "placeDescription":"It is the mission of the Office of Campus Recreation to assist in the development and education of the whole person. The Office achieves this goal by providing comprehensive fitness, recreation, and wellness programs in a state of the art facility to the diverse population of students and the Vanderbilt community at large. The wide variety of programs provide opportunities to develop the individual's positive self-esteem, relationships with others, and effective communication and leadership skills. The Student Recreation Center additionally serves as an avenue for individuals to achieve a stress free, holistic approach to a healthy lifestyle.",
-      "imagePath":"http://farm3.staticflickr.com/2528/4026583256_453db1129d_o.jpg",
-      "videoPath":"",
-      "latitude":36.14041,
-      "longitude":-86.80885
    },
    {
       "id":5,
@@ -76,19 +63,6 @@
       "videoPath":"",
       "latitude":36.14795751084467,
       "longitude":-86.80340766906738
-   },
-   {
-      "id":8,
-      "name":"Stevenson Center",
-      "category":[
-         "Academic"
-      ],
-      "hours":"8-5 PM",
-      "placeDescription":"The Stevenson Center Lecture Halls are located in Building 4 of the Stevenson Center, with rooms numbered 4xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics, and molecular biology, also houses the lecture halls and the Sarah Shannon Stevenson Science and Engineering Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education and other benefactors.",
-      "imagePath":"http://www.vanderbilt.edu/map/images/sc4.jpg",
-      "videoPath":"",
-      "latitude":36.14499670491264,
-      "longitude":-86.80174201726913
    },
    {
       "id":9,
@@ -715,19 +689,6 @@
       "longitude":-86.81934272934156
    },
    {
-      "id":59,
-      "name":"Rand Hall",
-      "category":[
-         "Dining"
-      ],
-      "hours":"",
-      "placeDescription":"A favorite meeting place for students and faculty, Rand Hall is named for Frank C. Rand, who served as a member of the Vanderbilt Board of Trust for 36 years and its president from 1934 until his death in 1949. Vanderbilt's first observatory was razed in 1952 to make way for Rand Hall, which was completed in 1953. A major renovation and addition to Rand Hall was completed in 1986. Rand Hall houses the Station B Post Office, the university bookstore, and the Two Avenues Marketplace (featuring a variety of restaurants).",
-      "imagePath":"https://www.vanderbilt.edu/map/images/1.jpg",
-      "videoPath":"",
-      "latitude":36.146508765514554,
-      "longitude":-86.80361652573134
-   },
-   {
       "id":60,
       "name":"1808 Edgehill",
       "category":[
@@ -1175,7 +1136,7 @@
       "id":95,
       "name":"Wesley Place Townhomes",
       "category":[
-         "Facility"
+         "Local"
       ],
       "hours":"",
       "placeDescription":"45 luxury apartments are located on the sixth floor roof and surround a spacious garden courtyard.  One, two and three bedroom apartments and townhomes are within walking distance to campus, making them a popular off-campus living choice for undergraduate and graduate students.",
@@ -1201,7 +1162,7 @@
       "id":97,
       "name":"Home Economics",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Opened in 1914, the second building constructed on the current Peabody campus, Home Economics now houses several Peabody College programs.",
@@ -1209,19 +1170,6 @@
       "videoPath":"",
       "latitude":36.143313925231126,
       "longitude":-86.79732317541139
-   },
-   {
-      "id":98,
-      "name":"Tolman Hall",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"Like Cole and McGill halls, this modified collegiate Gothic dormitory facing Alumni Lawn was built shortly after World War II. It has single rooms and a faculty apartment and has been completely renovated. Classics scholar and Arts and Science Dean Herbert C. Tolman, for whom the building is named, founded the Vanderbilt chapter of Phi Beta Kappa.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/3.jpg",
-      "videoPath":"",
-      "latitude":36.14717270736847,
-      "longitude":-86.80431168689717
    },
    {
       "id":99,
@@ -1240,7 +1188,7 @@
       "id":100,
       "name":"Cole Hall",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Cole Hall, a modified collegiate Gothic dormitory facing Alumni Lawn, was built shortly after World War II. It has single rooms and a faculty apartment and has been completely renovated. The building was named for Whitefoord R. Cole, president of the L&N Railroad, an early alumnus, and a longtime member of the Vanderbilt University Board of Trust.",
@@ -1248,19 +1196,6 @@
       "videoPath":"",
       "latitude":36.14663071848575,
       "longitude":-86.80452358317726
-   },
-   {
-      "id":101,
-      "name":"K Quad:currey",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"The Kissam Quadrangle is made up of six dormitories: Currey Hall, Dyer Hall, Hemingway Hall, Kissam Hall, Mims Hall and Reinke Hall. Kissam Quadrangle, housing about 600 freshmen, is named for Maria Kissam Vanderbilt, mother of William K. Vanderbilt, who gave the original Kissam Hall dormitory in her honor. (Old Kissam was razed in 1958, a year after this replacement quadrangle was completed.) Individual buildings are named for faculty members and trustees who were memorable in the university's history.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/12e.jpg",
-      "videoPath":"",
-      "latitude":36.149418616577705,
-      "longitude":-86.80111916331961
    },
    {
       "id":102,
@@ -1279,7 +1214,7 @@
       "id":103,
       "name":"Delta Delta Delta",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Delta Delta Delta sorority house.",
@@ -1292,7 +1227,7 @@
       "id":104,
       "name":"Chi Omega",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Chi Omega sorority house.",
@@ -1305,7 +1240,7 @@
       "id":105,
       "name":"Sigma Alpha Epsilon",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Sigma Alpha Epsilon fraternity house.",
@@ -1344,7 +1279,7 @@
       "id":108,
       "name":"North",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"North Hall was built to be a graduate student dormitory in 1929. Sixty years later, an innovative renovation reclaimed many areas of the building that had been unusable due to lack of sunlight, transforming North Hall into a modern dormitory featuring lounges with gas fireplaces, an apartment for visiting faculty, study rooms and a sun-filled atrium study area on the sixth floor.",
@@ -1370,7 +1305,7 @@
       "id":110,
       "name":"Dayani Center",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"This health promotion and rehabilitation center for patients, faculty, and staff was given in memory of Dr. Kim Dayani (MD '65) by his widow.",
@@ -1409,7 +1344,7 @@
       "id":113,
       "name":"Veterans Admin Hospital",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"The Nashville Veterans Administration Medical Center is closely affiliated with Vanderbilt and is located on the Vanderbilt campus. It provides both primary and specialty care to veterans throughout Middle Tennessee and south-central Kentucky. In addition, the Nashville VAMC serves as a V.A. referral center for kidney and bone marrow transplants, flow cytometry and photopheresis.",
@@ -1422,7 +1357,7 @@
       "id":114,
       "name":"Football Stadium",
       "category":[
-         "Facility"
+         "Athletics"
       ],
       "hours":"",
       "placeDescription":"Vanderbilt's football stadium has always been called Dudley Field, after chemistry professor William L. Dudley, the \"dean of southern athletics.\" Originally situated facing Kirkland Hall, Dudley field was moved to its current location on Natchez Trace in 1922. The stadium, enlarged three times, now seats  41,135. A bronze plaque at the stadium commemorates the May 1963 visit of President John F. Kennedy.",
@@ -1435,7 +1370,7 @@
       "id":115,
       "name":"Phi Kappa Psi",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Phi Kappa Psi fraternity house.",
@@ -1448,7 +1383,7 @@
       "id":116,
       "name":"2120 Belcourt",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"Vanderbilt building housing the Home Health Care Services.",
@@ -1461,7 +1396,7 @@
       "id":117,
       "name":"Learned Lab",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"A. B. Learned Laboratories this 11-story building for scientific research, constructed in 1952 and expanded in 1961, marked the integration of the School of Medicine with graduate study in biomedical sciences. Increased faculty research activity prompted student interest in graduate education and research among disciplines in the natural sciences, engineering and medicine. Engineering alumnus Andrew B. Learned of Natchez, Miss., for whom the building is named, was a major contributor.",
@@ -1474,7 +1409,7 @@
       "id":118,
       "name":"Pi Beta Phi",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Pi Beta Phi sorority house.",
@@ -1493,8 +1428,8 @@
       "placeDescription":"Built in 1957, the Peabody Maintenance Building was acquired by Vanderbilt in 1979 when Vanderbilt and Peabody merged. Superintendents for the grounds and housekeeping are located in this building.",
       "imagePath":"https://www.vanderbilt.edu/map/images/150.jpg",
       "videoPath":"",
-      "latitude":36.14292169214821,
-      "longitude":-86.79693545925592
+      "latitude":36.142921,
+      "longitude":-86.796935
    },
    {
       "id":120,
@@ -1506,86 +1441,60 @@
       "placeDescription":"West End Women's Health Center located at 2611 West End Ave. with adjacent parking.",
       "imagePath":"https://www.vanderbilt.edu/map/images/515.jpg",
       "videoPath":"",
-      "latitude":36.14553507681664,
-      "longitude":-86.8110584182256
-   },
-   {
-      "id":121,
-      "name":"K Quad:hemingway",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"The Kissam Quadrangle is made up of six dormitories: Currey Hall, Dyer Hall, Hemingway Hall, Kissam Hall, Mims Hall and Reinke Hall. Kissam Quadrangle, housing about 600 freshmen, is named for Maria Kissam Vanderbilt, mother of William K. Vanderbilt, who gave the original Kissam Hall dormitory in her honor. (Old Kissam was razed in 1958, a year after this replacement quadrangle was completed.) Individual buildings are named for faculty members and trustees who were memorable in the university's history.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/12d.jpg",
-      "videoPath":"",
-      "latitude":36.14953779451797,
-      "longitude":-86.8010251903152
-   },
-   {
-      "id":122,
-      "name":"Featheringill-jacobs Hall",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"When the Engineering Building opened for classes in the fall of 1950, it housed all School of Engineering departments. It was the first academic addition to the campus after World War II. Engineering alumnus A. J. Dyer, founder of Nashville bridge company, was a major contributor to the building fund and the principal donor of mechanical engineering laboratories, added in 1958. The building was renamed Jacobs Hall in 1996 in honor of Dillard Jacobs, Founder's medalist of the School of Engineering's class of 1932 and a professor of engineering at Vanderbilt for nearly 30 years. In 2001, construction was completed that transformed the old building into a new School of Engineering complex. The old central wing was demolished and replaced by Featheringill Hall, named for alumnus and lead donor William W. Featheringill, and the remaining wings of Jacobs were renovated.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/27.jpg",
-      "videoPath":"",
-      "latitude":36.145384642340304,
-      "longitude":-86.80276383040976
+      "latitude":36.145535,
+      "longitude":-86.811058
    },
    {
       "id":123,
       "name":"Medical Arts",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"This eight-story structure at 21st Ave. South and Garland Ave. is well-located for physicians' offices. Recent renovation includes a new entrance at the parking garage upper level.",
       "imagePath":"https://www.vanderbilt.edu/map/images/48.jpg",
       "videoPath":"",
-      "latitude":36.142146570913965,
-      "longitude":-86.80056386854095
+      "latitude":36.142146,
+      "longitude":-86.800563
    },
    {
       "id":124,
       "name":"Zeta Beta Tau",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Zeta Beta Tau fraternity house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/97.jpg",
       "videoPath":"",
-      "latitude":36.1460082061615,
-      "longitude":-86.80682642643654
+      "latitude":36.146008,
+      "longitude":-86.806826
    },
    {
       "id":125,
       "name":"Peabody Library",
       "category":[
-         "Facility"
+         "Library"
       ],
       "hours":"",
       "placeDescription":"The Peabody Library was a gift of the Carnegie Foundation in 1919 to the promising new college for teachers. For many years the library of Peabody College, it is now a part of Vanderbilt's Heard Library System.",
       "imagePath":"https://www.vanderbilt.edu/map/images/137.jpg",
       "videoPath":"",
-      "latitude":36.14266780989736,
-      "longitude":-86.79926152729804
+      "latitude":36.142667,
+      "longitude":-86.799261
    },
    {
       "id":126,
       "name":"Gillette",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Built in 1963 and named in memory of Peabody trustee Frank E. Gillette, this dormitory has been partially renovated and now includes an apartment for faculty visitors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/156.jpg",
       "videoPath":"",
-      "latitude":36.14112947021208,
-      "longitude":-86.79833368134526
+      "latitude":36.141129,
+      "longitude":-86.798333
    },
    {
       "id":127,
@@ -1597,8 +1506,8 @@
       "placeDescription":"The John F. Kennedy Center for Research on Human Development on 21st Ave. South in the Mental Retardation Laboratory and Child Study Center (MRL Building) and in the Hobbs Building on 18th Ave. South. This is the Kennedy Center's administrative home; research laboratories, the Special Education Department, and the Susan Gray school are also located here. A bronze head of President John F. Kennedy by Robert Berke graces the lobby of MRL.",
       "imagePath":"https://www.vanderbilt.edu/map/images/161.jpg",
       "videoPath":"",
-      "latitude":36.143173366527265,
-      "longitude":-86.79929741732926
+      "latitude":36.143173,
+      "longitude":-86.799297
    },
    {
       "id":128,
@@ -1610,60 +1519,60 @@
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/201b.jpg",
       "videoPath":"",
-      "latitude":36.141005948882295,
-      "longitude":-86.77340388980359
+      "latitude":36.141005,
+      "longitude":-86.773403
    },
    {
       "id":129,
       "name":"1801 21st Ave S",
       "category":[
-         "Facility"
+         "Local"
       ],
       "hours":"",
       "placeDescription":"1801 21st Avenue South was built in 1925 and is located in the heart of Hillsboro Village.  Acquired by the University in 1985, the property is currently leased to clothing retailer Posh.  ",
       "imagePath":"https://www.vanderbilt.edu/map/images/229.jpg",
       "videoPath":"",
-      "latitude":36.136447469815664,
-      "longitude":-86.80101951991556
+      "latitude":36.136447,
+      "longitude":-86.801019
    },
    {
       "id":130,
       "name":"Garland Hall",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Garland Hall memorializes the university's first chancellor, Landon C. Garland. Built in 1928, Garland, like Buttrick and Calhoun halls, is a collegiate Gothic classroom building, partially funded by Rockefeller's General Education Board. Partial renovation of Garland was completed in 1993. Garland houses the departments of Anthropology, Religious Studies and Sociology.",
       "imagePath":"https://www.vanderbilt.edu/map/images/18.jpg",
       "videoPath":"",
-      "latitude":36.146724900223134,
-      "longitude":-86.80166539261482
+      "latitude":36.146724,
+      "longitude":-86.801665
    },
    {
       "id":131,
       "name":"Zerfoss Health Ctr",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"The Zerfoss Center, built in 1967, provides outpatient medical and psychiatric services to students. The building also houses research laboratories and the Vanderbilt Addiction Care Center. The Student Health Service was begun in 1927 in a West Side Row house under the direction of physicians Thomas B. and Kate Savage Zerfoss.",
       "imagePath":"https://www.vanderbilt.edu/map/images/23b.jpg",
       "videoPath":"",
-      "latitude":36.14401204205248,
-      "longitude":-86.80200898364032
+      "latitude":36.144012,
+      "longitude":-86.802008
    },
    {
       "id":132,
       "name":"Phi Delta Theta",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Phi Delta Theta fraternity house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/95.jpg",
       "videoPath":"",
-      "latitude":36.14562574861951,
-      "longitude":-86.80708046266864
+      "latitude":36.145625,
+      "longitude":-86.807080
    },
    {
       "id":133,
@@ -1675,8 +1584,8 @@
       "placeDescription":"The Baker Building was built in 1967 and later purchased by Vanderbilt. Baker houses 26 university offices.",
       "imagePath":"https://www.vanderbilt.edu/map/images/185.jpg",
       "videoPath":"",
-      "latitude":36.14979975421156,
-      "longitude":-86.80006347597175
+      "latitude":36.149799,
+      "longitude":-86.800063
    },
    {
       "id":134,
@@ -1688,47 +1597,48 @@
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/201a.jpg",
       "videoPath":"",
-      "latitude":36.14197578431279,
-      "longitude":-86.77372088192912
+      "latitude":36.141975,
+      "longitude":-86.773720
    },
    {
       "id":135,
       "name":"Eskind Library",
       "category":[
-         "Facility"
+         "Library"
       ],
       "hours":"",
       "placeDescription":"Annette and Irwin Eskind Biomedical Library is a unit of the Heard Library System. It was completed in late 1993, replacing the old Medical Center Library. It is named for trustee Irwin B. Eskind, MD, and his wife, Annette, and has become the epicenter of an integrated larger medical library system. The Center for Biomedical Informatics occupies the entire fourth floor. Natural light fills the five-story building through skylights, open ceilings and the curved glass curtain wall that covers most of the northern exposure.",
       "imagePath":"https://www.vanderbilt.edu/map/images/214.jpg",
       "videoPath":"",
-      "latitude":36.14308626107777,
-      "longitude":-86.80276718783618
+      "latitude":36.143086,
+      "longitude":-86.802767
    },
    {
       "id":136,
       "name":"Law School",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The design of the Law School building fosters the teaching, research, and intellectual and social interactions that are the core of the Vanderbilt University Law School experience. Built in 1962, the Law School building was expanded and renovated in 2001, almost doubling its size and improving the use of existing space. Features include the Flynn Auditorium, a trial courtroom with state-of-the-art electronics, classrooms, student study areas, a cafe and lounge area, a computer lab, a renovated library, faculty and administrative offices, legal clinic offices, admissions office and private interview suites in the career services office.",
       "imagePath":"https://www.vanderbilt.edu/map/images/13.jpg",
       "videoPath":"",
-      "latitude":36.148284962708715,
-      "longitude":-86.80026635854729
+      "latitude":36.148284,
+      "longitude":-86.800266
    },
    {
       "id":137,
       "name":"Neely Auditorium",
       "category":[
-         "Facility"
+         "Student Life",
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Neely Auditorium was named in honor of a former trustee and university treasurer. \"Western Civ\" classes and compulsory chapel services were held in Neely for many years, as were Commencement exercises through 1948. Neely Auditorium is now the home of the Vanderbilt University Theatre. The building's collegiate Gothic brick and stone exterior gives no hint of the intimate performance space that has been created inside. In 1976, the hall was transformed from an auditorium into a multi-form theater with flexible light and sound capabilities and full production and backstage facilities. Movable seating can be arranged to suit each production, so that any part of the space can serve as stage or auditorium.",
       "imagePath":"https://www.vanderbilt.edu/map/images/10.jpg",
       "videoPath":"",
-      "latitude":36.14754626620983,
-      "longitude":-86.80294146296862
+      "latitude":36.147546,
+      "longitude":-86.802941
    },
    {
       "id":138,
@@ -1740,60 +1650,34 @@
       "placeDescription":"When Vanderbilt first opened its doors for classes in October 1875, this Victorian building with sweeping stairways, twin towers, a gabled roof and ornate arches was known as Main Building. Old Main housed classrooms, laboratories, administrative offices for all departments except law (which had rooms downtown) and medical (a separate entity on the University of Nashville campus several miles away), and the library. A 1,000-pound Westminster bell hung in one of the towers until a devastating fire in 1905 destroyed most of the building. After the fire, Main Building was rebuilt as \"College Hall,\" in an Italian style inspired by the town hall in Siena, Italy, with a castellated roof line instead of gables, and a single tower. Nashville schoolchildren raised money to buy a 2,000-lb. bronze bell for the rebuilt structure.  In 1939, College Hall was renamed in memory of James H. Kirkland, Vanderbilt's second chancellor, who led the university through 44 formative years. Kirkland Hall underwent exterior and interior renovation in the 1980s and now houses the offices of the chancellor and general officers, deans of the College of Arts and Science and Graduate School, and other administrators.",
       "imagePath":"https://www.vanderbilt.edu/map/images/11.jpg",
       "videoPath":"",
-      "latitude":36.148381789351404,
-      "longitude":-86.80274905193755
-   },
-   {
-      "id":139,
-      "name":"K Quad:kissam",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"The Kissam Quadrangle is made up of six dormitories: Currey Hall, Dyer Hall, Hemingway Hall, Kissam Hall, Mims Hall and Reinke Hall. Kissam Quadrangle, housing about 600 freshmen, is named for Maria Kissam Vanderbilt, mother of William K. Vanderbilt, who gave the original Kissam Hall dormitory in her honor. (Old Kissam was razed in 1958, a year after this replacement quadrangle was completed.) Individual buildings are named for faculty members and trustees who were memorable in the university's history.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/12a.jpg",
-      "videoPath":"",
-      "latitude":36.14923552562759,
-      "longitude":-86.80258892843293
+      "latitude":36.148381,
+      "longitude":-86.802749
    },
    {
       "id":140,
       "name":"Barnard Hall",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Barnard Hall and Vanderbilt Hall, duplex dormitories, built in 1952, were the last campus buildings of collegiate Gothic design built. Like most of Vanderbilt's older dormitories, both have been completely renovated. They now have an apartment for a faculty member, who lives among the students for the academic year; seminar, study, and music practice rooms; lounges and TV areas; and cable connections for computers in every student room. Barnard Hall is named for the legendary Edward E. Barnard, a Vanderbilt astronomer in the 1880s, who was known in his time as the ranking authority on the Milky Way. Frederick Vanderbilt Hall is named for the Commodore's grandson, who left a large part of his estate to the university.",
       "imagePath":"https://www.vanderbilt.edu/map/images/6.jpg",
       "videoPath":"",
-      "latitude":36.14895439463267,
-      "longitude":-86.80348297310822
-   },
-   {
-      "id":141,
-      "name":"Alumni Hall",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"Alumni Hall, with its leaded glass casement windows overlooking Alumni Lawn, was built in 1926 as a memorial to Vanderbilt men who served their country in World War I. The names of the 44 who gave their lives are carved on mantels in the Memorial Room. This was the first building of collegiate Gothic design on the campus and the first of eight major buildings designed for Vanderbilt by architect Henry C. Hibbs. Built with funds raised by popular subscription, and at a cost of less than $250,000, Alumni Hall was the hub of student activity until that role was assumed by Rand Hall, and later by Sarratt Student Center. Now Alumni Hall is home to various university offices.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/9.jpg",
-      "videoPath":"",
-      "latitude":36.148060348082495,
-      "longitude":-86.8035599059161
+      "latitude":36.148954,
+      "longitude":-86.803482
    },
    {
       "id":142,
-      "name":"Biomolecular Nmr",
+      "name":"Biomolecular NMR",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"This round building is part of the Stevenson Center for the Natural Sciences. It used to house academic computing and information services and currently houses the Biomolecular Nuclear Magnetic Resonance Spectroscopy (NMR) Center.",
       "imagePath":"https://www.vanderbilt.edu/map/images/46.jpg",
       "videoPath":"",
-      "latitude":36.14541639750556,
-      "longitude":-86.80200984013904
+      "latitude":36.145416,
+      "longitude":-86.802009
    },
    {
       "id":143,
@@ -1805,60 +1689,60 @@
       "placeDescription":"The Undergraduate Admissions and Student Financial Aid Building is easily accessible on West End Ave. at 23rd Ave., adjacent to the historic Fine Arts Building. This modern facility incorporates a section of West Side Hall (1887), the university's first dining hall.",
       "imagePath":"https://www.vanderbilt.edu/map/images/42.jpg",
       "videoPath":"",
-      "latitude":36.14831117195122,
-      "longitude":-86.80485352093334
+      "latitude":36.148311,
+      "longitude":-86.804853
    },
    {
       "id":144,
       "name":"Benson Old Central",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Victorian style Benson Science Hall, standing in a grove of Vanderbilt's oldest and most majestic trees, is a composite of two historic structures, Science Hall (1880) and adjacent Old Central (abt. 1859). The trees were small and young when Science Hall was built in 1880. Machine and forge shops and steam boilers for the new campus heating plant were in the basement, classrooms and laboratories for Botany, Geology, and Engineering on upper floors. Over the years, Old Science provided classrooms and offices for English, Philosophy, and Mathematics; housed the Geology Museum; and in the 1970s was a studio art center. Old Central, once the home of Mr. and Mrs. Henry S. Foote, is the only campus building that antedates the university. Bishop Holland Mctyeire lived here while overseeing construction of the first campus buildings. It was a faculty residence for many years, then housed women students. The departments of Philosophy and Mathematics were here; English and Economic Development were later residents. Old Science and Old Central have survived more than one master plan for the campus that called for their removal. In 1983, the two buildings were connected and restored with funds from Robert G. Benson and the Benson family, creating a single unit that today houses the English and History departments.",
       "imagePath":"https://www.vanderbilt.edu/map/images/16.jpg",
       "videoPath":"",
-      "latitude":36.14710356541978,
-      "longitude":-86.80229677655755
+      "latitude":36.147103,
+      "longitude":-86.802296
    },
    {
       "id":145,
       "name":"Divinity",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The John Frederick Oberlin Divinity Quadrangle, especially its Benton Chapel, is replete with Christian symbolism inside and out. Wrought-iron grills picture various symbols below windows on the east side of the chapel and facing the cloister court. Bronze handles on Benton Chapel doors represent Archangels Gabriel, with a trumpet, and Michael, with a sword; sculptures of Dismas and Lazarus, by Puryear Mims, greet you in the Chapel Foyer. Robert Harmon's \"Word of God\" window is over the doors. The quadrangle was built in 1959 and later named to commemorate the 1966 merger of Oberlin College Graduate School of Theology with Vanderbilt Divinity School. Benton Chapel is named for John Keith Benton, dean of the Divinity School from 1939 to 1956. Harvie Branscomb, chancellor from 1946 to 1963, and his wife, Margaret, are interred in the west wall. Directly beneath Benton Chapel is All Faith Chapel, a small space used for meditation, weddings, services, and other events.",
       "imagePath":"https://www.vanderbilt.edu/map/images/19.jpg",
       "videoPath":"",
-      "latitude":36.14674853755314,
-      "longitude":-86.80102323870727
+      "latitude":36.146748,
+      "longitude":-86.801023
    },
    {
       "id":146,
       "name":"Kappa Kappa Gamma",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Kappa Kappa Gamma sorority house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/132.jpg",
       "videoPath":"",
-      "latitude":36.14636711583766,
-      "longitude":-86.80708757746044
+      "latitude":36.146367,
+      "longitude":-86.807087
    },
    {
       "id":147,
       "name":"Children's Hospital Tower",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"The Children's Hospital Doctors' Office Tower houses offices and pediatric clinics including Orthopedics, Urology, Allergy, Heart, Immunology, Cancer, Acute Care, Primary Care and others.",
       "imagePath":"https://www.vanderbilt.edu/map/images/245a.jpg",
       "videoPath":"",
-      "latitude":36.13953597525375,
-      "longitude":-86.80295540953797
+      "latitude":36.139535,
+      "longitude":-86.802955
    },
    {
       "id":148,
@@ -1870,21 +1754,21 @@
       "placeDescription":"Maintenance building for Vanderbilt University.",
       "imagePath":"https://www.vanderbilt.edu/map/images/272.jpg",
       "videoPath":"",
-      "latitude":36.1430042850555,
-      "longitude":-86.79663302088002
+      "latitude":36.143004,
+      "longitude":-86.796633
    },
    {
       "id":149,
       "name":"Baseball Field House",
       "category":[
-         "Facility"
+         "Athletics"
       ],
       "hours":"",
       "placeDescription":"Field house at the baseball field used as storage by the baseball team.",
       "imagePath":"https://www.vanderbilt.edu/map/images/252a.jpg",
       "videoPath":"",
-      "latitude":36.143988260445454,
-      "longitude":-86.8078077963406
+      "latitude":36.143988,
+      "longitude":-86.807807
    },
    {
       "id":150,
@@ -1893,24 +1777,24 @@
          "Facility"
       ],
       "hours":"",
-      "placeDescription":"Purchased from the United Methodist Church in 2006, this building houses Vanderbilt University Business & Dining Services.  ",
+      "placeDescription":"Purchased from the United Methodist Church in 2006, this building houses Vanderbilt University Business & Dining Services.",
       "imagePath":"https://www.vanderbilt.edu/map/images/276.jpg",
       "videoPath":"",
-      "latitude":36.14500742959652,
-      "longitude":-86.7968455294608
+      "latitude":36.145007,
+      "longitude":-86.796845
    },
    {
       "id":151,
-      "name":"Stambaugh",
+      "name":"Stambaugh House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Opened in August 2007, Stambaugh house is located on the commons. Stambaugh provides modern features in a classic building housing 162 first-year students in traditional double rooms. The building is co-residential, with men and women living on separate floors. ",
       "imagePath":"https://www.vanderbilt.edu/map/images/281.jpg",
       "videoPath":"",
-      "latitude":36.14038540256715,
-      "longitude":-86.79740887357559
+      "latitude":36.140385,
+      "longitude":-86.797408
    },
    {
       "id":152,
@@ -1922,8 +1806,8 @@
       "placeDescription":"Home of the dean of The Commons, located at 1235 18th Avenue South.",
       "imagePath":"https://www.vanderbilt.edu/map/images/283.jpg",
       "videoPath":"",
-      "latitude":36.141356892398136,
-      "longitude":-86.7966799028408
+      "latitude":36.141356,
+      "longitude":-86.796679
    },
    {
       "id":153,
@@ -1935,21 +1819,21 @@
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/23e.jpg",
       "videoPath":"",
-      "latitude":36.14306965992577,
-      "longitude":-86.80079430744988
+      "latitude":36.143069,
+      "longitude":-86.800794
    },
    {
       "id":154,
       "name":"Buttrick Hall",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Originally constructed in 1928, Buttrick Hall underwent a renovation and addition in 2005 that increased its size from 38,000 to more than 90,000 square feet. In addition to serving as a venue for classroom teaching and a home for interdisciplinary program offices, Buttrick Hall is equipped to support public lectures, academic conferences and the needs of Vanderbilt's transinstitutional centers. The name Buttrick Hall recognizes Wallace Buttrick (1853-1926), Vanderbilt's principal advocate at the Rockefeller-funded General Education Board where he served as secretary (1902-1917), president (1917-1923), and chairman (1923-1926). GEB's support of academic and medical development at Vanderbilt was inestimable. Buttrick Hall was one of three collegiate Gothic classroom buildings for which GEB gave half the original construction funds.",
       "imagePath":"https://www.vanderbilt.edu/map/images/24.jpg",
       "videoPath":"",
-      "latitude":36.14619401653431,
-      "longitude":-86.80250122377373
+      "latitude":36.146194,
+      "longitude":-86.802501
    },
    {
       "id":155,
@@ -1961,47 +1845,48 @@
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/400.jpg",
       "videoPath":"",
-      "latitude":36.106910279982,
-      "longitude":-86.76274775881028
+      "latitude":36.106910,
+      "longitude":-86.762747
    },
    {
       "id":156,
       "name":"Bishop Johnson Center",
       "category":[
-         "Facility"
+         "Facility",
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The Bishop Joseph Johnson Black Cultural center provides an academic, cultural and social support system for students, as well as educational and cultural programming on the African and African American experience for the Vanderbilt and Nashville communities. Dedicated in 1984, the center is named for Vanderbilt's first African American student, Joseph Johnson (BD '54, Ph.D. '58), who became a bishop of the Christian Methodist Episcopal Church. Bishop Johnson was a Board of Trust member from 1971 until 1979. The house was built in 1900 as a faculty residence, renovated in 1984, and expanded and renovated again in 2004. The center houses a student lounge, library, computer lab, offices, meeting and class spaces, and art gallery.",
       "imagePath":"https://www.vanderbilt.edu/map/images/35.jpg",
       "videoPath":"",
-      "latitude":36.1458976299827,
-      "longitude":-86.80317928810427
+      "latitude":36.145897,
+      "longitude":-86.803179
    },
    {
       "id":157,
       "name":"Carmichael 1 & 2",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Vanderbilt's two high-rise residence halls on West End Ave. are the university's tallest buildings and home to 1,200 undergraduate students. The towers are named in memory of O. C. Carmichael, Vanderbilt's third chancellor. Each residential floor includes four six-person suites or single and double rooms, and lounges. The lower two floors contain study areas, lounges, recreation rooms and meeting rooms.  The East Towers were completed in 1966, West in 1970.",
       "imagePath":"https://www.vanderbilt.edu/map/images/36e.jpg",
       "videoPath":"",
-      "latitude":36.147846581983615,
-      "longitude":-86.80555461170768
+      "latitude":36.147846,
+      "longitude":-86.805554
    },
    {
       "id":158,
       "name":"Carmichael 3 & 4",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Vanderbilt's two high-rise residence halls on West End Ave. are the university's tallest buildings and home to 1,200 undergraduate students. The towers are named in memory of O. C. Carmichael, Vanderbilt's third chancellor. Each residential floor includes four six-person suites or single and double rooms, and lounges. The lower two floors contain study areas, lounges, recreation rooms and meeting rooms.  The East Towers were completed in 1966, West in 1970.",
       "imagePath":"https://www.vanderbilt.edu/map/images/36w.jpg",
       "videoPath":"",
-      "latitude":36.14755618935844,
-      "longitude":-86.80642031065504
+      "latitude":36.147556,
+      "longitude":-86.806420
    },
    {
       "id":159,
@@ -2013,8 +1898,8 @@
       "placeDescription":"The Community Partnership House is home to the Office of Active Citizenship and Service and the Office of Leadership Development and Intercultural Affairs. The house was built in the 1880s as a private residence, later remodeled with its current Spanish-style architecture, and years later purchased by the university. Over the years it served as residence for Chancellors Oliver Cromwell Carmichael and Harvie Branscomb, home to Alpha Omicron Pi sorority, the University Club, and the Office of Undergraduate Admissions. Since 1992, the building has been known as the Community Partnership House.",
       "imagePath":"https://www.vanderbilt.edu/map/images/39a.jpg",
       "videoPath":"",
-      "latitude":36.14442774534972,
-      "longitude":-86.80428175592124
+      "latitude":36.144427,
+      "longitude":-86.804281
    },
    {
       "id":160,
@@ -2026,129 +1911,129 @@
       "placeDescription":"Built as a plain, two-story brick residence in the 1880s and converted to a Mediterranean style in the 1920s, the Community Partnership House is now home to the Office of Active Citizenship and Service and the Office of Leadership Development and Intercultural Affairs. The adjacent annex building provides additional meeting space.",
       "imagePath":"https://www.vanderbilt.edu/map/images/39b.jpg",
       "videoPath":"",
-      "latitude":36.144147343697455,
-      "longitude":-86.8041483236005
+      "latitude":36.144147,
+      "longitude":-86.804148
    },
    {
       "id":161,
       "name":"Chaffin B",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Located across from the Student Recreation Center, Chaffin Apartments house 192 single undergraduates in 48 apartment units. The apartments were completed in 1974 and named in honor of Dean Nora Chaffin.  Each Chaffin apartment consists of two double bedrooms, a living/dining area, a full kitchen with electric range and large refrigerator, and a bath with tub/shower combination.",
       "imagePath":"https://www.vanderbilt.edu/map/images/122b.jpg",
       "videoPath":"",
-      "latitude":36.141176622857756,
-      "longitude":-86.80607303732738
+      "latitude":36.141176,
+      "longitude":-86.806073
    },
    {
       "id":162,
       "name":"Chaffin C",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Located across from the Student Recreation Center, Chaffin Apartments house 192 single undergraduates in 48 apartment units. The apartments were completed in 1974 and named in honor of Dean Nora Chaffin.  Each Chaffin apartment consists of two double bedrooms, a living/dining area, a full kitchen with electric range and large refrigerator, and a bath with tub/shower combination.",
       "imagePath":"https://www.vanderbilt.edu/map/images/122c.jpg",
       "videoPath":"",
-      "latitude":36.14115745873194,
-      "longitude":-86.80575905109954
+      "latitude":36.141157,
+      "longitude":-86.805759
    },
    {
       "id":163,
       "name":"Chaffin E",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Located across from the Student Recreation Center, Chaffin Apartments house 192 single undergraduates in 48 apartment units. The apartments were completed in 1974 and named in honor of Dean Nora Chaffin.  Each Chaffin apartment consists of two double bedrooms, a living/dining area, a full kitchen with electric range and large refrigerator, and a bath with tub/shower combination.",
       "imagePath":"https://www.vanderbilt.edu/map/images/122e.jpg",
       "videoPath":"",
-      "latitude":36.14073295209114,
-      "longitude":-86.8058867388737
+      "latitude":36.140732,
+      "longitude":-86.805886
    },
    {
       "id":164,
       "name":"Chaffin F",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Located across from the Student Recreation Center, Chaffin Apartments house 192 single undergraduates in 48 apartment units. The apartments were completed in 1974 and named in honor of Dean Nora Chaffin.  Each Chaffin apartment consists of two double bedrooms, a living/dining area, a full kitchen with electric range and large refrigerator, and a bath with tub/shower combination.",
       "imagePath":"https://www.vanderbilt.edu/map/images/122f.jpg",
       "videoPath":"",
-      "latitude":36.14065142110607,
-      "longitude":-86.80560041533975
+      "latitude":36.140651,
+      "longitude":-86.805600
    },
    {
       "id":165,
       "name":"Wilson Hall",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"David K. Wilson Hall was built in 1989 from brick and stone. Many of its design features draw from the exterior detailing of Kirkland Hall. Facing Kirkland Hall across Curry Field, the building is named for David K. Wilson, a longtime member of the Board of Trust and its president from 1981 to 1991, in recognition of his many generous gifts to the university over more than 20 years. The building houses Psychology and, on the ground floor, classrooms for the College of Arts and Science.",
       "imagePath":"https://www.vanderbilt.edu/map/images/125.jpg",
       "videoPath":"",
-      "latitude":36.14922509711259,
-      "longitude":-86.80071927235997
+      "latitude":36.149225,
+      "longitude":-86.800719
    },
    {
       "id":166,
       "name":"Wyatt Center",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The white-domed Faye and Joe Wyatt center for Education with its 10 Corinthian columns dominates the Peabody College campus. The Wyatt Center is one of the nation's most advanced learning environments, with state-of-the-art technologies such as enhanced computer classrooms, video conferencing and multimedia seminar rooms, satellite downlink and broadcast capabilities, and video-editing suites. Philanthropist John D. Rockefeller gave this landmark building to then-new Peabody College in 1915 as a personal gift. Under the leadership of chancellor Joe B. Wyatt, who served as chancellor from 1982 to 2000, Peabody's campus underwent a transformation, including renovation and expansion of this signature building. In 2000, the building which had been known as the Social Religious Building was renamed for outgoing chancellor Wyatt and his wife, Faye. Wyatt Center is home to the Department of Teaching and Learning, Vanderbilt Programs for Talented Youth and various centers as well as VUStar, the Vanderbilt on-campus broadcast facility.",
       "imagePath":"https://www.vanderbilt.edu/map/images/142.jpg",
       "videoPath":"",
-      "latitude":36.14038131452584,
-      "longitude":-86.79937764546304
+      "latitude":36.140381,
+      "longitude":-86.799377
    },
    {
       "id":167,
-      "name":"West",
+      "name":"West House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Two dormitory wings of the Wyatt Center, West Hall and East Hall, reach out from gracefully pillared colonnades. They were built in 1922 and 1924, respectively, primarily with Peabody College funds and gifts from alumni. Major renovation in 1987 made them entirely modern. West has a multi-purpose room with kitchen as well as a large laundry/study area serving Peabody College dormitories.",
       "imagePath":"https://www.vanderbilt.edu/map/images/141.jpg",
       "videoPath":"",
-      "latitude":36.14053891457239,
-      "longitude":-86.79982027286503
+      "latitude":36.140538,
+      "longitude":-86.799820
    },
    {
       "id":168,
       "name":"Lambda Chi Alpha",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Lambda Chi Alpha fraternity house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/101.jpg",
       "videoPath":"",
-      "latitude":36.14615644559106,
-      "longitude":-86.80611836911936
+      "latitude":36.146156,
+      "longitude":-86.806118
    },
    {
       "id":169,
-      "name":"East",
+      "name":"East House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Two dormitory wings of the Wyatt Center, West Hall and East Hall, reach out from gracefully pillared colonnades. They were built in 1922 and 1924, respectively, primarily with Peabody College funds and gifts from alumni. Major renovation in 1987 made them entirely modern.",
       "imagePath":"https://www.vanderbilt.edu/map/images/143.jpg",
       "videoPath":"",
-      "latitude":36.14042863897387,
-      "longitude":-86.7981552656531
+      "latitude":36.140428,
+      "longitude":-86.798155
    },
    {
       "id":170,
-      "name":"Vipps-seigenthaler",
+      "name":"Vipps-Seigenthaler",
       "category":[
          "Facility"
       ],
@@ -2156,8 +2041,8 @@
       "placeDescription":"Vanderbilt Institute for Public Policy Studies and the Freedom Forum First Amendment Center are located in this house at the corner of 18th Ave. South and Edgehill Ave. It was built in 1910 by banker Jefferson Davis Pullen and acquired by Peabody College in 1925 to be the residence for the Peabody College president. Since the early 1980s, it has been one of several campus locations used by researchers and analysts of the Vanderbilt Institute for Public Policy studies (VIPPS). In 1992, the Freedom Forum First Amendment Center (FAC) moved into the house. Extensive renovation that included incorporation of the residence into a larger complex was completed in 1993. Since the fall of 1993, VIPPS and FAC have shared these quarters.",
       "imagePath":"https://www.vanderbilt.edu/map/images/152.jpg",
       "videoPath":"",
-      "latitude":36.14351547740891,
-      "longitude":-86.7960253851415
+      "latitude":36.143515,
+      "longitude":-86.796025
    },
    {
       "id":171,
@@ -2169,21 +2054,21 @@
       "placeDescription":"Located at the corner of 19th & Edgehill, this building was originally constructed in 1956 to house the Bill Wilkerson Center for Hearing & Speech Sciences.  Since the Center moved in 2006, it has been home to various University departments, including Army ROTC, Navy ROTC, Center for Teaching, IRIS Center and the Vanderbilt Police Department.",
       "imagePath":"https://www.vanderbilt.edu/map/images/192.jpg",
       "videoPath":"",
-      "latitude":36.14420665804256,
-      "longitude":-86.79715439890276
+      "latitude":36.144206,
+      "longitude":-86.797154
    },
    {
       "id":172,
       "name":"Wesley Place Retail",
       "category":[
-         "Facility"
+         "Local"
       ],
       "hours":"",
-      "placeDescription":"The retail stores at Wesley Place, including CVS, Vanderbilt Traffic & Parking, Planet Beach, Super Cuts and Breugger�s Bagels, are located on the first floor of the parking garage.",
+      "placeDescription":"The retail stores at Wesley Place, including CVS, Vanderbilt Traffic & Parking, Planet Beach, Super Cuts and Breugger's Bagels, are located on the first floor of the parking garage.",
       "imagePath":"https://www.vanderbilt.edu/map/images/233a.jpg",
       "videoPath":"",
-      "latitude":36.14562989835913,
-      "longitude":-86.79943113783852
+      "latitude":36.145629,
+      "longitude":-86.799431
    },
    {
       "id":173,
@@ -2195,34 +2080,35 @@
       "placeDescription":"Acquired by the university in 2004, the house at 2007 Terrace Place has been home to the Office of Community, Neighborhood, and Government Relations since 2005. CNGR facilitates community, neighborhood and government partnerships across the university and provides information to the public about Vanderbilt-supported initiatives. The house was built circa 1905 on land that was part of the original 640 acres claimed by John Cockrill, brother-in-law of James Robertson, who founded Nashville in the winter of 1779. Over the years, when 2007 Terrace Place was not serving as a private residence, its occupants have included a travel agency,  restaurants, a western store, and Sigma Nu fraternity.",
       "imagePath":"https://www.vanderbilt.edu/map/images/271.jpg",
       "videoPath":"",
-      "latitude":36.14988872745782,
-      "longitude":-86.79896749025416
+      "latitude":36.149888,
+      "longitude":-86.798967
    },
    {
       "id":174,
-      "name":"Nphc Sororities",
+      "name":"NPHC Sororities",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"The two-story cottages in West Side Row are five of Vanderbilt's first dormitories, built a decade after the university opened. Before steam heat was installed in 1899, corner fireplaces heated the rooms. Coal bins were in the basement, and the students bought their own coal. Each cottage was designed with four double rooms on each floor, each room with an outside entrance, and no interior doors connecting the rooms. There were originally six cottages: Alpha, Belleview, Cumberland, Delphi, Euclid and Franklin. Alpha was removed in 1966 to make way for Carmichael Towers East. Belleview now houses NPHC Sororities; Cumberland is the home of Delta Gamma; Delphi houses NPHC Fraternities; Euclid is now K. C. Potter Center, home of the Office of LGBTQI Life; and Franklin houses the Margaret Cuninggim Women's Center.",
       "imagePath":"https://www.vanderbilt.edu/map/images/53a.jpg",
       "videoPath":"",
-      "latitude":36.14785799653407,
-      "longitude":-86.8052721166138
+      "latitude":36.147857,
+      "longitude":-86.805272
    },
    {
       "id":175,
       "name":"Canoe Storage",
       "category":[
-         "Facility"
+         "Facility",
+         "Athletics"
       ],
       "hours":"",
       "placeDescription":"Storage area for the Outdoor Recreation Center.  Houses overnight camping equipment and also rafts/canoes.",
       "imagePath":"https://www.vanderbilt.edu/map/images/237.jpg",
       "videoPath":"",
-      "latitude":36.139424276021614,
-      "longitude":-86.80841027878569
+      "latitude":36.139424,
+      "longitude":-86.808410
    },
    {
       "id":176,
@@ -2234,112 +2120,112 @@
       "placeDescription":"Off campus building that houses the Vanderbilt Kennedy Center - Behavior Analysis Clinic and Vanderbilt University Real Estate offices.",
       "imagePath":"https://www.vanderbilt.edu/map/images/262.jpg",
       "videoPath":"",
-      "latitude":36.14394421117582,
-      "longitude":-86.79660186374863
+      "latitude":36.143944,
+      "longitude":-86.796601
    },
    {
       "id":177,
       "name":"Delta Gamma",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"The two-story cottages in West Side Row are five of Vanderbilt's first dormitories, built a decade after the university opened. Before steam heat was installed in 1899, corner fireplaces heated the rooms. Coal bins were in the basement, and the students bought their own coal. Each cottage was designed with four double rooms on each floor, each room with an outside entrance, and no interior doors connecting the rooms. There were originally six cottages: Alpha, Belleview, Cumberland, Delphi, Euclid and Franklin. Alpha was removed in 1966 to make way for Carmichael Towers East. Belleview now houses NPHC Sororities; Cumberland is the home of Delta Gamma; Delphi houses NPHC Fraternities; Euclid is now K. C. Potter Center, home of the Office of LGBTQI Life; and Franklin houses the Margaret Cuninggim Women's Center.",
       "imagePath":"https://www.vanderbilt.edu/map/images/53b.jpg",
       "videoPath":"",
-      "latitude":36.14763364294966,
-      "longitude":-86.80510817760485
+      "latitude":36.147633,
+      "longitude":-86.805108
    },
    {
       "id":178,
       "name":"Women's Center",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"The two-story brick cottages of West Side Row were built in 1886 and 1887 as the university's first residence halls. There were originally six cottages: Alpha, Belleview, Cumberland, Delphi, Euclid and Franklin. Alpha was removed in 1966 to make way for Carmichael Towers East. Belleview now houses NPHC Sororities; Cumberland is the home of Delta Gamma; Delphi houses NPHC Fraternities; Euclid is now K. C. Potter Center, home of the Office of LGBTQI Life; and Franklin houses the Margaret Cuninggim Women's Center. The Women's Center is the hub of campus activities related to gender issues, offering lectures, workshops, and special events.",
       "imagePath":"https://www.vanderbilt.edu/map/images/53e.jpg",
       "videoPath":"",
-      "latitude":36.14707835484508,
-      "longitude":-86.80469258698662
+      "latitude":36.147078,
+      "longitude":-86.804692
    },
    {
       "id":179,
       "name":"Sigma Nu",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Currently houses Sigma Nu fraternity.",
       "imagePath":"https://www.vanderbilt.edu/map/images/100.jpg",
       "videoPath":"",
-      "latitude":36.146578813438026,
-      "longitude":-86.80686726124424
+      "latitude":36.146578,
+      "longitude":-86.806867
    },
    {
       "id":180,
       "name":"Kappa Alpha",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Kappa Alpha fraternity house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/81.jpg",
       "videoPath":"",
-      "latitude":36.14662892651167,
-      "longitude":-86.80579134298279
+      "latitude":36.146628,
+      "longitude":-86.805791
    },
    {
       "id":181,
       "name":"Alpha Epsilon Pi",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Alpha Epsilon Pi fraternity house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/85.jpg",
       "videoPath":"",
-      "latitude":36.14611456909944,
-      "longitude":-86.80538523546578
+      "latitude":36.146114,
+      "longitude":-86.805385
    },
    {
       "id":182,
       "name":"Alpha Chi Omega",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Alpha Chi Omega sorority house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/199.jpg",
       "videoPath":"",
-      "latitude":36.14551635374512,
-      "longitude":-86.80631822843279
+      "latitude":36.145516,
+      "longitude":-86.806318
    },
    {
       "id":183,
-      "name":"Sc Math",
+      "name":"Stevenson Center Math",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The Mathematics Building is Building 1 of the Stevenson Center, with rooms numbered 1xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics, and molecular biology, also houses lecture halls and the Sarah Shannon Stevenson Science and Engineering Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education, and other benefactors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/sc1.jpg",
       "videoPath":"",
-      "latitude":36.14535946408148,
-      "longitude":-86.80168824616888
+      "latitude":36.145359,
+      "longitude":-86.801688
    },
    {
       "id":184,
-      "name":"Sc Molec Biology",
+      "name":"Stevenson Center Molecular Biology",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The Molecular Biology Building is Building 2 of the Stevenson Center, with rooms numbered 2xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics, and molecular biology, also houses lecture halls and the Sarah Shannon Stevenson Science and Engineering Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education, and other benefactors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/sc2.jpg",
       "videoPath":"",
-      "latitude":36.144781365380425,
-      "longitude":-86.80100169919983
+      "latitude":36.144781,
+      "longitude":-86.801001
    },
    {
       "id":185,
@@ -2351,73 +2237,60 @@
       "placeDescription":"Former land site of the Mama Lere Childcare Center.  The brand new building, constructed in 2007, is one of four Vanderbilt Child & Family Center facilities.",
       "imagePath":"https://www.vanderbilt.edu/map/images/277.jpg",
       "videoPath":"",
-      "latitude":36.14445885462678,
-      "longitude":-86.79630801995933
+      "latitude":36.144458,
+      "longitude":-86.796308
    },
    {
       "id":186,
-      "name":"Sc Lecture",
+      "name":"Stevenson Center Lecture",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The Stevenson Center Lecture Halls are located in Building 4 of the Stevenson Center, with rooms numbered 4xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics, and molecular biology, also houses the lecture halls and the Sarah Shannon Stevenson Science and Engineering Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education and other benefactors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/sc4.jpg",
       "videoPath":"",
-      "latitude":36.14512932789174,
-      "longitude":-86.80160050201975
+      "latitude":36.145129,
+      "longitude":-86.801600
    },
    {
       "id":187,
-      "name":"Sc Physics & Astronomy",
+      "name":"Stevenson Center Physics & Astronomy",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The Physics and Astronomy Building is Building 6 of the Stevenson Center, with rooms numbered 6xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics, and molecular biology, also houses lecture halls and the Sarah Shannon Stevenson Science and Engineering Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education, and other benefactors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/sc6.jpg",
       "videoPath":"",
-      "latitude":36.144178420521555,
-      "longitude":-86.80230201534366
+      "latitude":36.144178,
+      "longitude":-86.802302
    },
    {
       "id":188,
-      "name":"Sc Science & Engineering",
+      "name":"Stevenson Center Science & Engineering",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The Science & Engineering Building is Building 5 of the Stevenson Center, with rooms numbered 5xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics, and molecular biology, also houses lecture halls and the Sarah Shannon Stevenson Science and Engineering Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education, and other benefactors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/sc5.jpg",
       "videoPath":"",
-      "latitude":36.144778343327346,
-      "longitude":-86.80217970957399
+      "latitude":36.144778,
+      "longitude":-86.802179
    },
    {
       "id":189,
-      "name":"Mcgill Hall",
+      "name":"McGill Hall",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Like Cole and Tolman Halls, this modified collegiate Gothic dormitory facing Alumni Lawn was built shortly after World War II. It has single rooms and a faculty apartment and has been completely renovated. McGill Hall is the site of the McGill project, a cooperative program with the Department of Philosophy to encourage discussion of philosophical issues between residents and faculty. Chemistry professor John T. McGill, for whom McGill Hall is named, came to Vanderbilt as a student in 1876 and served his alma mater for 70 years.",
       "imagePath":"https://www.vanderbilt.edu/map/images/4.jpg",
       "videoPath":"",
-      "latitude":36.147917552651975,
-      "longitude":-86.80486358739154
-   },
-   {
-      "id":190,
-      "name":"Vanderbilt Hall",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"Barnard Hall and Vanderbilt Hall are duplex dormitories, built in 1952. They were the last campus buildings of collegiate Gothic design built on campus. Like most of Vanderbilt's older dormitories, both have been completely renovated. They now have an apartment for a faculty member, who lives among the students for the academic year; seminar, study, and music practice rooms; lounges and TV areas; and cable connections for computers in every student room. Barnard Hall is named for the legendary Edward E. Barnard, a Vanderbilt astronomer in the 1880s, who was known in his time as the ranking authority on the Milky Way. Frederick Vanderbilt Hall is named for the Commodore's grandson, who left a large part of his estate to the university.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/5.jpg",
-      "videoPath":"",
-      "latitude":36.14852654359741,
-      "longitude":-86.80364930374688
+      "latitude":36.147917,
+      "longitude":-86.804863
    },
    {
       "id":191,
@@ -2429,190 +2302,191 @@
       "placeDescription":"The Fine Arts Gallery, also known as the Old Gym, a gem of Victorian architecture that is one of Vanderbilt's most notable landmarks, was built in 1880, seven years after the university's founding, in response to student demand for physical training. A large annex was added in 1920, and the Old Gym was host to basketball games, team practice and student dances until Memorial Gymnasium opened in 1952. The annex was removed in 1965. In 1970, the structure was recorded in graphic detail by the historic American buildings survey and subsequently placed on the national register of historic places. The Old Gym is now home to the Fine Arts Gallery and the Department of History of Art.",
       "imagePath":"https://www.vanderbilt.edu/map/images/7.jpg",
       "videoPath":"",
-      "latitude":36.14846143048801,
-      "longitude":-86.80449371507441
+      "latitude":36.148461,
+      "longitude":-86.804493
    },
    {
       "id":192,
-      "name":"B Quad:lupton",
+      "name":"Branscomb Quad: Lupton",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Branscomb Quadrangle is a complex of four connected dormitory buildings, with a computer lab in the basement and a deli/cafeteria on the first floor. It is home for about 700 undergraduates. It was built in 1962 as a women's residential complex and named for Chancellor Harvie Branscomb and his wife, Margaret. The names of the four dormitories: Lupton, Scales, Stapleton and Vaughn, memorialize four outstanding women in Vanderbilt history.",
       "imagePath":"https://www.vanderbilt.edu/map/images/8a.jpg",
       "videoPath":"",
-      "latitude":36.145373371496405,
-      "longitude":-86.80483376767194
+      "latitude":36.145373,
+      "longitude":-86.804833
    },
    {
       "id":193,
-      "name":"B Quad:vaughn",
+      "name":"Branscomb Quad: Vaughn",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Branscomb Quadrangle is a complex of four connected dormitory buildings, with a computer lab in the basement and a deli/cafeteria on the first floor. It is home for about 700 undergraduates. It was built in 1962 as a women's residential complex and named for Chancellor Harvie Branscomb and his wife, Margaret. The names of the four dormitories: Lupton, Scales, Stapleton and Vaughn, memorialize four outstanding women in Vanderbilt history.",
       "imagePath":"https://www.vanderbilt.edu/map/images/8b.jpg",
       "videoPath":"",
-      "latitude":36.144536301222175,
-      "longitude":-86.80497651138994
+      "latitude":36.144536,
+      "longitude":-86.804976
    },
    {
       "id":194,
-      "name":"B Quad:scales",
+      "name":"Branscomb Quad: Scales",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Branscomb Quadrangle is a complex of four connected dormitory buildings, with a computer lab in the basement and a deli/cafeteria on the first floor. It is home for about 700 undergraduates. It was built in 1962 as a women's residential complex and named for Chancellor Harvie Branscomb and his wife, Margaret. The names of the four dormitories: Lupton, Scales, Stapleton and Vaughn, memorialize four outstanding women in Vanderbilt history.",
       "imagePath":"https://www.vanderbilt.edu/map/images/8c.jpg",
       "videoPath":"",
-      "latitude":36.14522058165362,
-      "longitude":-86.80488051828104
+      "latitude":36.145220,
+      "longitude":-86.804880
    },
    {
       "id":195,
-      "name":"B Quad:market",
+      "name":"Branscomb Quad: Market",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Branscomb Quadrangle is a complex of four connected dormitory buildings, with a computer lab in the basement and a deli/cafeteria on the first floor. It is home for about 700 undergraduates. It was built in 1962 as a women's residential complex and named for Chancellor Harvie Branscomb and his wife, Margaret. The names of the four dormitories: Lupton, Scales, Stapleton and Vaughn, memorialize four outstanding women in Vanderbilt history.",
       "imagePath":"https://www.vanderbilt.edu/map/images/8d.jpg",
       "videoPath":"",
-      "latitude":36.145074411241325,
-      "longitude":-86.80567192427269
+      "latitude":36.145074,
+      "longitude":-86.805671
    },
    {
       "id":196,
-      "name":"B Quad:stapleton",
+      "name":"Branscomb Quad: Stapleton",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Branscomb Quadrangle is a complex of four connected dormitory buildings, with a computer lab in the basement and a deli/cafeteria on the first floor. It is home for about 700 undergraduates. It was built in 1962 as a women's residential complex and named for Chancellor Harvie Branscomb and his wife, Margaret. The names of the four dormitories: Lupton, Scales, Stapleton and Vaughn, memorialize four outstanding women in Vanderbilt history.",
       "imagePath":"https://www.vanderbilt.edu/map/images/8e.jpg",
       "videoPath":"",
-      "latitude":36.14463598472376,
-      "longitude":-86.80428116691387
+      "latitude":36.144635,
+      "longitude":-86.804281
    },
    {
       "id":197,
       "name":"Mayfield B",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Each unit at Mayfield place includes 10 single bedrooms, two bathrooms, a kitchen and a two-story living room. Mayfield is located across from the Student Recreation Center in a southern area of the campus (between 24th Ave. South and 25th Ave. South, just north of Capers Ave.) that has been nicknamed \"the burbs.\" The unique concept for student living at Mayfield includes \"living/learning lodges,\" self-directed, year-long programs of educational activities, including, but not limited to, community service projects.",
       "imagePath":"https://www.vanderbilt.edu/map/images/126b.jpg",
       "videoPath":"",
-      "latitude":36.1399243828546,
-      "longitude":-86.80673345762285
+      "latitude":36.139924,
+      "longitude":-86.806733
    },
    {
       "id":198,
       "name":"Mayfield D",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Each unit at Mayfield place includes 10 single bedrooms, two bathrooms, a kitchen and a two-story living room. Mayfield is located across from the Student Recreation Center in a southern area of the campus (between 24th Ave. South and 25th Ave. South, just north of Capers Ave.) that has been nicknamed \"the burbs.\" The unique concept for student living at Mayfield includes \"living/learning lodges,\" self-directed, year-long programs of educational activities, including, but not limited to, community service projects.",
       "imagePath":"https://www.vanderbilt.edu/map/images/126d.jpg",
       "videoPath":"",
-      "latitude":36.13975902902371,
-      "longitude":-86.80603749298585
+      "latitude":36.139759,
+      "longitude":-86.806037
    },
    {
       "id":199,
       "name":"Mayfield E",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Each unit at Mayfield place includes 10 single bedrooms, two bathrooms, a kitchen and a two-story living room. Mayfield is located across from the Student Recreation Center in a southern area of the campus (between 24th Ave. South and 25th Ave. South, just north of Capers Ave.) that has been nicknamed \"the burbs.\" The unique concept for student living at Mayfield includes \"living/learning lodges,\" self-directed, year-long programs of educational activities, including, but not limited to, community service projects.",
       "imagePath":"https://www.vanderbilt.edu/map/images/126e.jpg",
       "videoPath":"",
-      "latitude":36.139718861963104,
-      "longitude":-86.80565694005932
+      "latitude":36.139718,
+      "longitude":-86.805656
    },
    {
       "id":200,
       "name":"Langford Auditorium",
       "category":[
-         "Facility"
+         "Facility",
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"L. C. Langford Auditorium, located on Garland Ave., adjoining Light Hall, was built in 1979 with funds donated by Elizabeth Michaud Langford in memory of her husband, supplemented by funds from the Kresge Foundation. This 1,200-seat auditorium hosts Medical Center and general university events, including most events in Sarratt Center's Great Performances series of concerts, dance, and theater productions.",
       "imagePath":"https://www.vanderbilt.edu/map/images/127.jpg",
       "videoPath":"",
-      "latitude":36.142978979292366,
-      "longitude":-86.80271829615548
+      "latitude":36.142978,
+      "longitude":-86.802718
    },
    {
       "id":201,
       "name":"Vanderbilt Hospital",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"Vanderbilt University Hospital was built in 1980. The dramatic, twin-towered, red brick structure that houses VUH has become a Hillsboro/Vanderbilt neighborhood landmark. VUH is equipped to provide complex and critical services to its patients. Continuing Vanderbilt's more than century-old tradition of offering the best in patient care, the hospital is home to the only Level 1 trauma center in Middle Tennessee and a comprehensive neonatal intensive care unit. LifeFlight air ambulance service provides quick access to medical care for Middle Tennessee. VUH is a teaching hospital for the Vanderbilt School of Medicine and is staffed by Vanderbilt School of Medicine faculty.",
       "imagePath":"https://www.vanderbilt.edu/map/images/133.jpg",
       "videoPath":"",
-      "latitude":36.14229312387944,
-      "longitude":-86.8013960618733
+      "latitude":36.142293,
+      "longitude":-86.801396
    },
    {
       "id":202,
       "name":"Blair School Of Music",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The Blair building is a comprehensive performing arts center incorporating innovations in acoustical design and engineering into its teaching studios, practice rooms, classrooms and performance spaces. A construction project completed in 2001 almost quadrupled the area of the original 1980 facility. The focal point of the original facility is the 278-seat Steve and Judy Turner Recital Hall. During fall 2001, the new Martha Rivers Ingram Center for the Performing Arts opened, featuring the 620-seat Ingram hall, a complex of performance, rehearsal and recording space. The Anne Potter Wilson Music Library, on the second floor of the building, houses a comprehensive collection of books, journals, scores, sound recordings and videos. Established in 1964 as a division of Peabody College, the Blair School of Music was independent from 1977 until it merged with Vanderbilt in 1981.",
       "imagePath":"https://www.vanderbilt.edu/map/images/135.jpg",
       "videoPath":"",
-      "latitude":36.13891063629755,
-      "longitude":-86.80648456825224
+      "latitude":36.138910,
+      "longitude":-86.806484
    },
    {
       "id":203,
-      "name":"Memorial",
+      "name":"Memorial House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"This dormitory was built in 1935 as a rent-free residence for women students of Confederate ancestry, with financing by the United Daughters of the Confederacy and Peabody College. The building was modernized and renovated in 1988 and now has computer connections for the residents, seminar rooms and exercise and music practice rooms.",
       "imagePath":"https://www.vanderbilt.edu/map/images/144.jpg",
       "videoPath":"",
-      "latitude":36.140814463766986,
-      "longitude":-86.79775826848139
+      "latitude":36.140814,
+      "longitude":-86.797758
    },
    {
       "id":204,
       "name":"Payne",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Bruce Ryburn Payne came to Peabody College as its president in 1911 and planned the school's move from south Nashville to the new Hillsboro campus. Payne's vision for Peabody's future was a major influence in the development of the school's faculty, curriculum and physical plant, and Payne deserves much of the credit for the beauty of Peabody's campus. The Payne Building, which contains classrooms and offices, was constructed and named in his memory in 1953. A small statue from the tomb site of an ancient Korean king stands outside the Payne building. It was a gift from the South Korean government in appreciation for the work of a Peabody faculty delegation that helped rebuild the South Korean educational system after the Korean War.",
       "imagePath":"https://www.vanderbilt.edu/map/images/146.jpg",
       "videoPath":"",
-      "latitude":36.1425581654393,
-      "longitude":-86.79804515458527
+      "latitude":36.142558,
+      "longitude":-86.798045
    },
    {
       "id":205,
       "name":"Mayborn",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Massive columns and excellent design reflect the hope that 1914 held for the future of Peabody College. The entrance hall and marble stairway are of particular interest. Originally built for industrial arts, this was the first Peabody College building constructed on the Hillsboro campus. Home Economics followed in close order the same year. The building was refurbished and renamed in 1978 in honor of Peabody trustee Frank W. Mayborn and now houses faculty offices and classrooms.",
       "imagePath":"https://www.vanderbilt.edu/map/images/147.jpg",
       "videoPath":"",
-      "latitude":36.142713666934796,
-      "longitude":-86.79744286622119
+      "latitude":36.142713,
+      "longitude":-86.797442
    },
    {
       "id":206,
@@ -2624,21 +2498,8 @@
       "placeDescription":"The original Hill Student Center, a hub of student life for Peabody College, was built in 1959 and named in 1975 for Henry H. Hill, twice president of Peabody. The current Hill Center started its life in 1999 as an addition to that building and is home to Information Technology Services. When the original Hill Center was demolished in 2005, the ITS addition remained, retaining the name to honor Henry Hill. It is now connected to the Commons Center, which opened in 2008.",
       "imagePath":"https://www.vanderbilt.edu/map/images/151a.jpg",
       "videoPath":"",
-      "latitude":36.14188864372068,
-      "longitude":-86.79627636691299
-   },
-   {
-      "id":207,
-      "name":"Commons Center",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"The Commons is the first phase of College Halls at Vanderbilt, a residential college system designed to create a vibrant living and learning environment. Completed in 2008, the Commons serves as home for all first-year students at Vanderbilt, with 10 residence halls, The Commons Center--a dining/recreation facility, and a residence for the dean of The Commons. ",
-      "imagePath":"https://www.vanderbilt.edu/map/images/151b.jpg",
-      "videoPath":"",
-      "latitude":36.14202878447104,
-      "longitude":-86.79713720257004
+      "latitude":36.141888,
+      "longitude":-86.796276
    },
    {
       "id":208,
@@ -2650,60 +2511,62 @@
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/284.jpg",
       "videoPath":"",
-      "latitude":36.15931713920439,
-      "longitude":-86.80653596519952
+      "latitude":36.1593171,
+      "longitude":-86.8065359
    },
    {
       "id":209,
-      "name":"Hank Ingram",
+      "name":"Hank Ingram House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
-      "placeDescription":"Opened in August 2008, Hank Ingram House is located on the commons. \"Hank's House\" provides modern features in a classic building housing approximately 290 first-year students in traditional double rooms. Students live on floors 2-7 of this seven story building. On the first floor, students will find the laundry, an adjoining study space, and two music practice rooms. The second floor includes an apartment for the faculty head of house, two seminar rooms, a study space, and a common kitchen for building residents. Floors 3-6 each have a large study area and six shared bathrooms with showers. The seventh floor has a study area and three shared bathrooms with showers. The building is fully air conditioned. Corridors and common areas are carpeted. Student rooms have tiled floors. ",
+      "placeDescription":"Opened in August 2008, Hank Ingram House is located on the commons. \"Hank's House\" provides modern features in a classic building housing approximately 290 first-year students in traditional double rooms. Students live on floors 2-7 of this seven story building. On the first floor, students will find the laundry, an adjoining study space, and two music practice rooms. The second floor includes an apartment for the faculty head of house, two seminar rooms, a study space, and a common kitchen for building residents. Floors 3-6 each have a large study area and six shared bathrooms with showers. The seventh floor has a study area and three shared bathrooms with showers. The building is fully air conditioned. Corridors and common areas are carpeted. Student rooms have tiled floors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/280.jpg",
       "videoPath":"",
-      "latitude":36.14100237480439,
-      "longitude":-86.79677256222081
+      "latitude":36.141002,
+      "longitude":-86.796772
    },
    {
       "id":210,
-      "name":"Owen Grad Mgmt",
+      "name":"Owen Graduate School of Management",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Spacious, light-filled public areas bring warmth to the interior of Management Hall, home of the Owen Graduate School of Management, and its Anne Marie and Thomas B. Walker Jr. library. Management Hall was built in 1982 with leadership gifts from the Centennial Campaign. Historic Mechanical Engineering Hall, connected to Management Hall and enclosing the central courtyard, houses the Owen School's Executive MBA program. This Victorian building was constructed in 1888 to house Vanderbilt's fast-growing engineering program. It was the first building in Tennessee designed to teach engineering. \"Old Mechanical\" also housed the Army ROTC program for a number of years. The decorative watts governor at the peak of its roof symbolizes mechanical force.",
       "imagePath":"https://www.vanderbilt.edu/map/images/182.jpg",
       "videoPath":"",
-      "latitude":36.14736434156987,
-      "longitude":-86.79973151554204
+      "latitude":36.147364,
+      "longitude":-86.799731
    },
    {
       "id":211,
       "name":"Robinson Research",
       "category":[
-         "Facility"
+         "Academics",
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"Ann and Roscoe Robinson Building houses laboratories and academic space for Pharmacology, Biochemistry, and Molecular Physiology and Biophysics. The eight-story building is also home to the A. B. Hancock Jr. Memorial Laboratory for Cancer Research and the positron emission tomography (pet) scanner. Opened in 1989 as Medical Research Building 1, in 2001 the building was named for the Robinsons. Roscoe Robinson was professor of medicine and an internationally recognized physician who led Vanderbilt University Medical Center from 1981 to 1997 as vice chancellor for health affairs. The building is linked to Light Hall on all levels and shares an underground level with the Vanderbilt Clinic. The Vanderbilt Clinic and the Veterans Administration Medical Center are connected to the Robinson Building by a bridge.",
       "imagePath":"https://www.vanderbilt.edu/map/images/200.jpg",
       "videoPath":"",
-      "latitude":36.14186419804528,
-      "longitude":-86.80277069280191
+      "latitude":36.141864,
+      "longitude":-86.802770
    },
    {
       "id":212,
-      "name":"Student Recreation Ctr",
+      "name":"Student Recreation Center",
       "category":[
-         "Facility"
+         "Student Life",
+         "Athletics"
       ],
       "hours":"",
       "placeDescription":"The 132,000-square-foot Student Recreation Center on Capers Ave. is one of the most popular places on campus. Two levels of modern facilities house a swimming pool; courts for basketball, volleyball and badminton; six racquetball and two squash courts; a weight room; a wood-floor activity room; an indoor track; an aerobics room; classrooms; and a large social area used for parties, receptions and meetings. Adults and children challenge their stamina and skill on the two-story-high rock climbing wall in the Rec Center lobby, under the careful guidance of experienced climbers. In an average week, more than 15,000 students, faculty and staff members and their families use the Rec Center.",
       "imagePath":"https://www.vanderbilt.edu/map/images/203.jpg",
       "videoPath":"",
-      "latitude":36.1409812318599,
-      "longitude":-86.80898310544475
+      "latitude":36.140981,
+      "longitude":-86.808983
    },
    {
       "id":213,
@@ -2715,40 +2578,41 @@
       "placeDescription":"The Harold Stirling Vanderbilt Bridge Center was opened by Friends of Duplicate Bridge and named for Commodore Vanderbilt's great-grandson who invented contract bridge in the mid-1920s. The center, located on 28th Ave. South, is open to the public for a nominal admission fee. Day and evening sessions and bridge classes are available.",
       "imagePath":"https://www.vanderbilt.edu/map/images/212.jpg",
       "videoPath":"",
-      "latitude":36.144103700579365,
-      "longitude":-86.8112430576796
+      "latitude":36.144103,
+      "longitude":-86.811243
    },
    {
       "id":214,
       "name":"Preston Cancer Research Bldg",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"The Frances Williams Preston building is home to the activities and research of the Vanderbilt-Ingram Cancer Center, housing administrative offices, clinical areas and research laboratories dedicated to solving the mysteries of cancer in adults and children. Designated as Medical Research Building II when it was built in 1995, the building was renamed in 2001 in honor of Frances Williams Preston, a leader in the music industry and key supporter of cancer research and the Vanderbilt-Ingram Cancer Center. The naming of the building for Preston also recognizes the support the VICC has received from the T.J. Martell Foundation for leukemia, cancer and AIDS research, for which Preston serves as president of the board of directors. The Preston Building also provides laboratories and academic space for several divisions of the Department of Medicine.",
       "imagePath":"https://www.vanderbilt.edu/map/images/215.jpg",
       "videoPath":"",
-      "latitude":36.140915872224824,
-      "longitude":-86.80261625831001
+      "latitude":36.140915,
+      "longitude":-86.802616
    },
    {
       "id":215,
-      "name":"Outdoor Rec Ctr",
+      "name":"Outdoor Recreation Center",
       "category":[
-         "Facility"
+         "Student Life",
+         "Athletics"
       ],
       "hours":"",
       "placeDescription":"The five main components of the Outdoor Recreation Program are trips, equipment rentals, the climbing wall, kayaking workshops and a resource library. Headquarters for the program is the outdoor recreation center, a 3,060-square-foot facility that was completed in 1997 near the student recreation center. This building serves as a base for all trips and includes a resource library, a meeting room, checkout lobby, and space to store and maintain the extensive variety of outdoor recreation rental equipment available to the Vanderbilt community. Adjacent to this building is an open-air canoe storage shed with easy access for vehicles.",
       "imagePath":"https://www.vanderbilt.edu/map/images/236.jpg",
       "videoPath":"",
-      "latitude":36.13939171016051,
-      "longitude":-86.80777600995734
+      "latitude":36.139391,
+      "longitude":-86.807776
    },
    {
       "id":216,
-      "name":"Sutherland",
+      "name":"Sutherland House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Opened in August 2006, Sutherland House is located on The Commons. Sutherland provides modern features in a classic building housing 162 students in traditional double rooms. The building is co-residential, with men and women living on separate floors. ",
@@ -2761,14 +2625,14 @@
       "id":217,
       "name":"Frist Hall",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Vanderbilt University School of Nursing's Patricia Champion Frist Hall was dedicated in november 1998. The three-story, 25,000-square-foot brick structure houses a student lounge; an 80-seat, multimedia, interactive teaching center/classroom; two multi-purpose rooms; and an additional 30-seat classroom, all with computer-generated and ceiling-mounted projection systems capability. The building also includes faculty offices, workrooms, secretarial space, and three conference rooms.",
       "imagePath":"https://www.vanderbilt.edu/map/images/239.jpg",
       "videoPath":"",
-      "latitude":36.14532969210801,
-      "longitude":-86.80052967926312
+      "latitude":36.145329,
+      "longitude":-86.800529
    },
    {
       "id":218,
@@ -2787,20 +2651,20 @@
       "id":219,
       "name":"Monroe Carell Jr Children's Hospital",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"Monroe Carell Jr. Children's Hospital at Vanderbilt is a comprehensive children's hospital, providing advanced health care in a family-centered environment for children in Middle Tennessee. The eight-story facility features curved glass and granite on the outside and spacious, colorful, child-friendly design on the inside. The hospital is named in honor of Monroe J. Carell Jr., who was chairman and chief executive officer of Central Parking Corporation and a long-time supporter of Vanderbilt until his death in 2008. Carell served on the Vanderbilt University Board of Trust and the Children's Hospital Board of Directors. He and his wife Ann led the fundraising effort for the facility, which opened in Feb. 2004. Before moving into this freestanding facility, the Vanderbilt Children's Hospital had resided within Vanderbilt University Medical Center for 30 years.",
       "imagePath":"https://www.vanderbilt.edu/map/images/245.jpg",
       "videoPath":"",
-      "latitude":36.139854767907565,
-      "longitude":-86.80243056494352
+      "latitude":36.139854,
+      "longitude":-86.802430
    },
    {
       "id":220,
       "name":"Baseball Stadium",
       "category":[
-         "Facility"
+         "Athletics"
       ],
       "hours":"",
       "placeDescription":"Charles Hawkins Field at the McGugin Center, the home for Vanderbilt baseball, features a modern design with a classic baseball park atmosphere, including brick and iron features and 2,000 chair-back seats. Construction of the field and stadium began immediately following the 2000 baseball season, with official dedication of the field in spring 2002. Hawkins field is named in honor of the Hawkins family. Charles Hawkins III, who donated more than $1 million toward the project, played both football and baseball at Vanderbilt from 1952 to 1954 and became the first Commodore pitcher to earn all-Southeastern Conference honors. His father Charles Hawkins II lettered in both football and baseball at Vanderbilt in the mid-1920s. The new baseball press box is named in honor of Nashville sports writer Fred Russell, while the name of the complex itself honors Dan McGugin, former Vanderbilt football coach and athletic director.",
@@ -2813,20 +2677,21 @@
       "id":221,
       "name":"Schulman Center Hillel",
       "category":[
-         "Facility"
+         "Student Life",
+         "Dining"
       ],
       "hours":"",
       "placeDescription":"The Ben Schulman Center for Jewish Life is a focal point for Jewish social and cultural life on campus and the home of Vanderbilt Hillel. The 10,000-square-foot building, dedicated in 2002, features on the ground floor a multipurpose space that serves as both sanctuary and performance venue with a movable ark, grand piano, and raised stage; a social lounge with a billiard table; and Grins, a kosher vegetarian cafe. On the second floor are offices, a classroom, and a library. The center is named for Ben Schulman, a 1939 Vanderbilt graduate, who was a major contributor to the building project.",
       "imagePath":"https://www.vanderbilt.edu/map/images/254.jpg",
       "videoPath":"",
-      "latitude":36.14488289771103,
-      "longitude":-86.80647565605732
+      "latitude":36.144882,
+      "longitude":-86.806475
    },
    {
       "id":222,
       "name":"Bronson Ingram Studio Arts",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"The E. Bronson Ingram Studio Arts Center, completed in Fall 2005, houses studios for sculpture, ceramics, photography, computer arts, painting and drawing, as well as interior and exterior gallery space and faculty offices and research areas. Before completion of this three-story building in the university's central campus area, Studio Arts resided on the Peabody College campus. The building's namesake, E. Bronson Ingram, served as president of the Vanderbilt University Board of Trust from 1991 until his death in 1995. The Ingram family are longtime supporters of Vanderbilt and of the arts in Nashville.",
@@ -2837,16 +2702,16 @@
    },
    {
       "id":223,
-      "name":"Hobbs Hdl",
+      "name":"Hobbs",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Hobbs Laboratory of Human Development is named for Professor Nicholas Hobbs, the Kennedy Center's founder, whose research led to Project Re-Ed, a re-education intervention serving emotionally troubled children. In the building lobby, a mosaic mural by Ben Shahn represents the human condition. The original painting of the mural hangs in the Vatican museum.",
       "imagePath":"https://www.vanderbilt.edu/map/images/160.jpg",
       "videoPath":"",
-      "latitude":36.14151579096293,
-      "longitude":-86.79789313406417
+      "latitude":36.141515,
+      "longitude":-86.797893
    },
    {
       "id":224,
@@ -2863,22 +2728,22 @@
    },
    {
       "id":225,
-      "name":"Crawford",
+      "name":"Crawford House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Opened in August 2006, Crawford House is located on The Commons. Crawford provides modern features in a classic building housing 150 first-year students in traditional double rooms. Students live on floors 2-6 of this six story building. The second floor includes an apartment for the faculty head of house, a seminar room and common kitchen for building residents. Floors 3-6 each have a study area and three shared bathrooms with showers. In addition, there is a study area, laundry room and music rooms on the first floor. The building is fully air conditioned. Corridors and common areas are carpeted. Student rooms have tiled floors.",
       "imagePath":"https://www.vanderbilt.edu/map/images/275.jpg",
       "videoPath":"",
-      "latitude":36.14022474188263,
-      "longitude":-86.79785408615827
+      "latitude":36.140224,
+      "longitude":-86.797854
    },
    {
       "id":226,
-      "name":"Murray",
+      "name":"Murray House",
       "category":[
-         "Facility"
+         "Residence Hall"
       ],
       "hours":"",
       "placeDescription":"Opened in August 2007, Murray House is located on The Commons. Murray House provides modern features in a classic building housing 150 first-year students in traditional double rooms. Students live on floors 2-6 of this six story building. The second floor includes an apartment for the faculty head of house, a seminar room, and common kitchen for building residents. Floors 3-6 each have a study area and three shared bathrooms with showers. In addition, there is a study area, laundry room, and music rooms on the first floor. The building is fully air conditioned. Corridors and common areas are carpeted. Student rooms have tiled floors. ",
@@ -2891,20 +2756,20 @@
       "id":227,
       "name":"Alpha Tau Omega",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Alpha Tau Omega fraternity house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/96.jpg",
       "videoPath":"",
-      "latitude":36.146216759211285,
-      "longitude":-86.80734365680284
+      "latitude":36.146216,
+      "longitude":-86.807343
    },
    {
       "id":228,
       "name":"Pi Kappa Alpha",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Pi Kappa Alpha fraternity house.",
@@ -2917,33 +2782,20 @@
       "id":229,
       "name":"Delta Kappa Epsilon",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Delta Kappa Epsilon fraternity house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/77.jpg",
       "videoPath":"",
-      "latitude":36.14715910562708,
-      "longitude":-86.80618907823727
-   },
-   {
-      "id":230,
-      "name":"K Quad:dyer",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"The Kissam Quadrangle is made up of six dormitories: Currey Hall, Dyer Hall, Hemingway Hall, Kissam Hall, Mims Hall and Reinke Hall. Kissam Quadrangle, housing about 600 freshmen, is named for Maria Kissam Vanderbilt, mother of William K. Vanderbilt, who gave the original Kissam Hall dormitory in her honor. (Old Kissam was razed in 1958, a year after this replacement quadrangle was completed.) Individual buildings are named for faculty members and trustees who were memorable in the university's history.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/12f.jpg",
-      "videoPath":"",
-      "latitude":36.148956172793234,
-      "longitude":-86.8021511909563
+      "latitude":36.147159,
+      "longitude":-86.806189
    },
    {
       "id":231,
       "name":"Sigma Chi",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Sigma Chi fraternity house.",
@@ -2956,20 +2808,20 @@
       "id":232,
       "name":"Alpha Delta Pi",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Alpha Delta Pi sorority house.",
       "imagePath":"https://www.vanderbilt.edu/map/images/90.jpg",
       "videoPath":"",
-      "latitude":36.145597115601745,
-      "longitude":-86.80607493777626
+      "latitude":36.145597,
+      "longitude":-86.806074
    },
    {
       "id":233,
       "name":"Alpha Omicron Pi",
       "category":[
-         "Facility"
+         "Student Life"
       ],
       "hours":"",
       "placeDescription":"Alpha Omicron Pi sorority house.",
@@ -2979,36 +2831,23 @@
       "longitude":-86.80665412065376
    },
    {
-      "id":234,
-      "name":"K Quad:mims",
-      "category":[
-         "Facility"
-      ],
-      "hours":"",
-      "placeDescription":"The Kissam Quadrangle is made up of six dormitories: Currey Hall, Dyer Hall, Hemingway Hall, Kissam Hall, Mims Hall and Reinke Hall. Kissam Quadrangle, housing about 600 freshmen, is named for Maria Kissam Vanderbilt, mother of William K. Vanderbilt, who gave the original Kissam Hall dormitory in her honor. (Old Kissam was razed in 1958, a year after this replacement quadrangle was completed.) Individual buildings are named for faculty members and trustees who were memorable in the university's history.",
-      "imagePath":"https://www.vanderbilt.edu/map/images/12b.jpg",
-      "videoPath":"",
-      "latitude":36.14959218209849,
-      "longitude":-86.80205422172007
-   },
-   {
       "id":235,
       "name":"Furman Hall",
       "category":[
-         "Facility"
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"When Furman Hall opened in 1907, it was called the most modern chemistry / pharmacy building in the United States. Its name honors Francis Furman, a Nashville merchant, whose widow provided the building funds. Furman's grey stone composition stands in sharp contrast to adjacent brick buildings - the collegiate Gothic Calhoun and Garland Halls built in the late 1920s and the contemporary-style Law School building. Originally the home of science and engineering departments, in 1967, Furman was remodeled to house the humanities. Today, Furman Hall houses foreign languages, classical studies, philosophy and the Women's Studies program.",
       "imagePath":"https://www.vanderbilt.edu/map/images/15.jpg",
       "videoPath":"",
-      "latitude":36.148020721716804,
-      "longitude":-86.80107790456098
+      "latitude":36.148020,
+      "longitude":-86.801077
    },
    {
       "id":236,
       "name":"General Library",
       "category":[
-         "Facility"
+         "Library"
       ],
       "hours":"",
       "placeDescription":"Jean and Alexander Heard Library was built in 1941 to house the joint University Libraries, a cooperative venture of Vanderbilt University, Peabody College and Scarritt College. This collegiate Gothic building, designed by architect Henry Hibbs, was the first centrally air-conditioned building on campus. The General Education Board and Carnegie Corporation gave financial assistance to the original building project, as did more than 5,000 alumni and other friends. The H. Fort Flowers graduate wing, added in 1969, is of modern design, a complete departure from the collegiate style of the original building. The  building and all other campus libraries became units of Vanderbilt University Library after Peabody College merged with Vanderbilt in 1979. in 1983, Vanderbilt's library, with its several units, was named in honor of Alexander Heard, chancellor of the university from 1963 to 1982, and his wife, Jean Keller Heard.",
@@ -3027,14 +2866,14 @@
       "placeDescription":"Godchaux Hall, a collegiate Gothic building constructed in 1925 as a home for the School of Nursing, now houses faculty and administrative offices of the school, the Center for Nursing Research, and the Helene Fuld Multimedia Center. In 1971, the building was named for Mary Ragland Godchaux in recognition of her family's contributions to Vanderbilt. An underground annex housing lecture halls connects Godchaux with Stevenson Center and Medical Center North, and a 25,000-square-foot addition, Frist Hall,  was recently completed.",
       "imagePath":"https://www.vanderbilt.edu/map/images/22.jpg",
       "videoPath":"",
-      "latitude":36.14484972823459,
-      "longitude":-86.80027445009526
+      "latitude":36.144849,
+      "longitude":-86.800274
    },
    {
       "id":238,
-      "name":"Med Ctr North",
+      "name":"Medical Center North",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"When it was built in 1925, the building we now call Medical Center North housed both the Vanderbilt School of Medicine and Vanderbilt Hospital. It was considered to be a model of excellence in medical education facilities. The foundations were designed to carry additional floors. The Rockefeller and Carnegie foundations gave major financial support. Most of the building's collegiate Gothic design is now hidden behind additions made over the years. The only original entrances still visible are the north court entrance leading to learned labs and the west entrance near the Zerfoss Student Health Center. The 21-bed General Clinical Research Center, an inpatient orthopaedic unit, a Level 1 burn center, a sub-acute care unit, administrative support services for the hospital and Medical Center, faculty and administrative offices, and research space for Medical School departments are housed in Medical Center North.",
@@ -3045,22 +2884,24 @@
    },
    {
       "id":239,
-      "name":"Mrb Iii Bio/sci",
+      "name":"MRB III Bio/Sci",
       "category":[
-         "Facility"
+         "Medical",
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Biological Sciences / Medical Research Building III is occupied jointly by the College of Arts and Science and the School of Medicine, which encourages interaction among diverse research disciplines. The 350,000-square-foot facility houses the Department of Biological Sciences and research areas including neuroscience, genetics/genomics, cell and developmental biology and structural biology. The building includes research and teaching laboratories, research support areas, greenhouse, classrooms, conference rooms, and offices. Construction of the facility was completed in 2002, with renovation of the adjoining Learned Laboratory Building completed in 2003.",
       "imagePath":"https://www.vanderbilt.edu/map/images/23c.jpg",
       "videoPath":"",
-      "latitude":36.1443774191126,
-      "longitude":-86.80060653633404
+      "latitude":36.144377,
+      "longitude":-86.800606
    },
    {
       "id":240,
       "name":"Godchaux Nursing Annex",
       "category":[
-         "Facility"
+         "Medical",
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"Godchaux Nursing Annex houses the School of Nursing. It is an underground complex of lecture halls that connects Godchaux Hall with the Stevenson Center Complex (through the Molecular Biology Building) and Medical Center North.",
@@ -3071,33 +2912,33 @@
    },
    {
       "id":241,
-      "name":"Sc Library",
+      "name":"Stevenson Center Library",
       "category":[
-         "Facility"
+         "Library"
       ],
       "hours":"",
-      "placeDescription":"The Sarah Shannon Stevenson Science and Engineering Library is located on the ground level (level 2) of Building 3 of the Stevenson Center, with rooms numbered 3xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics and molecular biology, also houses lecture halls and the Stevenson Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education and other benefactors. The science and engineering library is named for Eldon Stevenson�s wife.",
+      "placeDescription":"The Sarah Shannon Stevenson Science and Engineering Library is located on the ground level (level 2) of Building 3 of the Stevenson Center, with rooms numbered 3xxx. The Stevenson Center for the Natural Sciences, a science complex that comprises more than 350,000 square feet of classroom and laboratory space for chemistry, physics, mathematics and molecular biology, also houses lecture halls and the Stevenson Library. The science center complex was built with funds from trustee Eldon Stevenson, Jr., for whom it is named, the National Science Foundation, U.S. Steel, DuPont, the U.S. Office of Education and other benefactors. The science and engineering library is named for Eldon Stevenson's wife.",
       "imagePath":"https://www.vanderbilt.edu/map/images/sc3.jpg",
       "videoPath":"",
-      "latitude":36.145316985501395,
-      "longitude":-86.80116312068023
+      "latitude":36.145316,
+      "longitude":-86.801163
    },
    {
       "id":242,
-      "name":"Medical Ctr East North Tower",
+      "name":"Medical Center East North Tower",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"Vanderbilt Medical Center building housing the surgery centers.",
       "imagePath":"https://www.vanderbilt.edu/map/images/211.jpg",
       "videoPath":"",
-      "latitude":36.14274099960437,
-      "longitude":-86.80069268088009
+      "latitude":36.142740,
+      "longitude":-86.800692
    },
    {
       "id":243,
-      "name":"Kensington Garage/health Plus",
+      "name":"Kensington Garage/Health Plus",
       "category":[
          "Facility"
       ],
@@ -3105,47 +2946,48 @@
       "placeDescription":"Since 2006, the top floor of the garage has housed the 22,000 square foot Health Plus fitness facility for University faculty and staff.",
       "imagePath":"https://www.vanderbilt.edu/map/images/195a.jpg",
       "videoPath":"",
-      "latitude":36.14549946282045,
-      "longitude":-86.80790719032743
+      "latitude":36.1454995,
+      "longitude":-86.8079073
    },
    {
       "id":244,
-      "name":"Med Research Bldg Iv",
+      "name":"MRB IV",
       "category":[
-         "Facility"
+         "Medical",
+         "Academics"
       ],
       "hours":"",
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/269.jpg",
       "videoPath":"",
-      "latitude":36.1426897884658,
-      "longitude":-86.8028224717488
+      "latitude":36.142689,
+      "longitude":-86.802822
    },
    {
       "id":245,
-      "name":"Medical Ctr East South Tower",
+      "name":"Medical Center East South Tower",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/255.jpg",
       "videoPath":"",
-      "latitude":36.14143133221374,
-      "longitude":-86.80131279850286
+      "latitude":36.141431,
+      "longitude":-86.801312
    },
    {
       "id":246,
-      "name":"Med Ctr North Ii",
+      "name":"Medical Center North II",
       "category":[
-         "Facility"
+         "Medical"
       ],
       "hours":"",
       "placeDescription":"",
       "imagePath":"https://www.vanderbilt.edu/map/images/23d.jpg",
       "videoPath":"",
-      "latitude":36.14345133863334,
-      "longitude":-86.80043813691121
+      "latitude":36.143451,
+      "longitude":-86.800438
    },
    {
       "id":247,
