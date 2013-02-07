@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -122,10 +123,11 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 		mCurrentPlaceBar = (LinearLayout) getActivity().findViewById(
 				R.id.current_place_bar);
 		mCurrentPlaceBar.setOnClickListener(this);
-
-		// setBackground() throws NoSuchMethodError
-		// Had to use this one instead
-		mCurrentPlaceBar.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
+		mCurrentPlaceBar.setBackgroundColor(Color.WHITE);
+		
+		((LinearLayout) getActivity().findViewById(R.id.placetab_root))
+			.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
+		
 	}
 
 	private class SearchLogic extends TimerTask {

@@ -221,4 +221,9 @@ public class AgendaMapFrag extends MapFragment {
 		this.getMap().setMyLocationEnabled(false);
 	}
 	
+	public void drawPath() {
+		
+		
+		
+	}
 }

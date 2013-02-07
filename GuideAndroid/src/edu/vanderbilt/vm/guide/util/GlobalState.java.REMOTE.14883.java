@@ -1,21 +1,12 @@
-package edu.vanderbilt.vm.guide.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+package edu.vanderbilt.vm.guide.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
-import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 
 /**
  * This class holds singletons of certain objects we need to share throughout
@@ -24,7 +15,6 @@ import edu.vanderbilt.vm.guide.db.GuideDBConstants;
  * methods to make data transactions with the agenda easier.
  * 
  * @author nicholasking
- * 
  */
 @NeedsTesting(lastModifiedDate = "12/22/12")
 public class GlobalState {
