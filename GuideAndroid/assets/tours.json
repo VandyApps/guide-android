@@ -3,7 +3,7 @@
  	"id" : 1,
  	"name" : "Test Tour 1",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [1, 8, 3, 9],
+ 	"placesOnTour" : [1, 22, 3, 9],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -12,7 +12,7 @@
  	"id" : 2,
  	"name" : "Test Tour 2",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [2, 4, 3, 5],
+ 	"placesOnTour" : [24, 44, 13, 42],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -21,7 +21,7 @@
  	"id" : 3,
  	"name" : "Test Tour 3",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [6, 1, 7],
+ 	"placesOnTour" : [11, 1, 50],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"

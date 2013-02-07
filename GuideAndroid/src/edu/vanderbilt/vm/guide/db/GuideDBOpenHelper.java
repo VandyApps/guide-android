@@ -50,7 +50,7 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 					TourTable.ICON_LOC_COL + " TEXT, " +
 					TourTable.TIME_REQUIRED_COL + " TEXT);";
 	
-	private static final int DB_VERSION = 2;
+	private static final int DB_VERSION = 3;
 	private static final Logger logger = LoggerFactory.getLogger("db.GuideDBOpenHelper");
 	
 	private final Context mContext;
