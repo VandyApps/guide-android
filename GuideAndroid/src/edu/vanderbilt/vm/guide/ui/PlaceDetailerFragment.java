@@ -170,7 +170,8 @@ public class PlaceDetailerFragment extends Fragment{
 		tvPlaceName.setText(mPlace.getName());
 		tvPlaceHours.setText(mPlace.getHours());
 		tvPlaceDesc.setText(mPlace.getDescription());
-		ivPlaceImage.setImageBitmap(GlobalState.getBitmapForPlace(mPlace));
+		// XXX
+		//ivPlaceImage.setImageBitmap(GlobalState.getBitmapForPlace(mPlace));
 		
 		// add to History
 		GlobalState.addHistory(mPlace);

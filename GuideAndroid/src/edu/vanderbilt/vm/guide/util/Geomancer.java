@@ -71,49 +71,6 @@ public class Geomancer {
 	private static ArrayList<GeomancerListener> mPadawan = new ArrayList<GeomancerListener>();
 
 	/**
-	 * Returns a Place which has the closest coordinate to the given Location. I
-	 * made it take a List<Place> because someone might need to find a Place in
-	 * a custom List, like the nearest academic building or the nearest buiding
-	 * that has a tornado shelter (GASP!!!)
-	 * 
-	 * @param location
-	 * @param placeList
-	 * @return
-	 * @deprecated Use the version of findClosestPlace() that takes a
-	 *             placeCursor instead. Note that this version returns the index of
-	 *             the place, not the place itself.
-	 */
-	@Deprecated
-	public static Place findClosestPlace(Location location,
-			List<Place> placeList) {
-		if (placeList.size() == 0) {
-			return null;
-		}
-
-		Place currPlace = placeList.get(0);
-		double currDist = findDistance(currPlace.getLatitude(),
-				currPlace.getLongitude(), location.getLatitude(),
-				location.getLongitude());
-		int closestIx = 0;
-
-		for (int i = 1; i < placeList.size(); i++) {
-			currPlace = placeList.get(i);
-			double dist = findDistance(currPlace.getLatitude(),
-					currPlace.getLongitude(), location.getLatitude(),
-					location.getLongitude());
-			if (dist < currDist) {
-				currDist = dist;
-				closestIx = i;
-			}
-		}
-
-		Place result = placeList.get(closestIx);
-		logger.debug("Closest is {} at position {}", result.getName(),
-				closestIx);
-		return placeList.get(closestIx);
-	}
-
-	/**
 	 * Find the closest place in the placeCursor to the given location
 	 * 
 	 * @param location

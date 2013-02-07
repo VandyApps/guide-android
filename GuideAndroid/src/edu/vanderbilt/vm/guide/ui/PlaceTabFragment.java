@@ -169,7 +169,8 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 			mCurrPlaceDesc.setText(desc + "...");
 		}
 
-		ivCurrent.setImageBitmap(GlobalState.getBitmapForPlace(mCurrPlace));
+		//XXX
+		//ivCurrent.setImageBitmap(GlobalState.getBitmapForPlace(mCurrPlace));
 
 	}
 
