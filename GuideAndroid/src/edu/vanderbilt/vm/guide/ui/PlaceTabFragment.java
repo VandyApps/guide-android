@@ -33,6 +33,7 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
+import edu.vanderbilt.vm.guide.ui.adapter.AlphabeticalCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
@@ -87,7 +88,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 				GuideDBConstants.PlaceTable.IMAGE_LOC_COL};
 		mAllPlacesCursor = DBUtils.getAllPlaces(columns,
 				helper.getReadableDatabase());
-		mListView.setAdapter(new PlaceCursorAdapter(getActivity(), mAllPlacesCursor));
+		mListView.setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
 		mListView.setOnItemClickListener(new PlaceListClickListener(
 				getActivity()));
 		helper.close();
