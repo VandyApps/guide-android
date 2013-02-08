@@ -35,11 +35,12 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 	private int mLatColIx;
 	private int mLngColIx;
 	private HashMap<Integer,Integer> mEnigma;
-	private final int CATEGORIES = 27;
+	private final int CATEGORIES = 26;
 	private ArrayList<HeaderRecord> mRecord = new ArrayList<HeaderRecord>();
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceTabFragment");
+	private static int categoryOffset = 0;
 	
 	public AlphabeticalCursorAdapter() throws Exception {
 		throw new Exception("Do not call this constructor");
@@ -76,7 +77,7 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return mCursor.getCount() + CATEGORIES;
+		return mCursor.getCount() + CATEGORIES + categoryOffset;
 	}
 
 	@Override
@@ -116,6 +117,37 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 		boolean isHeader = (x < 0)? true : false;
 		
 		LinearLayout layout = null;
+		if (isHeader) {
+			layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(
+					R.layout.place_list_header,null);
+			
+			HeaderRecord record = mRecord.get(-x - 1);
+			((TextView) layout.findViewById(R.id.header_title)).setText(
+					record.mTitle);
+			
+		} else {
+			layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(
+					R.layout.place_list_item,null);
+			
+			mCursor.moveToPosition(x);
+			((TextView) layout.findViewById(R.id.placelist_item_title))
+				.setText(
+						mCursor.getString(mNameColIx));
+			
+			((ImageView) layout.findViewById(R.id.placelist_item_thunbnail))
+				.setImageResource(R.drawable.home);
+			
+			Location tmp = new Location("Temp");
+			tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
+			tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
+			
+			int dist = (int) tmp.distanceTo(Geomancer.getDeviceLocation());
+			
+			((TextView) layout.findViewById(R.id.placelist_item_distance))
+				.setText(Integer.toString(dist) + " m");
+		}
+		
+		/*
 		if (convertView == null) {
 			if (isHeader) {
 				layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(
@@ -152,11 +184,13 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 				.setText(Integer.toString(dist) + " m");
 			
 		}
+		*/
 		return layout;
 	}
 	
 	private void checkPosition(int position) {
-		if (position < 0 || position >= mCursor.getCount() + CATEGORIES) {
+		if (position < 0 || position >= mCursor.getCount() 
+				+ CATEGORIES + categoryOffset) {
 			throw new IndexOutOfBoundsException("Position " + position
 					+ " is invalid for a cursor with " + getCount() + "rows.");
 		}
@@ -199,6 +233,12 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 		// Build HashMap based of the information stored in mRecord
 		int listPosition = 0;
 		for (int i = 0; i < mRecord.size(); i++) {
+			
+			if (mRecord.get(i).mChild.size() == 0) {
+				categoryOffset--;
+				continue;
+			}
+			
 			mRecord.get(i).mPosition = listPosition;
 			mEnigma.put(listPosition, -(i + 1));
 			listPosition++;
