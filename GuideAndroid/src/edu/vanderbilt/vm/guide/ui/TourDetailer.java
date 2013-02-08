@@ -80,11 +80,12 @@ public class TourDetailer extends Activity {
 				.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
 		Agenda tourAgenda = DBUtils.getAgendaFromIds(
 				mCursor.getString(placesIx), mHelper.getReadableDatabase());
+		
 		MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
-		LinearLayout mapContainer = (LinearLayout) findViewById(R.id.tour_detail_map_container);
+		//LinearLayout mapContainer = (LinearLayout) findViewById(R.id.tour_detail_map_container);
 		FragmentManager fm = getFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
-		ft.add(mapContainer.getId(), mapFrag, "tour_map_Fragment");
+		ft.add(R.id.tour_detail_map_container, mapFrag, "tour_map_Fragment");
 		ft.commit();
 
 	}
@@ -110,7 +111,7 @@ public class TourDetailer extends Activity {
 				.getColumnIndex(GuideDBConstants.TourTable.DESCRIPTION_COL);
 		if (index != -1) {
 			String tourDesc = cursor.getString(index);
-			TextView tourDescView = (TextView) findViewById(R.id.tour_detail_tour_desc_tv);
+			TextView tourDescView = (TextView) findViewById(R.id.main_description);
 			tourDescView.append(tourDesc);
 		} else {
 			logger.warn("Cursor for tour id {} didn't have a tour description");
@@ -120,8 +121,8 @@ public class TourDetailer extends Activity {
 				.getColumnIndex(GuideDBConstants.TourTable.TIME_REQUIRED_COL);
 		if (index != -1) {
 			String tourTime = cursor.getString(index);
-			TextView tourTimeView = (TextView) findViewById(R.id.tour_detail_tour_time_tv);
-			tourTimeView.append(tourTime);
+			TextView tourTimeView = (TextView) findViewById(R.id.other_descriptions1);
+			tourTimeView.setText(tourTime);
 		} else {
 			logger.warn("Cursor for tour id {} didn't have a tour time required");
 		}
@@ -129,8 +130,8 @@ public class TourDetailer extends Activity {
 		index = cursor.getColumnIndex(GuideDBConstants.TourTable.DISTANCE_COL);
 		if (index != -1) {
 			String tourDist = cursor.getString(index);
-			TextView tourDistView = (TextView) findViewById(R.id.tour_detail_tour_distance_tv);
-			tourDistView.append(tourDist);
+			TextView tourDistView = (TextView) findViewById(R.id.other_descriptions2);
+			tourDistView.setText(tourDist);
 		} else {
 			logger.warn("Cursor for tour id {} didn't have a tour distance");
 		}

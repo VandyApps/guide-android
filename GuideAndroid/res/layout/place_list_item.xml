@@ -24,7 +24,7 @@
         android:text="PlaceName"
         android:textSize="14sp"
         android:gravity="center_vertical"
-        android:padding="8dip" />
+        android:layout_margin="6dip" />
 
     <TextView
         android:id="@+id/placelist_item_distance"
@@ -33,6 +33,6 @@
         android:text="dist"
         android:textSize="14sp"
         android:gravity="center"
-        android:padding="8dip" />
+        android:layout_margin="6dip" />
 
 </LinearLayout>
