@@ -85,7 +85,8 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 		
 		int x = mEnigma.get(position);
 		while (x < 0) {
-			x = mEnigma.get(position + 1);
+			position++;
+			x = mEnigma.get(position);
 		}
 		
 		mCursor.moveToPosition(x);
@@ -98,7 +99,8 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 		
 		int x = mEnigma.get(position);
 		while (x < 0) {
-			x = mEnigma.get(position + 1);
+			position++;
+			x = mEnigma.get(position);
 		}
 		
 		mCursor.moveToPosition(x);
@@ -111,13 +113,7 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 		
 		int x = 0;
 		x = mEnigma.get(position);
-		
-		boolean isHeader;
-		if (x < 0) {
-			isHeader = true;
-		} else {
-			isHeader = false;
-		}
+		boolean isHeader = (x < 0)? true : false;
 		
 		LinearLayout layout = null;
 		if (convertView == null) {
