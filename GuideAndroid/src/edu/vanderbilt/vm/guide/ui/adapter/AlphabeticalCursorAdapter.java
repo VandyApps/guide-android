@@ -39,11 +39,11 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 	private ArrayList<HeaderRecord> mRecord = new ArrayList<HeaderRecord>();
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
-			.getLogger("ui.PlaceTabFragment");
+			.getLogger("ui.AlphabeticalCursorAdapter");
 	private static int categoryOffset = 0;
 	
 	public AlphabeticalCursorAdapter() throws Exception {
-		throw new Exception("Do not call this constructor");
+		throw new AssertionError("Do not call this constructor");
 	}
 	
 	public AlphabeticalCursorAdapter(Context ctx, Cursor cursor) {
