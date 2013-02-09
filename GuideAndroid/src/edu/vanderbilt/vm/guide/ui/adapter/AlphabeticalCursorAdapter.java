@@ -98,14 +98,17 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		checkPosition(position);
 		
+		
+		
 		int x = mEnigma.get(position);
-		while (x < 0) {
-			position++;
-			x = mEnigma.get(position);
+		
+		if (x < 0) {
+			return x;
+		} else {
+			mCursor.moveToPosition(x);
+			return mCursor.getInt(mIdColIx);
 		}
 		
-		mCursor.moveToPosition(x);
-		return mCursor.getInt(mIdColIx);
 	}
 
 	@Override

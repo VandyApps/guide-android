@@ -39,8 +39,6 @@ import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
-import edu.vanderbilt.vm.guide.util.GlobalState;
-import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(16)
 public class PlaceTabFragment extends Fragment implements OnClickListener,
@@ -105,7 +103,6 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 
 	}
 
-	@SuppressWarnings("deprecation")
 	private void setupUI() {
 		mCurrPlaceName = (TextView) getActivity().findViewById(
 				R.id.currentPlaceName);
@@ -125,10 +122,6 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 				R.id.current_place_bar);
 		mCurrentPlaceBar.setOnClickListener(this);
 		mCurrentPlaceBar.setBackgroundColor(Color.WHITE);
-		
-		((LinearLayout) getActivity().findViewById(R.id.placetab_root))
-			.setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
-		
 	}
 
 	private class SearchLogic extends TimerTask {
@@ -146,7 +139,8 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 	// want to access class variables
 	@Override
 	public void onClick(View v) {
-		if (v == mCurrPlaceDesc || v == mCurrPlaceName || v == mCurrentPlaceBar) {
+		if (v == mCurrPlaceDesc || v == mCurrPlaceName || 
+		                            v == mCurrentPlaceBar) {
 			PlaceDetailer.open(getActivity(), mCurrPlace.getUniqueId());
 		} else if (v == mSearchBox) {
 			// mSearchBox.setFocusable(true);
@@ -187,17 +181,24 @@ public class PlaceTabFragment extends Fragment implements OnClickListener,
 			return true;
 
 		case R.id.menu_sort_alphabetic:
-			// TODO
+			
+			mListView.setAdapter(new AlphabeticalCursorAdapter(getActivity(), 
+			        mAllPlacesCursor));
+			
 			Toast.makeText(getActivity(),
 					"PlacesList is sorted alphabetically", Toast.LENGTH_SHORT)
 					.show();
 			return true;
 
 		case R.id.menu_sort_distance:
-			// TODO
+			
+			mListView.setAdapter(new PlaceCursorAdapter(getActivity(), 
+			        mAllPlacesCursor));
+			
 			Toast.makeText(getActivity(), "PlacesList is sorted by distance",
 					Toast.LENGTH_SHORT).show();
 			return true;
+			
 		default:
 			return false;
 		}
