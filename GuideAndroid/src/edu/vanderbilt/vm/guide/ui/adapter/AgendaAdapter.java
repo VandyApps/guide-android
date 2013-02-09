@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 
 public class AgendaAdapter extends BaseAdapter {
@@ -35,16 +38,20 @@ public class AgendaAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView tv;
+		LinearLayout layout;
 		if (convertView == null) {
-			tv = (TextView) LayoutInflater.from(mContext).inflate(
-					android.R.layout.simple_list_item_1, null);
-			tv.setTag(tv);
+			layout = (LinearLayout) LayoutInflater.from(mContext).inflate(
+					R.layout.place_list_item , null);
+			layout.setTag(layout);
 		} else {
-			tv = (TextView) convertView.getTag();
+			layout = (LinearLayout) convertView.getTag();
 		}
-		tv.setText(mAgenda.get(position).getName());
-		return tv;
+		//layout.setText(mAgenda.get(position).getName());
+		((TextView) layout.findViewById(R.id.placelist_item_title))
+			.setText(mAgenda.get(position).getName());
+		((ImageView) layout.findViewById(R.id.placelist_item_thunbnail))
+			.setImageResource(R.drawable.home);
+		return layout;
 	}
 
 	

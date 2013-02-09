@@ -65,9 +65,9 @@ public class PlaceDetailerFragment extends Fragment{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		tvPlaceName = (TextView) mView.findViewById(R.id.PlaceName);
-		tvPlaceHours = (TextView) mView.findViewById(R.id.PlaceHours);
-		tvPlaceDesc = (TextView) mView.findViewById(R.id.PlaceDescription);
+		tvPlaceName = (TextView) mView.findViewById(R.id.detailee_name);
+		tvPlaceHours = (TextView) mView.findViewById(R.id.other_descriptions);
+		tvPlaceDesc = (TextView) mView.findViewById(R.id.main_description);
 		ivPlaceImage = (ImageView) mView.findViewById(R.id.PlaceImage);
 		
 		setHasOptionsMenu(true);

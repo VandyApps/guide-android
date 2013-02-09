@@ -226,4 +226,26 @@ public class AgendaMapFrag extends MapFragment {
 		
 		
 	}
+	
+	public void redrawMarker() {
+		
+		for (Place plc : mAgenda) {
+
+			Location plcLoc = new Location("temp");
+			plcLoc.setLatitude(plc.getLatitude());
+			plcLoc.setLongitude(plc.getLongitude());
+
+			// Set the marker for each Place
+			// Title must be exactly as the PlaceName, in order to match
+			// them later on
+			getMap().addMarker(new MarkerOptions()
+					.position(MapViewer.toLatLng(plc))
+					.title(plc.getName())
+					.draggable(false)
+					.snippet(
+							Geomancer.getDeviceLocation().distanceTo(plcLoc)
+									+ " yards away"));
+		}
+		
+	}
 }

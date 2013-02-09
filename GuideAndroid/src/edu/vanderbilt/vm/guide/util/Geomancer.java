@@ -225,6 +225,8 @@ public class Geomancer {
 			if (provider != null) {
 				sLocationManager.requestLocationUpdates(provider, 
 						DEFAULT_TIMEOUT, DEFAULT_RADIUS, mLocListener);
+			} else {
+				logger.error("Failed to get a Location Provider");
 			}
 		}
 	}

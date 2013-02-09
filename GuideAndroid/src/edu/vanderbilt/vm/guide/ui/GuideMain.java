@@ -58,7 +58,7 @@ public class GuideMain extends Activity {
 		mAction.setDisplayShowTitleEnabled(true);
 		mAction.setBackgroundDrawable(GuideConstants.OLD_GOLD);
 		mAction.setSplitBackgroundDrawable(GuideConstants.OLD_GOLD);
-		
+		mAction.setTitle(getResources().getText(R.string.university_name));
 		
 		mViewPager = (ViewPager) findViewById(R.id.swiper_1);
         mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);

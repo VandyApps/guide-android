@@ -32,8 +32,7 @@
 
         <activity
             android:name=".ui.GuideMain"
-            android:label="@string/title_activity_guide_main"
-            android:uiOptions="splitActionBarWhenNarrow" >
+            android:label="@string/university_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
