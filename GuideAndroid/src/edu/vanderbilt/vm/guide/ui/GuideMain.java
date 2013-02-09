@@ -43,6 +43,7 @@ public class GuideMain extends Activity {
 		setContentView(R.layout.activity_guide_main);
 		
         setupActionBar();
+        
         if (savedInstanceState != null) {
             mAction.setSelectedNavigationItem(
             		savedInstanceState.getInt("tab", 0));

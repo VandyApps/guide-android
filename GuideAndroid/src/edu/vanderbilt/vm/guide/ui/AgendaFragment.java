@@ -32,11 +32,11 @@ public class AgendaFragment extends ListFragment {
     }
 
     public void onReselect() {
-        try {
-            getListView().invalidateViews();
-        } catch(IllegalStateException e) {
-            logger.info("Caught IllegalStateException: ", e);
-        }
+    	try {
+    		getListView().invalidateViews();
+    	} catch (IllegalStateException e) {
+    		logger.info("Caught IllegalStateException: ", e);
+    	}
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.database.Cursor;
 import android.location.Location;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,10 +26,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
+import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 
-public class AgendaMapFrag extends MapFragment {
+public class AgendaMapFrag extends MapFragment 
+        implements OnMapLongClickListener,OnMarkerClickListener {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
@@ -129,57 +135,13 @@ public class AgendaMapFrag extends MapFragment {
 			map.animateCamera(update);
 
 			// What happens when a marker is tapped
-			map.setOnMarkerClickListener(new OnMarkerClickListener() {
-				@Override
-				public boolean onMarkerClick(Marker marker) {
-					if (marker.isInfoWindowShown()) {
-						marker.hideInfoWindow();
-						mPlaceIdFocused = -1;
-					} else {
-						marker.showInfoWindow();
-
-						Place plc = null;
-						Agenda agenda = GlobalState.getUserAgenda();
-
-						// Had to match marker by title, because there is no
-						// marker id
-						for (Place agndPlc : agenda) {
-							if (marker.getTitle().equals(agndPlc.getName())) {
-								plc = agndPlc;
-								break;
-							}
-						}
-
-						if (plc != null) {
-							mPlaceIdFocused = plc.getUniqueId();
-							if (agenda.isOnAgenda(plc)) {
-								// Option to remove
-								MenuItem item = mMenu
-										.findItem(R.id.map_menu_remove_agenda);
-								item.setVisible(true);
-								item.setShowAsAction(
-										MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-								item = mMenu.findItem(R.id.map_menu_add_agenda);
-								item.setVisible(false);
-								item = null;
-							} else {
-								// Option to add
-								mMenu.findItem(R.id.map_menu_add_agenda)
-										.setVisible(true);
-								mMenu.findItem(R.id.map_menu_remove_agenda)
-										.setVisible(false);
-							}
-						}
-					}
-					return true;
-				}
-			});
+			map.setOnMarkerClickListener(this);
 
 		}
 		
 		map.setMyLocationEnabled(showSelf);
 		
+		map.setOnMapLongClickListener(this);
 	}
 
 	@Override
@@ -248,4 +210,75 @@ public class AgendaMapFrag extends MapFragment {
 		}
 		
 	}
+
+    @Override
+    public void onMapLongClick(LatLng point) {
+        
+        Location clicked = new Location("temp");
+        clicked.setLatitude(point.latitude);
+        clicked.setLongitude(point.longitude);
+        
+        GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
+        String[] columns = {
+                GuideDBConstants.PlaceTable.LATITUDE_COL,
+                GuideDBConstants.PlaceTable.LONGITUDE_COL,
+                GuideDBConstants.PlaceTable.ID_COL};
+        Cursor cursor = DBUtils.getAllPlaces(columns, 
+                helper.getReadableDatabase());
+        
+        int position = Geomancer.findClosestPlace(clicked, cursor);
+        cursor.moveToPosition(position);
+        int idColIx =cursor.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
+        PlaceDetailer.open(getActivity(), (int) cursor.getLong(idColIx));
+        helper.close();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        
+        if (marker.isInfoWindowShown()) {
+            marker.hideInfoWindow();
+            mPlaceIdFocused = -1;
+        } else {
+            marker.showInfoWindow();
+
+            Place plc = null;
+            Agenda agenda = GlobalState.getUserAgenda();
+
+            // Had to match marker by title, because there is no
+            // marker id
+            for (Place agndPlc : agenda) {
+                if (marker.getTitle().equals(agndPlc.getName())) {
+                    plc = agndPlc;
+                    break;
+                }
+            }
+
+            if (plc != null) {
+                mPlaceIdFocused = plc.getUniqueId();
+                if (agenda.isOnAgenda(plc)) {
+                    // Option to remove
+                    MenuItem item = mMenu
+                            .findItem(R.id.map_menu_remove_agenda);
+                    item.setVisible(true);
+                    item.setShowAsAction(
+                            MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+                    item =mMenu.findItem(R.id.map_menu_add_agenda);
+                    item.setVisible(false);
+                    item = null;
+                } else {
+                    // Option to add
+                    mMenu.findItem(R.id.map_menu_add_agenda)
+                            .setVisible(true);
+                    mMenu.findItem(R.id.map_menu_remove_agenda)
+                            .setVisible(false);
+                }
+            }
+        }
+        return true;
+    }
+	
+
+	
 }

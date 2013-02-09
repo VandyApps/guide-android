@@ -16,7 +16,14 @@ public class PlaceListClickListener implements AdapterView.OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		PlaceDetailer.open(mContext, (int) parent.getItemIdAtPosition(position));
+		
+		int x = (int) parent.getItemIdAtPosition(position);
+		if (x > 0) {
+			PlaceDetailer.open(mContext, x);
+		} else {
+			return;
+		}
+		
 	}
 	
 }

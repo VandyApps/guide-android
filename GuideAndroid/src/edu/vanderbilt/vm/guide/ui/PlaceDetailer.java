@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
@@ -30,22 +31,22 @@ public class PlaceDetailer extends Activity {
 			.getLogger("ui.PlaceDetailer");
 	private static final String PLACE_ID_EXTRA = "placeId";
 	
-	@Override
+	@SuppressWarnings("deprecation")
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.single_pane);
 		
 		// Adding the fragment to layout
 		Fragment frag = PlaceDetailerFragment.newInstance(this, getIntent()
 				.getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
 		
-		LinearLayout layout = new LinearLayout(this);
-		layout.setId(1000);
-		{
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.add(1000, frag, "detailer_fragment");
-			ft.commit();
-		}
-		setContentView(layout);
+		((LinearLayout) findViewById(R.id.sp_pane1)).setBackgroundDrawable(
+		        GuideConstants.LIGHT_GOLD);
+		
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.add(R.id.sp_pane1, frag, "detailer_fragment");
+		ft.commit();
 		
 		//Setup ActionBar
 		mAction = getActionBar();
