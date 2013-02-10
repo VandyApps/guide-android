@@ -225,12 +225,12 @@ public class AgendaMapFrag extends MapFragment
                 GuideDBConstants.PlaceTable.ID_COL};
         Cursor cursor = DBUtils.getAllPlaces(columns, 
                 helper.getReadableDatabase());
-        helper.close();
         
         int position = Geomancer.findClosestPlace(clicked, cursor);
         cursor.moveToPosition(position);
         int idColIx =cursor.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
         PlaceDetailer.open(getActivity(), (int) cursor.getLong(idColIx));
+        helper.close();
     }
 
     @Override

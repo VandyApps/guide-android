@@ -9,6 +9,9 @@
 
   <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
     <checkLoggable>false</checkLoggable>
+    <tagEncoder>
+        <pattern>guide.%logger{22}</pattern>
+    </tagEncoder>
     <encoder>
        <pattern>[%method] %msg%n</pattern>
     </encoder>

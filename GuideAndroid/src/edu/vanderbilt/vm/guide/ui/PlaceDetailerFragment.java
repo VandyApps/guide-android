@@ -23,6 +23,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
+import edu.vanderbilt.vm.guide.util.ImageDownloader;
 
 public class PlaceDetailerFragment extends Fragment{
 	private Place mPlace;
@@ -32,6 +33,7 @@ public class PlaceDetailerFragment extends Fragment{
 	private ImageView ivPlaceImage;
 	private View mView;
 	private Menu mMenu;
+	private ImageDownloader.BitmapDownloaderTask mDlTask;
 	
 	private boolean isOnAgenda = false;
 	
@@ -92,6 +94,15 @@ public class PlaceDetailerFragment extends Fragment{
 		}
 		
 		
+	}
+	
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+	    if(mDlTask != null) {
+	        logger.trace("Cancelling image download task");
+	        mDlTask.cancel(true);
+	    }
 	}
 	
 	@Override
@@ -170,8 +181,10 @@ public class PlaceDetailerFragment extends Fragment{
 		tvPlaceName.setText(mPlace.getName());
 		tvPlaceHours.setText(mPlace.getHours());
 		tvPlaceDesc.setText(mPlace.getDescription());
-		// XXX
-		//ivPlaceImage.setImageBitmap(GlobalState.getBitmapForPlace(mPlace));
+		
+		logger.trace("Starting image download task");
+		mDlTask = new ImageDownloader.BitmapDownloaderTask(ivPlaceImage);
+		mDlTask.execute(mPlace.getPictureLoc());
 		
 		// add to History
 		GlobalState.addHistory(mPlace);
