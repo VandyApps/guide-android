@@ -1,5 +1,6 @@
 package edu.vanderbilt.vm.guide.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,8 @@ public class Geomancer {
 			.getLogger("util.Geomancer");
 	private static final double DEFAULT_LONGITUDE = -86.803889;
 	private static final double DEFAULT_LATITUDE = 36.147381;
+	public static final double FEET_PER_METER = 3.28083989501312;
+    public static final int FEET_PER_MILE = 5280;
 
 	private static Location sCurrLocation;
 	private static LocationManager sLocationManager;
@@ -113,6 +116,20 @@ public class Geomancer {
 		}
 
 		return closestIx;
+	}
+	
+	public static String getDistanceString(Location location) {
+    	double distInFeet = location.distanceTo(Geomancer.getDeviceLocation()) * FEET_PER_METER;
+        String distStr;
+        if(distInFeet < 1000) {
+            // Use feet measurements
+            distStr = Integer.toString((int)distInFeet) + " ft";
+        } else {
+            // Use mile measurements
+            DecimalFormat df = new DecimalFormat("#.##");
+            distStr = df.format(distInFeet / FEET_PER_MILE) + " mi";
+        }
+        return distStr;
 	}
 
 	/**

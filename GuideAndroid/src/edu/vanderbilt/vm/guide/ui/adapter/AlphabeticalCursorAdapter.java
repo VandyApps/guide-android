@@ -1,15 +1,11 @@
 package edu.vanderbilt.vm.guide.ui.adapter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.db.GuideDBConstants;
-import edu.vanderbilt.vm.guide.util.DBUtils;
-import edu.vanderbilt.vm.guide.util.Geomancer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,6 +19,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import edu.vanderbilt.vm.guide.util.DBUtils;
+import edu.vanderbilt.vm.guide.util.Geomancer;
 
 @SuppressLint("UseSparseArrays")
 public class AlphabeticalCursorAdapter extends BaseAdapter {
@@ -41,6 +41,7 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.AlphabeticalCursorAdapter");
 	private static int categoryOffset = 0;
+	
 	
 	public AlphabeticalCursorAdapter() throws Exception {
 		throw new AssertionError("Do not call this constructor");
@@ -143,11 +144,8 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 			Location tmp = new Location("Temp");
 			tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
 			tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
-			
-			int dist = (int) tmp.distanceTo(Geomancer.getDeviceLocation());
-			
 			((TextView) layout.findViewById(R.id.placelist_item_distance))
-				.setText(Integer.toString(dist) + " m");
+				.setText(Geomancer.getDistanceString(tmp));
 		}
 		
 		/*

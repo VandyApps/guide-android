@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +25,7 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
+import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.GlobalState;
@@ -140,10 +139,9 @@ public class TourDetailer extends Activity {
 				.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
 		if (index != -1) {
 			String placeIds = cursor.getString(index);
-			Agenda agenda = DBUtils.getAgendaFromIds(placeIds,
-					mHelper.getReadableDatabase());
+			Cursor placeCursor = mHelper.getReadableDatabase().query(GuideDBConstants.PlaceTable.PLACE_TABLE_NAME, PlaceCursorAdapter.getExpectedProjection(), "id in (" + placeIds + ")", null, null, null, null);
 			ListView listView = (ListView) findViewById(R.id.tour_detail_place_list);
-			listView.setAdapter(new AgendaAdapter(this, agenda));
+			listView.setAdapter(new PlaceCursorAdapter(this, placeCursor));
 			listView.setOnItemClickListener(new PlaceListClickListener(this));
 		} else {
 			logger.warn("Cursor for tour id {} didn't have the places on the tour");

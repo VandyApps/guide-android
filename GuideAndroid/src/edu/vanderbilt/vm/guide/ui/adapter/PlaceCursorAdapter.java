@@ -60,6 +60,10 @@ public class PlaceCursorAdapter extends BaseAdapter {
 		}
 		
 	}
+	
+	public static String[] getExpectedProjection() {
+	    return new String[] {GuideDBConstants.PlaceTable.ID_COL, GuideDBConstants.PlaceTable.NAME_COL, GuideDBConstants.PlaceTable.CATEGORY_COL, GuideDBConstants.PlaceTable.LATITUDE_COL, GuideDBConstants.PlaceTable.LONGITUDE_COL};
+	}
 
 	@Override
 	public int getCount() {
@@ -91,6 +95,7 @@ public class PlaceCursorAdapter extends BaseAdapter {
 		} else {
 			layout = (LinearLayout) convertView.getTag();
 		}
+		
 		mCursor.moveToPosition(position);
 		((TextView) layout.findViewById(R.id.placelist_item_title))
 			.setText(mCursor.getString(mNameColIx));
@@ -102,10 +107,8 @@ public class PlaceCursorAdapter extends BaseAdapter {
 		tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
 		tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
 		
-		int dist = (int) tmp.distanceTo(Geomancer.getDeviceLocation());
-		
 		((TextView) layout.findViewById(R.id.placelist_item_distance))
-			.setText(Integer.toString(dist) + " m");
+			.setText(Geomancer.getDistanceString(tmp));
 		
 		return layout;
 	}
