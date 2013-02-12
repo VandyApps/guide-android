@@ -1,3 +1,4 @@
+
 package edu.vanderbilt.vm.guide.annotations;
 
 /**
@@ -5,10 +6,9 @@ package edu.vanderbilt.vm.guide.annotations;
  * tested.
  * 
  * @author nick
- *
  */
 public @interface HasBeenTested {
 
-	String testDate();
-	
+    String testDate();
+
 }
