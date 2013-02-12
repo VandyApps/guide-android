@@ -7,7 +7,12 @@ import org.slf4j.LoggerFactory;
 import android.annotation.TargetApi;
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridLayout.LayoutParams;
+import android.widget.TextView;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
@@ -22,6 +27,19 @@ public class AgendaFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setListAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserAgenda()));
+
+        // Add an empty agenda indicator
+        TextView emptyIndicator = new TextView(getActivity());
+        emptyIndicator.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT));
+        emptyIndicator.setGravity(Gravity.CENTER);
+        emptyIndicator.setTextSize(16);
+        emptyIndicator.setText("Your agenda is empty.  Add places"
+                + " to your agenda by pressing the + " + "button at the top right of the screen "
+                + "when viewing a tour or location.");
+        emptyIndicator.setVisibility(View.GONE);
+        ((ViewGroup)getListView().getParent()).addView(emptyIndicator);
+        getListView().setEmptyView(emptyIndicator);
         setHasOptionsMenu(true);
     }
 
