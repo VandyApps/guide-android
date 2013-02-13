@@ -1,3 +1,4 @@
+
 package edu.vanderbilt.vm.guide.container;
 
 import java.util.ArrayList;
@@ -14,186 +15,202 @@ import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
  * data transactions between other Guide container classes.
  * 
  * @author nicholasking
- * 
  */
 @NeedsTesting(lastModifiedDate = "12/22/12")
 public class Place {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory
-			.getLogger("container.Place");
-	private static final int DEFAULT_ID = -1;
+    @SuppressWarnings("unused")
+    private static final Logger logger = LoggerFactory.getLogger("container.Place");
 
-	private double mLatitude;
-	private double mLongitude;
-	private String mImageLoc;
-	private String mAudioLoc;
-	private String mVideoLoc;
-	private String mName;
-	private String mDescription;
-	private String mHours;
-	private List<String> mCategories;
-	private int mUniqueId;
+    private static final int DEFAULT_ID = -1;
 
-	/* package */Place() {
-	}
+    private double mLatitude;
 
-	private Place(Place.Builder builder) {
-		if (builder.mUniqueId == DEFAULT_ID) {
-			throw new IllegalArgumentException(
-					"Unique ID must not be default value (" + DEFAULT_ID + ")");
-		}
-		mLatitude = builder.mLatitude;
-		mLongitude = builder.mLongitude;
-		mImageLoc = builder.mImageLoc;
-		mAudioLoc = builder.mAudioLoc;
-		mVideoLoc = builder.mVideoLoc;
-		mName = builder.mName;
-		mDescription = builder.mDescription;
-		mHours = builder.mHours;
-		mUniqueId = builder.mUniqueId;
-		mCategories = builder.mCategories;
-	}
+    private double mLongitude;
 
-	/**
-	 * A class for creating Place objects. You must use this class in order to
-	 * create a place. Chain setter method calls where appropriate. Call build()
-	 * when you have finished setting all of the fields. Any unset fields will
-	 * be given a default value.
-	 * <p/>
-	 * <b>Note:</b> You must set a uniqueId for every place. Failing to do so
-	 * will result in an exception.
-	 * 
-	 * @author nicholasking
-	 * 
-	 */
-	public static class Builder {
-		private double mLatitude = 0;
-		private double mLongitude = 0;
-		private String mImageLoc;
-		private String mAudioLoc;
-		private String mVideoLoc;
-		private String mName;
-		private String mDescription;
-		private String mHours;
-		private List<String> mCategories = new ArrayList<String>();
-		private int mUniqueId = DEFAULT_ID;
+    private String mImageLoc;
 
-		public Builder() {
-		}
+    private String mAudioLoc;
 
-		public Builder setLatitude(double lat) {
-			mLatitude = lat;
-			return this;
-		}
+    private String mVideoLoc;
 
-		public Builder setLongitude(double lon) {
-			mLongitude = lon;
-			return this;
-		}
+    private String mName;
 
-		public Builder setImageLoc(String imageLoc) {
-			mImageLoc = imageLoc;
-			return this;
-		}
+    private String mDescription;
 
-		public Builder setAudioLoc(String audioLoc) {
-			mAudioLoc = audioLoc;
-			return this;
-		}
+    private String mHours;
 
-		public Builder setVideoLoc(String videoLoc) {
-			mVideoLoc = videoLoc;
-			return this;
-		}
+    private List<String> mCategories;
 
-		public Builder setName(String name) {
-			mName = name;
-			return this;
-		}
+    private int mUniqueId;
 
-		public Builder setDescription(String desc) {
-			mDescription = desc;
-			return this;
-		}
+    /* package */Place() {
+    }
 
-		public Builder addCategory(String category) {
-			mCategories.add(category);
-			return this;
-		}
+    private Place(Place.Builder builder) {
+        if (builder.mUniqueId == DEFAULT_ID) {
+            throw new IllegalArgumentException("Unique ID must not be default value (" + DEFAULT_ID
+                    + ")");
+        }
+        mLatitude = builder.mLatitude;
+        mLongitude = builder.mLongitude;
+        mImageLoc = builder.mImageLoc;
+        mAudioLoc = builder.mAudioLoc;
+        mVideoLoc = builder.mVideoLoc;
+        mName = builder.mName;
+        mDescription = builder.mDescription;
+        mHours = builder.mHours;
+        mUniqueId = builder.mUniqueId;
+        mCategories = builder.mCategories;
+    }
 
-		public Builder setHours(String hours) {
-			mHours = hours;
-			return this;
-		}
+    /**
+     * A class for creating Place objects. You must use this class in order to
+     * create a place. Chain setter method calls where appropriate. Call build()
+     * when you have finished setting all of the fields. Any unset fields will
+     * be given a default value.
+     * <p/>
+     * <b>Note:</b> You must set a uniqueId for every place. Failing to do so
+     * will result in an exception.
+     * 
+     * @author nicholasking
+     */
+    public static class Builder {
+        private double mLatitude = 0;
 
-		public Builder setUniqueId(int uniqueId) {
-			mUniqueId = uniqueId;
-			return this;
-		}
+        private double mLongitude = 0;
 
-		public Place build() {
-			return new Place(this);
-		}
+        private String mImageLoc;
 
-	}
+        private String mAudioLoc;
 
-	public double getLatitude() {
-		return mLatitude;
-	}
+        private String mVideoLoc;
 
-	public double getLongitude() {
-		return mLongitude;
-	}
+        private String mName;
 
-	public String getPictureLoc() {
-		return mImageLoc;
-	}
+        private String mDescription;
 
-	public String getAudioLoc() {
-		return mAudioLoc;
-	}
+        private String mHours;
 
-	public String getVideoLoc() {
-		return mVideoLoc;
-	}
+        private List<String> mCategories = new ArrayList<String>();
 
-	public String getName() {
-		return mName;
-	}
+        private int mUniqueId = DEFAULT_ID;
 
-	public String getDescription() {
-		return mDescription;
-	}
+        public Builder() {
+        }
 
-	public String getHours() {
-		return mHours;
-	}
+        public Builder setLatitude(double lat) {
+            mLatitude = lat;
+            return this;
+        }
 
-	public List<String> getCategories() {
-		List<String> copy = new ArrayList<String>(mCategories);
-		return copy;
-	}
+        public Builder setLongitude(double lon) {
+            mLongitude = lon;
+            return this;
+        }
 
-	public int getUniqueId() {
-		return mUniqueId;
-	}
+        public Builder setImageLoc(String imageLoc) {
+            mImageLoc = imageLoc;
+            return this;
+        }
 
-	public int hashCode() {
-		// We just return the unique ID for efficiency,
-		// hoping that the client has actually made the ID unique
-		return mUniqueId;
-	}
+        public Builder setAudioLoc(String audioLoc) {
+            mAudioLoc = audioLoc;
+            return this;
+        }
 
-	@Override
-	public boolean equals(Object other) {
-		if (!(other instanceof Place)) {
-			return false;
-		}
-		Place otherPlace = (Place) other;
-		// We shouldn't have to compare anything other than the
-		// unique ID.
-		return this.mUniqueId == otherPlace.mUniqueId;
-	}
+        public Builder setVideoLoc(String videoLoc) {
+            mVideoLoc = videoLoc;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            mName = name;
+            return this;
+        }
+
+        public Builder setDescription(String desc) {
+            mDescription = desc;
+            return this;
+        }
+
+        public Builder addCategory(String category) {
+            mCategories.add(category);
+            return this;
+        }
+
+        public Builder setHours(String hours) {
+            mHours = hours;
+            return this;
+        }
+
+        public Builder setUniqueId(int uniqueId) {
+            mUniqueId = uniqueId;
+            return this;
+        }
+
+        public Place build() {
+            return new Place(this);
+        }
+
+    }
+
+    public double getLatitude() {
+        return mLatitude;
+    }
+
+    public double getLongitude() {
+        return mLongitude;
+    }
+
+    public String getPictureLoc() {
+        return mImageLoc;
+    }
+
+    public String getAudioLoc() {
+        return mAudioLoc;
+    }
+
+    public String getVideoLoc() {
+        return mVideoLoc;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public String getHours() {
+        return mHours;
+    }
+
+    public List<String> getCategories() {
+        List<String> copy = new ArrayList<String>(mCategories);
+        return copy;
+    }
+
+    public int getUniqueId() {
+        return mUniqueId;
+    }
+
+    public int hashCode() {
+        // We just return the unique ID for efficiency,
+        // hoping that the client has actually made the ID unique
+        return mUniqueId;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Place)) {
+            return false;
+        }
+        Place otherPlace = (Place)other;
+        // We shouldn't have to compare anything other than the
+        // unique ID.
+        return this.mUniqueId == otherPlace.mUniqueId;
+    }
 
 }

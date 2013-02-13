@@ -1,3 +1,4 @@
+
 package edu.vanderbilt.vm.guide.annotations;
 
 /**
@@ -7,12 +8,11 @@ package edu.vanderbilt.vm.guide.annotations;
  * means that only that particular method needs testing.
  * 
  * @author nick
- * 
  */
 public @interface NeedsTesting {
 
-	String lastTestDate() default "none";
+    String lastTestDate() default "none";
 
-	String lastModifiedDate();
+    String lastModifiedDate();
 
 }

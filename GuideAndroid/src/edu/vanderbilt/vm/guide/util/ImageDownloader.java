@@ -29,12 +29,11 @@ public class ImageDownloader {
 
     /**
      * Download an image at the given url and show it in the imageView
-     * asynchronously.  This method spawns an AsyncTask.  Only call this
-     * method if you don't need to potentially cancel the AsyncTask.
-     * Note that not cancelling the AsyncTask could be very bad since
-     * AsyncTask has a static thread pool of only 10 threads, so if the
-     * threads aren't terminated in a timely fashion, no more AsyncTasks
-     * can be executed.
+     * asynchronously. This method spawns an AsyncTask. Only call this method if
+     * you don't need to potentially cancel the AsyncTask. Note that not
+     * cancelling the AsyncTask could be very bad since AsyncTask has a static
+     * thread pool of only 10 threads, so if the threads aren't terminated in a
+     * timely fashion, no more AsyncTasks can be executed.
      * 
      * @param url The url to download the image from
      * @param imageView The ImageView to update

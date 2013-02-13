@@ -79,23 +79,5 @@
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
- },
- {
- 	"id" : 10,
- 	"name" : "Test Tour 10",
- 	"timeRequired" : "1 hour",
- 	"placesOnTour" : [6, 1, 7],
- 	"description" : "Description for this tour",
- 	"distance" : "0.7 miles",
- 	"iconPath" : "tour_placeholder"
- },
- {
- 	"id" : 11,
- 	"name" : "Test Tour 11",
- 	"timeRequired" : "1 hour",
- 	"placesOnTour" : [6, 1, 7],
- 	"description" : "Description for this tour",
- 	"distance" : "0.7 miles",
- 	"iconPath" : "tour_placeholder"
  }
 ]

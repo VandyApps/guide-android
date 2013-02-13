@@ -1,3 +1,4 @@
+
 package edu.vanderbilt.vm.guide.ui;
 
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +26,7 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
+import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.GlobalState;
@@ -34,168 +34,161 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 public class TourDetailer extends Activity {
 
-	public static final String TOUR_ID_EXTRA = "tourId";
-	private static final long NO_ID = -1;
-	private static final Logger logger = LoggerFactory
-			.getLogger("ui.TourDetailer");
+    public static final String TOUR_ID_EXTRA = "tourId";
 
-	private ActionBar mAction;
-	private Cursor mCursor;
-	private GuideDBOpenHelper mHelper;
+    private static final long NO_ID = -1;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_tour_detail);
+    private static final Logger logger = LoggerFactory.getLogger("ui.TourDetailer");
 
-		// Set up ActionBar
-		mAction = getActionBar();
-		mAction.setTitle("Tour Details");
-		mAction.setDisplayHomeAsUpEnabled(true);
-		mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
+    private ActionBar mAction;
 
-		mHelper = new GuideDBOpenHelper(this);
-		long tourId = getIntent().getExtras().getLong(TOUR_ID_EXTRA, NO_ID);
+    private Cursor mCursor;
 
-		if (tourId == NO_ID) {
-			logger.error("Got an intent with no tour ID");
-			return;
-		}
+    private GuideDBOpenHelper mHelper;
 
-		mCursor = mHelper.getReadableDatabase().query(
-				GuideDBConstants.TourTable.TOUR_TABLE_NAME, null,
-				GuideDBConstants.TourTable.ID_COL + " = " + tourId, null, null,
-				null, null);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tour_detail);
 
-		if (!mCursor.moveToFirst()) {
-			logger.error(
-					"Got an empty cursor for selection of tour with id {}",
-					tourId);
-			return;
-		}
+        // Set up ActionBar
+        mAction = getActionBar();
+        mAction.setTitle("Tour Details");
+        mAction.setDisplayHomeAsUpEnabled(true);
+        mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
 
-		fillViews(mCursor);
+        mHelper = new GuideDBOpenHelper(this);
+        long tourId = getIntent().getExtras().getLong(TOUR_ID_EXTRA, NO_ID);
 
-		int placesIx = mCursor
-				.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
-		Agenda tourAgenda = DBUtils.getAgendaFromIds(
-				mCursor.getString(placesIx), mHelper.getReadableDatabase());
-		
-		MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
-		//LinearLayout mapContainer = (LinearLayout) findViewById(R.id.tour_detail_map_container);
-		FragmentManager fm = getFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.add(R.id.tour_detail_map_container, mapFrag, "tour_map_Fragment");
-		ft.commit();
+        if (tourId == NO_ID) {
+            logger.error("Got an intent with no tour ID");
+            return;
+        }
 
-	}
+        mCursor = mHelper.getReadableDatabase().query(GuideDBConstants.TourTable.TOUR_TABLE_NAME,
+                null, GuideDBConstants.TourTable.ID_COL + " = " + tourId, null, null, null, null);
 
-	/**
-	 * Fill in all of the text for the TextViews in the layout and set up the
-	 * ListView
-	 * 
-	 * @param cursor
-	 *            The cursor to get the text from
-	 */
-	private void fillViews(Cursor cursor) {
-		int index = cursor.getColumnIndex(GuideDBConstants.TourTable.NAME_COL);
-		if (index != -1) {
-			String tourName = cursor.getString(index);
-			TextView tourNameView = (TextView) findViewById(R.id.tour_detail_tour_name_tv);
-			tourNameView.setText(tourName);
-		} else {
-			logger.warn("Cursor for tour id {} didn't have a tour name");
-		}
+        if (!mCursor.moveToFirst()) {
+            logger.error("Got an empty cursor for selection of tour with id {}", tourId);
+            return;
+        }
 
-		index = cursor
-				.getColumnIndex(GuideDBConstants.TourTable.DESCRIPTION_COL);
-		if (index != -1) {
-			String tourDesc = cursor.getString(index);
-			TextView tourDescView = (TextView) findViewById(R.id.main_description);
-			tourDescView.append(tourDesc);
-		} else {
-			logger.warn("Cursor for tour id {} didn't have a tour description");
-		}
+        fillViews(mCursor);
 
-		index = cursor
-				.getColumnIndex(GuideDBConstants.TourTable.TIME_REQUIRED_COL);
-		if (index != -1) {
-			String tourTime = cursor.getString(index);
-			TextView tourTimeView = (TextView) findViewById(R.id.other_descriptions1);
-			tourTimeView.setText(tourTime);
-		} else {
-			logger.warn("Cursor for tour id {} didn't have a tour time required");
-		}
+        int placesIx = mCursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
+        Agenda tourAgenda = DBUtils.getAgendaFromIds(mCursor.getString(placesIx),
+                mHelper.getReadableDatabase());
 
-		index = cursor.getColumnIndex(GuideDBConstants.TourTable.DISTANCE_COL);
-		if (index != -1) {
-			String tourDist = cursor.getString(index);
-			TextView tourDistView = (TextView) findViewById(R.id.other_descriptions2);
-			tourDistView.setText(tourDist);
-		} else {
-			logger.warn("Cursor for tour id {} didn't have a tour distance");
-		}
+        MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
+        // LinearLayout mapContainer = (LinearLayout)
+        // findViewById(R.id.tour_detail_map_container);
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.tour_detail_map_container, mapFrag, "tour_map_Fragment");
+        ft.commit();
 
-		index = cursor
-				.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
-		if (index != -1) {
-			String placeIds = cursor.getString(index);
-			Agenda agenda = DBUtils.getAgendaFromIds(placeIds,
-					mHelper.getReadableDatabase());
-			ListView listView = (ListView) findViewById(R.id.tour_detail_place_list);
-			listView.setAdapter(new AgendaAdapter(this, agenda));
-			listView.setOnItemClickListener(new PlaceListClickListener(this));
-		} else {
-			logger.warn("Cursor for tour id {} didn't have the places on the tour");
-		}
-	}
+    }
 
-	/**
-	 * Use this method to open the Details page
-	 * 
-	 * @param ctx
-	 *            The starting Activity
-	 * @param tourId
-	 *            The Id of the tour that you want to detail
-	 */
-	public static void open(Context ctx, long tourId) {
-		Intent i = new Intent(ctx, TourDetailer.class);
-		i.putExtra(TOUR_ID_EXTRA, tourId);
-		ctx.startActivity(i);
-	}
+    /**
+     * Fill in all of the text for the TextViews in the layout and set up the
+     * ListView
+     * 
+     * @param cursor The cursor to get the text from
+     */
+    private void fillViews(Cursor cursor) {
+        int index = cursor.getColumnIndex(GuideDBConstants.TourTable.NAME_COL);
+        if (index != -1) {
+            String tourName = cursor.getString(index);
+            TextView tourNameView = (TextView)findViewById(R.id.tour_detail_tour_name_tv);
+            tourNameView.setText(tourName);
+        } else {
+            logger.warn("Cursor for tour id {} didn't have a tour name");
+        }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.tour_detail_activity, menu);
-		return true;
-	}
+        index = cursor.getColumnIndex(GuideDBConstants.TourTable.DESCRIPTION_COL);
+        if (index != -1) {
+            String tourDesc = cursor.getString(index);
+            TextView tourDescView = (TextView)findViewById(R.id.main_description);
+            tourDescView.setText(tourDesc);
+        } else {
+            logger.warn("Cursor for tour id {} didn't have a tour description");
+        }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_add_tour_to_agenda:
-			int index = mCursor
-					.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
-			if (index == -1) {
-				logger.error("Cursor does not have a places on tour column");
-			} else {
-				String placeIds = mCursor.getString(index);
-				SQLiteDatabase db = mHelper.getReadableDatabase();
-				Agenda tourAgenda = DBUtils.getAgendaFromIds(placeIds, db);
-				GlobalState.getUserAgenda().coalesce(tourAgenda);
-				Toast.makeText(this,
-						"Added all of the places on this tour to your agenda",
-						Toast.LENGTH_LONG).show();
-			}
-			return true;
-		case android.R.id.home:
-			GuideMain.open(this);
-			return true;
-		default:
-			logger.warn("Clicked menu item does not match any known ids");
-			return false;
-		}
-	}
+        index = cursor.getColumnIndex(GuideDBConstants.TourTable.TIME_REQUIRED_COL);
+        if (index != -1) {
+            String tourTime = cursor.getString(index);
+            TextView tourTimeView = (TextView)findViewById(R.id.other_descriptions1);
+            tourTimeView.setText(tourTime);
+        } else {
+            logger.warn("Cursor for tour id {} didn't have a tour time required");
+        }
+
+        index = cursor.getColumnIndex(GuideDBConstants.TourTable.DISTANCE_COL);
+        if (index != -1) {
+            String tourDist = cursor.getString(index);
+            TextView tourDistView = (TextView)findViewById(R.id.other_descriptions2);
+            tourDistView.setText(tourDist);
+        } else {
+            logger.warn("Cursor for tour id {} didn't have a tour distance");
+        }
+
+        index = cursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
+        if (index != -1) {
+            String placeIds = cursor.getString(index);
+            Cursor placeCursor = mHelper.getReadableDatabase().query(
+                    GuideDBConstants.PlaceTable.PLACE_TABLE_NAME,
+                    PlaceCursorAdapter.getExpectedProjection(), "id in (" + placeIds + ")", null,
+                    null, null, null);
+            ListView listView = (ListView)findViewById(R.id.tour_detail_place_list);
+            listView.setAdapter(new PlaceCursorAdapter(this, placeCursor));
+            listView.setOnItemClickListener(new PlaceListClickListener(this));
+        } else {
+            logger.warn("Cursor for tour id {} didn't have the places on the tour");
+        }
+    }
+
+    /**
+     * Use this method to open the Details page
+     * 
+     * @param ctx The starting Activity
+     * @param tourId The Id of the tour that you want to detail
+     */
+    public static void open(Context ctx, long tourId) {
+        Intent i = new Intent(ctx, TourDetailer.class);
+        i.putExtra(TOUR_ID_EXTRA, tourId);
+        ctx.startActivity(i);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.tour_detail_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add_tour_to_agenda:
+                int index = mCursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
+                if (index == -1) {
+                    logger.error("Cursor does not have a places on tour column");
+                } else {
+                    String placeIds = mCursor.getString(index);
+                    SQLiteDatabase db = mHelper.getReadableDatabase();
+                    Agenda tourAgenda = DBUtils.getAgendaFromIds(placeIds, db);
+                    GlobalState.getUserAgenda().coalesce(tourAgenda);
+                    Toast.makeText(this, "Added all of the places on this tour to your agenda",
+                            Toast.LENGTH_LONG).show();
+                }
+                return true;
+            case android.R.id.home:
+                GuideMain.open(this);
+                return true;
+            default:
+                logger.warn("Clicked menu item does not match any known ids");
+                return false;
+        }
+    }
 
 }

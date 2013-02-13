@@ -1,3 +1,4 @@
+
 package edu.vanderbilt.vm.guide.ui;
 
 import org.slf4j.Logger;
@@ -23,100 +24,94 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 public class PlaceMapFrag extends MapFragment {
 
-	private Place mPlace;
-	private static final Logger logger = LoggerFactory
-			.getLogger("ui.PlaceTabFragment");
-	private Menu mMenu;
+    private Place mPlace;
 
-	/**
-	 * Instantiate a Map Fragment and sets the map focus to a place
-	 * 
-	 * @param ctx
-	 * @param plc
-	 * @return
-	 */
-	public static PlaceMapFrag newInstance(Context ctx, Place plc) {
-		
-		PlaceMapFrag frag = (PlaceMapFrag) Fragment.instantiate(ctx,
-				"edu.vanderbilt.vm.guide.ui.PlaceMapFrag");
-		frag.mPlace = plc;
-		frag.setHasOptionsMenu(true);
-		return frag;
-	}
+    private static final Logger logger = LoggerFactory.getLogger("ui.PlaceTabFragment");
 
-	@Override
-	public void onResume() {
-		super.onResume();
+    private Menu mMenu;
 
-		GoogleMap map = this.getMap();
-		MapViewer.resetCamera(map);
+    /**
+     * Instantiate a Map Fragment and sets the map focus to a place
+     * 
+     * @param ctx
+     * @param plc
+     * @return
+     */
+    public static PlaceMapFrag newInstance(Context ctx, Place plc) {
 
-		if (mPlace == null) {
-			// Show default Place (Vanderbilt Uni: UniqueId 10)
-			logger.error("No Place is specified. Showing default instead.");
-			mPlace = MapViewer.getPlaceById(getActivity(),
-					GuideConstants.DEFAULT_ID);
-		}
+        PlaceMapFrag frag = (PlaceMapFrag)Fragment.instantiate(ctx,
+                "edu.vanderbilt.vm.guide.ui.PlaceMapFrag");
+        frag.mPlace = plc;
+        frag.setHasOptionsMenu(true);
+        return frag;
+    }
 
-		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(
-				mPlace.getLatitude(), mPlace.getLongitude()),
-				MapViewer.BUILDING_ZOOM);
-		map.animateCamera(update);
+    @Override
+    public void onResume() {
+        super.onResume();
 
-		map.addMarker(new MarkerOptions().draggable(false)
-				.position(MapViewer.toLatLng(mPlace))
-				.title(mPlace.getName()).snippet(mPlace.getCategories().get(0)));
-		/*
-		if (GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
-			// Option to remove
-			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
-			mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
-		} else {
-			// Option to add
-			MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
-			item.setVisible(true);
-			item = mMenu.findItem(R.id.map_menu_remove_agenda);
-			item.setVisible(false);
-		}
-		*/
-	}
+        GoogleMap map = this.getMap();
+        MapViewer.resetCamera(map);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		switch (item.getItemId()) {
-		case R.id.map_menu_add_agenda:
-			MapViewer.addToAgenda(getActivity(), mPlace.getUniqueId());
-			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
-			mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
-			return true;
-		case R.id.map_menu_remove_agenda:
-			MapViewer.removeFromAgenda(getActivity(), mPlace.getUniqueId());
-			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(true);
-			mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
-			return true;
-		default:
-			return false;
-		}
-	}
+        if (mPlace == null) {
+            // Show default Place (Vanderbilt Uni: UniqueId 10)
+            logger.error("No Place is specified. Showing default instead.");
+            mPlace = MapViewer.getPlaceById(getActivity(), GuideConstants.DEFAULT_ID);
+        }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		mMenu = menu;
-		
-		if (GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
-			// Option to remove
-			mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
-			mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
-		} else {
-			// Option to add
-			MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
-			item.setVisible(true);
-			item = mMenu.findItem(R.id.map_menu_remove_agenda);
-			item.setVisible(false);
-		}
-		
-	}
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(mPlace.getLatitude(),
+                mPlace.getLongitude()), MapViewer.BUILDING_ZOOM);
+        map.animateCamera(update);
+
+        map.addMarker(new MarkerOptions().draggable(false).position(MapViewer.toLatLng(mPlace))
+                .title(mPlace.getName()).snippet(mPlace.getCategories().get(0)));
+        /*
+         * if (GlobalState.getUserAgenda().isOnAgenda(mPlace)) { // Option to
+         * remove mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
+         * mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true); } else
+         * { // Option to add MenuItem item =
+         * mMenu.findItem(R.id.map_menu_add_agenda); item.setVisible(true); item
+         * = mMenu.findItem(R.id.map_menu_remove_agenda);
+         * item.setVisible(false); }
+         */
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.map_menu_add_agenda:
+                MapViewer.addToAgenda(getActivity(), mPlace.getUniqueId());
+                mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
+                mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
+                return true;
+            case R.id.map_menu_remove_agenda:
+                MapViewer.removeFromAgenda(getActivity(), mPlace.getUniqueId());
+                mMenu.findItem(R.id.map_menu_add_agenda).setVisible(true);
+                mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mMenu = menu;
+
+        if (GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
+            // Option to remove
+            mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
+            mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
+        } else {
+            // Option to add
+            MenuItem item = mMenu.findItem(R.id.map_menu_add_agenda);
+            item.setVisible(true);
+            item = mMenu.findItem(R.id.map_menu_remove_agenda);
+            item.setVisible(false);
+        }
+
+    }
 
 }

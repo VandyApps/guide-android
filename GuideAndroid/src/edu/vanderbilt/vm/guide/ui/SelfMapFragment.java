@@ -1,3 +1,4 @@
+
 package edu.vanderbilt.vm.guide.ui;
 
 import android.content.Context;
@@ -14,37 +15,37 @@ import edu.vanderbilt.vm.guide.util.Geomancer;
 
 public class SelfMapFragment extends MapFragment {
 
-	/**
-	 * Instantiate a Map Fragment and focuses on the current location
-	 * 
-	 * @param ctx
-	 * @return
-	 */
-	public static SelfMapFragment newInstance(Context ctx) {
-		SelfMapFragment frag = (SelfMapFragment) Fragment.instantiate(ctx,
-				"edu.vanderbilt.vm.guide.ui.SelfMapFragment");
-		return frag;
-	}
+    /**
+     * Instantiate a Map Fragment and focuses on the current location
+     * 
+     * @param ctx
+     * @return
+     */
+    public static SelfMapFragment newInstance(Context ctx) {
+        SelfMapFragment frag = (SelfMapFragment)Fragment.instantiate(ctx,
+                "edu.vanderbilt.vm.guide.ui.SelfMapFragment");
+        return frag;
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
+    @Override
+    public void onResume() {
+        super.onResume();
 
-		GoogleMap map = this.getMap();
+        GoogleMap map = this.getMap();
 
-		map.setMyLocationEnabled(true);
-		Location loc = map.getMyLocation();
+        map.setMyLocationEnabled(true);
+        Location loc = map.getMyLocation();
 
-		Geomancer.setDeviceLocation(loc);
-		CameraUpdate u = CameraUpdateFactory.newLatLng(new LatLng(loc
-				.getLatitude(), loc.getLongitude()));
+        Geomancer.setDeviceLocation(loc);
+        CameraUpdate u = CameraUpdateFactory.newLatLng(new LatLng(loc.getLatitude(), loc
+                .getLongitude()));
 
-		map.animateCamera(u);
-	}
+        map.animateCamera(u);
+    }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		this.getMap().setMyLocationEnabled(false);
-	}
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.getMap().setMyLocationEnabled(false);
+    }
 }

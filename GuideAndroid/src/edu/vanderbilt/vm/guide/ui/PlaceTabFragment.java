@@ -17,7 +17,6 @@ import android.app.Fragment;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -60,7 +59,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener, Geoma
     private Place mCurrPlace;
 
     private ImageView ivCurrent;
-    
+
     private ImageDownloader.BitmapDownloaderTask mDlTask = null;
 
     private Timer mSearchFaerie;
@@ -108,11 +107,11 @@ public class PlaceTabFragment extends Fragment implements OnClickListener, Geoma
         setHasOptionsMenu(true);
 
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mDlTask != null) {
+        if (mDlTask != null) {
             logger.trace("Cancelling image download task");
             mDlTask.cancel(true);
         }
@@ -149,8 +148,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener, Geoma
     // want to access class variables
     @Override
     public void onClick(View v) {
-		if (v == mCurrPlaceDesc || v == mCurrPlaceName || 
-		                            v == mCurrentPlaceBar) {
+        if (v == mCurrPlaceDesc || v == mCurrPlaceName || v == mCurrentPlaceBar) {
             PlaceDetailer.open(getActivity(), mCurrPlace.getUniqueId());
         } else if (v == mSearchBox) {
             // mSearchBox.setFocusable(true);
@@ -190,21 +188,20 @@ public class PlaceTabFragment extends Fragment implements OnClickListener, Geoma
                 return true;
 
             case R.id.menu_sort_alphabetic:
-			
-			mListView.setAdapter(new AlphabeticalCursorAdapter(getActivity(), 
-			        mAllPlacesCursor));
-			
+
+                mListView
+                        .setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
+
                 return true;
 
             case R.id.menu_sort_distance:
-			
-			mListView.setAdapter(new PlaceCursorAdapter(getActivity(), 
-			        mAllPlacesCursor));
-			
+
+                mListView.setAdapter(new PlaceCursorAdapter(getActivity(), mAllPlacesCursor));
+
                 Toast.makeText(getActivity(), "PlacesList is sorted by distance",
                         Toast.LENGTH_SHORT).show();
                 return true;
-			
+
             default:
                 return false;
         }
