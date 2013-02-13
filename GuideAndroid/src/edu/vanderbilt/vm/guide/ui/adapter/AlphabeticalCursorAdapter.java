@@ -153,26 +153,6 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
                     .getDistanceString(tmp));
         }
 
-        /*
-         * if (convertView == null) { if (isHeader) { layout = (LinearLayout)
-         * LayoutInflater.from(mCtx).inflate( R.layout.place_list_header,null);
-         * } else { layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(
-         * R.layout.place_list_item, null); } layout.setTag(layout); } else {
-         * layout = (LinearLayout) convertView.getTag(); } if (isHeader) {
-         * HeaderRecord record = mRecord.get(-x - 1); ((TextView)
-         * layout.findViewById(R.id.header_title)).setText( record.mTitle); }
-         * else { mCursor.moveToPosition(x); ((TextView)
-         * layout.findViewById(R.id.placelist_item_title)) .setText(
-         * mCursor.getString(mNameColIx)); ((ImageView)
-         * layout.findViewById(R.id.placelist_item_thunbnail))
-         * .setImageResource(R.drawable.home); Location tmp = new
-         * Location("Temp");
-         * tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
-         * tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
-         * int dist = (int) tmp.distanceTo(Geomancer.getDeviceLocation());
-         * ((TextView) layout.findViewById(R.id.placelist_item_distance))
-         * .setText(Integer.toString(dist) + " m"); }
-         */
         return layout;
     }
 

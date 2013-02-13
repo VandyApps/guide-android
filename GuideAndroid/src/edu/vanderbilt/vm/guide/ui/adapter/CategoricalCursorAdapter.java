@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
-public class DistanceCursorAdapter extends BaseAdapter {
+public class CategoricalCursorAdapter extends BaseAdapter {
 	
 	private final Cursor mCursor;
 	private final Context mCtx;
@@ -42,11 +42,11 @@ public class DistanceCursorAdapter extends BaseAdapter {
 			.getLogger("ui.PlaceTabFragment");
 	private static int categoryOffset = 0;
 	
-	public DistanceCursorAdapter() throws Exception {
+	public CategoricalCursorAdapter() throws Exception {
 		throw new Exception("Do not call this constructor");
 	}
 	
-	public DistanceCursorAdapter(Context ctx, Cursor cursor) {
+	public CategoricalCursorAdapter(Context ctx, Cursor cursor) {
 		mCtx = ctx;
 		mCursor = cursor;
 		

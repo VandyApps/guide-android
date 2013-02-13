@@ -71,10 +71,7 @@ public class PlaceDetailerFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        tvPlaceName = (TextView)mView.findViewById(R.id.detailee_name);
-        tvPlaceHours = (TextView)mView.findViewById(R.id.other_descriptions);
-        tvPlaceDesc = (TextView)mView.findViewById(R.id.main_description);
-        ivPlaceImage = (ImageView)mView.findViewById(R.id.PlaceImage);
+        setupUI();
 
         setHasOptionsMenu(true);
 
@@ -178,6 +175,7 @@ public class PlaceDetailerFragment extends Fragment {
      * Update the information showed in the various Views based on mPlace
      */
     private void updateInformation() {
+        setupUI();
         tvPlaceName.setText(mPlace.getName());
         tvPlaceHours.setText(mPlace.getHours());
         tvPlaceDesc.setText(mPlace.getDescription());
@@ -203,5 +201,23 @@ public class PlaceDetailerFragment extends Fragment {
         db.close();
         return place;
     }
-
+    
+    private void setupUI() {
+        
+        if (tvPlaceName == null) {
+            tvPlaceName = (TextView)mView.findViewById(R.id.detailee_name);
+        }
+        if (tvPlaceHours == null) {
+        tvPlaceHours = (TextView)mView.findViewById(R.id.other_descriptions);
+        }
+        if (tvPlaceDesc == null) {
+        tvPlaceDesc = (TextView)mView.findViewById(R.id.main_description);
+        }
+        if (ivPlaceImage == null) {
+        ivPlaceImage = (ImageView)mView.findViewById(R.id.PlaceImage);
+        }
+        
+        
+    }
+    
 }

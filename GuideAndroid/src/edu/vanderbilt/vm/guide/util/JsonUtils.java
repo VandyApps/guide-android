@@ -1,4 +1,3 @@
-
 package edu.vanderbilt.vm.guide.util;
 
 import java.io.IOException;

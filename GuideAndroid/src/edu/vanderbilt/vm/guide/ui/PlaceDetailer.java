@@ -12,7 +12,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
@@ -32,7 +31,6 @@ public class PlaceDetailer extends Activity {
 
     private static final String PLACE_ID_EXTRA = "placeId";
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +39,6 @@ public class PlaceDetailer extends Activity {
         // Adding the fragment to layout
         Fragment frag = PlaceDetailerFragment.newInstance(this,
                 getIntent().getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
-
-        ((LinearLayout)findViewById(R.id.sp_pane1))
-                .setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.sp_pane1, frag, "detailer_fragment");
@@ -54,9 +49,7 @@ public class PlaceDetailer extends Activity {
         mAction.setTitle("Place Details");
         mAction.setDisplayHomeAsUpEnabled(true);
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
-
     }
-
     // ---------- END onCreate() ---------- //
 
     /**
