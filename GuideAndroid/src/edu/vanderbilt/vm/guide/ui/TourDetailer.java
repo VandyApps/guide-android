@@ -80,8 +80,7 @@ public class TourDetailer extends Activity {
                 mHelper.getReadableDatabase());
 
         MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
-        // LinearLayout mapContainer = (LinearLayout)
-        // findViewById(R.id.tour_detail_map_container);
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.tour_detail_map_container, mapFrag, "tour_map_Fragment");
@@ -190,5 +189,14 @@ public class TourDetailer extends Activity {
                 return false;
         }
     }
-
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.remove(getFragmentManager().findFragmentByTag("tour_map_Fragment"));
+        ft.commit();
+    }
+    
+    
 }

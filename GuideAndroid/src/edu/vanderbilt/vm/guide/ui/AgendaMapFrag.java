@@ -23,9 +23,12 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
+import edu.vanderbilt.vm.guide.container.Graph;
+import edu.vanderbilt.vm.guide.container.Node;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
@@ -142,6 +145,8 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         map.setMyLocationEnabled(showSelf);
 
         map.setOnMapLongClickListener(this);
+        
+        this.drawPath(Graph.createGraph(mAgenda));
     }
 
     @Override
@@ -183,8 +188,14 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         this.getMap().setMyLocationEnabled(false);
     }
 
-    public void drawPath() {
-
+    public void drawPath(Graph g) {
+        PolylineOptions option = new PolylineOptions();
+        
+        for (Node n : g) {
+            option.add(new LatLng(n.getLat(), n.getLng()));
+        }
+        
+        this.getMap().addPolyline(option);
     }
 
     public void redrawMarker() {

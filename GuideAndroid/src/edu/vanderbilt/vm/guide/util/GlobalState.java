@@ -21,6 +21,7 @@ public class GlobalState {
 
     private static Agenda userAgendaSingleton = new Agenda();
 
+    @SuppressWarnings("unused")
     private static Logger logger = LoggerFactory.getLogger("util.GlobalState");
 
     private GlobalState() {

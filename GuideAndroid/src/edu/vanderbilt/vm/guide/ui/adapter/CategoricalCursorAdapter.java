@@ -10,6 +10,7 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
+import edu.vanderbilt.vm.guide.util.GuideConstants.PlaceCategories;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -36,7 +37,8 @@ public class CategoricalCursorAdapter extends BaseAdapter {
 	private int mLngColIx;
 	private HashMap<Integer,Integer> mEnigma;
 	private int CATEGORIES;
-	private ArrayList<HeaderRecord> mRecord = new ArrayList<HeaderRecord>();
+	private ArrayList<HeaderRecord> mRecord;
+	
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger("ui.PlaceTabFragment");
@@ -72,6 +74,11 @@ public class CategoricalCursorAdapter extends BaseAdapter {
 		}
 		
 		mEnigma = new HashMap<Integer,Integer>();
+		
+		initializeRecord();
+		
+		scanningDatabase();
+		
 		buildMap();
 	}
 
@@ -114,10 +121,9 @@ public class CategoricalCursorAdapter extends BaseAdapter {
 		
 		int x = 0;
 		x = mEnigma.get(position);
-		boolean isHeader = (x < 0)? true : false;
 		
 		LinearLayout layout = null;
-		if (isHeader) {
+		if (x < 0) {
 			layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(
 					R.layout.place_list_header,null);
 			
@@ -155,47 +161,32 @@ public class CategoricalCursorAdapter extends BaseAdapter {
 		}
 	}
 	
+	private void initializeRecord() {
+	    mRecord = new ArrayList<HeaderRecord>();
+	    
+	    for (PlaceCategories c : PlaceCategories.values()) {
+	        mRecord.add(new HeaderRecord(c));
+	    }
+	    
+        CATEGORIES = mRecord.size();
+	}
+	
+	private void scanningDatabase() {
+	    // iterates through the database and make an index
+        if (!mCursor.moveToFirst()) {
+            return;
+        }
+        
+        PlaceCategories c;
+        do {
+            
+            
+            
+        } while (mCursor.moveToNext());
+    
+	}
+	
 	private void buildMap(){
-		
-	    /////////////////////////////////////////////////////////
-		// Initializing the Header records
-		mRecord.add(new HeaderRecord("100 ft", 30.5));
-		mRecord.add(new HeaderRecord("200 ft", 61));
-		mRecord.add(new HeaderRecord("400 ft", 122));
-		mRecord.add(new HeaderRecord("800 ft", 244));
-		mRecord.add(new HeaderRecord("1000 ft", 304.8));
-		mRecord.add(new HeaderRecord("0.3 mi", 483));
-		mRecord.add(new HeaderRecord("0.6 mi", 965.6));
-		mRecord.add(new HeaderRecord("1.2 mi", 1931));
-		mRecord.add(new HeaderRecord("2.4 mi", 3862));
-		mRecord.add(new HeaderRecord("In a galaxy far far away", 10000000));
-		CATEGORIES = mRecord.size();
-		/////////////////////////////////////////////////////////
-		
-		// Scanning the database to index
-		if (!mCursor.moveToFirst()) {
-			return;
-		}
-		
-		/////////////////////////////////////////////////////////
-		Location current = Geomancer.getDeviceLocation();
-		Location tmp = new Location("Temp");
-		do {
-			
-            tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
-            tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
-			
-			for (int i = 0; i < mRecord.size();i++) {
-				if (current.distanceTo(tmp) < mRecord.get(i).mDist) {
-					mRecord.get(i).mChild.add(mCursor.getPosition());
-					break;
-				}
-			}
-			
-		} while (mCursor.moveToNext());
-		/////////////////////////////////////////////////////////
-		
-		
 		// Build HashMap based of the information stored in mRecord
 		int listPosition = 0;
 		for (int i = 0; i < mRecord.size(); i++) {
@@ -218,24 +209,24 @@ public class CategoricalCursorAdapter extends BaseAdapter {
 			
 	}
 	
-	static class HeaderRecord {
+	public static class HeaderRecord {
 		
 		int mPosition;
-		double mDist;     // in meters
 		String mTitle;
+		PlaceCategories mCat;
 		ArrayList<Integer> mChild;
 		
-		public HeaderRecord(String s, double d) {
+		public HeaderRecord(PlaceCategories d) {
 			mPosition = 0;
-			mTitle = s;
-			mDist = d;
+			mCat = d;
+			mTitle = d.text();
 			mChild = new ArrayList<Integer>();
 		}
 		
 		public HeaderRecord() {
 			mPosition = 0;
+			mCat = PlaceCategories.MISC;
 			mTitle = "";
-			mDist = 0;
 			mChild = new ArrayList<Integer>();
 		}
 		

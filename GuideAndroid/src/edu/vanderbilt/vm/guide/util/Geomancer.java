@@ -17,6 +17,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
+import edu.vanderbilt.vm.guide.container.Graph;
+import edu.vanderbilt.vm.guide.container.Node;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 
@@ -267,26 +269,63 @@ public class Geomancer {
      * getNodeWithLowestScore() }
      */
 
-    /*
-     * static Graph findPath(Graph g, Node start, Node end) { // Assert that
-     * "start" and "end" are elements of "g" // Assert that Graph is a typedef
-     * of Arraylist<Node> // Initialization routine for (Node node : g) { if
-     * (node.getId() == start.getId()) { node.setScore(0); } else {
-     * node.setScore(Double.MAX_VALUE); } node.setPrevious(null); } // Create a
-     * set of nodes not yet examined. This initially contain all // the nodes in
-     * "g" Graph unvisited = g.clone(); // This is the bulk of the algorithm
-     * while (!unvisited.isEmpty()) { Node u =
-     * unvisited.getNodeWithLowestScore(); unvisited.remove(u); if (u.getId() ==
-     * end.getId()) { break; } if (u.getScore() == Double.MAX_VALUE) { break; }
-     * for (Node neigh : u.getNeighbours()) { // getNeighbours() returns a Graph
-     * object if (!unvisited.contains(neigh)) { continue; } double dist =
-     * u.getScore() + u.distanceTo(neigh); if (dist < neigh.getScore()) {
-     * neigh.setScore(dist); neigh.setPrevious(u); } } } // backtracing the path
-     * // Since "start" and "end" are elements of "g", They should have received
-     * // the result of the algorithm run Graph path = Graph.getEmptySet(); //
-     * just use the default constructor // here if there's no issue Node prev =
-     * end.getPrevious(); while (prev != null) { path.add(0, prev); prev =
-     * prev.getPrevious(); } return path }
-     */
+    static Graph findPath(Graph g, Node start, Node end) {
+        // Assert that "start" and "end" are elements of "g"
+        // Assert that Graph is a typedef of Arraylist<Node>
+
+        // Initialization routine
+        for (Node node : g) {
+            if (node.getId() == start.getId()) {
+                node.setScore(0);
+            } else {
+                node.setScore(Double.MAX_VALUE);
+            }
+
+            node.setPrevious(-1);
+        }
+
+        // Create a set of nodes not yet examined. This initially contain all
+        // the nodes in "g"
+        Graph unvisited = (Graph)g.clone();
+
+        // This is the bulk of the algorithm
+        while (!unvisited.isEmpty()) {
+            Node u = unvisited.getNodeWithLowestScore();
+            unvisited.remove(u);
+            if (u.getId() == end.getId()) {
+                break;
+            }
+
+            if (u.getScore() == Double.MAX_VALUE) {
+                break;
+            }
+
+            for (Node neigh : g.getNodeNeighbour(u)) {
+                // getNeighbours() returns a Graph object
+                if (!unvisited.contains(neigh)) {
+                    continue;
+                }
+                double dist = u.getScore() + u.distanceTo(neigh);
+                if (dist < neigh.getScore()) {
+                    neigh.setScore(dist);
+                    neigh.setPrevious(u.getId());
+                }
+            }
+        }
+
+        // backtracing the path
+        // Since "start" and "end" are elements of "g", They should have
+        // received
+        // the result of the algorithm run
+        Graph path = new Graph();
+
+        int prev = end.getPrevious();
+        while (prev != -1) {
+            path.add(g.findNodeById(prev));
+            prev = (g.findNodeById(prev)).getPrevious();
+        }
+
+        return path;
+    }
 
 }

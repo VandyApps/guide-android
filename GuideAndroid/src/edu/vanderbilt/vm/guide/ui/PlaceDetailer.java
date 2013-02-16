@@ -25,7 +25,9 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 @TargetApi(16)
 public class PlaceDetailer extends Activity {
     private ActionBar mAction;
-
+    
+    private int mPlaceId;
+    
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailer");
 
@@ -35,11 +37,11 @@ public class PlaceDetailer extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_pane);
-
-        // Adding the fragment to layout
-        Fragment frag = PlaceDetailerFragment.newInstance(this,
-                getIntent().getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
-
+        
+        mPlaceId = getIntent().getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1);
+        
+        Fragment frag = PlaceDetailerFragment.newInstance(this, mPlaceId);
+        
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.sp_pane1, frag, "detailer_fragment");
         ft.commit();
@@ -51,6 +53,20 @@ public class PlaceDetailer extends Activity {
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
     }
     // ---------- END onCreate() ---------- //
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putInt(PLACE_ID_EXTRA, mPlaceId);
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.remove(getFragmentManager().findFragmentByTag("detailer_fragment"));
+        ft.commit();
+    }
 
     /**
      * Use this method to open the Details page

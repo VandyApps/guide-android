@@ -125,10 +125,9 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 
         int x = 0;
         x = mEnigma.get(position);
-        boolean isHeader = (x < 0) ? true : false;
 
         LinearLayout layout = null;
-        if (isHeader) {
+        if (x < 0) {
             layout = (LinearLayout)LayoutInflater.from(mCtx).inflate(R.layout.place_list_header,
                     null);
 
@@ -180,10 +179,11 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
         if (!mCursor.moveToFirst()) {
             return;
         }
-
+        
+        String initial;
         do {
 
-            String initial = mCursor.getString(mNameColIx).substring(0, 1);
+            initial = mCursor.getString(mNameColIx).substring(0, 1);
 
             for (int i = 0; i < mRecord.size() - 1; i++) {
                 if (initial.equalsIgnoreCase(mRecord.get(i).mTitle)) {

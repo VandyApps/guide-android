@@ -44,6 +44,7 @@ public class ImageDownloader {
     }
 
     public static class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+        @SuppressWarnings("unused")
         private String url;
 
         private final WeakReference<ImageView> imageViewReference;

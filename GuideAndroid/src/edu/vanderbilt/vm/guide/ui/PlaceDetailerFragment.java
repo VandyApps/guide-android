@@ -63,15 +63,17 @@ public class PlaceDetailerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (container == null) {
+            return null;
+        }
         mView = inflater.inflate(R.layout.fragment_place_detailer, container, false);
+        setupUI();
         return mView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        setupUI();
 
         setHasOptionsMenu(true);
 
@@ -123,7 +125,7 @@ public class PlaceDetailerFragment extends Fragment {
             // Use default icon "+" as defined in xml
         }
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -146,7 +148,6 @@ public class PlaceDetailerFragment extends Fragment {
     }
 
     private void addRemoveToAgenda() {
-
         if (isOnAgenda) {
             GlobalState.getUserAgenda().remove(mPlace);
             mMenu.findItem(R.id.menu_add_agenda).setIcon(
@@ -169,23 +170,23 @@ public class PlaceDetailerFragment extends Fragment {
     void setPlaceDetailed(Place plc) {
         mPlace = plc;
         updateInformation();
+        
+        // add to History
+        GlobalState.addHistory(mPlace);
     }
 
     /*
      * Update the information showed in the various Views based on mPlace
      */
     private void updateInformation() {
-        setupUI();
-        tvPlaceName.setText(mPlace.getName());
+        tvPlaceName.setText(
+                mPlace.getName());
         tvPlaceHours.setText(mPlace.getHours());
         tvPlaceDesc.setText(mPlace.getDescription());
 
         logger.trace("Starting image download task");
         mDlTask = new ImageDownloader.BitmapDownloaderTask(ivPlaceImage);
         mDlTask.execute(mPlace.getPictureLoc());
-
-        // add to History
-        GlobalState.addHistory(mPlace);
     }
 
     private static Place getPlaceById(Context ctx, int id) {
@@ -201,23 +202,12 @@ public class PlaceDetailerFragment extends Fragment {
         db.close();
         return place;
     }
-    
+
     private void setupUI() {
-        
-        if (tvPlaceName == null) {
-            tvPlaceName = (TextView)mView.findViewById(R.id.detailee_name);
-        }
-        if (tvPlaceHours == null) {
+        tvPlaceName = (TextView)mView.findViewById(R.id.detailee_name);
         tvPlaceHours = (TextView)mView.findViewById(R.id.other_descriptions);
-        }
-        if (tvPlaceDesc == null) {
         tvPlaceDesc = (TextView)mView.findViewById(R.id.main_description);
-        }
-        if (ivPlaceImage == null) {
         ivPlaceImage = (ImageView)mView.findViewById(R.id.PlaceImage);
-        }
-        
-        
     }
-    
+
 }

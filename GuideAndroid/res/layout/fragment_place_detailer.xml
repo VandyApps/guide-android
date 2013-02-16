@@ -6,12 +6,12 @@
 
     <ImageView
         android:id="@+id/PlaceImage"
-        android:src="@drawable/home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp" />
-	
-        <include layout="@layout/generic_detailer" />
+        android:layout_margin="5dp"
+        android:src="@drawable/home" />
+
+    <include layout="@layout/generic_detailer" />
 
 </LinearLayout>
