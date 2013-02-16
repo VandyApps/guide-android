@@ -19,7 +19,6 @@ import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants.PlaceTable;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants.TourTable;
-import edu.vanderbilt.vm.guide.util.GuideConstants.PlaceCategories;
 
 /**
  * This class contains a bunch of static helper methods that handle the JSON

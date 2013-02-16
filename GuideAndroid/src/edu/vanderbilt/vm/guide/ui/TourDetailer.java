@@ -75,16 +75,7 @@ public class TourDetailer extends Activity {
 
         fillViews(mCursor);
 
-        int placesIx = mCursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
-        Agenda tourAgenda = DBUtils.getAgendaFromIds(mCursor.getString(placesIx),
-                mHelper.getReadableDatabase());
-
-        MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.tour_detail_map_container, mapFrag, "tour_map_Fragment");
-        ft.commit();
+        
 
     }
 
@@ -188,6 +179,22 @@ public class TourDetailer extends Activity {
                 logger.warn("Clicked menu item does not match any known ids");
                 return false;
         }
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        
+        int placesIx = mCursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
+        Agenda tourAgenda = DBUtils.getAgendaFromIds(mCursor.getString(placesIx),
+                mHelper.getReadableDatabase());
+
+        MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.tour_detail_map_container, mapFrag, "tour_map_Fragment");
+        ft.commit();
     }
     
     @Override

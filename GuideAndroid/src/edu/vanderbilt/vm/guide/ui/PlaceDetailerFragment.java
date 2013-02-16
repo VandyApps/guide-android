@@ -116,9 +116,7 @@ public class PlaceDetailerFragment extends Fragment {
         this.mMenu = menu;
 
         if (isOnAgenda) {
-            /*
-             * The default icon is a "+" therefore change to "-"
-             */
+             // The default icon is a "+" therefore change to "-"
             mMenu.findItem(R.id.menu_add_agenda).setIcon(
                     (Drawable)getResources().getDrawable(R.drawable.content_remove));
         } else {

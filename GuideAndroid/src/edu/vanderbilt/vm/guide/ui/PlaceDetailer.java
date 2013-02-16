@@ -26,8 +26,6 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 public class PlaceDetailer extends Activity {
     private ActionBar mAction;
     
-    private int mPlaceId;
-    
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailer");
 
@@ -38,14 +36,6 @@ public class PlaceDetailer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_pane);
         
-        mPlaceId = getIntent().getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1);
-        
-        Fragment frag = PlaceDetailerFragment.newInstance(this, mPlaceId);
-        
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.sp_pane1, frag, "detailer_fragment");
-        ft.commit();
-
         // Setup ActionBar
         mAction = getActionBar();
         mAction.setTitle("Place Details");
@@ -55,9 +45,14 @@ public class PlaceDetailer extends Activity {
     // ---------- END onCreate() ---------- //
     
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //outState.putInt(PLACE_ID_EXTRA, mPlaceId);
+    public void onResume() {
+        super.onResume();
+        Fragment frag = PlaceDetailerFragment.newInstance(this, getIntent()
+                .getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
+        
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.sp_pane1, frag, "detailer_fragment");
+        ft.commit();
     }
     
     @Override
