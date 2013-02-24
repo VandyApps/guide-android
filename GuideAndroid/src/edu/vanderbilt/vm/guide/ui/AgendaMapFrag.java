@@ -39,7 +39,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener,
         OnMarkerClickListener {
 
-    @SuppressWarnings("unused")
+    // @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.AgendaMapFrag");
 
     private Agenda mAgenda;
@@ -145,8 +145,21 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         map.setMyLocationEnabled(showSelf);
 
         map.setOnMapLongClickListener(this);
-        
-        this.drawPath(Graph.createGraph(mAgenda));
+
+        Graph g = Graph.createGraph(mAgenda);
+        logger.debug("Graph creation done");
+        g.buildNetwork();
+        logger.debug("Network building done");
+
+        for (Node nn : g) {
+
+            for (Integer i : nn.getNeighbours()) {
+                drawPath(nn, g.findNodeById(i));
+            }
+        }
+        logger.debug("Path drawing done");
+        // this.drawPath(Geomancer.findPath(g, g.findNodeById(6),
+        // g.findNodeById(147)));
     }
 
     @Override
@@ -188,13 +201,20 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         this.getMap().setMyLocationEnabled(false);
     }
 
+    private void drawPath(Node n1, Node n2) {
+        PolylineOptions option = new PolylineOptions();
+        option.add(new LatLng(n1.getLat(), n1.getLng()));
+        option.add(new LatLng(n2.getLat(), n2.getLng()));
+        this.getMap().addPolyline(option);
+    }
+
     public void drawPath(Graph g) {
         PolylineOptions option = new PolylineOptions();
-        
+
         for (Node n : g) {
             option.add(new LatLng(n.getLat(), n.getLng()));
         }
-        
+
         this.getMap().addPolyline(option);
     }
 

@@ -79,5 +79,14 @@
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
+ },
+ {
+ 	"id" : 10,
+ 	"name" : "Pathing test",
+ 	"timeRequired" : "1 hour",
+ 	"placesOnTour" : [6, 1, 7, 11, 12, 13, 14, 145, 146, 147, 157, 158, 160, 161, 162, 174, 175, 176],
+ 	"description" : "Description for this tour",
+ 	"distance" : "0.7 miles",
+ 	"iconPath" : "tour_placeholder"
  }
 ]
