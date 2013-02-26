@@ -33,4 +33,35 @@ public interface GuideConstants {
 
     // white
     public static final ColorDrawable WHITE = new ColorDrawable(Color.WHITE);
+    
+    public enum PlaceCategories {
+        
+        RESIDENCE_HALL ("Residence Hall"),
+        RECREATION ("Recreation"),
+        DINING ("Dining"),
+        ACADEMICS ("Academics"),
+        EVERYTHING ("Everything"),
+        FACILITY ("Facility"),
+        MEDICAL ("Medical"),
+        LOCAL ("Local"),
+        ATHLETICS ("Athetics"),
+        GREEK_LIFE ("Greek Life"),
+        STUDENT_LIFE ("Student Life"),
+        MISC ("Misc."),
+        LIBRARY ("Library");
+        
+        private final String text;
+        
+        PlaceCategories(String s) {
+            this.text = s;
+        }
+        
+        PlaceCategories() {
+            this.text = "Khaz Modan";
+        }
+        
+        public String text() {
+            return this.text;
+        }
+    }
 }

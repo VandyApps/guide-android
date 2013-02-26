@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
+import edu.vanderbilt.vm.guide.container.Node;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
@@ -222,7 +223,11 @@ public class MapViewer extends Activity {
     static LatLng toLatLng(Location loc) {
         return new LatLng(loc.getLatitude(), loc.getLongitude());
     }
-
+    
+    static LatLng toLatLng(Node n) {
+        return new LatLng(n.getLat(), n.getLng());
+    }
+    
     /*
      * Static utility methods commonly used by all the MapFragments
      */

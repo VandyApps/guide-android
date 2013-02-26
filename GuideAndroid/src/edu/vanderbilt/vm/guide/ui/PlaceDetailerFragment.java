@@ -63,18 +63,17 @@ public class PlaceDetailerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (container == null) {
+            return null;
+        }
         mView = inflater.inflate(R.layout.fragment_place_detailer, container, false);
+        setupUI();
         return mView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        tvPlaceName = (TextView)mView.findViewById(R.id.detailee_name);
-        tvPlaceHours = (TextView)mView.findViewById(R.id.other_descriptions);
-        tvPlaceDesc = (TextView)mView.findViewById(R.id.main_description);
-        ivPlaceImage = (ImageView)mView.findViewById(R.id.PlaceImage);
 
         setHasOptionsMenu(true);
 
@@ -117,16 +116,14 @@ public class PlaceDetailerFragment extends Fragment {
         this.mMenu = menu;
 
         if (isOnAgenda) {
-            /*
-             * The default icon is a "+" therefore change to "-"
-             */
+             // The default icon is a "+" therefore change to "-"
             mMenu.findItem(R.id.menu_add_agenda).setIcon(
                     (Drawable)getResources().getDrawable(R.drawable.content_remove));
         } else {
             // Use default icon "+" as defined in xml
         }
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -149,7 +146,6 @@ public class PlaceDetailerFragment extends Fragment {
     }
 
     private void addRemoveToAgenda() {
-
         if (isOnAgenda) {
             GlobalState.getUserAgenda().remove(mPlace);
             mMenu.findItem(R.id.menu_add_agenda).setIcon(
@@ -172,22 +168,23 @@ public class PlaceDetailerFragment extends Fragment {
     void setPlaceDetailed(Place plc) {
         mPlace = plc;
         updateInformation();
+        
+        // add to History
+        GlobalState.addHistory(mPlace);
     }
 
     /*
      * Update the information showed in the various Views based on mPlace
      */
     private void updateInformation() {
-        tvPlaceName.setText(mPlace.getName());
+        tvPlaceName.setText(
+                mPlace.getName());
         tvPlaceHours.setText(mPlace.getHours());
         tvPlaceDesc.setText(mPlace.getDescription());
 
         logger.trace("Starting image download task");
         mDlTask = new ImageDownloader.BitmapDownloaderTask(ivPlaceImage);
         mDlTask.execute(mPlace.getPictureLoc());
-
-        // add to History
-        GlobalState.addHistory(mPlace);
     }
 
     private static Place getPlaceById(Context ctx, int id) {
@@ -202,6 +199,13 @@ public class PlaceDetailerFragment extends Fragment {
         Place place = DBUtils.getPlaceById(id, db);
         db.close();
         return place;
+    }
+
+    private void setupUI() {
+        tvPlaceName = (TextView)mView.findViewById(R.id.detailee_name);
+        tvPlaceHours = (TextView)mView.findViewById(R.id.other_descriptions);
+        tvPlaceDesc = (TextView)mView.findViewById(R.id.main_description);
+        ivPlaceImage = (ImageView)mView.findViewById(R.id.PlaceImage);
     }
 
 }

@@ -12,7 +12,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
@@ -26,38 +25,43 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
 @TargetApi(16)
 public class PlaceDetailer extends Activity {
     private ActionBar mAction;
-
+    
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailer");
 
     private static final String PLACE_ID_EXTRA = "placeId";
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_pane);
-
-        // Adding the fragment to layout
-        Fragment frag = PlaceDetailerFragment.newInstance(this,
-                getIntent().getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
-
-        ((LinearLayout)findViewById(R.id.sp_pane1))
-                .setBackgroundDrawable(GuideConstants.LIGHT_GOLD);
-
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.sp_pane1, frag, "detailer_fragment");
-        ft.commit();
-
+        
         // Setup ActionBar
         mAction = getActionBar();
         mAction.setTitle("Place Details");
         mAction.setDisplayHomeAsUpEnabled(true);
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
-
     }
-
     // ---------- END onCreate() ---------- //
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        Fragment frag = PlaceDetailerFragment.newInstance(this, getIntent()
+                .getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
+        
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.sp_pane1, frag, "detailer_fragment");
+        ft.commit();
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.remove(getFragmentManager().findFragmentByTag("detailer_fragment"));
+        ft.commit();
+    }
 
     /**
      * Use this method to open the Details page

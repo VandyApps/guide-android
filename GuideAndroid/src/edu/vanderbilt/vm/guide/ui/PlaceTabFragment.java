@@ -35,7 +35,7 @@ import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.adapter.AlphabeticalCursorAdapter;
-import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
+import edu.vanderbilt.vm.guide.ui.adapter.DistanceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
@@ -117,7 +117,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener, Geoma
         }
     }
 
-    @SuppressWarnings("deprecation")
+    //@SuppressWarnings("deprecation")
     private void setupUI() {
         mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
         mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
@@ -196,7 +196,7 @@ public class PlaceTabFragment extends Fragment implements OnClickListener, Geoma
 
             case R.id.menu_sort_distance:
 
-                mListView.setAdapter(new PlaceCursorAdapter(getActivity(), mAllPlacesCursor));
+                mListView.setAdapter(new DistanceCursorAdapter(getActivity(), mAllPlacesCursor));
 
                 Toast.makeText(getActivity(), "PlacesList is sorted by distance",
                         Toast.LENGTH_SHORT).show();

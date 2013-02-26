@@ -1,4 +1,3 @@
-
 package edu.vanderbilt.vm.guide.util;
 
 import java.io.IOException;
@@ -280,5 +279,5 @@ public class JsonUtils {
         logger.trace("Inserting ContentValues into Tour table: {}", cv);
         db.insert(TourTable.TOUR_TABLE_NAME, null, cv);
     }
-
+    
 }
