@@ -90,5 +90,17 @@ public interface GuideDBConstants {
 
         String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.edu.vanderbilt.vm.guide.tour";
     }
+    
+    public interface NodeTable {
+        String NODE_TABLE_NAME = "nodes";
+        
+        String ID_COL = "id";
+        
+        String LAT_COL = "latitude";
+        
+        String LON_COL = "longitude";
+        
+        String NEIGHBOR_COL  = "neighbor_ids";
+    }
 
 }

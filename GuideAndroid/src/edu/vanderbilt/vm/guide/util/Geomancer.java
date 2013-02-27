@@ -48,6 +48,7 @@ public class Geomancer {
     private static LocationManager sLocationManager;
 
     private static LocationListener mLocListener = new LocationListener() {
+        @Override
         public void onLocationChanged(Location location) {
             // Called when a new location is found
             // by the network location provider.
@@ -59,12 +60,15 @@ public class Geomancer {
 
         }
 
+        @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
 
+        @Override
         public void onProviderEnabled(String provider) {
         }
 
+        @Override
         public void onProviderDisabled(String provider) {
         }
     };

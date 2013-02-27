@@ -41,6 +41,7 @@ public class FragmentTabListener<T extends Fragment> implements ActionBar.TabLis
 
     /* The following are each of the ActionBar.TabListener callbacks */
 
+    @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
         // Check if the fragment is already initialized
         if (mFragment == null) {
@@ -53,6 +54,7 @@ public class FragmentTabListener<T extends Fragment> implements ActionBar.TabLis
         }
     }
 
+    @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         if (mFragment != null) {
             // Detach the fragment, because another one is being attached
@@ -60,6 +62,7 @@ public class FragmentTabListener<T extends Fragment> implements ActionBar.TabLis
         }
     }
 
+    @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         // User selected the already selected tab. Usually do nothing.
     }

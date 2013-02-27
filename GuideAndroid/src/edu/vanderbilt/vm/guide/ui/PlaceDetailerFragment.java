@@ -118,7 +118,7 @@ public class PlaceDetailerFragment extends Fragment {
         if (isOnAgenda) {
              // The default icon is a "+" therefore change to "-"
             mMenu.findItem(R.id.menu_add_agenda).setIcon(
-                    (Drawable)getResources().getDrawable(R.drawable.content_remove));
+                    getResources().getDrawable(R.drawable.content_remove));
         } else {
             // Use default icon "+" as defined in xml
         }
@@ -149,12 +149,12 @@ public class PlaceDetailerFragment extends Fragment {
         if (isOnAgenda) {
             GlobalState.getUserAgenda().remove(mPlace);
             mMenu.findItem(R.id.menu_add_agenda).setIcon(
-                    (Drawable)getResources().getDrawable(R.drawable.content_new));
+                    getResources().getDrawable(R.drawable.content_new));
             Toast.makeText(getActivity(), "Removed from Agenda", Toast.LENGTH_SHORT).show();
         } else {
             GlobalState.getUserAgenda().add(mPlace);
             mMenu.findItem(R.id.menu_add_agenda).setIcon(
-                    (Drawable)getResources().getDrawable(R.drawable.content_remove));
+                    getResources().getDrawable(R.drawable.content_remove));
             Toast.makeText(getActivity(), "Added to Agenda", Toast.LENGTH_SHORT).show();
         }
         isOnAgenda = !isOnAgenda;

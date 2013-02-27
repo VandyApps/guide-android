@@ -196,6 +196,7 @@ public class Place {
         return mUniqueId;
     }
 
+    @Override
     public int hashCode() {
         // We just return the unique ID for efficiency,
         // hoping that the client has actually made the ID unique

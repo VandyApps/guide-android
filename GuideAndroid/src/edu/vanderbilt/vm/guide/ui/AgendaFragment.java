@@ -30,8 +30,8 @@ public class AgendaFragment extends ListFragment {
 
         // Add an empty agenda indicator
         TextView emptyIndicator = new TextView(getActivity());
-        emptyIndicator.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
+        emptyIndicator.setLayoutParams(new ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
         emptyIndicator.setGravity(Gravity.CENTER);
         emptyIndicator.setTextSize(16);
         emptyIndicator.setText("Your agenda is empty.  Add places"
@@ -57,6 +57,7 @@ public class AgendaFragment extends ListFragment {
         }
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_sort_alphabetic:

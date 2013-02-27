@@ -1,6 +1,7 @@
 package edu.vanderbilt.vm.guide.container;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.location.Location;
 
@@ -14,7 +15,7 @@ public class Node {
 
     private double mLng;
     
-    private ArrayList<Integer> mNeighbours;
+    private List<Integer> mNeighbours = new LinkedList<Integer>();
 
     private int mPrevious;
     
@@ -33,7 +34,6 @@ public class Node {
         mLat = lat/DEGPERRAD;
         mLng = lng/DEGPERRAD;
         
-        mNeighbours = new ArrayList<Integer>();
         if (neighs != null) {
             for (int i : neighs) {
                 mNeighbours.add(i);
@@ -46,7 +46,6 @@ public class Node {
         mId = -1;
         mLat = lat/DEGPERRAD;
         mLng = lng/DEGPERRAD;
-        mNeighbours = new ArrayList<Integer>();
         isPlace = false;
     }
     
@@ -54,7 +53,6 @@ public class Node {
         mId = plc.getUniqueId();
         mLat = plc.getLatitude()/DEGPERRAD;
         mLng = plc.getLongitude()/DEGPERRAD;
-        mNeighbours = new ArrayList<Integer>();
         isPlace = true;
     }
     
@@ -62,7 +60,6 @@ public class Node {
         mId = -1;
         mLat = loc.getLatitude()/DEGPERRAD;
         mLng = loc.getLongitude()/DEGPERRAD;
-        mNeighbours = new ArrayList<Integer>();
         isPlace = false;
     }
 

@@ -13,6 +13,7 @@ public class About extends Activity {
 
     private static String MAP_TIPS = "map_tips";
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

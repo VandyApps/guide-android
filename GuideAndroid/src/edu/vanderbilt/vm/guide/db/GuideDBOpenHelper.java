@@ -48,6 +48,13 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 					TourTable.ICON_LOC_COL + " TEXT, " +
 					TourTable.TIME_REQUIRED_COL + " TEXT);";
 	
+	private static final String NODE_DB_CREATE =
+	        "CREATE TABLE " + NodeTable.NODE_TABLE_NAME + " (" +
+	                NodeTable.ID_COL + " INTEGER PRIMARY KEY, " +
+	                NodeTable.LAT_COL + " FLOAT, " +
+	                NodeTable.LON_COL + " FLOAT, " +
+	                NodeTable.NEIGHBOR_COL + " TEXT);";
+	
 	private static final int DB_VERSION = 4;
 	private static final Logger logger = LoggerFactory.getLogger("db.GuideDBOpenHelper");
 	
@@ -56,14 +63,16 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// Create the Place and Tour databases
-		logger.trace("Executing SQL: \n" + PLACE_DB_CREATE);
+		logger.trace("Executing SQL: \n{}", PLACE_DB_CREATE);
 		db.execSQL(PLACE_DB_CREATE);
-		logger.trace("Executing SQL: \n" + TOUR_DB_CREATE);
+		logger.trace("Executing SQL: \n{}", TOUR_DB_CREATE);
 		db.execSQL(TOUR_DB_CREATE);
+		logger.trace("Executing SQL: \n{}", NODE_DB_CREATE);
+		db.execSQL(NODE_DB_CREATE);
 		
-		logger.trace("Populating " + 
-				GuideDBConstants.PlaceTable.PLACE_TABLE_NAME + 
-				" table from JSON file " + GuideDBConstants.PLACES_JSON_NAME);
+		logger.trace("Populating {} table from JSON file {}",
+				GuideDBConstants.PlaceTable.PLACE_TABLE_NAME,
+				GuideDBConstants.PLACES_JSON_NAME);
 		InputStream in = null;
 		try {
 			in = mContext.getAssets().open(
@@ -113,6 +122,7 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE " + PlaceTable.PLACE_TABLE_NAME);
 		db.execSQL("DROP TABLE " + TourTable.TOUR_TABLE_NAME);
+		db.execSQL("DROP TABLE " + NodeTable.NODE_TABLE_NAME);
 		onCreate(db);
 	}
 	
