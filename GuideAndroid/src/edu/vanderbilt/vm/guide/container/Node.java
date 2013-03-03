@@ -28,7 +28,7 @@ public class Node {
     static final double EPSILON = 0.000001;
     
     // Main constructor for a node that represents a row in the Nodes DB table.
-    public Node(int id, double lat, double lng, int[] neighs, int isAPlace) {
+    public Node(int id, double lat, double lng, int[] neighs) {
         mId = id;
         mLat = lat/DEGPERRAD;
         mLng = lng/DEGPERRAD;
