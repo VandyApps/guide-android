@@ -39,7 +39,7 @@ public class Node {
                 mNeighbours.add(i);
             }
         }
-        isPlace = (isAPlace > 0) ? true : false;
+        isPlace = (id < 9999 && id > 0) ? true : false;
     }
     
     public Node(double lat, double lng) {

@@ -176,9 +176,9 @@ public class Graph extends ArrayList<Node> {
         // Create supertriangle that encompasses all Nodes
         Triangle superTri = new Triangle();
 
-        superTri.add(new Node(-1, yMin, xMin - h * Math.sqrt(3) / 3, null, 0));
-        superTri.add(new Node(-2, yMin, xMax + h * Math.sqrt(3) / 3, null, 0));
-        superTri.add(new Node(-3, yMax + w * Math.sqrt(3) / 2, (xMin + xMax) / 2, null, 0));
+        superTri.add(new Node(-1, yMin, xMin - h * Math.sqrt(3) / 3, null));
+        superTri.add(new Node(-2, yMin, xMax + h * Math.sqrt(3) / 3, null));
+        superTri.add(new Node(-3, yMax + w * Math.sqrt(3) / 2, (xMin + xMax) / 2, null));
 
         workingSet.add(superTri);
 

@@ -49,11 +49,15 @@
         </activity>
         <activity
             android:name="edu.vanderbilt.vm.guide.ui.MapViewer"
-            android:label="Map" >
+            android:label="@string/title_map" >
         </activity>
         <activity
             android:name=".ui.About"
             android:label="@string/menu_about" >
+        </activity>
+        <activity 
+            android:name=".ui.Navigator"
+            android:label="@string/title_navigator">
         </activity>
 
         <provider

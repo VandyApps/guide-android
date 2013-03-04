@@ -124,8 +124,10 @@ public class MapViewer extends Activity {
             case R.id.menu_about:
                 About.open(this);
                 return true;
+            
             default:
                 return false;
+            
         }
     }
 

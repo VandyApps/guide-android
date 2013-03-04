@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <TextView
+        android:id="@+id/nav_tv1"
+        style="@style/description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_label1" />
+
+    <Button
+        android:id="@+id/nav_et1"
+        style="@style/description_text_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="Choose starting location..." />
+
+    <TextView
+        android:id="@+id/nav_tv2"
+        style="@style/description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_label2" />
+
+    <Button
+        android:id="@+id/nav_et2"
+        style="@style/description_text_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="Choose destination..." />
+	
+    <include layout="@layout/horizontal_line" />
+    
+    <Button
+        android:id="@+id/nav_btn"
+        style="@style/description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Path" />
+
+</LinearLayout>
