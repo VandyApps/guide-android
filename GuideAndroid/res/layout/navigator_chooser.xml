@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="Choose starting location..." />
+        android:text="@string/nav_label5" />
 
     <TextView
         android:id="@+id/nav_tv2"
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="Choose destination..." />
+        android:text="@string/nav_label6" />
 	
     <include layout="@layout/horizontal_line" />
     
@@ -42,6 +42,6 @@
         style="@style/description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Path" />
+        android:text="@string/nav_label7" />
 
 </LinearLayout>

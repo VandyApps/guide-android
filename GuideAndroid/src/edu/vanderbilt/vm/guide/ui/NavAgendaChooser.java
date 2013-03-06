@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import edu.vanderbilt.vm.guide.R;
 
 public class NavAgendaChooser extends Fragment implements OnClickListener{
