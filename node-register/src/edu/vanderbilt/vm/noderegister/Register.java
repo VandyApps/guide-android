@@ -37,8 +37,8 @@ import android.widget.Toast;
  * Usage: Tap the left button at the bottom of the screen; You'll get a message
  * showing the filename being used, where the node information will be stored;
  * This filename is randomly generated; Walk to a Point of physical
- * significance; tap on the right button with the label "Register"; You'll get a
- * message showing the Id of the Node you've just registered; Continue until
+ * significance; tap on the right button with the label "Register"; You'll get
+ * a message showing the Id of the Node you've just registered; Continue until
  * you're done; Tap on the left button again to end the session;
  * </p>
  * <p>
@@ -155,6 +155,7 @@ public class Register extends FragmentActivity implements OnClickListener {
         if (isRegistering) {
             // close everything
             try {
+            	mJw.endArray();
                 mJw.close();
             } catch (IOException e) {
                 e.printStackTrace();
