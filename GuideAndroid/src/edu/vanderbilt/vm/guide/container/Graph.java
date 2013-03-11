@@ -142,7 +142,7 @@ public class Graph extends ArrayList<Node> {
         // Initialization
         ArrayList<Triangle> workingSet = new ArrayList<Triangle>();
         Collections.sort(this, new HorizontalComparator());
-
+        
         // Find bounding rectangle
         double xMin = this.get(0).getLng();
         double yMin = this.get(0).getLat();
@@ -157,7 +157,7 @@ public class Graph extends ArrayList<Node> {
                 yMax = n.getLat();
             }
             if (n.getLat() < yMin) {
-                xMin = n.getLat();
+                yMin = n.getLat();
             }
         }
 
@@ -176,9 +176,9 @@ public class Graph extends ArrayList<Node> {
         // Create supertriangle that encompasses all Nodes
         Triangle superTri = new Triangle();
 
-        superTri.add(new Node(-1, yMin, xMin - h * Math.sqrt(3) / 3, null));
-        superTri.add(new Node(-2, yMin, xMax + h * Math.sqrt(3) / 3, null));
-        superTri.add(new Node(-3, yMax + w * Math.sqrt(3) / 2, (xMin + xMax) / 2, null));
+        superTri.add(new Node(-1, yMin, xMin - w, null));
+        superTri.add(new Node(-2, yMin, xMax + w, null));
+        superTri.add(new Node(-3, yMax + h, (xMin + xMax) / 2, null));
 
         workingSet.add(superTri);
 
@@ -196,15 +196,17 @@ public class Graph extends ArrayList<Node> {
             // Search for Triangles that contain this Vertex
             // store its edges, and then remove the Triangle
             edgeSet = new ArrayList<Edge>();
-
+            logger.debug("Size of workingSet before remove: " + workingSet.size());
             for (int k = 0; k < workingSet.size(); k++) {
-                Triangle tri = workingSet.get(k);
+                Triangle tri = workingSet.get(k);/*
                 if (tri.isLeftOf(n)) {
                     // should remove completed triangle here
                     workingSet.remove(k);
                     k--;
 
-                } else if (tri.isEncompassing(n)) {
+                } else 
+                */
+                if (tri.isEncompassing(n)) {
                     edgeSet.add(new Edge(tri.get(0), tri.get(1)));
                     edgeSet.add(new Edge(tri.get(1), tri.get(2)));
                     edgeSet.add(new Edge(tri.get(0), tri.get(2)));
@@ -216,9 +218,10 @@ public class Graph extends ArrayList<Node> {
                     // logger.debug("Not encompassing");
                 }
             }
-            // logger.debug("Size of edgeSet before remove: " + edgeSet.size());
+            logger.debug("Size of workingSet after remove: " + workingSet.size());
+             logger.debug("Size of edgeSet before remove: " + edgeSet.size());
             removeDuplicateEdge(edgeSet);
-            // logger.debug("Size of edgeSet after remove: " + edgeSet.size());
+             logger.debug("Size of edgeSet after remove: " + edgeSet.size());
             for (Edge e : edgeSet) {
 
                 Triangle newT = new Triangle();

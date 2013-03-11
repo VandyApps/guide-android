@@ -17,10 +17,16 @@ public class NavAgendaChooser extends Fragment implements OnClickListener{
     
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        
+        super.onActivityCreated(savedInstanceState);        
     }
     
+    @Override
+    public void onResume() {
+        super.onResume();
+        
+        
+    }
+
     @Override
     public void onClick(View v) {
         

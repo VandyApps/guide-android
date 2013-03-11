@@ -99,6 +99,11 @@ public class Node {
         return mPrevious;
     }
     
+    @Override
+    public String toString() {
+        return "{ id: " + getId() + " }";
+    }
+    
     public void setScore(double scr) {
         mScore = scr;
     }

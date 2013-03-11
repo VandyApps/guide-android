@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,11 +46,13 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
 
     private Agenda mAgenda;
 
-    private int mPlaceIdFocused;
+    private int mPlaceIdFocused = -1;
 
     private Menu mMenu;
 
     private boolean showSelf = true;
+
+    private static final String ID_ARRAY = "ids";
 
     /**
      * Instantiate a Map Fragment and puts markers on all the places on the
@@ -62,9 +66,11 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
 
         AgendaMapFrag frag = (AgendaMapFrag)Fragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.AgendaMapFrag");
-        frag.mAgenda = agenda;
-        frag.mPlaceIdFocused = -1;
-        frag.setHasOptionsMenu(true);
+
+        Bundle arg = new Bundle();
+        arg.putIntArray(ID_ARRAY, extractIdArray(agenda));
+        frag.setArguments(arg);
+
         return frag;
     }
 
@@ -75,9 +81,16 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         GoogleMap map = getMap();
         MapViewer.resetCamera(map);
 
-        if (mAgenda == null) {
-            mAgenda = GlobalState.getUserAgenda();
+        int[] ids = this.getArguments().getIntArray(ID_ARRAY);
+        GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
+        SQLiteDatabase db = helper.getReadableDatabase();
+        mAgenda = new Agenda();
+
+        for (int placeId : ids) {
+            mAgenda.add(DBUtils.getPlaceById(placeId, db));
         }
+
+        db.close();
 
         ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
         for (Place plc : mAgenda) {
@@ -86,13 +99,15 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
             Location plcLoc = new Location("temp");
             plcLoc.setLatitude(plc.getLatitude());
             plcLoc.setLongitude(plc.getLongitude());
+            
+            int dist = (int)Geomancer.getDeviceLocation().distanceTo(plcLoc);
 
             // Set the marker for each Place
             // Title must be exactly as the PlaceName, in order to match
             // them later on
             map.addMarker(new MarkerOptions().position(MapViewer.toLatLng(plc))
                     .title(plc.getName()).draggable(false)
-                    .snippet(Geomancer.getDeviceLocation().distanceTo(plcLoc) + " yards away"));
+                    .snippet(dist + " yards away"));
         }
 
         // Calculate the bounds that cover all places in Agenda
@@ -119,7 +134,10 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
                 }
             }
 
-            // Sanitize
+            // Sanitize. This will still result in weird result if the
+            // coordinate value is wrong,
+            // but at least the weirdness is semi-consistent and easier to
+            // catch.
             if (minLat > 90 || minLat < -90) {
                 minLat = 0;
             }
@@ -141,23 +159,8 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
             map.setOnMarkerClickListener(this);
 
         }
-
-        map.setMyLocationEnabled(showSelf);
-
-        map.setOnMapLongClickListener(this);
-
-        Graph g = Graph.createGraph(mAgenda);
-        logger.debug("Graph creation done");
-        g.buildNetwork();
-        logger.debug("Network building done");
-
-        for (Node nn : g) {
-
-            for (Integer i : nn.getNeighbours()) {
-                drawPath(nn, g.findNodeById(i));
-            }
-        }
-        logger.debug("Path drawing done");
+        
+        this.drawNetwork();
         // this.drawPath(Geomancer.findPath(g, g.findNodeById(6),
         // g.findNodeById(147)));
     }
@@ -191,13 +194,55 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
      * 
      * @param show
      */
-    public void setShowCurrentLocation(boolean show) {
+    void setShowCurrentLocation(boolean show) {
         showSelf = show;
+    }
+
+    /**
+     * Set whether the map will show the adjacency connection between Points in
+     * the Agenda. This method should only be called inside or after onResume().
+     */
+    void drawNetwork() {
+        GoogleMap map = this.getMap();
+        map.setMyLocationEnabled(showSelf);
+
+        map.setOnMapLongClickListener(this);
+
+        Graph g = Graph.createGraph(mAgenda);
+        logger.debug("Graph creation done");
+        g.buildNetwork();
+        logger.debug("Network building done");
+
+        for (Node nn : g) {
+
+            for (Integer i : nn.getNeighbours()) {
+                drawPath(nn, g.findNodeById(i));
+            }
+        }
+
+        logger.debug("Path drawing done");
+    }
+
+    /**
+     * Set whether the map will connect the Places in the Agenda as a sequence.
+     * This method should only be called inside or after onResume().
+     * 
+     * @param show default is false.
+     */
+    void drawSequentialPath() {
+
+    }
+
+    void setAgenda(Agenda a) {
+        this.mAgenda = a;
     }
 
     @Override
     public void onPause() {
         super.onPause();
+
+        // Stops the map from requesting location data when this page is
+        // inactive
         this.getMap().setMyLocationEnabled(false);
     }
 
@@ -304,4 +349,14 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         return true;
     }
 
+    private static int[] extractIdArray(Agenda a) {
+
+        int[] arr = new int[a.size()];
+
+        for (int i = 0; i < a.size(); i++) {
+            arr[i] = a.get(i).getUniqueId();
+        }
+
+        return arr;
+    }
 }

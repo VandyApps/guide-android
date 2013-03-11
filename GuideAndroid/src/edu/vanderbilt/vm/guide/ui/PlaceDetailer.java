@@ -31,6 +31,8 @@ public class PlaceDetailer extends Activity {
 
     private static final String PLACE_ID_EXTRA = "placeId";
 
+    private static final String FRAG = "detail";
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,26 +43,33 @@ public class PlaceDetailer extends Activity {
         mAction.setTitle("Place Details");
         mAction.setDisplayHomeAsUpEnabled(true);
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
+        
+        // Setup the detailer fragment
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment frag = getFragmentManager().findFragmentByTag(FRAG);
+        
+        if (frag == null) {
+            frag = PlaceDetailerFragment.newInstance(this, getIntent()
+                .getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
+            ft.add(R.id.sp_pane1, frag, FRAG);
+        }
+        
+        ft.commit();
     }
     // ---------- END onCreate() ---------- //
     
     @Override
     public void onResume() {
         super.onResume();
-        Fragment frag = PlaceDetailerFragment.newInstance(this, getIntent()
-                .getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
         
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.sp_pane1, frag, "detailer_fragment");
-        ft.commit();
     }
     
     @Override
     public void onPause() {
         super.onPause();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.remove(getFragmentManager().findFragmentByTag("detailer_fragment"));
-        ft.commit();
+        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //ft.remove(getFragmentManager().findFragmentByTag("detailer_fragment"));
+        //ft.commit();
     }
 
     /**

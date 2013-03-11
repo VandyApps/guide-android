@@ -15,7 +15,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.JsonWriter;
 import android.view.Menu;
@@ -89,8 +88,7 @@ public class Register extends FragmentActivity implements OnClickListener {
         mBtn2.setOnClickListener(this);
 
         // Setup MapFragment
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         ft.add(R.id.map_container, new SupportMapFragment(), MAP);
         ft.commit();

@@ -32,6 +32,7 @@ public class Navigator extends Activity {
         // Setup Navigation on ActionBar
         final ActionBar actionBar = getActionBar();
         actionBar.setBackgroundDrawable(GuideConstants.OLD_GOLD);
+
         // Specify that a dropdown list should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
