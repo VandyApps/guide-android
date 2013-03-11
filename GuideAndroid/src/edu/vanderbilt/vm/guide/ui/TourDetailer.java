@@ -195,20 +195,4 @@ public class TourDetailer extends Activity {
         }
     }
     
-    @Override
-    public void onResume() {
-        super.onResume();
-        
-
-    }
-    
-    @Override
-    public void onPause() {
-        super.onPause();
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.remove(getFragmentManager().findFragmentByTag("tour_map_Fragment"));
-        //ft.commit();
-    }
-    
-    
 }

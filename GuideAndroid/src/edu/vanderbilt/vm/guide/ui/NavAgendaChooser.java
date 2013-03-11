@@ -21,13 +21,6 @@ public class NavAgendaChooser extends Fragment implements OnClickListener{
     }
     
     @Override
-    public void onResume() {
-        super.onResume();
-        
-        
-    }
-
-    @Override
     public void onClick(View v) {
         
         switch (v.getId()) {

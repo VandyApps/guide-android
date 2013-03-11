@@ -196,10 +196,14 @@ public class Graph extends ArrayList<Node> {
             // Search for Triangles that contain this Vertex
             // store its edges, and then remove the Triangle
             edgeSet = new ArrayList<Edge>();
-            logger.debug("Size of workingSet before remove: " + workingSet.size());
+            //logger.debug("Size of workingSet before remove: " + workingSet.size());
             for (int k = 0; k < workingSet.size(); k++) {
-                Triangle tri = workingSet.get(k);/*
-                if (tri.isLeftOf(n)) {
+                Triangle tri = workingSet.get(k);
+		/*
+                I'm getting weird bugs here, so this part is commented out for now.
+		The functionality is not affected, but there may be some performance hit.
+		*/ /*    
+		if (tri.isLeftOf(n)) {
                     // should remove completed triangle here
                     workingSet.remove(k);
                     k--;
@@ -218,10 +222,10 @@ public class Graph extends ArrayList<Node> {
                     // logger.debug("Not encompassing");
                 }
             }
-            logger.debug("Size of workingSet after remove: " + workingSet.size());
-             logger.debug("Size of edgeSet before remove: " + edgeSet.size());
+            // logger.debug("Size of workingSet after remove: " + workingSet.size());
+            // logger.debug("Size of edgeSet before remove: " + edgeSet.size());
             removeDuplicateEdge(edgeSet);
-             logger.debug("Size of edgeSet after remove: " + edgeSet.size());
+            // logger.debug("Size of edgeSet after remove: " + edgeSet.size());
             for (Edge e : edgeSet) {
 
                 Triangle newT = new Triangle();
