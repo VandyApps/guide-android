@@ -132,9 +132,15 @@ public class Graph extends ArrayList<Node> {
      * ( mailto:sjaak@sjaakpriester.nl )
      */
     public void buildNetwork() {
-
+        
+        if (this.size() < 2) {
+            logger.debug("Can't build network with less than 2 points");
+            return;
+        }
+        
         if (this.size() < 3) {
-            // Can't build triangle with less than 3 points
+            this.get(0).addNeighbour(this.get(1).getId());
+            this.get(1).addNeighbour(this.get(0).getId());
             logger.debug("Can't build triangle with less than 3 points");
             return;
         }
@@ -142,6 +148,7 @@ public class Graph extends ArrayList<Node> {
         // Initialization
         ArrayList<Triangle> workingSet = new ArrayList<Triangle>();
         Collections.sort(this, new HorizontalComparator());
+        ArrayList<Triangle> finishedSet = new ArrayList<Triangle>();
         
         // Find bounding rectangle
         double xMin = this.get(0).getLng();
@@ -195,22 +202,18 @@ public class Graph extends ArrayList<Node> {
 
             // Search for Triangles that contain this Vertex
             // store its edges, and then remove the Triangle
-            edgeSet = new ArrayList<Edge>();
+            edgeSet.clear();
             //logger.debug("Size of workingSet before remove: " + workingSet.size());
             for (int k = 0; k < workingSet.size(); k++) {
                 Triangle tri = workingSet.get(k);
-		/*
-                I'm getting weird bugs here, so this part is commented out for now.
-		The functionality is not affected, but there may be some performance hit.
-		*/ /*    
-		if (tri.isLeftOf(n)) {
-                    // should remove completed triangle here
+                     
+                if (tri.isLeftOf(n)) {
+                    // should move completed triangle to the finished set
+                    finishedSet.add(tri);
                     workingSet.remove(k);
                     k--;
 
-                } else 
-                */
-                if (tri.isEncompassing(n)) {
+                } else if (tri.isEncompassing(n)) {
                     edgeSet.add(new Edge(tri.get(0), tri.get(1)));
                     edgeSet.add(new Edge(tri.get(1), tri.get(2)));
                     edgeSet.add(new Edge(tri.get(0), tri.get(2)));
@@ -238,10 +241,17 @@ public class Graph extends ArrayList<Node> {
 
         // Remove super triangle
         workingSet.remove(superTri);
-        // logger.debug("Size of workingSet: " + workingSet.size());
-
-        // convert to adjacency list
+        
+        // Add all remaining Triangles to the finished set
         for (Triangle tri : workingSet) {
+            finishedSet.add(tri);
+        }
+        
+        workingSet = null;
+        // logger.debug("Size of workingSet: " + workingSet.size());
+        
+        // convert to adjacency list
+        for (Triangle tri : finishedSet) {
             // logger.debug("Id: "+tri.get(0).getId());
 
             if ((tri.get(0).getId() <= 0) || (tri.get(1).getId() <= 0) || (tri.get(2).getId() <= 0)) {
