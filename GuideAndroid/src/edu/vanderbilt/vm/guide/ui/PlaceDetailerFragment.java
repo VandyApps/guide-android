@@ -46,6 +46,8 @@ public class PlaceDetailerFragment extends Fragment {
     private boolean isOnAgenda = false;
 
     private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailerFragment");
+	
+    private static final String PLC_ID = "id";
 
     /**
      * Create a new instance of the PlaceDetail fragment. This method returns a
@@ -57,7 +59,11 @@ public class PlaceDetailerFragment extends Fragment {
     static PlaceDetailerFragment newInstance(Context ctx, int id) {
         PlaceDetailerFragment frag = (PlaceDetailerFragment)Fragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.PlaceDetailerFragment");
-        frag.mPlace = getPlaceById(ctx, id);
+
+        Bundle arg = new Bundle();
+        arg.putInt(PLC_ID, id);
+        frag.setArguments(arg);
+        
         return frag;
     }
 
@@ -72,8 +78,8 @@ public class PlaceDetailerFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
 
@@ -81,13 +87,13 @@ public class PlaceDetailerFragment extends Fragment {
             Bundle args = getArguments();
             logger.debug("Using information from argument");
             if (args != null) {
-                int placeId = args.getInt(GuideConstants.PLACE_ID_EXTRA,
+                int placeId = args.getInt(PLC_ID,
                         GuideConstants.BAD_PLACE_ID);
                 mPlace = getPlaceById(getActivity(), placeId);
             }
         }
 
-        updateInformation();
+        //updateInformation();
 
         /* Check if this place is already on Agenda */
         if (GlobalState.getUserAgenda().isOnAgenda(mPlace)) {
@@ -96,6 +102,12 @@ public class PlaceDetailerFragment extends Fragment {
             isOnAgenda = false;
         }
 
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateInformation();
     }
 
     @Override
@@ -111,7 +123,6 @@ public class PlaceDetailerFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        menu.clear();
         inflater.inflate(R.menu.place_detail_activity, menu);
         this.mMenu = menu;
 

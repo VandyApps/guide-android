@@ -53,6 +53,8 @@ public class MapViewer extends Activity {
 
     private static final String MAP_CURRENT = "map_current";
 
+    private static final String MAP = "map";
+
     private ActionBar mAction;
 
     private Menu mMenu;
@@ -61,33 +63,37 @@ public class MapViewer extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_pane);
-        MapFragment frag = null;
+        
+        MapFragment frag = (MapFragment)getFragmentManager().findFragmentByTag(MAP);
 
-        Intent i = this.getIntent();
-        if (i.hasExtra(MAP_FOCUS)) {
-            /*
-             * If the intent come with a PlaceId: - center the map to that place
-             * - show marker for that place only
-             */
+        if (frag == null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Intent i = this.getIntent();
 
-            Place plc = getPlaceById(this, i.getIntExtra(MAP_FOCUS, -1));
-            frag = PlaceMapFrag.newInstance(this, plc);
+            if (i.hasExtra(MAP_FOCUS)) {
+                /*
+                 * If the intent come with a PlaceId: - center the map to that
+                 * place - show marker for that place only
+                 */
 
-        } else if (i.hasExtra(MAP_AGENDA)) {
-            /*
-             * If not, then: - show markers for all places on the agenda -
-             * center the map to current location
-             */
+                Place plc = getPlaceById(this, i.getIntExtra(MAP_FOCUS, -1));
+                frag = PlaceMapFrag.newInstance(this, plc);
 
-            frag = AgendaMapFrag.newInstance(this, GlobalState.getUserAgenda());
+            } else if (i.hasExtra(MAP_AGENDA)) {
+                /*
+                 * If not, then: - show markers for all places on the agenda -
+                 * center the map to current location
+                 */
 
-        } else if (i.hasExtra(MAP_CURRENT)) {
-            frag = SelfMapFragment.newInstance(this);
+                frag = AgendaMapFrag.newInstance(this, GlobalState.getUserAgenda());
+
+            } else if (i.hasExtra(MAP_CURRENT)) {
+                frag = SelfMapFragment.newInstance(this);
+            }
+
+            ft.add(R.id.sp_pane1, frag, "map_fragment");
+            ft.commit();
         }
-
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.sp_pane1, frag, "map_fragment");
-        ft.commit();
 
         setupActionBar();
     }
@@ -124,8 +130,10 @@ public class MapViewer extends Activity {
             case R.id.menu_about:
                 About.open(this);
                 return true;
+
             default:
                 return false;
+
         }
     }
 
@@ -223,11 +231,11 @@ public class MapViewer extends Activity {
     static LatLng toLatLng(Location loc) {
         return new LatLng(loc.getLatitude(), loc.getLongitude());
     }
-    
+
     static LatLng toLatLng(Node n) {
         return new LatLng(n.getLat(), n.getLng());
     }
-    
+
     /*
      * Static utility methods commonly used by all the MapFragments
      */

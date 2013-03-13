@@ -45,7 +45,9 @@ public class TourDetailer extends Activity {
     private Cursor mCursor;
 
     private GuideDBOpenHelper mHelper;
-
+    
+    private static final String MAP = "map";
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,9 +76,21 @@ public class TourDetailer extends Activity {
         }
 
         fillViews(mCursor);
-
         
-
+        MapFragment mapFrag = (MapFragment)getFragmentManager().findFragmentByTag(MAP);
+        
+        if (mapFrag == null) {
+            int placesIx = mCursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
+            Agenda tourAgenda = DBUtils.getAgendaFromIds(mCursor.getString(placesIx),
+                    mHelper.getReadableDatabase());
+    
+            mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
+    
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.tour_detail_map_container, mapFrag, MAP);
+            ft.commit();
+        }
     }
 
     /**
@@ -180,30 +194,5 @@ public class TourDetailer extends Activity {
                 return false;
         }
     }
-    
-    @Override
-    public void onResume() {
-        super.onResume();
-        
-        int placesIx = mCursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
-        Agenda tourAgenda = DBUtils.getAgendaFromIds(mCursor.getString(placesIx),
-                mHelper.getReadableDatabase());
-
-        MapFragment mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.tour_detail_map_container, mapFrag, "tour_map_Fragment");
-        ft.commit();
-    }
-    
-    @Override
-    public void onPause() {
-        super.onPause();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.remove(getFragmentManager().findFragmentByTag("tour_map_Fragment"));
-        ft.commit();
-    }
-    
     
 }

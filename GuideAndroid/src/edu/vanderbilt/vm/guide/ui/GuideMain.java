@@ -90,7 +90,9 @@ public class GuideMain extends Activity {
             case R.id.menu_about:
                 About.open(this);
                 return true;
-
+            case R.id.menu_navigator:
+                Navigator.open(this);
+                return true;
             default:
                 return false;
         }

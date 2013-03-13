@@ -35,8 +35,7 @@ public class StatsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        tvHistory = (TextView)getActivity().findViewById(R.id.tv_history);
-        tvHistory.setText("History");
+        ((TextView)getActivity().findViewById(R.id.tv_history)).setText("History");
 
         listHistory = (ListView)getActivity().findViewById(R.id.list_history);
         listHistory.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserHistory()));

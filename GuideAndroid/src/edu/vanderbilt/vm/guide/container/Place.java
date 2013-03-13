@@ -195,8 +195,12 @@ public class Place {
     public int getUniqueId() {
         return mUniqueId;
     }
-
+    
     @Override
+    public String toString() {
+        return "{ id: " + this.getUniqueId() + ", name: " + getName() + " }";
+    }
+    
     public int hashCode() {
         // We just return the unique ID for efficiency,
         // hoping that the client has actually made the ID unique

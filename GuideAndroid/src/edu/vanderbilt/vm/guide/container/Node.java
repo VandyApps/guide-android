@@ -29,7 +29,7 @@ public class Node {
     static final double EPSILON = 0.000001;
     
     // Main constructor for a node that represents a row in the Nodes DB table.
-    public Node(int id, double lat, double lng, int[] neighs, int isAPlace) {
+    public Node(int id, double lat, double lng, int[] neighs) {
         mId = id;
         mLat = lat/DEGPERRAD;
         mLng = lng/DEGPERRAD;
@@ -39,7 +39,7 @@ public class Node {
                 mNeighbours.add(i);
             }
         }
-        isPlace = (isAPlace > 0) ? true : false;
+        isPlace = (id < 9999 && id > 0) ? true : false;
     }
     
     public Node(double lat, double lng) {
@@ -94,6 +94,11 @@ public class Node {
     
     public int getPrevious() {
         return mPrevious;
+    }
+    
+    @Override
+    public String toString() {
+        return "{ id: " + getId() + " }";
     }
     
     public void setScore(double scr) {

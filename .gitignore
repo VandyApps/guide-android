@@ -21,3 +21,6 @@ local.properties
 
 # Google maps API key
 maps_api_key.xml
+
+# trash left behind by the Ubuntu file explorer
+.directory

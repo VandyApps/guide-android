@@ -7,7 +7,8 @@
     <string name="title_activity_guide_main">Guide Android</string>
 	<string name="title_activity_place_detail_activity">Place Details</string>
 	<string name="title_activity_tour_detail_activity">Tour Details</string>
-	<string name="title_activity_webmap">WebMap</string>
+	<string name="title_map">Map</string>
+	<string name="title_navigator">Navigate</string>
 	
 	<string name="main_current_location">This box shows your current location. 
 	    Click to show the detail of this place</string>
@@ -22,5 +23,16 @@
 	<string name="menu_about">About</string>
 	<string name="menu_sort_alphabetic">Sort: alphabetically</string>
 	<string name="menu_sort_distance">Sort: by distance</string>
+	<string name="menu_navigator">Navigate</string>
+	
+	<string name="nav_label1">Travel from</string>
+	<string name="nav_label2">Destination</string>
+	<string name="nav_label3">Travel through</string>
+	<string name="nav_label4">Agenda</string>
+	<string name="nav_label5">Choose starting location#8230</string>
+	<string name="nav_label6">Choose destination#8230</string>
+	<string name="nav_label7">Show Path</string>
+	<string name="nav_label8">Choose Tour</string>
+	<string name="nav_label9">Show Path</string>
 	
 </resources>
