@@ -1,31 +1,34 @@
-import sys
+from sys import argv
 import json
 
-# takes two json containing an array of Nodes and merge the list.
-# copy this script file into a folder that also contains a "nodes.json" and
-# a "source.json"
-# Everything in Source will be appended at the end of Nodes, with the id
+# merge_list [ORIGINAL] [EXTRA, EXTRA, EXTRA, ... ]
+# takes jsons containing an array of Nodes and merge the list.
+# Everything in EXTRAs will be appended at the end of ORIGINAL, with the id
 # appropriately modified
 # Do not use this to append anything to the nodes.json generated from
 # places.json, because then the id would be messed up
-nodesJson = open("nodes.json",'r')
-sourceJson = open("source.json",'r')
 
+# Open ORIGINAL on which EXTRA will be appended
+nodesJson = open(argv[1], 'r')
 nodesList = json.load(nodesJson)
 nodesJson.close()
 
-# get the last node's id
-lastId = nodesList[len(nodesList) - 1]["id"]
+for extraName in argv[2:]:
+    # get the last node's id
+    lastId = nodesList[len(nodesList) - 1]["id"]
+    
+    # Open the EXTRA which will be appended to ORIGINAL
+    sourceJson = open(extraName, 'r')
+    sourceList = json.load(sourceJson)
+    sourceJson.close()
+    
+    # Appending
+    for source in sourceList:
+	    lastId = lastId + 1
+	    source["id"] = lastId
+	    nodesList.append(source)
 
-sourceList = json.load(sourceJson)
-sourceJson.close()
-
-for source in sourceList:
-	lastId = lastId + 1
-	source["id"] = lastId
-	nodesList.append(source)
-
-
-mergedJson = open("nodes.json", 'w')
+# dump everything in ORIGINAL
+mergedJson = open(argv[1], 'w')
 json.dump(nodesList, mergedJson, False, True, True, True, None, 3)
 
