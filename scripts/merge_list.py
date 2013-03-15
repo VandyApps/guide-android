@@ -1,12 +1,10 @@
 from sys import argv
 import json
 
-# merge_list [ORIGINAL] [EXTRA, EXTRA, EXTRA, ... ]
+# merge_list.py [ORIGINAL] [EXTRA EXTRA EXTRA ...]
 # takes jsons containing an array of Nodes and merge the list.
-# Everything in EXTRAs will be appended at the end of ORIGINAL, with the id
+# Everything in EXTRAs will be appended at the end of ORIGINAL, with the ids
 # appropriately modified
-# Do not use this to append anything to the nodes.json generated from
-# places.json, because then the id would be messed up
 
 # Open ORIGINAL on which EXTRA will be appended
 nodesJson = open(argv[1], 'r')
