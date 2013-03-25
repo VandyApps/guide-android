@@ -67,10 +67,8 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         AgendaMapFrag frag = (AgendaMapFrag)Fragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.AgendaMapFrag");
 
-        Bundle arg = new Bundle();
-        arg.putIntArray(ID_ARRAY, extractIdArray(agenda));
-        frag.setArguments(arg);
-
+        frag.mAgenda = agenda;
+        
         return frag;
     }
 
@@ -80,17 +78,6 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
 
         GoogleMap map = getMap();
         MapViewer.resetCamera(map);
-
-        int[] ids = this.getArguments().getIntArray(ID_ARRAY);
-        GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
-        SQLiteDatabase db = helper.getReadableDatabase();
-        mAgenda = new Agenda();
-
-        for (int placeId : ids) {
-            mAgenda.add(DBUtils.getPlaceById(placeId, db));
-        }
-
-        db.close();
 
         ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
         for (Place plc : mAgenda) {

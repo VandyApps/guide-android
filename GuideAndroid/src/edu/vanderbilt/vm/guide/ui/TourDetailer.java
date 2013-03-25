@@ -92,6 +92,13 @@ public class TourDetailer extends Activity {
             ft.commit();
         }
     }
+    
+    @Override
+    public void onDestroy() {
+        if (mHelper != null) {
+            mHelper.close();
+        }
+    }
 
     /**
      * Fill in all of the text for the TextViews in the layout and set up the
