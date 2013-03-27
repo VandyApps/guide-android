@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,8 +49,6 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
     private Menu mMenu;
 
     private boolean showSelf = true;
-
-    private static final String ID_ARRAY = "ids";
 
     /**
      * Instantiate a Map Fragment and puts markers on all the places on the
@@ -173,6 +169,7 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.map_viewer, menu);
         mMenu = menu;
     }
 
@@ -304,20 +301,19 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
             marker.showInfoWindow();
 
             Place plc = null;
-            Agenda agenda = GlobalState.getUserAgenda();
 
             // Had to match marker by title, because there is no
             // marker id
-            for (Place agndPlc : agenda) {
+            for (Place agndPlc : mAgenda) {
                 if (marker.getTitle().equals(agndPlc.getName())) {
                     plc = agndPlc;
                     break;
                 }
             }
 
-            if (plc != null) {
+            if (plc != null && mMenu != null) {
                 mPlaceIdFocused = plc.getUniqueId();
-                if (agenda.isOnAgenda(plc)) {
+                if (mAgenda.isOnAgenda(plc)) {
                     // Option to remove
                     MenuItem item = mMenu.findItem(R.id.map_menu_remove_agenda);
                     item.setVisible(true);
@@ -336,14 +332,4 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         return true;
     }
 
-    private static int[] extractIdArray(Agenda a) {
-
-        int[] arr = new int[a.size()];
-
-        for (int i = 0; i < a.size(); i++) {
-            arr[i] = a.get(i).getUniqueId();
-        }
-
-        return arr;
-    }
 }

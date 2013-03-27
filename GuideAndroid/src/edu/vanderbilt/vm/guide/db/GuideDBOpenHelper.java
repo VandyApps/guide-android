@@ -55,7 +55,7 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 	                NodeTable.LON_COL + " FLOAT, " +
 	                NodeTable.NEIGHBOR_COL + " TEXT);";
 	
-	private static final int DB_VERSION = 4;
+	private static final int DB_VERSION = 5;
 	private static final Logger logger = LoggerFactory.getLogger("db.GuideDBOpenHelper");
 	
 	private final Context mContext;
@@ -116,13 +116,38 @@ public class GuideDBOpenHelper extends SQLiteOpenHelper implements GuideDBConsta
 			}
 		}
 		
+		logger.trace("Populating " + 
+				GuideDBConstants.NodeTable.NODE_TABLE_NAME + 
+				" table from JSON file " + GuideDBConstants.NODES_JSON_NAME);
+		in = null;
+		try {
+			in = mContext.getAssets().open(
+					GuideDBConstants.NODES_JSON_NAME);
+			JsonUtils.populateDatabaseFromInputStream(
+					GuideDBConstants.NodeTable.NODE_TABLE_NAME, in, db);
+		} catch (IOException e) {
+			logger.error("Error processing file " + 
+					GuideDBConstants.NODES_JSON_NAME, e);
+		} finally {
+			if(in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.error("Error closing input stream for file " 
+							+ GuideDBConstants.NODES_JSON_NAME, e);
+				}
+			}
+		}
+		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE " + PlaceTable.PLACE_TABLE_NAME);
-		db.execSQL("DROP TABLE " + TourTable.TOUR_TABLE_NAME);
-		db.execSQL("DROP TABLE " + NodeTable.NODE_TABLE_NAME);
+	    if (!db.isReadOnly()) {
+    		db.execSQL("DROP TABLE IF EXISTS " + PlaceTable.PLACE_TABLE_NAME);
+    		db.execSQL("DROP TABLE IF EXISTS " + TourTable.TOUR_TABLE_NAME);
+    		db.execSQL("DROP TABLE IF EXISTS " + NodeTable.NODE_TABLE_NAME);
+	    }
 		onCreate(db);
 	}
 	

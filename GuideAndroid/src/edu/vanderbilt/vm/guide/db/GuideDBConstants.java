@@ -18,6 +18,8 @@ public interface GuideDBConstants {
     String PLACES_JSON_NAME = "places.json";
 
     String TOURS_JSON_NAME = "tours.json";
+    
+    String NODES_JSON_NAME = "nodes.json";
 
     public interface PlaceTable {
         String PLACE_TABLE_NAME = "places";

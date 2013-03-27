@@ -95,6 +95,7 @@ public class TourDetailer extends Activity {
     
     @Override
     public void onDestroy() {
+        super.onDestroy();
         if (mHelper != null) {
             mHelper.close();
         }
