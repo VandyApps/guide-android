@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,7 +35,6 @@ import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
-import edu.vanderbilt.vm.guide.util.GlobalState;
 
 public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener,
         OnMarkerClickListener {
@@ -66,6 +66,12 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
         frag.mAgenda = agenda;
         
         return frag;
+    }
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
