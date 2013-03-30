@@ -7,12 +7,15 @@
 #
 #   where INPUT_FILE is the file containing the nodes Json
 #
-# the REPL will start, and you can start adding the adjacency
-# data like this:
+# the REPL will start, and you can start adding and removing the 
+# adjacency data like this:
 #
-#       [ 12 , 34 ]
+#           l 12 34
 #
-# where 12 and 34 are the IDs of two nodes that you want to be linked.
+#           s 12 34
+#
+# where l and s are keywords to indicate linkage and unlinkage respectively,
+# and 12 and 34 are the IDs of two nodes that you want to be linked.
 # Press Enter, and the REPL will be ready to accept another input after
 # it has modified the list.
 #
@@ -41,18 +44,24 @@ while True:
     if data == "":
         break
     
-    # if the input is done correctly, then it should
-    # be evalable to a list with length 2
-    data_parsed = eval(data)
-    # print str(len(data_parsed))
+    tokens = data.split()
     
-    # link that shit up
-    for node in NodeList:
-        if node["id"] == data_parsed[0]:
-            node["neighbours"].append(data_parsed[1])
-    
-        if node["id"] == data_parsed[1]:
-            node["neighbours"].append(data_parsed[0])
+    if tokens[0] == 'l':
+        for node in NodeList:
+            if node["id"] == int(tokens[1]):
+                node["neighbours"].append(int(tokens[2]))
+        
+            if node["id"] == int(tokens[2]):
+                node["neighbours"].append(int(tokens[1]))
+        
+    elif tokens[0] == 's':
+        for node in NodeList:
+            if node["id"] == int(tokens[1]):
+                node["neighbours"].remove(int(tokens[2]))
+        
+            if node["id"] == int(tokens[2]):
+                node["neighbours"].remove(int(tokens[1]))
+
 
 # Finalize the json and save it
 outFile = open(argv[2], 'w')
