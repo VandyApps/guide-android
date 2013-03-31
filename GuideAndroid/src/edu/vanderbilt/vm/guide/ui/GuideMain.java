@@ -98,6 +98,7 @@ public class GuideMain extends Activity {
         }
     }
 
+    @Override
     public void onSaveInstanceState(Bundle state) {
         state.putInt("tab", mAction.getSelectedTab().getPosition());
     }

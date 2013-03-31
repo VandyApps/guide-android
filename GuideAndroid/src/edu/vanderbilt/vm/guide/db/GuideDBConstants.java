@@ -18,6 +18,8 @@ public interface GuideDBConstants {
     String PLACES_JSON_NAME = "places.json";
 
     String TOURS_JSON_NAME = "tours.json";
+    
+    String NODES_JSON_NAME = "nodes.json";
 
     public interface PlaceTable {
         String PLACE_TABLE_NAME = "places";
@@ -89,6 +91,18 @@ public interface GuideDBConstants {
         String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.edu.vanderbilt.vm.guide.tour";
 
         String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.edu.vanderbilt.vm.guide.tour";
+    }
+    
+    public interface NodeTable {
+        String NODE_TABLE_NAME = "nodes";
+        
+        String ID_COL = "id";
+        
+        String LAT_COL = "latitude";
+        
+        String LON_COL = "longitude";
+        
+        String NEIGHBOR_COL  = "neighbor_ids";
     }
 
 }

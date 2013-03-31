@@ -17,6 +17,7 @@ import com.google.gson.stream.JsonReader;
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants.NodeTable;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants.PlaceTable;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants.TourTable;
 
@@ -136,6 +137,10 @@ public class JsonUtils {
             while (reader.hasNext()) {
                 insertTourTuple(db, reader);
             }
+        } else if (tableName.equals(GuideDBConstants.NodeTable.NODE_TABLE_NAME)) {
+            while (reader.hasNext()) {
+                insertNodeTuple(db, reader);
+            }
         }
 
         return db;
@@ -249,7 +254,9 @@ public class JsonUtils {
                     placeIds.append(',');
                 }
                 // Remove trailing comma
-                placeIds.deleteCharAt(placeIds.length() - 1);
+                if (placeIds.length() != 0) {
+                    placeIds.deleteCharAt(placeIds.length() - 1);
+                }
                 reader.endArray();
                 cv.put(TourTable.PLACES_ON_TOUR_COL, placeIds.toString());
 
@@ -278,6 +285,53 @@ public class JsonUtils {
         cv.put(TourTable.ID_COL, id);
         logger.trace("Inserting ContentValues into Tour table: {}", cv);
         db.insert(TourTable.TOUR_TABLE_NAME, null, cv);
+    }
+    
+    private static void insertNodeTuple(SQLiteDatabase db, JsonReader reader) throws IOException {
+        reader.beginObject();
+        
+        int id = BAD_ID;
+        ContentValues cv = new ContentValues();
+
+        while (reader.hasNext()) {
+            String propertyName = reader.nextName();
+
+            if (propertyName.equals("id")) {
+                id = reader.nextInt();
+
+            } else if (propertyName.equals("latitude")) {
+                cv.put(NodeTable.LAT_COL, reader.nextDouble());
+
+            } else if (propertyName.equals("longitude")) {
+                cv.put(NodeTable.LON_COL, reader.nextDouble());
+
+            } else if (propertyName.equals("neighbors")) {
+                reader.beginArray();
+                StringBuilder neighborIds = new StringBuilder();
+                while (reader.hasNext()) {
+                    neighborIds.append(reader.nextInt());
+                    neighborIds.append(',');
+                }
+                // Remove trailing comma
+                if (neighborIds.length() != 0) {
+                    neighborIds.deleteCharAt(neighborIds.length() - 1);
+                }
+                reader.endArray();
+                cv.put(NodeTable.NEIGHBOR_COL, neighborIds.toString());
+
+            }
+        }
+
+        reader.endObject();
+
+        if (id == BAD_ID) {
+            logger.warn("Got a tour with no ID.  Skipping.");
+            return;
+        }
+
+        cv.put(NodeTable.ID_COL, id);
+        logger.trace("Inserting ContentValues into Node table: {}", cv);
+        db.insert(NodeTable.NODE_TABLE_NAME, null, cv);
     }
     
 }

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?v=3.11&key=AIzaSyDWE8xMberwg5rR7zpU_TZ7cjtbFoRWKv4&sensor=false">
+    </script>
+    <script type="text/javascript" src="../js/json2.js">
+    </script>
+    <script type="text/javascript">
+      function MarkerHolder(marker, id) {
+        this.marker = marker;
+        this.id = id;
+        this.adjacency = new Array();
+      }
+
+      MarkerHolder.prototype.addAdjacency = function(id) {
+        this.adjacency[this.adjacency.length] = id;
+      };
+
+      // Holds a reference to the polyline connecting markers of ids 1 and 2
+      function PolylineHolder(polyline, id1, id2) {
+        this.polyline = polyline;
+        this.id1 = id1;
+        this.id2 = id2;
+      }
+
+      var map;
+      var markerHolder1;
+      var STARTING_NODE_ID = 10000;
+      var curNodeId = STARTING_NODE_ID;
+
+      // Array of MarkerHolder objects
+      // index of MarkerHolder with id n is n-STARTING_NODE_ID
+      var markerHolders = new Array(); 
+
+      // Array of PolylineHolders
+      var polylineHolders = new Array();
+
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(36.14572, -86.80446),
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.HYBRID
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+
+        google.maps.event.addListener(map, 'click', function(event) {
+          placeMarker(event.latLng);
+        });
+      }
+
+      function getMarkerHolder(marker) {
+        return markerHolders[parseInt(marker.title) - STARTING_NODE_ID];
+      }
+
+      function placeMarker(location) {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: curNodeId.toString()
+        });
+
+        var markerHolder = new MarkerHolder(marker, curNodeId);
+        markerHolders[markerHolder.id - STARTING_NODE_ID] = markerHolder;
+
+        // If a marker is clicked, start a linking operation
+        google.maps.event.addListener(marker, 'click', function() {
+          if (markerHolder1 == null) {
+            markerHolder1 = getMarkerHolder(marker);
+          } else {
+            var markerHolder2 = getMarkerHolder(marker);
+
+            var ix = markerHolder1.adjacency.indexOf(markerHolder2.id);
+            if(ix != -1) {
+              // If the markers were already adjacent, make them unadjacent
+              markerHolder1.adjacency[ix] = null;
+              ix = markerHolder2.adjacency.indexOf(markerHolder1.id);
+              if (ix != -1) {
+                markerHolder2.adjacency[ix] = null;
+              }
+              removePolyline(markerHolder1.id, markerHolder2.id);
+            } else if (markerHolder1.id != markerHolder2.id) {
+              // Draw a line on the map connecting the two markers
+              var connector = new google.maps.Polyline({
+                  path: [markerHolder1.marker.position, markerHolder2.marker.position],
+                  map: map
+              });
+
+              polylineHolders.push(new PolylineHolder(connector, markerHolder1.id, markerHolder2.id));
+
+              // Add the two markers to each others' adjacency lists
+              markerHolder1.addAdjacency(markerHolder2.id);
+              markerHolder2.addAdjacency(markerHolder1.id);
+            }
+
+            markerHolder1 = null;
+          }
+        });
+
+        // google.maps.event.addListener(marker, 'dblclick', function() {
+
+        curNodeId++;
+      }
+
+      function removePolyline(id1, id2) {
+        for (var i=0; i<polylineHolders.length; i++) {
+          if (polylineHolders[i] != null && 
+              (polylineHolders[i].id1 == id1 || polylineHolders[i].id1 == id2) &&
+              (polylineHolders[i].id2 == id1 || polylineHolders[i].id2 == id2)) {
+            // Remove that polyline from the map
+            polylineHolders[i].polyline.setPath([]);
+            polylineHolders[i] = null;
+            return;
+          }
+        }
+      }
+
+      function Node(id, lat, lon) {
+        this.id = id;
+        this.latitude = lat;
+        this.longitude = lon;
+
+        // Array of neighbor ids
+        this.neighbors = new Array();
+      }
+
+      /*
+      Node.prototype.toJSON = function(key) {
+        if (key == "id") {
+          return id;
+        } else if (key == "latitutude") {
+          return latitude;
+        } else if (key == "longitude") {
+          return longitude;
+        } else if (key == "neighbors") {
+          return neighbors;
+        } else {
+          return undefined;
+        }
+      }*/
+
+      function writeJSON() {
+        var nodes = new Array();
+        console.log(markerHolders);
+        for (var i=0; i<markerHolders.length; i++) {
+          if (markerHolders[i] != null) {
+            console.log(markerHolders[i]);
+            var node = new Node(markerHolders[i].id,
+                                markerHolders[i].marker.position.lat(),
+                                markerHolders[i].marker.position.lng());
+            for (var j=0; j<markerHolders[i].adjacency.length; j++) {
+              if (markerHolders[i].adjacency[j] != null) {
+                node.neighbors.push(markerHolders[i].adjacency[j]);
+              }
+            }
+            nodes.push(node);
+          }
+        }
+
+        console.log(JSON.stringify(nodes));
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+  <body>
+    <table>
+      <tbody>
+        <tr>
+          <div id="map-canvas" style="width: 600px; height: 400px"/>
+        </tr>
+        <tr>
+          <td align="center">
+            <input id="writeJsonButton" type="button" value="Write JSON" onclick="writeJSON();" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

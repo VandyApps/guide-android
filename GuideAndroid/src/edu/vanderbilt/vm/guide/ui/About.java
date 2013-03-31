@@ -1,18 +1,28 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class About extends Activity {
 
+    Logger logger = LoggerFactory.getLogger(Activity.class);
+    
     private static String MAP_TIPS = "map_tips";
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -27,6 +37,28 @@ public class About extends Activity {
             tvAbout.setGravity(Gravity.CENTER);
             this.setContentView(tvAbout);
 
+        }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean isDebuggable =  ( 0 != ( getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE ) );
+        if (isDebuggable) {
+            menu.add(Menu.NONE, 1, Menu.NONE, "Open Graph Debug Activity");
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == 1) {
+            Intent intent = new Intent().setClass(this, GraphUtilsDebugActivity.class);
+            startActivity(intent);
+            return true;
+        } else {
+            logger.error("Invalid options item selected");
+            return false;
         }
     }
 
