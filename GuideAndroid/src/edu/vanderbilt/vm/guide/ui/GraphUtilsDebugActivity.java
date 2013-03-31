@@ -26,15 +26,17 @@ public class GraphUtilsDebugActivity extends Activity implements GuideDBConstant
         
         GuideDBOpenHelper helper = new GuideDBOpenHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
+        /*
         Cursor placeCursor = db.query(PlaceTable.PLACE_TABLE_NAME, 
                 new String[] {PlaceTable.ID_COL, PlaceTable.LATITUDE_COL, PlaceTable.LONGITUDE_COL, PlaceTable.NAME_COL},
-                null, null, null, null, null);
+                null, null, null, null, null);*/
         Cursor nodeCursor = db.query(NodeTable.NODE_TABLE_NAME, 
                 new String[] {NodeTable.ID_COL, NodeTable.LAT_COL, NodeTable.LON_COL},
                 null, null, null, null, null);
         
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.debug_graph_map)).getMap();
         
+        /*
         if (placeCursor != null) {
             int id_ix = placeCursor.getColumnIndex(PlaceTable.ID_COL);
             int name_ix = placeCursor.getColumnIndex(PlaceTable.NAME_COL);
@@ -50,15 +52,17 @@ public class GraphUtilsDebugActivity extends Activity implements GuideDBConstant
                         .title(name)
                         .snippet("ID: " + id));
             }
-        }
+        }*/
         
         if (nodeCursor != null) {
             int id_ix = nodeCursor.getColumnIndex(NodeTable.ID_COL);
             int lat_ix = nodeCursor.getColumnIndex(NodeTable.LAT_COL);
             int lon_ix = nodeCursor.getColumnIndex(NodeTable.LON_COL);
+            int neighbors_ix = nodeCursor.getColumnIndex(NodeTable.NEIGHBOR_COL);
             while (nodeCursor.moveToNext()) {
                 double lat = nodeCursor.getDouble(lat_ix);
                 double lon = nodeCursor.getDouble(lon_ix);
+                String neighbors = nodeCursor.getString(neighbors_ix);
                 int id = nodeCursor.getInt(id_ix);
                 mMap.addMarker(new MarkerOptions().position(
                         new LatLng(lat, lon))

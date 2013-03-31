@@ -305,7 +305,7 @@ public class JsonUtils {
             } else if (propertyName.equals("longitude")) {
                 cv.put(NodeTable.LON_COL, reader.nextDouble());
 
-            } else if (propertyName.equals("neighbours")) {
+            } else if (propertyName.equals("neighbors")) {
                 reader.beginArray();
                 StringBuilder neighborIds = new StringBuilder();
                 while (reader.hasNext()) {

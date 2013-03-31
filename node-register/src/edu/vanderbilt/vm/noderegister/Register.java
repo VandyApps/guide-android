@@ -63,7 +63,7 @@ public class Register extends FragmentActivity implements OnClickListener {
 
     private static final String ID = "id";
 
-    private static final String NEIGH = "neighbours";
+    private static final String NEIGH = "neighbors";
 
     private static final int FIRST_ID = 10000;
 

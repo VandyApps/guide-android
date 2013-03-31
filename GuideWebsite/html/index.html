@@ -122,9 +122,8 @@
         this.latitude = lat;
         this.longitude = lon;
 
-        // Array of neighbour ids.  Yes, the British spelling is used here
-        // intentionally.
-        this.neighbours = new Array();
+        // Array of neighbor ids
+        this.neighbors = new Array();
       }
 
       /*
@@ -135,8 +134,8 @@
           return latitude;
         } else if (key == "longitude") {
           return longitude;
-        } else if (key == "neighbours") {
-          return neighbours;
+        } else if (key == "neighbors") {
+          return neighbors;
         } else {
           return undefined;
         }
@@ -153,7 +152,7 @@
                                 markerHolders[i].marker.position.lng());
             for (var j=0; j<markerHolders[i].adjacency.length; j++) {
               if (markerHolders[i].adjacency[j] != null) {
-                node.neighbours.push(markerHolders[i].adjacency[j]);
+                node.neighbors.push(markerHolders[i].adjacency[j]);
               }
             }
             nodes.push(node);

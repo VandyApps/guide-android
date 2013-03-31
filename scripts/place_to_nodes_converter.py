@@ -15,7 +15,7 @@ for place in placeslist:
 	node["id"] = place["id"]
 	node["latitude"] = place["latitude"]
 	node["longitude"] = place["longitude"]
-	node["neighbours"] = []
+	node["neighbors"] = []
 	nodeslist.append(node)
 
 # insert a place holder in preparation for the rest of the dataset
@@ -23,7 +23,7 @@ last = {}
 last["id"] = 9999
 last["latitude"] = 0
 last["lomgitude"] = 0
-last["neighbour"] = []
+last["neighbor"] = []
 nodeslist.append(last)
 
 # Dump everything in a new file named nodes.json
