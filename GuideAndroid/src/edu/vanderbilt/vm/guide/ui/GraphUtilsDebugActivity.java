@@ -12,12 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -163,7 +167,27 @@ public class GraphUtilsDebugActivity extends Activity implements GuideDBConstant
                 drawGraphOnMap(mst(mGraph));
                 return true;
             case SHORTEST_PATH:
-                drawGraphOnMap(shortestPath(mGraph, vertexMap.get(10000), vertexMap.get(10215)));
+                final Dialog dialog = new Dialog(this);
+                dialog.setContentView(R.layout.graph_utils_debug_pt_dialog);
+                final EditText node1Edit = (EditText)dialog.findViewById(R.id.graph_utils_debug_pt_dialog_node1);
+                final EditText node2Edit = (EditText)dialog.findViewById(R.id.graph_utils_debug_pt_dialog_node2);
+                final Button confirmButton = (Button) dialog.findViewById(R.id.graph_utils_debug_pt_dialog_button);
+                confirmButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                        try {
+                            int pt1Id = Integer.parseInt(node1Edit.getText().toString());
+                            int pt2Id = Integer.parseInt(node2Edit.getText().toString());
+                            drawGraphOnMap(shortestPath(mGraph, vertexMap.get(pt1Id), vertexMap.get(pt2Id)));
+                        } catch (Throwable t) {
+                            // just keep app from crashing for now
+                        }
+                    }
+                    
+                });
+                dialog.show();
                 return true;
             case CLEAR_MAP:
                 mMap.clear();
