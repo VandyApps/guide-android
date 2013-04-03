@@ -254,7 +254,9 @@ public class Graph extends ArrayList<Node> {
         for (Triangle tri : finishedSet) {
             // logger.debug("Id: "+tri.get(0).getId());
 
-            if ((tri.get(0).getId() <= 0) || (tri.get(1).getId() <= 0) || (tri.get(2).getId() <= 0)) {
+            if (    (tri.get(0).getId() <= 0)   || 
+                    (tri.get(1).getId() <= 0)   || 
+                    (tri.get(2).getId() <= 0))  {
                 continue;
             }
 

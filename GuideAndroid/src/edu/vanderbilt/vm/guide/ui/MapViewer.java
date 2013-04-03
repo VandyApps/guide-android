@@ -266,8 +266,8 @@ public class MapViewer extends Activity {
 
     // Centers the camera in the middle of the campus on a wide zoom
     static void resetCamera(GoogleMap map) {
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(36.145205, -86.803987),
-                MapViewer.WIDE_ZOOM);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(
+                36.145205, -86.803987), MapViewer.WIDE_ZOOM);
         map.moveCamera(update);
     }
     // ---------- END classes and other methods ---------- //
