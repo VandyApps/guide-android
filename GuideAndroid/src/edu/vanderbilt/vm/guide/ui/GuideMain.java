@@ -68,7 +68,6 @@ public class GuideMain extends Activity {
         mTabsAdapter.addTab(mAction.newTab().setText("Places"), PlaceTabFragment.class, null);
         mTabsAdapter.addTab(mAction.newTab().setText("Agenda"), AgendaFragment.class, null);
         mTabsAdapter.addTab(mAction.newTab().setText("Tours"), TourFragment.class, null);
-        mTabsAdapter.addTab(mAction.newTab().setText("Stats"), StatsFragment.class, null);
     }
 
     @Override

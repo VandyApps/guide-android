@@ -25,14 +25,14 @@
 	<string name="menu_sort_distance">Sort: by distance</string>
 	<string name="menu_navigator">Navigate</string>
 	
-	<string name="nav_label1">Travel from</string>
+	<string name="nav_label1">Start</string>
 	<string name="nav_label2">Destination</string>
 	<string name="nav_label3">Travel through</string>
 	<string name="nav_label4">Agenda</string>
-	<string name="nav_label5">Choose starting location#8230</string>
-	<string name="nav_label6">Choose destination#8230</string>
-	<string name="nav_label7">Show Path</string>
+	<string name="nav_label5">Enter name of starting location</string>
+	<string name="nav_label6">Enter name of destination</string>
+	<string name="nav_label7">Find Path</string>
 	<string name="nav_label8">Choose Tour</string>
-	<string name="nav_label9">Show Path</string>
+	<string name="nav_label9">Find Path</string>
 	
 </resources>

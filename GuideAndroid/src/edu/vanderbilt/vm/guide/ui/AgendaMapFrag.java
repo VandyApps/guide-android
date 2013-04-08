@@ -35,6 +35,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
+import edu.vanderbilt.vm.guide.util.GlobalState;
 
 public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener,
         OnMarkerClickListener {
@@ -77,6 +78,9 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
     @Override
     public void onResume() {
         super.onResume();
+        if (mAgenda == null) {
+            mAgenda = GlobalState.getUserAgenda();
+        }
 
         GoogleMap map = getMap();
         MapViewer.resetCamera(map);
