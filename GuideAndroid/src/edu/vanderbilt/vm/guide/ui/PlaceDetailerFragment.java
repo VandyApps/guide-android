@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;

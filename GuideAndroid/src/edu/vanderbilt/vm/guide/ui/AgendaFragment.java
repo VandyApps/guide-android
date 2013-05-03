@@ -11,7 +11,6 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
