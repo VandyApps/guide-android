@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Context;
@@ -15,6 +14,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfig;
+import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfigReceiver;
 import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
@@ -25,11 +26,13 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  * 
  * @author nicholasking
  */
-public class GuideMain extends SherlockFragmentActivity {
+public class GuideMain extends SherlockFragmentActivity implements SearchConfigReceiver {
 
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger("ui.GuideMain");
 
+    private static final String TAB_CACHE = "tab_cache";
+    
     private ActionBar mAction;
 
     private ViewPager mViewPager;
@@ -39,15 +42,14 @@ public class GuideMain extends SherlockFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Geomancer.activateGeolocation(this);
-
-        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_guide_main);
 
         setupActionBar();
-
+        
+        Geomancer.activateGeolocation(this);
+        
         if (savedInstanceState != null) {
-            mAction.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+            mAction.setSelectedNavigationItem(savedInstanceState.getInt(TAB_CACHE, 0));
         }
     }
 
@@ -58,8 +60,8 @@ public class GuideMain extends SherlockFragmentActivity {
         mAction = getSupportActionBar();
         mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mAction.setDisplayShowTitleEnabled(true);
-        mAction.setBackgroundDrawable(GuideConstants.OLD_GOLD);
-        mAction.setSplitBackgroundDrawable(GuideConstants.OLD_GOLD);
+        mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
+        mAction.setSplitBackgroundDrawable(GuideConstants.DECENT_GOLD);
         mAction.setTitle(getResources().getText(R.string.university_name));
 
         mViewPager = (ViewPager)findViewById(R.id.swiper_1);
@@ -72,8 +74,7 @@ public class GuideMain extends SherlockFragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.activity_guide_main, menu);
+        getSupportMenuInflater().inflate(R.menu.activity_guide_main, menu);
         return true;
     }
 
@@ -88,9 +89,15 @@ public class GuideMain extends SherlockFragmentActivity {
             case R.id.menu_about:
                 About.open(this);
                 return true;
+
             case R.id.menu_navigator:
                 Navigator.open(this);
                 return true;
+                
+            case R.id.menu_search:
+                SearchDialog.newInstance(this).show(getSupportFragmentManager(), "search_dialog");
+                return true;
+                
             default:
                 return false;
         }
@@ -98,7 +105,7 @@ public class GuideMain extends SherlockFragmentActivity {
 
     @Override
     public void onSaveInstanceState(Bundle state) {
-        state.putInt("tab", mAction.getSelectedTab().getPosition());
+        state.putInt(TAB_CACHE, mAction.getSelectedTab().getPosition());
     }
 
     // ---------- END setup and lifecycle related methods ---------- //
@@ -112,6 +119,12 @@ public class GuideMain extends SherlockFragmentActivity {
         Intent i = new Intent(ctx, GuideMain.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ctx.startActivity(i);
+    }
+
+    @Override
+    public void receiveSearchConfig(SearchConfig config) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

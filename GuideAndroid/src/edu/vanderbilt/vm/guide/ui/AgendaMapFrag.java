@@ -14,13 +14,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -59,15 +61,15 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
      * @return
      */
     public static AgendaMapFrag newInstance(Context ctx, Agenda agenda) {
-
-        AgendaMapFrag frag = (AgendaMapFrag) SupportMapFragment.instantiate(ctx,
+        
+        AgendaMapFrag frag = (AgendaMapFrag)SupportMapFragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.AgendaMapFrag");
 
         frag.mAgenda = agenda;
-        
+
         return frag;
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +85,8 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
 
         GoogleMap map = getMap();
         MapViewer.resetCamera(map);
-
+        map.setOnMarkerClickListener(this);     // What happens when a marker is tapped
+        
         ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
         for (Place plc : mAgenda) {
             geopointList.add(MapViewer.toLatLng(plc));
@@ -91,70 +94,42 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
             Location plcLoc = new Location("temp");
             plcLoc.setLatitude(plc.getLatitude());
             plcLoc.setLongitude(plc.getLongitude());
-            
+
             int dist = (int)Geomancer.getDeviceLocation().distanceTo(plcLoc);
 
             // Set the marker for each Place
             // Title must be exactly as the PlaceName, in order to match
             // them later on
             map.addMarker(new MarkerOptions().position(MapViewer.toLatLng(plc))
-                    .title(plc.getName()).draggable(false)
-                    .snippet(dist + " yards away"));
+                    .title(plc.getName()).draggable(false).snippet(dist + " yards away"));
         }
 
         // Calculate the bounds that cover all places in Agenda
         if (geopointList.size() == 0) {
 
+        } else if (geopointList.size() == 1) {
+            map.moveCamera(CameraUpdateFactory.newLatLng(geopointList.get(0)));
+            
         } else {
-            double minLat = Double.MAX_VALUE;
-            double maxLat = -Double.MAX_VALUE;
-            double minLng = Double.MAX_VALUE;
-            double maxLng = -Double.MAX_VALUE;
+            map.setOnCameraChangeListener(new OnCameraChangeListener() {
 
-            for (LatLng point : geopointList) {
-                if (point.latitude < minLat) {
-                    minLat = point.latitude;
+                @Override
+                public void onCameraChange(CameraPosition arg0) {
+                    GoogleMap map = getMap();
+                    LatLngBounds.Builder builder = LatLngBounds.builder();
+                    
+                    for (Place plc : mAgenda) {
+                        builder.include(MapViewer.toLatLng(plc));
+                    }
+                    
+                    map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 20));
+                    map.setOnCameraChangeListener(null);
                 }
-                if (point.latitude > maxLat) {
-                    maxLat = point.latitude;
-                }
-                if (point.longitude < minLng) {
-                    minLng = point.longitude;
-                }
-                if (point.longitude > minLng) {
-                    maxLng = point.longitude;
-                }
-            }
-
-            // Sanitize. This will still result in weird result if the
-            // coordinate value is wrong,
-            // but at least the weirdness is semi-consistent and easier to
-            // catch.
-            if (minLat > 90 || minLat < -90) {
-                minLat = 0;
-            }
-            if (maxLat > 90 || maxLat < -90) {
-                maxLat = 0;
-            }
-            if (minLng > 180 || minLng < -180) {
-                minLng = 0;
-            }
-            if (maxLng > 180 || maxLng < -180) {
-                maxLng = 0;
-            }
-
-            CameraUpdate update = CameraUpdateFactory.newLatLng(new LatLng((minLat + maxLat) / 2,
-                    (minLng + maxLng) / 2));
-            map.animateCamera(update);
-
-            // What happens when a marker is tapped
-            map.setOnMarkerClickListener(this);
+                
+            });
 
         }
-        
-        this.drawNetwork();
-        // this.drawPath(Geomancer.findPath(g, g.findNodeById(6),
-        // g.findNodeById(147)));
+
     }
 
     @Override
@@ -326,7 +301,8 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
                     // Option to remove
                     MenuItem item = mMenu.findItem(R.id.map_menu_remove_agenda);
                     item.setVisible(true);
-                    //item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS); TODO
+                    // item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                    // TODO
 
                     item = mMenu.findItem(R.id.map_menu_add_agenda);
                     item.setVisible(false);

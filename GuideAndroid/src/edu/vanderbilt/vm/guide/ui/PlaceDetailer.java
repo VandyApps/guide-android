@@ -8,7 +8,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  * 
  * @author nicholasking, athran
  */
-@TargetApi(16)
 public class PlaceDetailer extends SherlockFragmentActivity {
     private ActionBar mAction;
     
@@ -51,26 +49,11 @@ public class PlaceDetailer extends SherlockFragmentActivity {
         
         if (frag == null) {
             frag = PlaceDetailerFragment.newInstance(this, getIntent()
-                .getIntExtra(GuideConstants.PLACE_ID_EXTRA, -1));
+                .getIntExtra(PLACE_ID_EXTRA, -1));
             ft.add(R.id.sp_pane1, frag, FRAG);
         }
         
         ft.commit();
-    }
-    // ---------- END onCreate() ---------- //
-    
-    @Override
-    public void onResume() {
-        super.onResume();
-        
-    }
-    
-    @Override
-    public void onPause() {
-        super.onPause();
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.remove(getFragmentManager().findFragmentByTag("detailer_fragment"));
-        //ft.commit();
     }
 
     /**

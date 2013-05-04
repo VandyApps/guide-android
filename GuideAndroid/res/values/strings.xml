@@ -16,6 +16,7 @@
 	<string name="main_search">Search</string>
 	<string name="main_qr">QR</string>
 	<string name="main_serch_box">Search Box</string>
+	<string name="main_agenda_empty">Your agenda is empty. Add places to your agenda by pressing the + button at the top right of the screen when viewing a tour or location.</string>
 	
 	<string name="menu_add_agenda">Agenda</string>	
 	<string name="menu_refresh">Refresh</string>
@@ -34,5 +35,30 @@
 	<string name="nav_label7">Find Path</string>
 	<string name="nav_label8">Choose Tour</string>
 	<string name="nav_label9">Find Path</string>
+	
+	<string name="search_tv1">Name Snippet</string>
+	<string name="search_tv2">Category</string>
+	<string name="search_tv3">Distance Radius</string>
+	<string name="search_et1">snippet</string>
+	<string name="search_et2">feet</string>
+	<string name="search_btn1">Search</string>
+	<string name="search_btn2">Clear</string>
+	
+	<string name="search_cb1">Residence Hall</string>
+	<string name="search_cb2">Recreation</string>
+	<string name="search_cb3">Dining</string>
+	<string name="search_cb4">Academics</string>
+	<string name="search_cb5">Everything</string>
+	<string name="search_cb6">Facility</string>
+	<string name="search_cb7">Medical</string>
+	<string name="search_cb8">Local</string>
+	<string name="search_cb9">Athletics</string>
+	<string name="search_cb10">Greek Life</string>
+	<string name="search_cb11">Student Life</string>
+	<string name="search_cb12">Misc.</string>
+	<string name="search_cb13">Library</string>
+	
+	
+	
 	
 </resources>

@@ -35,6 +35,7 @@
 
         <activity
             android:name=".ui.GuideMain"
+            android:screenOrientation="portrait"
             android:label="@string/university_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

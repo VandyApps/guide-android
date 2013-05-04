@@ -6,16 +6,10 @@
         android:showAsAction="never" />
     
     <item
-        android:id="@+id/menu_refresh"
-        android:title="@string/menu_refresh"
-        android:icon="@drawable/navigation_refresh"
-        android:showAsAction="never" />
-    
-    <item
         android:id="@+id/menu_map"
         android:title="@string/menu_map"
         android:icon="@drawable/location_map"
-        android:showAsAction="always"/>
+        android:showAsAction="always|collapseActionView"/>
     
     <item
         android:id="@+id/menu_about"
@@ -37,6 +31,8 @@
         android:id="@+id/menu_navigator"
         android:title="@string/menu_navigator"
         android:icon="@drawable/navigate"
-        android:showAsAction="always" />
+        android:showAsAction="always|collapseActionView" />
+    <item android:id="@+id/menu_search" android:title="Search" android:icon="@android:drawable/ic_menu_search" android:showAsAction="always|collapseActionView"></item>
+    
     
 </menu>

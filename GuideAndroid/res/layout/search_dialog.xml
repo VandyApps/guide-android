@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/search_tv1"
+                style="@style/description_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/search_tv1" />
+
+            <EditText
+                android:id="@+id/search_et1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:ems="10"
+                android:hint="@string/search_et1" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/search_tv2"
+                style="@style/description_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/search_tv2" />
+
+            <TextView
+                android:id="@+id/search_tv3"
+                style="@style/description_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:gravity="right"
+                android:text="Any" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search_category_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone" >
+
+            <CheckBox
+                android:id="@+id/search_cb1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb1"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb2"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb3"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb4"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb5"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb6"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb7"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb8"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb9"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb10"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb11"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb12"
+                android:typeface="serif" />
+
+            <CheckBox
+                android:id="@+id/search_cb13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_cb13"
+                android:typeface="serif" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/search_tv4"
+                style="@style/description_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/search_tv3" />
+
+            <EditText
+                android:id="@+id/search_et2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:ems="10"
+                android:hint="@string/search_et2"
+                android:inputType="numberDecimal" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp" >
+
+            <Button
+                android:id="@+id/search_btn1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/search_btn1" />
+
+            <Button
+                android:id="@+id/search_btn2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/search_btn2" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

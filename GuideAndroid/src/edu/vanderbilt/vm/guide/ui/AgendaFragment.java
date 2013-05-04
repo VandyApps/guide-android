@@ -8,7 +8,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,27 +39,21 @@ public class AgendaFragment extends SherlockFragment {
         lv.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserAgenda()));
 
         // Add an empty agenda indicator
-        TextView emptyIndicator = new TextView(getActivity());
-        emptyIndicator.setLayoutParams(new ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-        emptyIndicator.setGravity(Gravity.CENTER);
-        emptyIndicator.setTextSize(16);
-        emptyIndicator.setText("Your agenda is empty.  Add places"
-                + " to your agenda by pressing the + " + "button at the top right of the screen "
-                + "when viewing a tour or location.");
-        emptyIndicator.setVisibility(View.GONE);
+        TextView emptyIndicator = (TextView) getActivity().getLayoutInflater().inflate(R.layout.agenda_empty, null, false);
         ((ViewGroup) lv.getParent()).addView(emptyIndicator);
         lv.setEmptyView(emptyIndicator);
         
         setHasOptionsMenu(true);
     }
 
+    /* TODO Remove if unnecessary or done debugging
     @Override
     public void onResume() {
         super.onResume();
         logger.trace("AgendaFragment: OnResume called");
     }
-
+    */
+    
     public void onReselect() {
         try {
             ((ListView) mRoot.findViewById(R.id.s_l_listview1)).invalidateViews();
@@ -86,6 +79,7 @@ public class AgendaFragment extends SherlockFragment {
                 Toast.makeText(getActivity(), "Agenda is sorted by distance", Toast.LENGTH_SHORT)
                         .show();
                 return true;
+                
             default:
                 return false;
         }

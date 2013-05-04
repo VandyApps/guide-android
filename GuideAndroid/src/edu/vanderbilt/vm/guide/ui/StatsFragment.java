@@ -7,9 +7,7 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
 import edu.vanderbilt.vm.guide.util.GlobalState;
-import edu.vanderbilt.vm.guide.util.GuideConstants;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,9 +47,10 @@ public class StatsFragment extends SherlockFragment {
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent i = new Intent().setClass(getActivity(), PlaceDetailer.class).putExtra(
-                        GuideConstants.PLACE_ID_EXTRA, place.getUniqueId());
-                startActivity(i);
+                // Intent i = new Intent().setClass(getActivity(),
+                // PlaceDetailer.class).putExtra(
+                // GuideConstants.PLACE_ID_EXTRA, place.getUniqueId());
+                // startActivity(i);
             }
 
         });

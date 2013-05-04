@@ -4,7 +4,6 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,7 +32,6 @@ import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
-@TargetApi(11)
 public class MapViewer extends SherlockFragmentActivity {
 
     @SuppressWarnings("unused")

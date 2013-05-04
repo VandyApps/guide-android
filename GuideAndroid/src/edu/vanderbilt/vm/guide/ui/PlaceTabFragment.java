@@ -6,9 +6,6 @@ package edu.vanderbilt.vm.guide.ui;
  * This Fragment shows the categories of places and the user's current location
  */
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,17 +60,12 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
 
     private ImageDownloader.BitmapDownloaderTask mDlTask = null;
 
-    private Timer mSearchFaerie;
-
     private Cursor mAllPlacesCursor; // A cursor holding all places in the db
-
-    private static final int SEARCH_DELAY = 5000;
 
     private static final Logger logger = LoggerFactory.getLogger("ui.PlaceTabFragment");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_place_list, container, false);
     }
 
@@ -134,17 +126,6 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
         mCurrentPlaceBar.setBackgroundColor(Color.WHITE);
     }
 
-    private class SearchLogic extends TimerTask {
-
-        @Override
-        public void run() {
-            // String query = mSearchBox.getText().toString();
-
-            // TODO
-        }
-
-    }
-
     // this method of setting up OnClickListener seems to be necessary when you
     // want to access class variables
     @Override
@@ -183,20 +164,13 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_refresh:
-                // TODO
-                Toast.makeText(getActivity(), "Place list refreshed", Toast.LENGTH_SHORT).show();
-                return true;
-
             case R.id.menu_sort_alphabetic:
 
-                mListView
-                        .setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
+                mListView.setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
 
                 return true;
 
             case R.id.menu_sort_distance:
-
                 mListView.setAdapter(new DistanceCursorAdapter(getActivity(), mAllPlacesCursor));
 
                 Toast.makeText(getActivity(), "PlacesList is sorted by distance",
@@ -212,15 +186,12 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
     public void onResume() {
         super.onResume();
         Geomancer.registerGeomancerListener(this);
-        mSearchFaerie = new Timer();
-        mSearchFaerie.schedule(new SearchLogic(), 0, SEARCH_DELAY);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Geomancer.removeGeomancerListener(this);
-        mSearchFaerie.cancel();
     }
 
     @Override
