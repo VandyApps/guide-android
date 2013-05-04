@@ -4,23 +4,23 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.maps.SupportMapFragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.MapFragment;
 
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
@@ -32,7 +32,7 @@ import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
-public class TourDetailer extends Activity {
+public class TourDetailer extends SherlockFragmentActivity {
 
     public static final String TOUR_ID_EXTRA = "tourId";
 
@@ -54,7 +54,7 @@ public class TourDetailer extends Activity {
         setContentView(R.layout.activity_tour_detail);
 
         // Set up ActionBar
-        mAction = getActionBar();
+        mAction = getSupportActionBar();
         mAction.setTitle("Tour Details");
         mAction.setDisplayHomeAsUpEnabled(true);
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
@@ -77,7 +77,7 @@ public class TourDetailer extends Activity {
 
         fillViews(mCursor);
         
-        MapFragment mapFrag = (MapFragment)getFragmentManager().findFragmentByTag(MAP);
+        SupportMapFragment mapFrag = (SupportMapFragment)getSupportFragmentManager().findFragmentByTag(MAP);
         
         if (mapFrag == null) {
             int placesIx = mCursor.getColumnIndex(GuideDBConstants.TourTable.PLACES_ON_TOUR_COL);
@@ -86,7 +86,7 @@ public class TourDetailer extends Activity {
     
             mapFrag = MapViewer.getAgendaMapFragment(this, tourAgenda);
     
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.add(R.id.tour_detail_map_container, mapFrag, MAP);
             ft.commit();
@@ -173,7 +173,7 @@ public class TourDetailer extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.tour_detail_activity, menu);
         return true;
     }

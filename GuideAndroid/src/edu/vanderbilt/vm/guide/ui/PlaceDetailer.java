@@ -4,14 +4,15 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
@@ -23,7 +24,7 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  * @author nicholasking, athran
  */
 @TargetApi(16)
-public class PlaceDetailer extends Activity {
+public class PlaceDetailer extends SherlockFragmentActivity {
     private ActionBar mAction;
     
     @SuppressWarnings("unused")
@@ -39,14 +40,14 @@ public class PlaceDetailer extends Activity {
         setContentView(R.layout.single_pane);
         
         // Setup ActionBar
-        mAction = getActionBar();
+        mAction = getSupportActionBar();
         mAction.setTitle("Place Details");
         mAction.setDisplayHomeAsUpEnabled(true);
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
         
         // Setup the detailer fragment
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment frag = getFragmentManager().findFragmentByTag(FRAG);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        SherlockFragment frag = (SherlockFragment)getSupportFragmentManager().findFragmentByTag(FRAG);
         
         if (frag == null) {
             frag = PlaceDetailerFragment.newInstance(this, getIntent()

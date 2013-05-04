@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
@@ -20,7 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -37,7 +36,7 @@ import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 
-public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener,
+public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickListener,
         OnMarkerClickListener {
 
     // @SuppressWarnings("unused")
@@ -61,7 +60,7 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
      */
     public static AgendaMapFrag newInstance(Context ctx, Agenda agenda) {
 
-        AgendaMapFrag frag = (AgendaMapFrag)Fragment.instantiate(ctx,
+        AgendaMapFrag frag = (AgendaMapFrag) SupportMapFragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.AgendaMapFrag");
 
         frag.mAgenda = agenda;
@@ -327,7 +326,7 @@ public class AgendaMapFrag extends MapFragment implements OnMapLongClickListener
                     // Option to remove
                     MenuItem item = mMenu.findItem(R.id.map_menu_remove_agenda);
                     item.setVisible(true);
-                    item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                    //item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS); TODO
 
                     item = mMenu.findItem(R.id.map_menu_add_agenda);
                     item.setVisible(false);

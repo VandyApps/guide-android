@@ -1,13 +1,14 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import com.actionbarsherlock.app.SherlockFragment;
+
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class StatsFragment extends Fragment {
+public class StatsFragment extends SherlockFragment {
     TextView tvHistory;
 
     ListView listHistory;

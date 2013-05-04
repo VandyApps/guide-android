@@ -4,16 +4,16 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
 import edu.vanderbilt.vm.guide.util.Geomancer;
@@ -25,8 +25,7 @@ import edu.vanderbilt.vm.guide.util.GuideConstants;
  * 
  * @author nicholasking
  */
-@TargetApi(16)
-public class GuideMain extends Activity {
+public class GuideMain extends SherlockFragmentActivity {
 
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger("ui.GuideMain");
@@ -56,7 +55,7 @@ public class GuideMain extends Activity {
      * Configure the action bar with the appropriate tabs and options
      */
     private void setupActionBar() {
-        mAction = getActionBar();
+        mAction = getSupportActionBar();
         mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mAction.setDisplayShowTitleEnabled(true);
         mAction.setBackgroundDrawable(GuideConstants.OLD_GOLD);
@@ -73,7 +72,7 @@ public class GuideMain extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.activity_guide_main, menu);
         return true;
     }

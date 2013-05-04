@@ -11,21 +11,21 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.SparseArray;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -35,7 +35,7 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 
-public class GraphUtilsDebugActivity extends Activity implements GuideDBConstants {
+public class GraphUtilsDebugActivity extends SherlockFragmentActivity implements GuideDBConstants {
     
     private GoogleMap mMap;
     private SparseArray<MapVertex> vertexMap = new SparseArray<MapVertex>();
@@ -64,7 +64,7 @@ public class GraphUtilsDebugActivity extends Activity implements GuideDBConstant
                 new String[] {NodeTable.ID_COL, NodeTable.LAT_COL, NodeTable.LON_COL, NodeTable.NEIGHBOR_COL},
                 null, null, null, null, null);
         
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.debug_graph_map)).getMap();
+        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.debug_graph_map)).getMap();
         
         /*
         if (placeCursor != null) {

@@ -4,28 +4,40 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.annotation.TargetApi;
-import android.app.ListFragment;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.ui.adapter.AgendaAdapter;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 
-@TargetApi(13)
-public class AgendaFragment extends ListFragment {
+public class AgendaFragment extends SherlockFragment {
 
     private static final Logger logger = LoggerFactory.getLogger("ui.AgendaFragment");
 
+    private View mRoot;
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mRoot = inflater.inflate(R.layout.single_list, container, false);
+        return mRoot;
+    }
+    
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setListAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserAgenda()));
+        
+        ListView lv = (ListView) mRoot.findViewById(R.id.s_l_listview1);
+        
+        lv.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserAgenda()));
 
         // Add an empty agenda indicator
         TextView emptyIndicator = new TextView(getActivity());
@@ -37,8 +49,9 @@ public class AgendaFragment extends ListFragment {
                 + " to your agenda by pressing the + " + "button at the top right of the screen "
                 + "when viewing a tour or location.");
         emptyIndicator.setVisibility(View.GONE);
-        ((ViewGroup)getListView().getParent()).addView(emptyIndicator);
-        getListView().setEmptyView(emptyIndicator);
+        ((ViewGroup) lv.getParent()).addView(emptyIndicator);
+        lv.setEmptyView(emptyIndicator);
+        
         setHasOptionsMenu(true);
     }
 
@@ -50,7 +63,8 @@ public class AgendaFragment extends ListFragment {
 
     public void onReselect() {
         try {
-            getListView().invalidateViews();
+            ((ListView) mRoot.findViewById(R.id.s_l_listview1)).invalidateViews();
+            
         } catch (IllegalStateException e) {
             logger.info("Caught IllegalStateException: ", e);
         }
@@ -61,14 +75,14 @@ public class AgendaFragment extends ListFragment {
         switch (item.getItemId()) {
             case R.id.menu_sort_alphabetic:
                 GlobalState.getUserAgenda().sortAlphabetically();
-                this.getListView().invalidateViews();
+                ((ListView) mRoot.findViewById(R.id.s_l_listview1)).invalidateViews();
                 Toast.makeText(getActivity(), "Agenda is sorted alphabetically", Toast.LENGTH_SHORT)
                         .show();
                 return true;
 
             case R.id.menu_sort_distance:
                 GlobalState.getUserAgenda().sortByDistance();
-                this.getListView().invalidateViews();
+                ((ListView) mRoot.findViewById(R.id.s_l_listview1)).invalidateViews();
                 Toast.makeText(getActivity(), "Agenda is sorted by distance", Toast.LENGTH_SHORT)
                         .show();
                 return true;

@@ -4,14 +4,15 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Fragment;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,7 +26,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 import edu.vanderbilt.vm.guide.util.ImageDownloader;
 
-public class PlaceDetailerFragment extends Fragment {
+public class PlaceDetailerFragment extends SherlockFragment {
     private Place mPlace;
 
     private TextView tvPlaceName;
@@ -56,7 +57,7 @@ public class PlaceDetailerFragment extends Fragment {
      * @return
      */
     static PlaceDetailerFragment newInstance(Context ctx, int id) {
-        PlaceDetailerFragment frag = (PlaceDetailerFragment)Fragment.instantiate(ctx,
+        PlaceDetailerFragment frag = (PlaceDetailerFragment) SherlockFragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.PlaceDetailerFragment");
 
         Bundle arg = new Bundle();

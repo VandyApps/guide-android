@@ -1,6 +1,7 @@
 package edu.vanderbilt.vm.guide.ui;
 
-import android.app.Fragment;
+import com.actionbarsherlock.app.SherlockFragment;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.adapter.AutoPlaceCursorAdapter;
 
-public class NavPlaceChooser extends Fragment implements OnClickListener{
+public class NavPlaceChooser extends SherlockFragment implements OnClickListener{
     
     private Cursor mAutoSrc;
     

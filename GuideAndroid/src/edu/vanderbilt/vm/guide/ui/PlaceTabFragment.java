@@ -12,14 +12,15 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.ImageDownloader;
 
 @TargetApi(16)
-public class PlaceTabFragment extends Fragment implements OnClickListener, GeomancerListener {
+public class PlaceTabFragment extends SherlockFragment implements OnClickListener, GeomancerListener {
     private final int DESCRIPTION_LENGTH = 100;
 
     private ListView mListView;

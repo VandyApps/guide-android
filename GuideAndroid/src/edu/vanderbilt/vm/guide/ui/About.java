@@ -4,21 +4,21 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Activity;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class About extends Activity {
+public class About extends SherlockActivity {
 
-    Logger logger = LoggerFactory.getLogger(Activity.class);
+    Logger logger = LoggerFactory.getLogger(SherlockActivity.class);
     
     private static String MAP_TIPS = "map_tips";
 

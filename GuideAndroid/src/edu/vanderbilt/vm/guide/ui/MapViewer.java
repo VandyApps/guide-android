@@ -5,23 +5,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import edu.vanderbilt.vm.guide.R;
@@ -34,7 +34,7 @@ import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 @TargetApi(11)
-public class MapViewer extends Activity {
+public class MapViewer extends SherlockFragmentActivity {
 
     @SuppressWarnings("unused")
     private static final int MEDIUM_ZOOM = 18;
@@ -64,10 +64,10 @@ public class MapViewer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_pane);
         
-        MapFragment frag = (MapFragment)getFragmentManager().findFragmentByTag(MAP);
+        SupportMapFragment frag = (SupportMapFragment)getSupportFragmentManager().findFragmentByTag(MAP);
 
         if (frag == null) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             Intent i = this.getIntent();
 
             if (i.hasExtra(MAP_FOCUS)) {
@@ -88,7 +88,7 @@ public class MapViewer extends Activity {
                 frag = AgendaMapFrag.newInstance(this, GlobalState.getUserAgenda());
 
             } else if (i.hasExtra(MAP_CURRENT)) {
-                frag = SelfMapFragment.newInstance(this);
+                //frag = SelfMapFragment.newInstance(this);
             }
 
             ft.add(R.id.sp_pane1, frag, "map_fragment");
@@ -102,7 +102,7 @@ public class MapViewer extends Activity {
 
     // ---------- BEGIN setup and lifecycle related methods ---------- //
     private void setupActionBar() {
-        mAction = getActionBar();
+        mAction = getSupportActionBar();
         mAction.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         mAction.setDisplayShowTitleEnabled(true);
         mAction.setDisplayHomeAsUpEnabled(true);
@@ -112,7 +112,7 @@ public class MapViewer extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.map_viewer, menu);
         mMenu = menu;
         mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);

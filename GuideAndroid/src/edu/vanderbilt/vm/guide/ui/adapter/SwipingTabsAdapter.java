@@ -3,20 +3,21 @@ package edu.vanderbilt.vm.guide.ui.adapter;
 
 import java.util.ArrayList;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import edu.vanderbilt.vm.guide.ui.AgendaFragment;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
 public class SwipingTabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
         ViewPager.OnPageChangeListener {
-    private final Activity mActivity;
+    private final SherlockFragmentActivity mActivity;
 
     private final ActionBar mActionBar;
 
@@ -37,11 +38,11 @@ public class SwipingTabsAdapter extends FragmentPagerAdapter implements ActionBa
         }
     }
 
-    public SwipingTabsAdapter(Activity activity, ViewPager pager) {
-        super(activity.getFragmentManager());
+    public SwipingTabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+        super(activity.getSupportFragmentManager());
         // TODO Auto-generated constructor stub
         mActivity = activity;
-        mActionBar = activity.getActionBar();
+        mActionBar = activity.getSupportActionBar();
         mViewPager = pager;
         mViewPager.setAdapter(this);
         mViewPager.setOnPageChangeListener(this);
@@ -101,11 +102,11 @@ public class SwipingTabsAdapter extends FragmentPagerAdapter implements ActionBa
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public SherlockFragment getItem(int position) {
         TabInfo info = mTabs.get(position);
-        Fragment fragment = Fragment.instantiate(mActivity, info.clss.getName(), info.args);
+        SherlockFragment fragment = (SherlockFragment) SherlockFragment.instantiate(mActivity, info.clss.getName(), info.args);
         if (info.clss.equals(AgendaFragment.class)) {
-            mAgendaFragment = (AgendaFragment)fragment;
+            //mAgendaFragment = (AgendaFragment) fragment;
         }
         return fragment;
     }

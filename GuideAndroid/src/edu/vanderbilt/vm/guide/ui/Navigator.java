@@ -1,19 +1,20 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
 
-public class Navigator extends Activity {
+public class Navigator extends SherlockFragmentActivity {
     
     private static final String CHOOSER = "chooser";
     
@@ -30,7 +31,7 @@ public class Navigator extends Activity {
         setContentView(R.layout.navigator_main);
         
         // Setup Navigation on ActionBar
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(GuideConstants.OLD_GOLD);
 
         // Specify that a dropdown list should be displayed in the action bar.
@@ -59,7 +60,7 @@ public class Navigator extends Activity {
                 });
         
         // Setup fragments
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         
         ft.add(R.id.nav_map, AgendaMapFrag.newInstance(this, new Agenda()), MAP);
         ft.add(R.id.nav_chooser, new NavPlaceChooser(),CHOOSER);
@@ -72,7 +73,7 @@ public class Navigator extends Activity {
     
     
     void setDisplayAgenda(Agenda a) {
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.remove( fm.findFragmentByTag(MAP) );
         ft.add(R.id.nav_map, AgendaMapFrag.newInstance(this, a), MAP);
@@ -84,7 +85,7 @@ public class Navigator extends Activity {
             case 0:
                 // Travel from Place to Place
                 if (mNavChoice != 0) {
-                    FragmentManager fm = getFragmentManager();
+                    FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.remove( fm.findFragmentByTag(CHOOSER) );
                     ft.add(R.id.nav_chooser, new NavPlaceChooser(), CHOOSER);
@@ -96,7 +97,7 @@ public class Navigator extends Activity {
             case 1:
                 // Travel through the Agenda
                 if (mNavChoice != 1) {
-                    FragmentManager fm = getFragmentManager();
+                    FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.remove( fm.findFragmentByTag(CHOOSER) );
                     ft.add(R.id.nav_chooser, new NavAgendaChooser(), CHOOSER);
@@ -108,7 +109,7 @@ public class Navigator extends Activity {
             case 2:
                 // Travel through a Tour
                 if (mNavChoice != 2) {
-                    FragmentManager fm = getFragmentManager();
+                    FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.remove( fm.findFragmentByTag(CHOOSER) );
                     ft.add(R.id.nav_chooser, new NavTourChooser(), CHOOSER);

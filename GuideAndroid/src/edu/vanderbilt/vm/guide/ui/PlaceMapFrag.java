@@ -4,7 +4,6 @@ package edu.vanderbilt.vm.guide.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +12,7 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -22,7 +21,7 @@ import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
-public class PlaceMapFrag extends MapFragment {
+public class PlaceMapFrag extends SupportMapFragment {
 
     private Place mPlace;
 
@@ -39,7 +38,7 @@ public class PlaceMapFrag extends MapFragment {
      */
     public static PlaceMapFrag newInstance(Context ctx, Place plc) {
 
-        PlaceMapFrag frag = (PlaceMapFrag)Fragment.instantiate(ctx,
+        PlaceMapFrag frag = (PlaceMapFrag) SupportMapFragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.PlaceMapFrag");
         frag.mPlace = plc;
         frag.setHasOptionsMenu(true);

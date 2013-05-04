@@ -31,6 +31,8 @@
                 android:id="@+id/main_description"
                 style="@style/description_text"
                 android:layout_width="match_parent"
+                android:typeface="serif"
+                android:lineSpacingExtra="6dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
                 android:text="Main description text" />

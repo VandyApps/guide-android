@@ -1,8 +1,9 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import com.actionbarsherlock.app.SherlockFragment;
+
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.adapter.TourAdapter;
 
 @SuppressLint("NewApi")
-public class TourFragment extends Fragment {
+public class TourFragment extends SherlockFragment {
 
     private GridView mGridView;
 
