@@ -12,6 +12,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfig;
@@ -34,7 +35,7 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
     private static final String TAB_CACHE = "tab_cache";
     
     private ActionBar mAction;
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,7 +134,12 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
 
     @Override
     public void receiveSearchConfig(SearchConfig config) {
-        // TODO Auto-generated method stub
+        
+        // TODO SQL query
+        
+        
+        Cursor cursor = null;
+        ((PlaceTabFragment) getSupportFragmentManager().findFragmentByTag("places")).viewListFromCursor(cursor);
         
     }
 
