@@ -14,51 +14,27 @@ import com.actionbarsherlock.view.MenuItem;
 
 import android.annotation.TargetApi;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.adapter.AlphabeticalCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.DistanceCursorAdapter;
-import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
-import edu.vanderbilt.vm.guide.util.ImageDownloader;
 
 @TargetApi(16)
-public class PlaceTabFragment extends SherlockFragment implements OnClickListener, GeomancerListener {
-    private final int DESCRIPTION_LENGTH = 100;
+public class PlaceTabFragment extends SherlockFragment {
 
     private ListView mListView;
-
-    private TextView mCurrPlaceName;
-
-    private TextView mCurrPlaceDesc;
-
-    private EditText mSearchBox;
-
-    private LinearLayout mCurrentPlaceBar;
-
-    private Place mCurrPlace;
-
-    private ImageView ivCurrent;
-
-    private ImageDownloader.BitmapDownloaderTask mDlTask = null;
 
     private Cursor mAllPlacesCursor; // A cursor holding all places in the db
 
@@ -101,63 +77,11 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mDlTask != null) {
-            logger.trace("Cancelling image download task");
-            mDlTask.cancel(true);
-        }
-    }
-
     //@SuppressWarnings("deprecation")
     private void setupUI() {
-        mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
-        mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
-        ivCurrent = (ImageView)getActivity().findViewById(R.id.currentPlaceThumbnail);
 
         mListView = (ListView)getActivity().findViewById(R.id.placeTablistView);
 
-        mSearchBox = (EditText)getActivity().findViewById(R.id.placeTabSearchEdit);
-        mSearchBox.setOnClickListener(this);
-
-        mCurrentPlaceBar = (LinearLayout)getActivity().findViewById(R.id.current_place_bar);
-        mCurrentPlaceBar.setOnClickListener(this);
-        mCurrentPlaceBar.setBackgroundColor(Color.WHITE);
-    }
-
-    // this method of setting up OnClickListener seems to be necessary when you
-    // want to access class variables
-    @Override
-    public void onClick(View v) {
-        if (v == mCurrPlaceDesc || v == mCurrPlaceName || v == mCurrentPlaceBar) {
-            PlaceDetailer.open(getActivity(), mCurrPlace.getUniqueId());
-        } else if (v == mSearchBox) {
-            // mSearchBox.setFocusable(true);
-        }
-
-    }
-
-    public void setCurrentPlace(Place plc) {
-        if (plc == null) {
-            return;
-        }
-
-        mCurrPlace = plc;
-        mCurrPlaceName.setText(mCurrPlace.getName());
-
-        String desc = mCurrPlace.getDescription();
-        if (desc != null && desc.length() > DESCRIPTION_LENGTH) {
-            mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH) + "...");
-        } else if (desc == null) {
-            mCurrPlaceDesc.setText("No description available");
-        } else {
-            mCurrPlaceDesc.setText(desc + "...");
-        }
-
-        mDlTask = new ImageDownloader.BitmapDownloaderTask(ivCurrent);
-        logger.trace("Starting image download task");
-        mDlTask.execute(mCurrPlace.getPictureLoc());
 
     }
 
@@ -185,16 +109,16 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        Geomancer.registerGeomancerListener(this);
+        //Geomancer.registerGeomancerListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Geomancer.removeGeomancerListener(this);
+        //Geomancer.removeGeomancerListener(this);
     }
 
-    @Override
+    
     public void updateLocation(Location loc) {
         findAndSetClosestPlace(loc);
     }
@@ -209,7 +133,7 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
             Toast.makeText(getActivity(), "Couldn't find closest place", Toast.LENGTH_LONG).show();
         } else {
             mAllPlacesCursor.moveToPosition(closestIx);
-            setCurrentPlace(DBUtils.getPlaceFromCursor(mAllPlacesCursor));
+            //setCurrentPlace(DBUtils.getPlaceFromCursor(mAllPlacesCursor));
         }
     }
 

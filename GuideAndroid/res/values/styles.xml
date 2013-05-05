@@ -1,6 +1,4 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light"></style>
     
     <style name="detail_name_text">
         <item name="android:textSize">18sp</item>
@@ -25,5 +23,9 @@
         <item name="android:layout_height">2dp</item>
         <item name="android:background">@drawable/actionbar_bg</item>
     </style>
+    
+    <color name="light_gold">#ffffdc</color>
+    <color name="white">#ffffff</color>
+    <color name="dark_gold">#B69000</color>
     
 </resources>

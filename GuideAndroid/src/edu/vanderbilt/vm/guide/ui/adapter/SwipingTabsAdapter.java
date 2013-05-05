@@ -69,7 +69,7 @@ public class SwipingTabsAdapter extends FragmentPagerAdapter implements ActionBa
 
     private void updateAgendaFragment() {
         if (mAgendaFragment != null) {
-            mAgendaFragment.onReselect();
+            //mAgendaFragment.onReselect();
         }
     }
 
@@ -91,7 +91,7 @@ public class SwipingTabsAdapter extends FragmentPagerAdapter implements ActionBa
             if (mTabs.get(i) == tag) {
                 mViewPager.setCurrentItem(i);
                 if (tag.clss.equals(AgendaFragment.class) && mAgendaFragment != null) {
-                    mAgendaFragment.onReselect();
+                    //mAgendaFragment.onReselect();
                 }
             }
         }

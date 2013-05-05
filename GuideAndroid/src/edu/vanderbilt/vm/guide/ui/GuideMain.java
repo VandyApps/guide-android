@@ -45,6 +45,8 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         
         if (savedInstanceState != null) {
             mAction.setSelectedNavigationItem(savedInstanceState.getInt(TAB_CACHE, 0));
+        } else {
+            mAction.setSelectedNavigationItem(1);
         }
     }
 
@@ -77,7 +79,6 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
                 .setText("Tours")
                 .setTabListener(new FragmentTabListener<TourFragment>(this, "tours", TourFragment.class));
         mAction.addTab(tab);
-        
     }
 
     @Override

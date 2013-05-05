@@ -2,70 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/placetab_root" >
-
-    <LinearLayout
-        android:id="@+id/current_place_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dip" >
-
-        <ImageView
-            android:id="@+id/currentPlaceThumbnail"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="5dp" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="100"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="You are at:"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/currentPlaceName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PlaceName"
-                android:textColor="@android:color/secondary_text_light"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/currentPlaceDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PlaceDesc"
-                android:textColor="@android:color/secondary_text_light"
-                android:textSize="14sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <EditText
-            android:id="@+id/placeTabSearchEdit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="100" />
-
-        <ImageButton
-            android:id="@+id/placeTabSearchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@android:drawable/ic_menu_search" />
-    </LinearLayout>
+    android:background="@color/light_gold"
+    android:orientation="vertical" >
 
     <ListView
         android:id="@+id/placeTablistView"
