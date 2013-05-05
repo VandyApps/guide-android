@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -12,11 +13,10 @@ import com.actionbarsherlock.view.MenuItem;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfig;
 import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfigReceiver;
-import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
+import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
@@ -35,14 +35,9 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
     
     private ActionBar mAction;
 
-    private ViewPager mViewPager;
-
-    private SwipingTabsAdapter mTabsAdapter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_guide_main);
 
         setupActionBar();
         
@@ -63,12 +58,26 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
         mAction.setSplitBackgroundDrawable(GuideConstants.DECENT_GOLD);
         mAction.setTitle(getResources().getText(R.string.university_name));
-
-        mViewPager = (ViewPager)findViewById(R.id.swiper_1);
-        mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);
-        mTabsAdapter.addTab(mAction.newTab().setText("Places"), PlaceTabFragment.class, null);
-        mTabsAdapter.addTab(mAction.newTab().setText("Agenda"), AgendaFragment.class, null);
-        mTabsAdapter.addTab(mAction.newTab().setText("Tours"), TourFragment.class, null);
+        
+        Tab tab;
+        tab = mAction
+                .newTab()
+                .setText("Places")
+                .setTabListener(new FragmentTabListener<PlaceTabFragment>(this, "places", PlaceTabFragment.class));
+        mAction.addTab(tab);
+        
+        tab = mAction
+                .newTab()
+                .setText("Agenda")
+                .setTabListener(new FragmentTabListener<AgendaFragment>(this, "agenda", AgendaFragment.class));
+        mAction.addTab(tab);
+        
+        tab = mAction
+                .newTab()
+                .setText("Tours")
+                .setTabListener(new FragmentTabListener<TourFragment>(this, "tours", TourFragment.class));
+        mAction.addTab(tab);
+        
     }
 
     @Override
