@@ -36,11 +36,14 @@ public class PlaceTabFragment extends SherlockFragment {
         ((ListView) mRoot.findViewById(R.id.s_l_listview1)).setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
     }
     
+    @SuppressWarnings("unused")
+    private static final Logger LOGGER = LoggerFactory.getLogger("ui.PlaceTabFragment");
+
+    
     private View mRoot;
     
     private Cursor mAllPlacesCursor; // A cursor holding all places in the db
 
-    private static final Logger logger = LoggerFactory.getLogger("ui.PlaceTabFragment");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,15 +79,15 @@ public class PlaceTabFragment extends SherlockFragment {
         ListView lv = (ListView) mRoot.findViewById(R.id.s_l_listview1);
         switch (item.getItemId()) {
             case R.id.menu_sort_alphabetic:
-
+                
                 lv.setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
                 
                 Toast.makeText(getActivity(), "Places List is sorted alphabetically",
                         Toast.LENGTH_SHORT).show();
-                
                 return true;
 
             case R.id.menu_sort_distance:
+                
                 lv.setAdapter(new DistanceCursorAdapter(getActivity(), mAllPlacesCursor));
 
                 Toast.makeText(getActivity(), "Places List is sorted by distance",

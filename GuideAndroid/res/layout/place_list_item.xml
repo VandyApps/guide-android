@@ -2,33 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dip" >
+    android:background="@color/light_gold"
+    android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/placelist_item_thunbnail"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_launcher" />
-
-    <TextView
-        android:id="@+id/placelist_item_title"
-        android:layout_width="0dip"
+    <LinearLayout
+        android:id="@+id/placelist_item_header"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dip"
-        android:layout_weight="100"
-        android:gravity="center_vertical"
-        android:text="PlaceName"
-        android:textSize="14sp" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/placelist_item_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="4dip"
-        android:gravity="center"
-        android:text="dist"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/header_title"
+            style="@style/detail_name_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dip" />
+
+        <View style="@style/Separator" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:id="@+id/placelist_item_item"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/placelist_item_thunbnail"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/placelist_item_title"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_margin="4dip"
+            android:layout_weight="100"
+            android:gravity="center_vertical"
+            android:text="PlaceName"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/placelist_item_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="4dip"
+            android:gravity="center"
+            android:text="dist"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </LinearLayout>

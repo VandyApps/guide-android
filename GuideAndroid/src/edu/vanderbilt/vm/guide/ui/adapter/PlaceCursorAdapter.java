@@ -99,6 +99,8 @@ public class PlaceCursorAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         checkPosition(position);
+        
+        
         LinearLayout layout;
         if (convertView == null) {
             layout = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.place_list_item,
@@ -108,13 +110,22 @@ public class PlaceCursorAdapter extends BaseAdapter {
             layout = (LinearLayout)convertView.getTag();
         }
 
+        
+        // no header
+        layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
+        
+        
         mCursor.moveToPosition(position);
         ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mCursor
                 .getString(mNameColIx));
 
+        
+        // TODO replace placeholder with categorical icon
         ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
                 .setImageResource(R.drawable.home);
 
+        
+        
         Location tmp = new Location("Temp");
         tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
         tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
@@ -122,6 +133,7 @@ public class PlaceCursorAdapter extends BaseAdapter {
         ((TextView)layout.findViewById(R.id.placelist_item_distance)).setText(Geomancer
                 .getDistanceString(tmp));
 
+        
         return layout;
     }
 
@@ -133,3 +145,16 @@ public class PlaceCursorAdapter extends BaseAdapter {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
