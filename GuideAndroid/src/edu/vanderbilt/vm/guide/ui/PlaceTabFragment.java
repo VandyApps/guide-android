@@ -28,6 +28,7 @@ import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.adapter.AlphabeticalCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.CategoricalCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.DistanceCursorAdapter;
+import edu.vanderbilt.vm.guide.ui.adapter.IndexedCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
@@ -70,7 +71,8 @@ public class PlaceTabFragment extends SherlockFragment {
         mAllPlacesCursor = DBUtils.getAllPlaces(columns, helper.getReadableDatabase());
         
         ListView lv = (ListView) mRoot.findViewById(R.id.s_l_listview1);
-        lv.setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
+        lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                IndexedCursorAdapter.SORT_ALPHABETICALLY));
         lv.setOnItemClickListener(new PlaceListClickListener(getActivity()));
         helper.close();
 
@@ -89,7 +91,8 @@ public class PlaceTabFragment extends SherlockFragment {
         switch (item.getItemId()) {
             case R.id.menu_sort_alphabetic:
                 
-                lv.setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
+                lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                        IndexedCursorAdapter.SORT_ALPHABETICALLY));
                 
                 Toast.makeText(getActivity(), "Places List is sorted alphabetically",
                         Toast.LENGTH_SHORT).show();
@@ -97,7 +100,8 @@ public class PlaceTabFragment extends SherlockFragment {
 
             case R.id.menu_sort_distance:
                 
-                lv.setAdapter(new DistanceCursorAdapter(getActivity(), mAllPlacesCursor));
+                lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                        IndexedCursorAdapter.SORT_BY_DISTANCE));
 
                 Toast.makeText(getActivity(), "Places List is sorted by distance",
                         Toast.LENGTH_SHORT).show();
@@ -105,7 +109,8 @@ public class PlaceTabFragment extends SherlockFragment {
 
             case R.id.menu_sort_category:
                 
-                lv.setAdapter(new CategoricalCursorAdapter(getActivity(), mAllPlacesCursor));
+                lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                        IndexedCursorAdapter.SORT_BY_CATEGORY));
                 
                 Toast.makeText(getActivity(), "Places List is sorted by category",
                         Toast.LENGTH_SHORT).show();
