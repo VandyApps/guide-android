@@ -48,12 +48,10 @@ public class CursorIndexerHelper {
         
         private static class HeaderRecord {
             
-            int mPosition;
             final String mTitle;
             final ArrayList<Integer> mChild;
 
             public HeaderRecord(String s) {
-                mPosition = 0;
                 mTitle = s;
                 mChild = new ArrayList<Integer>();
             }
@@ -101,31 +99,29 @@ public class CursorIndexerHelper {
                     }
                     
                 } while (cursor.moveToNext());
+            }
             
+            // Build HashMap based of the information stored in mRecord
+            int listPosition = 0;
+            mEnigma = new ArrayList<Integer>();
             
-                // Build HashMap based of the information stored in mRecord
-                int listPosition = 0;
-                mEnigma = new ArrayList<Integer>();
-                
-                for (int i = 0; i < mRecords.size(); i++) {
+            for (int i = 0; i < mRecords.size(); i++) {
 
-                    if (mRecords.get(i).mChild.size() == 0) {
-                        mCategories--;
-                        
-                    } else {
-                        mRecords.get(i).mPosition = listPosition;
-                        mEnigma.add(listPosition, -(i + 1));
-                        listPosition++;
-            
-                        for (Integer child : mRecords.get(i).mChild) {
-                            mEnigma.add(listPosition, child);
-                            listPosition++;
-                        }
-                    }
+                if (mRecords.get(i).mChild.size() == 0) {
+                    mCategories--;
                     
+                } else {
+                    mEnigma.add(listPosition, -(i + 1));
+                    listPosition++;
+        
+                    for (Integer child : mRecords.get(i).mChild) {
+                        mEnigma.add(listPosition, child);
+                        listPosition++;
+                    }
                 }
                 
             }
+            
         }
         
         @Override
@@ -165,13 +161,11 @@ public class CursorIndexerHelper {
         
         private static class HeaderRecord {
             
-            int mPosition;
             final double mDist;     // in meters
             final String mTitle;
             final ArrayList<Integer> mChild;
             
             public HeaderRecord(String s, double d) {
-                mPosition = 0;
                 mTitle = s;
                 mDist = d;
                 mChild = new ArrayList<Integer>();
@@ -218,31 +212,30 @@ public class CursorIndexerHelper {
                     }
                     
                 } while (cursor.moveToNext());
-        
-                
-                
-                // Build HashMap based of the information stored in mRecord
-                int listPosition = 0;
-                mEnigma = new ArrayList<Integer>();
-                
-                for (int i = 0; i < mRecords.size(); i++) {
-                    
-                    if (mRecords.get(i).mChild.size() == 0) {
-                        mCategories--;
-        
-                    } else {
-                        mRecords.get(i).mPosition = listPosition;
-                        mEnigma.add(listPosition, -(i + 1));
-                        listPosition++;
-                        
-                        for (Integer child : mRecords.get(i).mChild) {
-                            mEnigma.add(listPosition, child);
-                            listPosition++;
-                        }
-                    }
-                    
-                }
             }
+                
+                
+            // Build HashMap based of the information stored in mRecord
+            int listPosition = 0;
+            mEnigma = new ArrayList<Integer>();
+            
+            for (int i = 0; i < mRecords.size(); i++) {
+                
+                if (mRecords.get(i).mChild.size() == 0) {
+                    mCategories--;
+    
+                } else {
+                    mEnigma.add(listPosition, -(i + 1));
+                    listPosition++;
+                    
+                    for (Integer child : mRecords.get(i).mChild) {
+                        mEnigma.add(listPosition, child);
+                        listPosition++;
+                    }
+                }
+                
+            }
+        
             
         }
         
@@ -278,17 +271,15 @@ public class CursorIndexerHelper {
         private ArrayList<Integer> mEnigma;
         private ArrayList<HeaderRecord> mRecords;
         
-        private int mCategories = 26;
+        private int mCategories;
         
-        public static class HeaderRecord {
+        private static class HeaderRecord {
 
-            int mPosition;
             final String mTitle;
             final PlaceCategories mCat;
             final ArrayList<Integer> mChild;
 
             public HeaderRecord(PlaceCategories d) {
-                mPosition = 0;
                 mCat = d;
                 mTitle = d.text();
                 mChild = new ArrayList<Integer>();
@@ -349,7 +340,6 @@ public class CursorIndexerHelper {
                     mCategories--;
 
                 } else {
-                    mRecords.get(i).mPosition = listPosition;
                     mEnigma.add(listPosition, -(i + 1));
                     listPosition++;
         

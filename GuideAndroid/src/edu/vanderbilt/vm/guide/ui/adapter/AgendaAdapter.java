@@ -42,6 +42,7 @@ public class AgendaAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        
         LinearLayout layout;
         if (convertView == null) {
             layout = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.place_list_item,
@@ -51,9 +52,13 @@ public class AgendaAdapter extends BaseAdapter {
             layout = (LinearLayout)convertView.getTag();
         }
 
+        
+        layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
         ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mAgenda.get(position)
                 .getName());
         
+        
+        // TODO replace placeholder icon.
         ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
                 .setImageResource(R.drawable.home);
         

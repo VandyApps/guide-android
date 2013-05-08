@@ -14,7 +14,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.annotation.TargetApi;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,15 +24,13 @@ import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.ui.adapter.AlphabeticalCursorAdapter;
-import edu.vanderbilt.vm.guide.ui.adapter.CategoricalCursorAdapter;
-import edu.vanderbilt.vm.guide.ui.adapter.DistanceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.IndexedCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 
-@TargetApi(16)
+
+
 public class PlaceTabFragment extends SherlockFragment {
 
     public void viewListFromCursor(Cursor cursor) {
