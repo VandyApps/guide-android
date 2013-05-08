@@ -44,7 +44,7 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 
     private final int CATEGORIES = 26;
 
-    private ArrayList<HeaderRecord> mRecord = new ArrayList<HeaderRecord>();
+    private ArrayList<HeaderRecord> mRecord;
 
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.AlphabeticalCursorAdapter");
@@ -80,7 +80,8 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
             throw new SQLiteException("Cursor does not have a longitude column");
         }
 
-        
+        initializeRecord();
+        scanningDatabase();
         buildMap();
     }
 
@@ -176,68 +177,76 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
         }
     }
 
-    private void buildMap() {
-
-        // Initializing the Header records
+    private void initializeRecord() {
+        mRecord = new ArrayList<HeaderRecord>();
         char c = 'A';
         for (int i = 0; i < CATEGORIES; i++) {
-            mRecord.add(new HeaderRecord(c));
+            mRecord.add(new HeaderRecord(String.valueOf(c)));
             c++;
         }
 
         HeaderRecord rec = new HeaderRecord("0-9");
         mRecord.add(rec);
+        
+    }
+    
+    // iterates through the database and make an index
+    private void scanningDatabase() {
 
-        // Scanning the database to index
         if (mCursor.moveToFirst()) {
          
             
             String initial;
+            boolean isChar;
             
             do {
     
                 initial = mCursor.getString(mNameColIx).substring(0, 1);
+                isChar = false;
                 
                 for (int i = 0; i < mRecord.size() - 1; i++) {
                     
                     if (initial.equalsIgnoreCase(mRecord.get(i).mTitle)) {
                         mRecord.get(i).mChild.add(mCursor.getPosition());
+                        isChar = true;
                         break;
-                        
-                    }
-                    
-                    if (i == mRecord.size() - 2) {
-                        mRecord.get(mRecord.size() - 1).mChild.add(mCursor.getPosition());
                     }
                     
                 }
     
-            } while (mCursor.moveToNext());
-    
-            
-            
-            // Build HashMap based of the information stored in mRecord
-            int listPosition = 0;
-            mEnigma = new ArrayList<Integer>();
-            
-            for (int i = 0; i < mRecord.size(); i++) {
-    
-                if (mRecord.get(i).mChild.size() == 0) {
-                    categoryOffset--;
-                    
-                } else {
-                    mRecord.get(i).mPosition = listPosition;
-                    mEnigma.add(listPosition, -(i + 1));
-                    listPosition++;
-        
-                    for (Integer child : mRecord.get(i).mChild) {
-                        mEnigma.add(listPosition, child);
-                        listPosition++;
-                    }
+                if (!isChar) { // add to final category
+                    mRecord.get(mRecord.size() - 1).mChild.add(mCursor.getPosition());
                 }
                 
-            }
+            } while (mCursor.moveToNext());
         }
+        
+    }
+    
+    // Build HashMap based of the information stored in mRecord
+    private void buildMap() {
+
+        int listPosition = 0;
+        mEnigma = new ArrayList<Integer>();
+        
+        for (int i = 0; i < mRecord.size(); i++) {
+
+            if (mRecord.get(i).mChild.size() == 0) {
+                categoryOffset--;
+                
+            } else {
+                mRecord.get(i).mPosition = listPosition;
+                mEnigma.add(listPosition, -(i + 1));
+                listPosition++;
+    
+                for (Integer child : mRecord.get(i).mChild) {
+                    mEnigma.add(listPosition, child);
+                    listPosition++;
+                }
+            }
+            
+        }
+    
     }
 
     static class HeaderRecord {
@@ -245,12 +254,6 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
         int mPosition;
         final String mTitle;
         final ArrayList<Integer> mChild;
-
-        public HeaderRecord(char c) {
-            mPosition = 0;
-            mTitle = String.valueOf(c);
-            mChild = new ArrayList<Integer>();
-        }
 
         public HeaderRecord(String s) {
             mPosition = 0;

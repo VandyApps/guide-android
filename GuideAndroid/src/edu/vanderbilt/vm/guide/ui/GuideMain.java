@@ -34,6 +34,10 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
 
     private static final String TAB_CACHE = "tab_cache";
     
+    private static final String FRAG_PLACES = "places";
+    private static final String FRAG_HOME = "agenda";
+    private static final String FRAG_TOUR = "tours";
+    
     private ActionBar mAction;
     
     @Override
@@ -66,19 +70,19 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         tab = mAction
                 .newTab()
                 .setText("Places")
-                .setTabListener(new FragmentTabListener<PlaceTabFragment>(this, "places", PlaceTabFragment.class));
+                .setTabListener(new FragmentTabListener<PlaceTabFragment>(this, FRAG_PLACES, PlaceTabFragment.class));
         mAction.addTab(tab);
         
         tab = mAction
                 .newTab()
                 .setText("Agenda")
-                .setTabListener(new FragmentTabListener<AgendaFragment>(this, "agenda", AgendaFragment.class));
+                .setTabListener(new FragmentTabListener<AgendaFragment>(this, FRAG_HOME, AgendaFragment.class));
         mAction.addTab(tab);
         
         tab = mAction
                 .newTab()
                 .setText("Tours")
-                .setTabListener(new FragmentTabListener<TourFragment>(this, "tours", TourFragment.class));
+                .setTabListener(new FragmentTabListener<TourFragment>(this, FRAG_TOUR, TourFragment.class));
         mAction.addTab(tab);
     }
 
@@ -139,7 +143,7 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         
         
         Cursor cursor = null;
-        ((PlaceTabFragment) getSupportFragmentManager().findFragmentByTag("places")).viewListFromCursor(cursor);
+        ((PlaceTabFragment) getSupportFragmentManager().findFragmentByTag(FRAG_PLACES)).viewListFromCursor(cursor);
         
     }
 

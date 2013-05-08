@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.annotation.TargetApi;
@@ -24,6 +26,7 @@ import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.ui.adapter.AlphabeticalCursorAdapter;
+import edu.vanderbilt.vm.guide.ui.adapter.CategoricalCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.DistanceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
@@ -75,6 +78,12 @@ public class PlaceTabFragment extends SherlockFragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.place_list, menu);
+    }
+    
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ListView lv = (ListView) mRoot.findViewById(R.id.s_l_listview1);
         switch (item.getItemId()) {
@@ -94,6 +103,14 @@ public class PlaceTabFragment extends SherlockFragment {
                         Toast.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.menu_sort_category:
+                
+                lv.setAdapter(new CategoricalCursorAdapter(getActivity(), mAllPlacesCursor));
+                
+                Toast.makeText(getActivity(), "Places List is sorted by category",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+                
             default:
                 return false;
         }

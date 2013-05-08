@@ -41,8 +41,8 @@ public interface GuideConstants {
         ATHLETICS ("Athetics"),
         GREEK_LIFE ("Greek Life"),
         STUDENT_LIFE ("Student Life"),
-        MISC ("Misc."),
-        LIBRARY ("Library");
+        LIBRARY ("Library"),
+        MISC ("Misc.");
         
         private final String text;
         
