@@ -131,7 +131,13 @@ public class CursorIndexerHelper {
 
         @Override
         public int getDBRow(int position) {
-            return mEnigma.get(position);
+            int row = mEnigma.get(position); 
+            if (row > -1) {
+                return row;
+            } else {
+                return 0;   // this is a workaround. For some reason the listView
+                            // is trying to get the id of the header.
+            }
         }
 
         @Override

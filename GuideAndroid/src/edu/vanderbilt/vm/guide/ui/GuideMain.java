@@ -1,6 +1,14 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,16 +17,21 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfig;
 import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfigReceiver;
 import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
+import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
@@ -53,6 +66,42 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         } else {
             mAction.setSelectedNavigationItem(1);
         }
+        
+        try {
+            
+            File cache = this.getExternalFilesDir(null);
+            LOGGER.info("Testing the files directory");
+            
+            if (cache.list() == null) {
+                LOGGER.info("list is null");
+            } else {
+                LOGGER.info("length of list: " + cache.list().length);
+            }
+            
+            File output = new File(cache.getAbsolutePath() + GuideConstants.CACHE_FILENAME);
+            FileInputStream fis = new FileInputStream(output);
+            
+            JsonReader reader = new JsonReader(new InputStreamReader(fis));
+            String name;
+            
+            if (reader.peek() == JsonToken.END_DOCUMENT)
+                return;
+            
+            reader.beginObject();
+            while (reader.hasNext()) {
+                name = reader.nextName();
+                if (name.equals(GuideConstants.CACHE_TAG_AGENDA)) {
+                    
+                    GlobalState.getUserAgenda().overwrite(Agenda.build(this, reader));
+                    
+                }
+            }
+            reader.endObject();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
     /*
@@ -123,6 +172,30 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         state.putInt(TAB_CACHE, mAction.getSelectedTab().getPosition());
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Agenda agenda = GlobalState.getUserAgenda();
+        
+        try {
+            FileOutputStream fos = new FileOutputStream(getExternalFilesDir(null).getAbsolutePath() + GuideConstants.CACHE_FILENAME);
+            
+            JsonWriter writer = new JsonWriter(new OutputStreamWriter(fos));
+            
+            writer.beginObject();
+            writer.name(GuideConstants.CACHE_TAG_AGENDA);
+            agenda.write(writer);
+            writer.endObject();
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    
     // ---------- END setup and lifecycle related methods ---------- //
 
     /**
