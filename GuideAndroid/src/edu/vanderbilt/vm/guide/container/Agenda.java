@@ -9,6 +9,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -161,7 +162,13 @@ public class Agenda implements Iterable<Place> {
         
         GuideDBOpenHelper helper = new GuideDBOpenHelper(ctx);
         Cursor cursor = DBUtils.getAllPlaces(new String[]{
-                GuideDBConstants.PlaceTable.ID_COL
+                GuideDBConstants.PlaceTable.NAME_COL, 
+                GuideDBConstants.PlaceTable.CATEGORY_COL,
+                GuideDBConstants.PlaceTable.LATITUDE_COL,
+                GuideDBConstants.PlaceTable.LONGITUDE_COL, 
+                GuideDBConstants.PlaceTable.ID_COL,
+                GuideDBConstants.PlaceTable.DESCRIPTION_COL,
+                GuideDBConstants.PlaceTable.IMAGE_LOC_COL
         }, helper.getReadableDatabase());
         
         Agenda agenda = new Agenda();
@@ -171,12 +178,13 @@ public class Agenda implements Iterable<Place> {
         
         while (reader.hasNext()) {
             id = reader.nextInt();
-            
+            //Log.i("Agenda", "got PlaceID: " + id);
             cursor.moveToFirst();
             do {
                 
                 if (id == cursor.getInt(colIx)) {
                     agenda.add(DBUtils.getPlaceFromCursor(cursor));
+                    //Log.i("Agenda", "got a DB match: " + id);
                     break;
                 }
                 
@@ -186,6 +194,7 @@ public class Agenda implements Iterable<Place> {
         
         reader.endArray();
         helper.close();
+        cursor.close();
         return agenda;
     }
     

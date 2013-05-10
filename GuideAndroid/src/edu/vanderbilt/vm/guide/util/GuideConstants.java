@@ -59,7 +59,7 @@ public interface GuideConstants {
         }
     }
     
-    public static final String CACHE_FILENAME = "vm_guide_cache.json";
+    public static final String CACHE_FILENAME = "/vm_guide_cache.json";
     
     public static final String CACHE_TAG_AGENDA = "agenda";
     

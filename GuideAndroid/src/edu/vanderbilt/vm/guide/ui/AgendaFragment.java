@@ -132,6 +132,8 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
             logger.trace("Cancelling image download task");
             mDlTask.cancel(true);
         }
+        
+        mAllPlacesCursor.close();
     }
     
     @Override

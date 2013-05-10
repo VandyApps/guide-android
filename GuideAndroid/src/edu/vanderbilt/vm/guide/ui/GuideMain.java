@@ -3,9 +3,7 @@ package edu.vanderbilt.vm.guide.ui;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
@@ -69,35 +67,36 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         
         try {
             
-            File cache = this.getExternalFilesDir(null);
-            LOGGER.info("Testing the files directory");
-            
-            if (cache.list() == null) {
-                LOGGER.info("list is null");
-            } else {
-                LOGGER.info("length of list: " + cache.list().length);
-            }
-            
-            File output = new File(cache.getAbsolutePath() + GuideConstants.CACHE_FILENAME);
+            File output = new File(getExternalFilesDir(null).getAbsolutePath() + GuideConstants.CACHE_FILENAME);
             FileInputStream fis = new FileInputStream(output);
+            
+            //String path = cache.getAbsolutePath() + GuideConstants.CACHE_FILENAME;
+            
+            //LOGGER.info(path);
             
             JsonReader reader = new JsonReader(new InputStreamReader(fis));
             String name;
             
-            if (reader.peek() == JsonToken.END_DOCUMENT)
-                return;
+            if (reader.peek() == JsonToken.END_DOCUMENT) {
+                //LOGGER.info("No cache found.");
+                
+            } else {
             
-            reader.beginObject();
-            while (reader.hasNext()) {
-                name = reader.nextName();
-                if (name.equals(GuideConstants.CACHE_TAG_AGENDA)) {
-                    
-                    GlobalState.getUserAgenda().overwrite(Agenda.build(this, reader));
-                    
+                reader.beginObject();
+                while (reader.hasNext()) {
+                    name = reader.nextName();
+                    if (name.equals(GuideConstants.CACHE_TAG_AGENDA)) {
+                        
+                        GlobalState.getUserAgenda().coalesce(Agenda.build(this, reader));
+                        
+                    } else {
+                        //LOGGER.info("skipped name: " + name);
+                        reader.skipValue();
+                    }
                 }
+                reader.endObject();
+                
             }
-            reader.endObject();
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,20 +175,24 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
     public void onDestroy() {
         super.onDestroy();
         Agenda agenda = GlobalState.getUserAgenda();
+        //LOGGER.info("onStop is called");
         
         try {
             FileOutputStream fos = new FileOutputStream(getExternalFilesDir(null).getAbsolutePath() + GuideConstants.CACHE_FILENAME);
             
             JsonWriter writer = new JsonWriter(new OutputStreamWriter(fos));
             
+            //LOGGER.info("Opening output stream");
+            
             writer.beginObject();
             writer.name(GuideConstants.CACHE_TAG_AGENDA);
             agenda.write(writer);
-            writer.endObject();
             
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            //LOGGER.info("Agenda done writing stuff");
+            
+            writer.endObject();
+            writer.flush();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
