@@ -9,7 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
 
-public class CursorIndexerHelper {
+public class CursorIndexerFactory {
     
     public interface CursorIndexer {
         

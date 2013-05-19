@@ -58,7 +58,9 @@
 	<string name="search_cb12">Misc.</string>
 	<string name="search_cb13">Library</string>
 	
-	
+	<string name="tour_manager_btn1">Create</string>
+	<string name="tour_manager_btn2">Delete</string>
+	<string name="tour_manager_btn3">Map</string>
 	
 	
 </resources>

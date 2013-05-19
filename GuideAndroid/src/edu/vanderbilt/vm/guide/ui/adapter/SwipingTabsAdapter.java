@@ -40,7 +40,6 @@ public class SwipingTabsAdapter extends FragmentPagerAdapter implements ActionBa
 
     public SwipingTabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
         super(activity.getSupportFragmentManager());
-        // TODO Auto-generated constructor stub
         mActivity = activity;
         mActionBar = activity.getSupportActionBar();
         mViewPager = pager;
