@@ -69,7 +69,7 @@ public class GlobalState {
                 // TODO
             }
 
-            userHistory.addToTop(plc);
+            // userHistory.addToTop(plc); TODO
         }
 
     }

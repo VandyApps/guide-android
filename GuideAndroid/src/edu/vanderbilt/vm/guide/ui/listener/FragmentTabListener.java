@@ -1,12 +1,12 @@
 
 package edu.vanderbilt.vm.guide.ui.listener;
 
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.ActionBar.Tab;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 /**
  * FragmentTabListener switches between fragments when a tab is clicked. Code
@@ -16,11 +16,10 @@ import android.app.ActionBar.Tab;
  * @author nicholasking
  * @param <T> The fragment's class
  */
-@TargetApi(13)
 public class FragmentTabListener<T extends Fragment> implements ActionBar.TabListener {
     private Fragment mFragment;
 
-    private final Activity mActivity;
+    private final SherlockFragmentActivity mActivity;
 
     private final String mTag;
 
@@ -33,7 +32,7 @@ public class FragmentTabListener<T extends Fragment> implements ActionBar.TabLis
      * @param tag The identifier tag for the fragment
      * @param clz The fragment's Class, used to instantiate the fragment
      */
-    public FragmentTabListener(Activity activity, String tag, Class<T> clz) {
+    public FragmentTabListener(SherlockFragmentActivity activity, String tag, Class<T> clz) {
         mActivity = activity;
         mTag = tag;
         mClass = clz;

@@ -86,7 +86,7 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
         GoogleMap map = getMap();
         MapViewer.resetCamera(map);
         map.setOnMarkerClickListener(this);     // What happens when a marker is tapped
-        
+        map.setMyLocationEnabled(showSelf);
         ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
         for (Place plc : mAgenda) {
             geopointList.add(MapViewer.toLatLng(plc));

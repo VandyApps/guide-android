@@ -1,12 +1,23 @@
 package edu.vanderbilt.vm.guide.container;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
+
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
+import edu.vanderbilt.vm.guide.util.DBUtils;
 
 /**
  * Represents a list of places that the user plans to visit.
@@ -137,8 +148,66 @@ public class Agenda implements Iterable<Place> {
 
     }
 
-    public void addToTop(Place plc) {
-        mPlaces.add(0, plc);
+    public void write(JsonWriter writer) throws IOException {
+        writer.beginArray();
+        
+        for (Place plc : mPlaces) {
+            writer.value(plc.getUniqueId());
+        }
+        
+        writer.endArray();
     }
-
+    
+    public static Agenda build(Context ctx, JsonReader reader) throws IOException {
+        
+        GuideDBOpenHelper helper = new GuideDBOpenHelper(ctx);
+        Cursor cursor = DBUtils.getAllPlaces(new String[]{
+                GuideDBConstants.PlaceTable.NAME_COL, 
+                GuideDBConstants.PlaceTable.CATEGORY_COL,
+                GuideDBConstants.PlaceTable.LATITUDE_COL,
+                GuideDBConstants.PlaceTable.LONGITUDE_COL, 
+                GuideDBConstants.PlaceTable.ID_COL,
+                GuideDBConstants.PlaceTable.DESCRIPTION_COL,
+                GuideDBConstants.PlaceTable.IMAGE_LOC_COL
+        }, helper.getReadableDatabase());
+        
+        Agenda agenda = new Agenda();
+        reader.beginArray();
+        int id;
+        int colIx = cursor.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
+        
+        while (reader.hasNext()) {
+            id = reader.nextInt();
+            //Log.i("Agenda", "got PlaceID: " + id);
+            cursor.moveToFirst();
+            do {
+                
+                if (id == cursor.getInt(colIx)) {
+                    agenda.add(DBUtils.getPlaceFromCursor(cursor));
+                    //Log.i("Agenda", "got a DB match: " + id);
+                    break;
+                }
+                
+            } while (cursor.moveToNext());
+            
+        }
+        
+        reader.endArray();
+        helper.close();
+        cursor.close();
+        return agenda;
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+

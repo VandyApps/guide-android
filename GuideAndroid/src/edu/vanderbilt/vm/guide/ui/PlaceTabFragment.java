@@ -10,70 +10,51 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.annotation.TargetApi;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
-import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.ui.adapter.AlphabeticalCursorAdapter;
-import edu.vanderbilt.vm.guide.ui.adapter.DistanceCursorAdapter;
-import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
+import edu.vanderbilt.vm.guide.ui.adapter.IndexedCursorAdapter;
+import edu.vanderbilt.vm.guide.ui.adapter.PlaceCursorAdapter;
 import edu.vanderbilt.vm.guide.ui.listener.PlaceListClickListener;
 import edu.vanderbilt.vm.guide.util.DBUtils;
-import edu.vanderbilt.vm.guide.util.Geomancer;
-import edu.vanderbilt.vm.guide.util.ImageDownloader;
 
-@TargetApi(16)
-public class PlaceTabFragment extends SherlockFragment implements OnClickListener, GeomancerListener {
-    private final int DESCRIPTION_LENGTH = 100;
 
-    private ListView mListView;
 
-    private TextView mCurrPlaceName;
+public class PlaceTabFragment extends SherlockFragment {
 
-    private TextView mCurrPlaceDesc;
+    public void viewListFromCursor(Cursor cursor) {
+        ((ListView) mRoot.findViewById(R.id.s_l_listview1)).setAdapter(new PlaceCursorAdapter(getActivity(), cursor));
+    }
+    
+    @SuppressWarnings("unused")
+    private static final Logger LOGGER = LoggerFactory.getLogger("ui.PlaceTabFragment");
 
-    private EditText mSearchBox;
-
-    private LinearLayout mCurrentPlaceBar;
-
-    private Place mCurrPlace;
-
-    private ImageView ivCurrent;
-
-    private ImageDownloader.BitmapDownloaderTask mDlTask = null;
-
+    
+    private View mRoot;
+    
     private Cursor mAllPlacesCursor; // A cursor holding all places in the db
 
-    private static final Logger logger = LoggerFactory.getLogger("ui.PlaceTabFragment");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_place_list, container, false);
+        mRoot = inflater.inflate(R.layout.single_list, container, false);
+        return mRoot;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        setupUI();
 
         // Query for places and setup ListView
         GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
@@ -85,132 +66,58 @@ public class PlaceTabFragment extends SherlockFragment implements OnClickListene
                 GuideDBConstants.PlaceTable.IMAGE_LOC_COL
         };
         mAllPlacesCursor = DBUtils.getAllPlaces(columns, helper.getReadableDatabase());
-        mListView.setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
-        mListView.setOnItemClickListener(new PlaceListClickListener(getActivity()));
+        
+        ListView lv = (ListView) mRoot.findViewById(R.id.s_l_listview1);
+        lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                IndexedCursorAdapter.SORT_ALPHABETICALLY));
+        lv.setOnItemClickListener(new PlaceListClickListener(getActivity()));
         helper.close();
 
-        // Tells you what is the closest building to your location right now
-        Location loc = Geomancer.getDeviceLocation();
-        findAndSetClosestPlace(loc);
-
-        // Prevent the soft keyboard from popping up at startup.
-        getActivity().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
         setHasOptionsMenu(true);
-
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mDlTask != null) {
-            logger.trace("Cancelling image download task");
-            mDlTask.cancel(true);
-        }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.place_list, menu);
     }
-
-    //@SuppressWarnings("deprecation")
-    private void setupUI() {
-        mCurrPlaceName = (TextView)getActivity().findViewById(R.id.currentPlaceName);
-        mCurrPlaceDesc = (TextView)getActivity().findViewById(R.id.currentPlaceDesc);
-        ivCurrent = (ImageView)getActivity().findViewById(R.id.currentPlaceThumbnail);
-
-        mListView = (ListView)getActivity().findViewById(R.id.placeTablistView);
-
-        mSearchBox = (EditText)getActivity().findViewById(R.id.placeTabSearchEdit);
-        mSearchBox.setOnClickListener(this);
-
-        mCurrentPlaceBar = (LinearLayout)getActivity().findViewById(R.id.current_place_bar);
-        mCurrentPlaceBar.setOnClickListener(this);
-        mCurrentPlaceBar.setBackgroundColor(Color.WHITE);
-    }
-
-    // this method of setting up OnClickListener seems to be necessary when you
-    // want to access class variables
-    @Override
-    public void onClick(View v) {
-        if (v == mCurrPlaceDesc || v == mCurrPlaceName || v == mCurrentPlaceBar) {
-            PlaceDetailer.open(getActivity(), mCurrPlace.getUniqueId());
-        } else if (v == mSearchBox) {
-            // mSearchBox.setFocusable(true);
-        }
-
-    }
-
-    public void setCurrentPlace(Place plc) {
-        if (plc == null) {
-            return;
-        }
-
-        mCurrPlace = plc;
-        mCurrPlaceName.setText(mCurrPlace.getName());
-
-        String desc = mCurrPlace.getDescription();
-        if (desc != null && desc.length() > DESCRIPTION_LENGTH) {
-            mCurrPlaceDesc.setText(desc.substring(0, DESCRIPTION_LENGTH) + "...");
-        } else if (desc == null) {
-            mCurrPlaceDesc.setText("No description available");
-        } else {
-            mCurrPlaceDesc.setText(desc + "...");
-        }
-
-        mDlTask = new ImageDownloader.BitmapDownloaderTask(ivCurrent);
-        logger.trace("Starting image download task");
-        mDlTask.execute(mCurrPlace.getPictureLoc());
-
-    }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        ListView lv = (ListView) mRoot.findViewById(R.id.s_l_listview1);
         switch (item.getItemId()) {
             case R.id.menu_sort_alphabetic:
-
-                mListView.setAdapter(new AlphabeticalCursorAdapter(getActivity(), mAllPlacesCursor));
-
-                return true;
-
-            case R.id.menu_sort_distance:
-                mListView.setAdapter(new DistanceCursorAdapter(getActivity(), mAllPlacesCursor));
-
-                Toast.makeText(getActivity(), "PlacesList is sorted by distance",
+                
+                lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                        IndexedCursorAdapter.SORT_ALPHABETICALLY));
+                
+                Toast.makeText(getActivity(), "Places List is sorted alphabetically",
                         Toast.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.menu_sort_distance:
+                
+                lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                        IndexedCursorAdapter.SORT_BY_DISTANCE));
+
+                Toast.makeText(getActivity(), "Places List is sorted by distance",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.menu_sort_category:
+                
+                lv.setAdapter(new IndexedCursorAdapter(getActivity(), mAllPlacesCursor, 
+                        IndexedCursorAdapter.SORT_BY_CATEGORY));
+                
+                Toast.makeText(getActivity(), "Places List is sorted by category",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+                
             default:
                 return false;
         }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Geomancer.registerGeomancerListener(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Geomancer.removeGeomancerListener(this);
-    }
-
-    @Override
-    public void updateLocation(Location loc) {
-        findAndSetClosestPlace(loc);
-    }
-
-    private void findAndSetClosestPlace(Location loc) {
-        if (loc == null) {
-            return;
-        }
-
-        int closestIx = Geomancer.findClosestPlace(loc, mAllPlacesCursor);
-        if (closestIx == -1) {
-            Toast.makeText(getActivity(), "Couldn't find closest place", Toast.LENGTH_LONG).show();
-        } else {
-            mAllPlacesCursor.moveToPosition(closestIx);
-            setCurrentPlace(DBUtils.getPlaceFromCursor(mAllPlacesCursor));
-        }
-    }
+    
+    
 
 }

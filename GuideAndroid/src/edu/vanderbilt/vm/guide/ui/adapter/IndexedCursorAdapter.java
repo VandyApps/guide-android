@@ -14,15 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import edu.vanderbilt.vm.guide.ui.adapter.CursorIndexerHelper.CursorIndexer;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 
-public class PlaceCursorAdapter extends BaseAdapter {
+public class IndexedCursorAdapter extends BaseAdapter {
 
     private final Cursor mCursor;
 
     private final Context mContext;
 
+    private final CursorIndexer mIndexer;
+    
     private int mIdColIx;
 
     private int mNameColIx;
@@ -33,19 +36,22 @@ public class PlaceCursorAdapter extends BaseAdapter {
 
     private int mLngColIx;
 
+    public static final int SORT_ALPHABETICALLY = 0;
+    public static final int SORT_BY_DISTANCE = 1;
+    public static final int SORT_BY_CATEGORY = 2;
     /**
      * Do not call this constructor.
      * 
      * @throws Exception
      */
-    public PlaceCursorAdapter() throws Exception {
+    public IndexedCursorAdapter() throws Exception {
         throw new Exception("Do not call this constructor");
     }
 
-    public PlaceCursorAdapter(Context context, Cursor cursor) {
+    public IndexedCursorAdapter(Context context, Cursor cursor, int sort) {
         mContext = context;
         mCursor = cursor;
-
+        
         mIdColIx = mCursor.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
         if (mIdColIx == -1) {
             throw new SQLiteException("Cursor does not have an id column");
@@ -66,7 +72,24 @@ public class PlaceCursorAdapter extends BaseAdapter {
         if (mLngColIx == -1) {
             throw new SQLiteException("Cursor does not have a longitude column");
         }
-
+        
+        switch (sort) {
+            case SORT_ALPHABETICALLY:
+                mIndexer = CursorIndexerHelper.getAlphabeticalIndexer(context, cursor, mNameColIx);
+                break;
+                
+            case SORT_BY_CATEGORY:
+                mIndexer = CursorIndexerHelper.getCategoricalIndexer(context, cursor, mCatColIx);
+                break;
+                
+            case SORT_BY_DISTANCE:
+                mIndexer = CursorIndexerHelper.getDistanceIndexer(context, cursor, mLatColIx, mLngColIx);
+                break;
+                
+            default:
+                mIndexer = null;
+        }
+        
     }
 
     public static String[] getExpectedProjection() {
@@ -79,20 +102,20 @@ public class PlaceCursorAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mCursor.getCount();
+        return mIndexer.categoriesCount() + mCursor.getCount();
     }
 
     @Override
     public Object getItem(int position) {
         checkPosition(position);
-        mCursor.moveToPosition(position);
+        mCursor.moveToPosition(mIndexer.getDBRow(position));
         return DBUtils.getPlaceFromCursor(mCursor);
     }
 
     @Override
     public long getItemId(int position) {
         checkPosition(position);
-        mCursor.moveToPosition(position);
+        mCursor.moveToPosition(mIndexer.getDBRow(position));
         return mCursor.getInt(mIdColIx);
     }
 
@@ -111,34 +134,40 @@ public class PlaceCursorAdapter extends BaseAdapter {
         }
 
         
-        // no header
-        layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
-        
-        
-        mCursor.moveToPosition(position);
-        ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mCursor
-                .getString(mNameColIx));
+        if (mIndexer.isHeader(position)) {
+            layout.findViewById(R.id.placelist_item_header).setVisibility(View.VISIBLE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.GONE);
+            
+            ((TextView)layout.findViewById(R.id.header_title)).setText(
+                    mIndexer.getHeaderTitle(position));
 
-        
-        // TODO replace placeholder with categorical icon
-        ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
-                .setImageResource(R.drawable.home);
+        } else {
+            layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.VISIBLE);
 
-        
-        
-        Location tmp = new Location("Temp");
-        tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
-        tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
+            
+            mCursor.moveToPosition(mIndexer.getDBRow(position));
+            ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mCursor
+                    .getString(mNameColIx));
+            
+            
+            // TODO replace placeholder icon with categorical icon
+            ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
+                    .setImageResource(R.drawable.home);
 
-        ((TextView)layout.findViewById(R.id.placelist_item_distance)).setText(Geomancer
-                .getDistanceString(tmp));
+            
+            Location tmp = new Location("Temp");
+            tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
+            tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
+            ((TextView)layout.findViewById(R.id.placelist_item_distance)).setText(
+                    Geomancer.getDistanceString(tmp));
+        }
 
-        
         return layout;
     }
 
     private void checkPosition(int position) {
-        if (position < 0 || position >= mCursor.getCount()) {
+        if (position < 0 || position >= (mCursor.getCount() + mIndexer.categoriesCount())) {
             throw new IndexOutOfBoundsException("Position " + position
                     + " is invalid for a cursor with " + getCount() + "rows.");
         }

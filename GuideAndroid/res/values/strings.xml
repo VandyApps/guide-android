@@ -10,9 +10,8 @@
 	<string name="title_map">Map</string>
 	<string name="title_navigator">Navigate</string>
 	
-	<string name="main_current_location">This box shows your current location. 
-	    Click to show the detail of this place</string>
-	<string name="main_current_location2">You are at:</string>
+	<string name="main_current_location">This box shows your current location. Click to show the detail of this place</string>
+	<string name="main_current_location2">Current Location: </string>
 	<string name="main_search">Search</string>
 	<string name="main_qr">QR</string>
 	<string name="main_serch_box">Search Box</string>
@@ -24,6 +23,7 @@
 	<string name="menu_about">About</string>
 	<string name="menu_sort_alphabetic">Sort: alphabetically</string>
 	<string name="menu_sort_distance">Sort: by distance</string>
+	<string name="menu_sort_category">Sort: by category</string>
 	<string name="menu_navigator">Navigate</string>
 	
 	<string name="nav_label1">Start</string>

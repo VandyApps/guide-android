@@ -1,7 +1,6 @@
 package edu.vanderbilt.vm.guide.ui.adapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +26,10 @@ import android.widget.TextView;
 @SuppressLint("UseSparseArrays")
 public class DistanceCursorAdapter extends BaseAdapter {
 	
+    @SuppressWarnings("unused")
+    private static final Logger logger = LoggerFactory
+            .getLogger("ui.PlaceTabFragment");
+    
 	private final Cursor mCursor;
 	private final Context mCtx;
 	private int mIdColIx;
@@ -34,13 +37,13 @@ public class DistanceCursorAdapter extends BaseAdapter {
 	private int mCatColIx;
 	private int mLatColIx;
 	private int mLngColIx;
-	private HashMap<Integer,Integer> mEnigma;
+	
+	private ArrayList<Integer> mEnigma;
 	private int CATEGORIES;
 	private ArrayList<HeaderRecord> mRecord = new ArrayList<HeaderRecord>();
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory
-			.getLogger("ui.PlaceTabFragment");
 	private static int categoryOffset = 0;
+	
+	
 	
 	public DistanceCursorAdapter() throws Exception {
 		throw new Exception("Do not call this constructor");
@@ -71,7 +74,7 @@ public class DistanceCursorAdapter extends BaseAdapter {
 			throw new SQLiteException("Cursor does not have a longitude column");
 		}
 		
-		mEnigma = new HashMap<Integer,Integer>();
+		
 		buildMap();
 	}
 
@@ -112,28 +115,35 @@ public class DistanceCursorAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		checkPosition(position);
 		
-		int x = 0;
-		x = mEnigma.get(position);
-		boolean isHeader = (x < 0)? true : false;
-		
 		LinearLayout layout = null;
-		if (isHeader) {
-			layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(
-					R.layout.place_list_header,null);
+		if (convertView == null) {
+		    layout = (LinearLayout)LayoutInflater.from(mCtx).inflate(R.layout.place_list_item,
+                    null);
+            layout.setTag(layout);
+        } else {
+            layout = (LinearLayout)convertView.getTag();
+		}
+		
+		
+		int x = 0;
+        x = mEnigma.get(position);
+		
+		if (x < 0) {
+		    layout.findViewById(R.id.placelist_item_header).setVisibility(View.VISIBLE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.GONE);
 			
-			HeaderRecord record = mRecord.get(-x - 1);
 			((TextView) layout.findViewById(R.id.header_title)).setText(
-					record.mTitle);
+			        mRecord.get(-x - 1).mTitle);
 			
 		} else {
-			layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(
-					R.layout.place_list_item,null);
+		    layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.VISIBLE);
 			
 			mCursor.moveToPosition(x);
-			((TextView) layout.findViewById(R.id.placelist_item_title))
-				.setText(
-						mCursor.getString(mNameColIx));
+			((TextView) layout.findViewById(R.id.placelist_item_title)).setText(
+					mCursor.getString(mNameColIx));
 			
+	        // TODO replace placeholder with categorical icon
 			((ImageView) layout.findViewById(R.id.placelist_item_thunbnail))
 				.setImageResource(R.drawable.home);
 			
@@ -157,7 +167,7 @@ public class DistanceCursorAdapter extends BaseAdapter {
 	
 	private void buildMap(){
 		
-	    /////////////////////////////////////////////////////////
+
 		// Initializing the Header records
 		mRecord.add(new HeaderRecord("100 ft", 30.5));
 		mRecord.add(new HeaderRecord("200 ft", 61));
@@ -170,60 +180,62 @@ public class DistanceCursorAdapter extends BaseAdapter {
 		mRecord.add(new HeaderRecord("2.4 mi", 3862));
 		mRecord.add(new HeaderRecord("In a galaxy far far away", 10000000));
 		CATEGORIES = mRecord.size();
-		/////////////////////////////////////////////////////////
+
+		
 		
 		// Scanning the database to index
-		if (!mCursor.moveToFirst()) {
-			return;
+		if (mCursor.moveToFirst()) {
+		
+
+    		Location current = Geomancer.getDeviceLocation();
+    		Location tmp = new Location("Temp");
+    		
+    		do {
+    			
+                tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
+                tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
+    			
+    			for (int i = 0; i < mRecord.size();i++) {
+    				if (current.distanceTo(tmp) < mRecord.get(i).mDist) {
+    					mRecord.get(i).mChild.add(mCursor.getPosition());
+    					break;
+    				}
+    			}
+    			
+    		} while (mCursor.moveToNext());
+    
+    		
+    		
+    		// Build HashMap based of the information stored in mRecord
+    		int listPosition = 0;
+    		mEnigma = new ArrayList<Integer>();
+    		
+    		for (int i = 0; i < mRecord.size(); i++) {
+    			
+    			if (mRecord.get(i).mChild.size() == 0) {
+    				categoryOffset--;
+    
+    			} else {
+        			mRecord.get(i).mPosition = listPosition;
+        			mEnigma.add(listPosition, -(i + 1));
+        			listPosition++;
+        			
+        			for (Integer child : mRecord.get(i).mChild) {
+        			    mEnigma.add(listPosition, child);
+        				listPosition++;
+        			}
+    			}
+    			
+    		}
 		}
-		
-		/////////////////////////////////////////////////////////
-		Location current = Geomancer.getDeviceLocation();
-		Location tmp = new Location("Temp");
-		do {
-			
-            tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
-            tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
-			
-			for (int i = 0; i < mRecord.size();i++) {
-				if (current.distanceTo(tmp) < mRecord.get(i).mDist) {
-					mRecord.get(i).mChild.add(mCursor.getPosition());
-					break;
-				}
-			}
-			
-		} while (mCursor.moveToNext());
-		/////////////////////////////////////////////////////////
-		
-		
-		// Build HashMap based of the information stored in mRecord
-		int listPosition = 0;
-		for (int i = 0; i < mRecord.size(); i++) {
-			
-			if (mRecord.get(i).mChild.size() == 0) {
-				categoryOffset--;
-				continue;
-			}
-			
-			mRecord.get(i).mPosition = listPosition;
-			mEnigma.put(listPosition, -(i + 1));
-			listPosition++;
-			
-			for (Integer child : mRecord.get(i).mChild) {
-				mEnigma.put(listPosition, child);
-				listPosition++;
-			}
-			
-		}
-			
 	}
 	
 	static class HeaderRecord {
 		
 		int mPosition;
-		double mDist;     // in meters
-		String mTitle;
-		ArrayList<Integer> mChild;
+		final double mDist;     // in meters
+		final String mTitle;
+		final ArrayList<Integer> mChild;
 		
 		public HeaderRecord(String s, double d) {
 			mPosition = 0;
@@ -231,14 +243,7 @@ public class DistanceCursorAdapter extends BaseAdapter {
 			mDist = d;
 			mChild = new ArrayList<Integer>();
 		}
-		
-		public HeaderRecord() {
-			mPosition = 0;
-			mTitle = "";
-			mDist = 0;
-			mChild = new ArrayList<Integer>();
-		}
-		
+
 	}
 	
 }

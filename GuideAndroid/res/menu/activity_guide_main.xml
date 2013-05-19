@@ -1,38 +1,30 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item 
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
         android:id="@+id/menu_settings"
-        android:title="@string/menu_settings"
         android:orderInCategory="100"
-        android:showAsAction="never" />
-    
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
     <item
         android:id="@+id/menu_map"
-        android:title="@string/menu_map"
         android:icon="@drawable/location_map"
-        android:showAsAction="always|collapseActionView"/>
-    
+        android:showAsAction="always|collapseActionView"
+        android:title="@string/menu_map"/>
     <item
         android:id="@+id/menu_about"
-        android:title="@string/menu_about"
         android:icon="@drawable/action_about"
-        android:showAsAction="never" />
-    
-    <item
-        android:id="@+id/menu_sort_alphabetic"
-        android:title="@string/menu_sort_alphabetic"
-        android:showAsAction="never" />
-    
-    <item 
-        android:id="@+id/menu_sort_distance"
-        android:title="@string/menu_sort_distance"
-        android:showAsAction="never" />
-    
+        android:showAsAction="never"
+        android:title="@string/menu_about"/>
     <item
         android:id="@+id/menu_navigator"
-        android:title="@string/menu_navigator"
         android:icon="@drawable/navigate"
-        android:showAsAction="always|collapseActionView" />
-    <item android:id="@+id/menu_search" android:title="Search" android:icon="@android:drawable/ic_menu_search" android:showAsAction="always|collapseActionView"></item>
-    
-    
+        android:showAsAction="always|collapseActionView"
+        android:title="@string/menu_navigator"/>
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="always|collapseActionView"
+        android:title="Search">
+    </item>
+
 </menu>

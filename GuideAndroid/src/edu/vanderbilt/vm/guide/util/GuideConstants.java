@@ -41,8 +41,8 @@ public interface GuideConstants {
         ATHLETICS ("Athetics"),
         GREEK_LIFE ("Greek Life"),
         STUDENT_LIFE ("Student Life"),
-        MISC ("Misc."),
-        LIBRARY ("Library");
+        LIBRARY ("Library"),
+        MISC ("Misc.");
         
         private final String text;
         
@@ -58,4 +58,24 @@ public interface GuideConstants {
             return this.text;
         }
     }
+    
+    public static final String CACHE_FILENAME = "/vm_guide_cache.json";
+    
+    public static final String CACHE_TAG_AGENDA = "agenda";
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,7 +2,6 @@
 package edu.vanderbilt.vm.guide.ui.adapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +40,11 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
 
     private int mLngColIx;
 
-    private HashMap<Integer, Integer> mEnigma;
+    private ArrayList<Integer> mEnigma;
 
     private final int CATEGORIES = 26;
 
-    private ArrayList<HeaderRecord> mRecord = new ArrayList<HeaderRecord>();
+    private ArrayList<HeaderRecord> mRecord;
 
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.AlphabeticalCursorAdapter");
@@ -81,7 +80,8 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
             throw new SQLiteException("Cursor does not have a longitude column");
         }
 
-        mEnigma = new HashMap<Integer, Integer>();
+        initializeRecord();
+        scanningDatabase();
         buildMap();
     }
 
@@ -123,35 +123,50 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         checkPosition(position);
 
+        LinearLayout layout = null;
+        if (convertView == null) {
+            layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(R.layout.place_list_item, null);
+            layout.setTag(layout);
+            
+        } else {
+            layout = (LinearLayout)convertView.getTag();
+        }
+        
+        
         int x = 0;
         x = mEnigma.get(position);
-
-        LinearLayout layout = null;
-        if (x < 0) {
-            layout = (LinearLayout)LayoutInflater.from(mCtx).inflate(R.layout.place_list_header,
-                    null);
-
-            HeaderRecord record = mRecord.get(-x - 1);
-            ((TextView)layout.findViewById(R.id.header_title)).setText(record.mTitle);
+        
+        
+        if (x < 0) { // isHeader
+            layout.findViewById(R.id.placelist_item_header).setVisibility(View.VISIBLE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.GONE);
+            
+            ((TextView)layout.findViewById(R.id.header_title)).setText(
+                    mRecord.get(-x - 1).mTitle);
 
         } else {
-            layout = (LinearLayout)LayoutInflater.from(mCtx)
-                    .inflate(R.layout.place_list_item, null);
+            layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.VISIBLE);
 
+            
             mCursor.moveToPosition(x);
             ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mCursor
                     .getString(mNameColIx));
-
+            
+            
+            // TODO replace placeholder icon with categorical icon
             ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
                     .setImageResource(R.drawable.home);
 
+            
             Location tmp = new Location("Temp");
             tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
             tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
-            ((TextView)layout.findViewById(R.id.placelist_item_distance)).setText(Geomancer
-                    .getDistanceString(tmp));
+            ((TextView)layout.findViewById(R.id.placelist_item_distance)).setText(
+                    Geomancer.getDistanceString(tmp));
         }
 
+        
         return layout;
     }
 
@@ -162,79 +177,87 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
         }
     }
 
-    private void buildMap() {
-
-        // Initializing the Header records
+    private void initializeRecord() {
+        mRecord = new ArrayList<HeaderRecord>();
         char c = 'A';
         for (int i = 0; i < CATEGORIES; i++) {
-            mRecord.add(new HeaderRecord(c));
+            mRecord.add(new HeaderRecord(String.valueOf(c)));
             c++;
         }
 
-        HeaderRecord rec = new HeaderRecord();
-        rec.mTitle = "0-9";
+        HeaderRecord rec = new HeaderRecord("0-9");
         mRecord.add(rec);
-
-        // Scanning the database to index
-        if (!mCursor.moveToFirst()) {
-            return;
-        }
         
-        String initial;
-        do {
+    }
+    
+    // iterates through the database and make an index
+    private void scanningDatabase() {
 
-            initial = mCursor.getString(mNameColIx).substring(0, 1);
-
-            for (int i = 0; i < mRecord.size() - 1; i++) {
-                if (initial.equalsIgnoreCase(mRecord.get(i).mTitle)) {
-                    mRecord.get(i).mChild.add(mCursor.getPosition());
-                    break;
-                } else if (i == mRecord.size() - 2) {
+        if (mCursor.moveToFirst()) {
+         
+            
+            String initial;
+            boolean isChar;
+            
+            do {
+    
+                initial = mCursor.getString(mNameColIx).substring(0, 1);
+                isChar = false;
+                
+                for (int i = 0; i < mRecord.size() - 1; i++) {
+                    
+                    if (initial.equalsIgnoreCase(mRecord.get(i).mTitle)) {
+                        mRecord.get(i).mChild.add(mCursor.getPosition());
+                        isChar = true;
+                        break;
+                    }
+                    
+                }
+    
+                if (!isChar) { // add to final category
                     mRecord.get(mRecord.size() - 1).mChild.add(mCursor.getPosition());
                 }
-            }
+                
+            } while (mCursor.moveToNext());
+        }
+        
+    }
+    
+    // Build HashMap based of the information stored in mRecord
+    private void buildMap() {
 
-        } while (mCursor.moveToNext());
-
-        // Build HashMap based of the information stored in mRecord
         int listPosition = 0;
+        mEnigma = new ArrayList<Integer>();
+        
         for (int i = 0; i < mRecord.size(); i++) {
 
             if (mRecord.get(i).mChild.size() == 0) {
                 categoryOffset--;
-                continue;
-            }
-
-            mRecord.get(i).mPosition = listPosition;
-            mEnigma.put(listPosition, -(i + 1));
-            listPosition++;
-
-            for (Integer child : mRecord.get(i).mChild) {
-                mEnigma.put(listPosition, child);
+                
+            } else {
+                mRecord.get(i).mPosition = listPosition;
+                mEnigma.add(listPosition, -(i + 1));
                 listPosition++;
+    
+                for (Integer child : mRecord.get(i).mChild) {
+                    mEnigma.add(listPosition, child);
+                    listPosition++;
+                }
             }
-
+            
         }
-
+    
     }
 
     static class HeaderRecord {
 
         int mPosition;
+        final String mTitle;
+        final ArrayList<Integer> mChild;
 
-        String mTitle;
-
-        ArrayList<Integer> mChild;
-
-        public HeaderRecord(char c) {
+        public HeaderRecord(String s) {
             mPosition = 0;
-            mTitle = String.valueOf(c);
-            mChild = new ArrayList<Integer>();
-        }
-
-        public HeaderRecord() {
-            mPosition = 0;
-            mTitle = "";
+            mTitle = s;
             mChild = new ArrayList<Integer>();
         }
 

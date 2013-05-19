@@ -2,7 +2,6 @@
 package edu.vanderbilt.vm.guide.ui.adapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +42,7 @@ public class CategoricalCursorAdapter extends BaseAdapter {
 
     private int mLngColIx;
 
-    private HashMap<Integer, Integer> mEnigma;
+    private ArrayList<Integer> mEnigma;
 
     private int CATEGORIES;
 
@@ -83,12 +82,8 @@ public class CategoricalCursorAdapter extends BaseAdapter {
             throw new SQLiteException("Cursor does not have a longitude column");
         }
 
-        mEnigma = new HashMap<Integer, Integer>();
-
         initializeRecord();
-
         scanningDatabase();
-
         buildMap();
     }
 
@@ -129,28 +124,42 @@ public class CategoricalCursorAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         checkPosition(position);
 
+        LinearLayout layout = null;
+        if (convertView == null) {
+            layout = (LinearLayout) LayoutInflater.from(mCtx).inflate(R.layout.place_list_item, null);
+            layout.setTag(layout);
+            
+        } else {
+            layout = (LinearLayout)convertView.getTag();
+        }
+        
+        
         int x = 0;
         x = mEnigma.get(position);
 
-        LinearLayout layout = null;
-        if (x < 0) {
-            layout = (LinearLayout)LayoutInflater.from(mCtx).inflate(R.layout.place_list_header,
-                    null);
+        
+        if (x < 0) { // isHeader
+            layout.findViewById(R.id.placelist_item_header).setVisibility(View.VISIBLE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.GONE);
 
-            HeaderRecord record = mRecord.get(-x - 1);
-            ((TextView)layout.findViewById(R.id.header_title)).setText(record.mTitle);
+            ((TextView)layout.findViewById(R.id.header_title)).setText(
+                    mRecord.get(-x - 1).mTitle);
 
         } else {
-            layout = (LinearLayout)LayoutInflater.from(mCtx)
-                    .inflate(R.layout.place_list_item, null);
+            layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
+            layout.findViewById(R.id.placelist_item_item).setVisibility(View.VISIBLE);
 
+            
             mCursor.moveToPosition(x);
-            ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mCursor
-                    .getString(mNameColIx));
+            ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(
+                    mCursor.getString(mNameColIx));
 
+            
+            // TODO replace placeholder icon with categorical icon
             ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
                     .setImageResource(R.drawable.home);
 
+            
             Location tmp = new Location("Temp");
             tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
             tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
@@ -178,38 +187,64 @@ public class CategoricalCursorAdapter extends BaseAdapter {
         CATEGORIES = mRecord.size();
     }
 
+    // iterates through the database and make an index
     private void scanningDatabase() {
-        // iterates through the database and make an index
-        if (!mCursor.moveToFirst()) {
-            return;
+
+        if (mCursor.moveToFirst()) {
+
+            String catStr;
+            boolean isCat;
+            
+            do {
+                
+                catStr = mCursor.getString(mCatColIx);
+                isCat = false;
+                //logger.info("Category String from database: " + catStr);
+                for (int i = 0; i < mRecord.size() - 1; i++) {
+                    
+                    if (catStr.equalsIgnoreCase(mRecord.get(i).mCat.text())) {
+                        mRecord.get(i).mChild.add(mCursor.getPosition());
+                        isCat = true;
+                        break;
+                    }
+                    
+                }
+                
+                if (!isCat) { // add to final category
+                    mRecord.get(mRecord.size() - 1).mChild.add(mCursor.getPosition());
+                }
+                
+            } while (mCursor.moveToNext());
         }
-
-        // PlaceCategories c;
-        do {
-
-        } while (mCursor.moveToNext());
-
+        
     }
 
+    // Build HashMap based of the information stored in mRecord
     private void buildMap() {
-        // Build HashMap based of the information stored in mRecord
+
         int listPosition = 0;
+        mEnigma = new ArrayList<Integer>();
+        
+        // DEBUG
+        //logger.info("Size of Records: " + mRecord.size());
+        
         for (int i = 0; i < mRecord.size(); i++) {
 
             if (mRecord.get(i).mChild.size() == 0) {
+                //logger.info("Size of Records' child: " + mRecord.get(i).mChild.size());
                 categoryOffset--;
-                continue;
-            }
 
-            mRecord.get(i).mPosition = listPosition;
-            mEnigma.put(listPosition, -(i + 1));
-            listPosition++;
-
-            for (Integer child : mRecord.get(i).mChild) {
-                mEnigma.put(listPosition, child);
+            } else {
+                mRecord.get(i).mPosition = listPosition;
+                mEnigma.add(listPosition, -(i + 1));
                 listPosition++;
+    
+                for (Integer child : mRecord.get(i).mChild) {
+                    mEnigma.add(listPosition, child);
+                    listPosition++;
+                }
             }
-
+            
         }
 
     }
@@ -217,24 +252,15 @@ public class CategoricalCursorAdapter extends BaseAdapter {
     public static class HeaderRecord {
 
         int mPosition;
-
-        String mTitle;
-
-        PlaceCategories mCat;
-
-        ArrayList<Integer> mChild;
+        final String mTitle;
+        final PlaceCategories mCat;
+        final ArrayList<Integer> mChild;
 
         public HeaderRecord(PlaceCategories d) {
             mPosition = 0;
             mCat = d;
+            logger.info("text of Enum: " + mCat.text());
             mTitle = d.text();
-            mChild = new ArrayList<Integer>();
-        }
-
-        public HeaderRecord() {
-            mPosition = 0;
-            mCat = PlaceCategories.MISC;
-            mTitle = "";
             mChild = new ArrayList<Integer>();
         }
 

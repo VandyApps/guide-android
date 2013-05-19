@@ -1,23 +1,35 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfig;
 import edu.vanderbilt.vm.guide.ui.SearchDialog.SearchConfigReceiver;
-import edu.vanderbilt.vm.guide.ui.adapter.SwipingTabsAdapter;
+import edu.vanderbilt.vm.guide.ui.listener.FragmentTabListener;
 import edu.vanderbilt.vm.guide.util.Geomancer;
+import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 /**
@@ -33,16 +45,15 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
 
     private static final String TAB_CACHE = "tab_cache";
     
+    private static final String FRAG_PLACES = "places";
+    private static final String FRAG_HOME = "agenda";
+    private static final String FRAG_TOUR = "tours";
+    
     private ActionBar mAction;
-
-    private ViewPager mViewPager;
-
-    private SwipingTabsAdapter mTabsAdapter;
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_guide_main);
 
         setupActionBar();
         
@@ -50,7 +61,46 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         
         if (savedInstanceState != null) {
             mAction.setSelectedNavigationItem(savedInstanceState.getInt(TAB_CACHE, 0));
+        } else {
+            mAction.setSelectedNavigationItem(1);
         }
+        
+        try {
+            
+            File output = new File(getExternalFilesDir(null).getAbsolutePath() + GuideConstants.CACHE_FILENAME);
+            FileInputStream fis = new FileInputStream(output);
+            
+            //String path = cache.getAbsolutePath() + GuideConstants.CACHE_FILENAME;
+            
+            //LOGGER.info(path);
+            
+            JsonReader reader = new JsonReader(new InputStreamReader(fis));
+            String name;
+            
+            if (reader.peek() == JsonToken.END_DOCUMENT) {
+                //LOGGER.info("No cache found.");
+                
+            } else {
+            
+                reader.beginObject();
+                while (reader.hasNext()) {
+                    name = reader.nextName();
+                    if (name.equals(GuideConstants.CACHE_TAG_AGENDA)) {
+                        
+                        GlobalState.getUserAgenda().coalesce(Agenda.build(this, reader));
+                        
+                    } else {
+                        //LOGGER.info("skipped name: " + name);
+                        reader.skipValue();
+                    }
+                }
+                reader.endObject();
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
     /*
@@ -63,12 +113,25 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
         mAction.setSplitBackgroundDrawable(GuideConstants.DECENT_GOLD);
         mAction.setTitle(getResources().getText(R.string.university_name));
-
-        mViewPager = (ViewPager)findViewById(R.id.swiper_1);
-        mTabsAdapter = new SwipingTabsAdapter(this, mViewPager);
-        mTabsAdapter.addTab(mAction.newTab().setText("Places"), PlaceTabFragment.class, null);
-        mTabsAdapter.addTab(mAction.newTab().setText("Agenda"), AgendaFragment.class, null);
-        mTabsAdapter.addTab(mAction.newTab().setText("Tours"), TourFragment.class, null);
+        
+        Tab tab;
+        tab = mAction
+                .newTab()
+                .setText("Places")
+                .setTabListener(new FragmentTabListener<PlaceTabFragment>(this, FRAG_PLACES, PlaceTabFragment.class));
+        mAction.addTab(tab);
+        
+        tab = mAction
+                .newTab()
+                .setText("Agenda")
+                .setTabListener(new FragmentTabListener<AgendaFragment>(this, FRAG_HOME, AgendaFragment.class));
+        mAction.addTab(tab);
+        
+        tab = mAction
+                .newTab()
+                .setText("Tours")
+                .setTabListener(new FragmentTabListener<TourFragment>(this, FRAG_TOUR, TourFragment.class));
+        mAction.addTab(tab);
     }
 
     @Override
@@ -108,6 +171,34 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         state.putInt(TAB_CACHE, mAction.getSelectedTab().getPosition());
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Agenda agenda = GlobalState.getUserAgenda();
+        //LOGGER.info("onStop is called");
+        
+        try {
+            FileOutputStream fos = new FileOutputStream(getExternalFilesDir(null).getAbsolutePath() + GuideConstants.CACHE_FILENAME);
+            
+            JsonWriter writer = new JsonWriter(new OutputStreamWriter(fos));
+            
+            //LOGGER.info("Opening output stream");
+            
+            writer.beginObject();
+            writer.name(GuideConstants.CACHE_TAG_AGENDA);
+            agenda.write(writer);
+            
+            //LOGGER.info("Agenda done writing stuff");
+            
+            writer.endObject();
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    
     // ---------- END setup and lifecycle related methods ---------- //
 
     /**
@@ -123,7 +214,12 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
 
     @Override
     public void receiveSearchConfig(SearchConfig config) {
-        // TODO Auto-generated method stub
+        
+        // TODO SQL query
+        
+        
+        Cursor cursor = null;
+        ((PlaceTabFragment) getSupportFragmentManager().findFragmentByTag(FRAG_PLACES)).viewListFromCursor(cursor);
         
     }
 
