@@ -1,9 +1,7 @@
 package edu.vanderbilt.vm.guide.ui.controllers;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import edu.vanderbilt.vm.guide.ui.ActTourEditor;
+import edu.vanderbilt.vm.guide.ui.ActTourEditor.ATEMemo;
 import edu.vanderbilt.vm.guide.ui.TourManagerFragment;
 
 public class TourManagerController extends Controller {
@@ -13,12 +11,12 @@ public class TourManagerController extends Controller {
  * need be.
  * 
  * @param activity
- * @param containerID
- *            where to put the views
+ * @param containerID where to put the views
  * @return an instance of TourManagerController
  */
 public static TourManagerController getInstance(
-        SherlockFragmentActivity activity, int containerID) {
+        ActTourEditor activity, 
+        int containerID) {
     TourManagerController cont = new TourManagerController();
     cont.mActivity = activity;
     cont.mContainerID = containerID;
@@ -30,15 +28,17 @@ public static TourManagerController getInstance(
  * Initialize the controller. This include creating views.
  */
 public void init() {
-    mFragment = new TourManagerFragment();
+    mFragment = TourManagerFragment.getInstance(this);
+    mActivity.getSupportFragmentManager()
+            .beginTransaction()
+            .replace(mContainerID, mFragment)
+            .commit();
 
-    mActivity.getSupportFragmentManager().beginTransaction()
-            .replace(mContainerID, mFragment).commit();
-
+    mState = TMNormalState.getInstance();
 }
 
 // Objects for View operations
-private SherlockFragmentActivity mActivity;
+private ActTourEditor mActivity;
 private TourManagerFragment mFragment;
 private int mContainerID;
 private ControllerState mState;
@@ -50,19 +50,24 @@ private TourManagerController() {
 @Override
 public boolean handleMessage(int what, Object data) {
     switch (what) {
-    case ActTourEditor.MESSAGE_BACKPRESSED:
+    case ATEMemo.MESSAGE_BACKPRESSED:
         return mState.handleMessage(what);
 
-    case TourManagerFragment.EVENT_CREATE_CLICKED:
+    case ATEMemo.EVENT_CREATE_CLICKED:
+        // Switch to the creation page
+        mActivity.setController(
+                TourEditorController.getInstance(
+                        mActivity, 
+                        mContainerID, 
+                        0));
+        return true;
 
+    case ATEMemo.EVENT_DELETE_CLICKED:
+        
         return false;
 
-    case TourManagerFragment.EVENT_DELETE_CLICKED:
-
-        return false;
-
-    case TourManagerFragment.EVENT_MAP_CLICKED:
-
+    case ATEMemo.EVENT_MAP_CLICKED:
+        // TODO Once the new Tour data structure is done
         return false;
 
     default:
@@ -74,7 +79,6 @@ public boolean handleMessage(int what, Object data) {
 private static class TMNormalState implements ControllerState {
 
 public static TMNormalState getInstance() {
-
     TMNormalState state = new TMNormalState();
     return state;
 }
@@ -84,14 +88,17 @@ private TMNormalState() {
 
 @Override
 public boolean handleMessage(int what) {
-    // TODO Auto-generated method stub
-    return false;
+    return handleMessage(what, null);
 }
 
 @Override
 public boolean handleMessage(int what, Object data) {
-    // TODO Auto-generated method stub
-    return false;
+    switch (what) {
+    case ATEMemo.MESSAGE_BACKPRESSED:
+        return false;
+    
+    default: return false;
+    }
 }
 
 @Override
@@ -101,5 +108,9 @@ public void dispose() {
 }
 
 }
+
+
+// One of TourManager's States
+
 
 }

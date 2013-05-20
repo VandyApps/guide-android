@@ -1,6 +1,8 @@
 package edu.vanderbilt.vm.guide.ui.controllers;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import edu.vanderbilt.vm.guide.ui.ActTourEditor;
+import edu.vanderbilt.vm.guide.ui.ActTourEditor.ATEMemo;
+import edu.vanderbilt.vm.guide.ui.TourEditorFragment;
 
 public class TourEditorController extends Controller {
 
@@ -15,7 +17,7 @@ public class TourEditorController extends Controller {
  * @return an instance of TourEditorController
  */
 public static TourEditorController getInstance(
-        SherlockFragmentActivity activity,
+        ActTourEditor activity,
         int containerID,
         int tourID)
 {
@@ -23,19 +25,16 @@ public static TourEditorController getInstance(
     cont.mActivity = activity;
     cont.mContainerID = containerID;
     cont.mTourID = tourID;
+    cont.init();
     return cont;
 }
 
 
 //Objects for View operations
-private SherlockFragmentActivity mActivity;
+private ActTourEditor mActivity;
+private TourEditorFragment mFragment;
 private int mContainerID;
 private int mTourID;
-
-
-// Messages
-public static final int MESSAGE_DONE = 0;
-
 
 /*
  * Private constructor. Do not use.
@@ -44,10 +43,28 @@ private TourEditorController() {
 }
 
 
+private void init() {
+    mFragment = TourEditorFragment.getInstance(this);
+    mActivity.getSupportFragmentManager()
+            .beginTransaction()
+            .replace(mContainerID, mFragment)
+            .commit();
+    
+}
+
+
 @Override
 public boolean handleMessage(int what, Object data) {
-    // TODO Auto-generated method stub
-    return false;
+    switch (what) {
+    case ATEMemo.TEC_MESSAGE_DONE:
+        String fakeTour = (String) data;
+        ActTourEditor.mModel.add(fakeTour);
+        mActivity.setController(
+                TourManagerController.getInstance(mActivity, mContainerID));
+        return true;
+    
+    default: return false;
+    }
 }
 
 
