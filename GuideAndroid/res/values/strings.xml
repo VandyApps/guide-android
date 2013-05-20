@@ -62,5 +62,5 @@
 	<string name="tour_manager_btn2">Delete</string>
 	<string name="tour_manager_btn3">Map</string>
 	
-	
+	<string name="tour_editor_btn_done">Done</string>
 </resources>
