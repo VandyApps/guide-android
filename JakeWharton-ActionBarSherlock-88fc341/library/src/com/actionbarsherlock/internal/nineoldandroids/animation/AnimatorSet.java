@@ -506,9 +506,11 @@ public final class AnimatorSet extends Animator {
             mDelayAnim.setDuration(mStartDelay);
             mDelayAnim.addListener(new AnimatorListenerAdapter() {
                 boolean canceled = false;
+                @Override
                 public void onAnimationCancel(Animator anim) {
                     canceled = true;
                 }
+                @Override
                 public void onAnimationEnd(Animator anim) {
                     if (!canceled) {
                         int numNodes = nodesToStart.size();
@@ -642,12 +644,14 @@ public final class AnimatorSet extends Animator {
          * to prevent follow-on animations from running when some dependency
          * animation is canceled.
          */
+        @Override
         public void onAnimationCancel(Animator animation) {
         }
 
         /**
          * An end event is received - see if this is an event we are listening for
          */
+        @Override
         public void onAnimationEnd(Animator animation) {
             if (mRule == Dependency.AFTER) {
                 startIfReady(animation);
@@ -657,12 +661,14 @@ public final class AnimatorSet extends Animator {
         /**
          * Ignore repeat events for now
          */
+        @Override
         public void onAnimationRepeat(Animator animation) {
         }
 
         /**
          * A start event is received - see if this is an event we are listening for
          */
+        @Override
         public void onAnimationStart(Animator animation) {
             if (mRule == Dependency.WITH) {
                 startIfReady(animation);
@@ -711,6 +717,7 @@ public final class AnimatorSet extends Animator {
             mAnimatorSet = animatorSet;
         }
 
+        @Override
         public void onAnimationCancel(Animator animation) {
             if (!mTerminated) {
                 // Listeners are already notified of the AnimatorSet canceling in cancel().
@@ -726,6 +733,7 @@ public final class AnimatorSet extends Animator {
             }
         }
 
+        @Override
         public void onAnimationEnd(Animator animation) {
             animation.removeListener(this);
             mPlayingSet.remove(animation);
@@ -760,10 +768,12 @@ public final class AnimatorSet extends Animator {
         }
 
         // Nothing to do
+        @Override
         public void onAnimationRepeat(Animator animation) {
         }
 
         // Nothing to do
+        @Override
         public void onAnimationStart(Animator animation) {
         }
 

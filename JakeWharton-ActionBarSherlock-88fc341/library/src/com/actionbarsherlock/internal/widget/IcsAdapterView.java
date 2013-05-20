@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -815,6 +816,7 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
     }
 
     private class SelectionNotifier implements Runnable {
+        @Override
         public void run() {
             if (mDataChanged) {
                 // Data has changed between when this SelectionNotifier
@@ -846,7 +848,7 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
         }
 
         // we fire selection events here not in View
-        if (mSelectedPosition != ListView.INVALID_POSITION && isShown() && !isInTouchMode()) {
+        if (mSelectedPosition != AdapterView.INVALID_POSITION && isShown() && !isInTouchMode()) {
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
         }
     }

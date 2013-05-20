@@ -32,6 +32,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.internal.nineoldandroids.animation.Animator;
@@ -189,7 +190,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
         final IcsLinearLayout tabLayout = (IcsLinearLayout) LayoutInflater.from(getContext())
                 .inflate(R.layout.abs__action_bar_tab_bar_view, null);
         tabLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         return tabLayout;
     }
 
@@ -197,7 +198,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
         final IcsSpinner spinner = new IcsSpinner(getContext(), null,
                 R.attr.actionDropDownStyle);
         spinner.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         spinner.setOnItemSelectedListener(this);
         return spinner;
     }
@@ -244,6 +245,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
             removeCallbacks(mTabSelector);
         }
         mTabSelector = new Runnable() {
+            @Override
             public void run() {
                 final int scrollPos = tabView.getLeft() - (getWidth() - tabView.getWidth()) / 2;
                 smoothScrollTo(scrollPos, 0);
@@ -277,7 +279,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
 
         if (forAdapter) {
             tabView.setBackgroundDrawable(null);
-            tabView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT,
+            tabView.setLayoutParams(new ListView.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                     mContentHeight));
         } else {
             tabView.setFocusable(true);
@@ -293,7 +295,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
     public void addTab(ActionBar.Tab tab, boolean setSelected) {
         TabView tabView = createTabView(tab, false);
         mTabLayout.addView(tabView, new IcsLinearLayout.LayoutParams(0,
-                LayoutParams.MATCH_PARENT, 1));
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT, 1));
         if (mTabSpinner != null) {
             ((TabAdapter) mTabSpinner.getAdapter()).notifyDataSetChanged();
         }
@@ -308,7 +310,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
     public void addTab(ActionBar.Tab tab, int position, boolean setSelected) {
         final TabView tabView = createTabView(tab, false);
         mTabLayout.addView(tabView, position, new IcsLinearLayout.LayoutParams(
-                0, LayoutParams.MATCH_PARENT, 1));
+                0, android.view.ViewGroup.LayoutParams.MATCH_PARENT, 1));
         if (mTabSpinner != null) {
             ((TabAdapter) mTabSpinner.getAdapter()).notifyDataSetChanged();
         }
@@ -426,8 +428,8 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
                 if (icon != null) {
                     if (mIconView == null) {
                         ImageView iconView = new ImageView(getContext());
-                        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
+                        LayoutParams lp = new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                                android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
                         lp.gravity = Gravity.CENTER_VERTICAL;
                         iconView.setLayoutParams(lp);
                         addView(iconView, 0);
@@ -445,8 +447,8 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
                         CapitalizingTextView textView = new CapitalizingTextView(getContext(), null,
                                 R.attr.actionBarTabTextStyle);
                         textView.setEllipsize(TruncateAt.END);
-                        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
+                        LayoutParams lp = new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                                android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
                         lp.gravity = Gravity.CENTER_VERTICAL;
                         textView.setLayoutParams(lp);
                         addView(textView);
@@ -498,6 +500,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
     }
 
     private class TabClickListener implements OnClickListener {
+        @Override
         public void onClick(View view) {
             TabView tabView = (TabView) view;
             tabView.getTab().select();

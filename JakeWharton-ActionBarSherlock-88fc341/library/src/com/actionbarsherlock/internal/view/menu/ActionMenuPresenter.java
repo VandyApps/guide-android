@@ -34,6 +34,7 @@ import android.view.View.MeasureSpec;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.internal.view.View_HasStateListenerSupport;
 import com.actionbarsherlock.internal.view.View_OnAttachStateChangeListener;
@@ -263,6 +264,7 @@ public class ActionMenuPresenter extends BaseMenuPresenter
         return super.filterLeftoverView(parent, childIndex);
     }
 
+    @Override
     public boolean onSubMenuSelected(SubMenuBuilder subMenu) {
         if (!subMenu.hasVisibleItems()) return false;
 
@@ -377,6 +379,7 @@ public class ActionMenuPresenter extends BaseMenuPresenter
         return mReserveOverflow;
     }
 
+    @Override
     public boolean flagActionItems() {
         final ArrayList<MenuItemImpl> visibleItems = mMenu.getVisibleItems();
         final int itemsSize = visibleItems.size();
@@ -566,10 +569,12 @@ public class ActionMenuPresenter extends BaseMenuPresenter
         @SuppressWarnings("unused")
         public static final Parcelable.Creator<SavedState> CREATOR
                 = new Parcelable.Creator<SavedState>() {
+            @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
+            @Override
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
@@ -599,10 +604,12 @@ public class ActionMenuPresenter extends BaseMenuPresenter
             return true;
         }
 
+        @Override
         public boolean needsDividerBefore() {
             return false;
         }
 
+        @Override
         public boolean needsDividerAfter() {
             return false;
         }
@@ -709,6 +716,7 @@ public class ActionMenuPresenter extends BaseMenuPresenter
             mPopup = popup;
         }
 
+        @Override
         public void run() {
             mMenu.changeMenuMode();
             final View menuView = (View) mMenuView;

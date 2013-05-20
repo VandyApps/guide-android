@@ -1,7 +1,5 @@
 package com.actionbarsherlock.internal.widget;
 
-import com.actionbarsherlock.R;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
@@ -23,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+
+import com.actionbarsherlock.R;
 
 /**
  * A proxy between pre- and post-Honeycomb implementations of this class.
@@ -225,7 +225,7 @@ public class IcsListPopupWindow {
             mPopup.setTouchInterceptor(mTouchInterceptor);
             mPopup.showAsDropDown(mDropDownAnchorView,
                     mDropDownHorizontalOffset, mDropDownVerticalOffset);
-            mDropDownList.setSelection(ListView.INVALID_POSITION);
+            mDropDownList.setSelection(AdapterView.INVALID_POSITION);
 
             if (!mModal || mDropDownList.isInTouchMode()) {
                 clearListSelection();
@@ -296,6 +296,7 @@ public class IcsListPopupWindow {
             mDropDownList.setFocusable(true);
             mDropDownList.setFocusableInTouchMode(true);
             mDropDownList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
                 public void onItemSelected(AdapterView<?> parent, View view,
                         int position, long id) {
 
@@ -308,6 +309,7 @@ public class IcsListPopupWindow {
                     }
                 }
 
+                @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
@@ -595,12 +597,14 @@ public class IcsListPopupWindow {
     }
 
     private class ListSelectorHider implements Runnable {
+        @Override
         public void run() {
             clearListSelection();
         }
     }
 
     private class ResizePopupRunnable implements Runnable {
+        @Override
         public void run() {
             if (mDropDownList != null && mDropDownList.getCount() > mDropDownList.getChildCount() &&
                     mDropDownList.getChildCount() <= mListItemExpandMaximum) {
@@ -611,6 +615,7 @@ public class IcsListPopupWindow {
     }
 
     private class PopupTouchInterceptor implements OnTouchListener {
+        @Override
         public boolean onTouch(View v, MotionEvent event) {
             final int action = event.getAction();
             final int x = (int) event.getX();
@@ -628,11 +633,13 @@ public class IcsListPopupWindow {
     }
 
     private class PopupScrollListener implements ListView.OnScrollListener {
+        @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                 int totalItemCount) {
 
         }
 
+        @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             if (scrollState == SCROLL_STATE_TOUCH_SCROLL &&
                     !isInputMethodNotNeeded() && mPopup.getContentView() != null) {

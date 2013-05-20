@@ -568,8 +568,10 @@ class ActivityChooserModel extends DataSetObservable {
         final LinkedList<Runnable> mTasks = new LinkedList<Runnable>();
         Runnable mActive;
 
+        @Override
         public synchronized void execute(final Runnable r) {
             mTasks.offer(new Runnable() {
+                @Override
                 public void run() {
                     try {
                         r.run();
@@ -891,6 +893,7 @@ class ActivityChooserModel extends DataSetObservable {
             return true;
         }
 
+        @Override
         public int compareTo(ActivityResolveInfo another) {
              return  Float.floatToIntBits(another.weight) - Float.floatToIntBits(weight);
         }
@@ -915,6 +918,7 @@ class ActivityChooserModel extends DataSetObservable {
         private final Map<String, ActivityResolveInfo> mPackageNameToActivityMap =
             new HashMap<String, ActivityResolveInfo>();
 
+        @Override
         public void sort(Intent intent, List<ActivityResolveInfo> activities,
                 List<HistoricalRecord> historicalRecords) {
             Map<String, ActivityResolveInfo> packageNameToActivityMap =
@@ -956,7 +960,8 @@ class ActivityChooserModel extends DataSetObservable {
      */
     private final class HistoryLoader implements Runnable {
 
-       public void run() {
+       @Override
+    public void run() {
             FileInputStream fis = null;
             try {
                 fis = mContext.openFileInput(mHistoryFileName);
@@ -1043,6 +1048,7 @@ class ActivityChooserModel extends DataSetObservable {
                     // thread, wait for data changes which happen during sorting, and
                     // perform UI modification based on the data change.
                     mHandler.post(new Runnable() {
+                        @Override
                         public void run() {
                             pruneExcessiveHistoricalRecordsLocked();
                             sortActivities();
@@ -1070,6 +1076,7 @@ class ActivityChooserModel extends DataSetObservable {
      */
     private final class HistoryPersister implements Runnable {
 
+        @Override
         public void run() {
             FileOutputStream fos = null;
             List<HistoricalRecord> records = null;

@@ -155,7 +155,7 @@ public class AlphabeticalCursorAdapter extends BaseAdapter {
             
             
             // TODO replace placeholder icon with categorical icon
-            ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
+            ((ImageView)layout.findViewById(R.id.placelist_item_thumbnail))
                     .setImageResource(R.drawable.home);
 
             

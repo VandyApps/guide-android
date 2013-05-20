@@ -440,7 +440,7 @@ public class IcsProgressBar extends View {
         mIndeterminate = false;
         mOnlyIndeterminate = false;
         mDuration = 4000;
-        mBehavior = AlphaAnimation.RESTART;
+        mBehavior = Animation.RESTART;
         mMinWidth = 24;
         mMaxWidth = 48;
         mMinHeight = 24;
@@ -609,6 +609,7 @@ public class IcsProgressBar extends View {
             mFromUser = fromUser;
         }
 
+        @Override
         public void run() {
             doRefreshProgress(mId, mProgress, mFromUser, true);
             // Put ourselves back in the cache when we are done
@@ -1104,10 +1105,12 @@ public class IcsProgressBar extends View {
 
         public static final Parcelable.Creator<SavedState> CREATOR
                 = new Parcelable.Creator<SavedState>() {
+            @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
+            @Override
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
@@ -1186,6 +1189,7 @@ public class IcsProgressBar extends View {
      * Command for sending an accessibility event.
      */
     private class AccessibilityEventSender implements Runnable {
+        @Override
         public void run() {
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
         }

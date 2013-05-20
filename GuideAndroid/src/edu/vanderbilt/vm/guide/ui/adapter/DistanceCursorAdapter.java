@@ -144,7 +144,7 @@ public class DistanceCursorAdapter extends BaseAdapter {
 					mCursor.getString(mNameColIx));
 			
 	        // TODO replace placeholder with categorical icon
-			((ImageView) layout.findViewById(R.id.placelist_item_thunbnail))
+			((ImageView) layout.findViewById(R.id.placelist_item_thumbnail))
 				.setImageResource(R.drawable.home);
 			
 			Location tmp = new Location("Temp");

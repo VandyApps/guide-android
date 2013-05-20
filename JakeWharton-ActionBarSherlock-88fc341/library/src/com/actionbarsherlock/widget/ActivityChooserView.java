@@ -16,12 +16,6 @@
 
 package com.actionbarsherlock.widget;
 
-import android.os.Build;
-import com.actionbarsherlock.R;
-import com.actionbarsherlock.internal.widget.IcsLinearLayout;
-import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
-import com.actionbarsherlock.view.ActionProvider;
-import com.actionbarsherlock.widget.ActivityChooserModel.ActivityChooserModelClient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +24,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +37,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.actionbarsherlock.R;
+import com.actionbarsherlock.internal.widget.IcsLinearLayout;
+import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
+import com.actionbarsherlock.view.ActionProvider;
+import com.actionbarsherlock.widget.ActivityChooserModel.ActivityChooserModelClient;
 
 /**
  * This class is a view for choosing an activity for handling a given {@link Intent}.
@@ -261,6 +262,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setActivityChooserModel(ActivityChooserModel dataModel) {
         mAdapter.setDataModel(dataModel);
         if (isShowingPopup()) {
@@ -536,6 +538,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
             View.OnClickListener, View.OnLongClickListener, PopupWindow.OnDismissListener {
 
         // AdapterView#OnItemClickListener
+        @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ActivityChooserViewAdapter adapter = (ActivityChooserViewAdapter) parent.getAdapter();
             final int itemViewType = adapter.getItemViewType(position);
@@ -566,6 +569,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         }
 
         // View.OnClickListener
+        @Override
         public void onClick(View view) {
             if (view == mDefaultActivityButton) {
                 dismissPopup();
@@ -598,6 +602,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         }
 
         // PopUpWindow.OnDismissListener#onDismiss
+        @Override
         public void onDismiss() {
             notifyOnDismissListener();
             if (mProvider != null) {
@@ -671,6 +676,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
             return ITEM_VIEW_TYPE_COUNT;
         }
 
+        @Override
         public int getCount() {
             int count = 0;
             int activityCount = mDataModel.getActivityCount();
@@ -684,6 +690,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
             return count;
         }
 
+        @Override
         public Object getItem(int position) {
             final int itemViewType = getItemViewType(position);
             switch (itemViewType) {
@@ -699,10 +706,12 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
             }
         }
 
+        @Override
         public long getItemId(int position) {
             return position;
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final int itemViewType = getItemViewType(position);
             switch (itemViewType) {

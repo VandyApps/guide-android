@@ -119,48 +119,60 @@ public class IndexedCursorAdapter extends BaseAdapter {
         return mCursor.getInt(mIdColIx);
     }
 
+    private class ViewHolder {
+        LinearLayout headerLayout;
+        LinearLayout itemLayout;
+        TextView headerTitleView;
+        TextView itemTitleView;
+        ImageView thumbnailView;
+        TextView itemDistView;
+    }
+    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         checkPosition(position);
-        
-        
         LinearLayout layout;
+        
         if (convertView == null) {
             layout = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.place_list_item,
                     null);
-            layout.setTag(layout);
         } else {
-            layout = (LinearLayout)convertView.getTag();
+            layout = (LinearLayout)convertView;
         }
 
+        ViewHolder holder;
+        if (layout.getTag() == null || !(layout.getTag() instanceof ViewHolder)) {
+            holder = new ViewHolder();
+            holder.headerLayout = (LinearLayout)layout.findViewById(R.id.placelist_item_header);
+            holder.itemLayout = (LinearLayout)layout.findViewById(R.id.placelist_item_item);
+            holder.headerTitleView = (TextView)layout.findViewById(R.id.header_title);
+            holder.itemTitleView = (TextView)layout.findViewById(R.id.placelist_item_title);
+            holder.thumbnailView = (ImageView)layout.findViewById(R.id.placelist_item_thumbnail);
+            holder.itemDistView = (TextView)layout.findViewById(R.id.placelist_item_distance);
+            layout.setTag(holder);
+        } else {
+            holder = (ViewHolder)layout.getTag();
+        }
         
         if (mIndexer.isHeader(position)) {
-            layout.findViewById(R.id.placelist_item_header).setVisibility(View.VISIBLE);
-            layout.findViewById(R.id.placelist_item_item).setVisibility(View.GONE);
-            
-            ((TextView)layout.findViewById(R.id.header_title)).setText(
-                    mIndexer.getHeaderTitle(position));
-
+            holder.headerLayout.setVisibility(View.VISIBLE);
+            holder.itemLayout.setVisibility(View.GONE);
+            holder.headerTitleView.setText(mIndexer.getHeaderTitle(position));
         } else {
-            layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
-            layout.findViewById(R.id.placelist_item_item).setVisibility(View.VISIBLE);
-
+            holder.headerLayout.setVisibility(View.GONE);
+            holder.itemLayout.setVisibility(View.VISIBLE);
             
             mCursor.moveToPosition(mIndexer.getDBRow(position));
-            ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mCursor
-                    .getString(mNameColIx));
             
+            holder.itemTitleView.setText(mCursor.getString(mNameColIx));
             
             // TODO replace placeholder icon with categorical icon
-            ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
-                    .setImageResource(R.drawable.home);
-
+            holder.thumbnailView.setImageResource(R.drawable.home);
             
             Location tmp = new Location("Temp");
             tmp.setLatitude(Double.parseDouble(mCursor.getString(mLatColIx)));
             tmp.setLongitude(Double.parseDouble(mCursor.getString(mLngColIx)));
-            ((TextView)layout.findViewById(R.id.placelist_item_distance)).setText(
-                    Geomancer.getDistanceString(tmp));
+            holder.itemDistView.setText(Geomancer.getDistanceString(tmp));
         }
 
         return layout;

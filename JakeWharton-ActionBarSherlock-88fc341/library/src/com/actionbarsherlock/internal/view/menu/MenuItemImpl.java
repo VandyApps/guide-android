@@ -170,10 +170,12 @@ public final class MenuItemImpl implements MenuItem {
         return false;
     }
 
+    @Override
     public boolean isEnabled() {
         return (mFlags & ENABLED) != 0;
     }
 
+    @Override
     public MenuItem setEnabled(boolean enabled) {
         if (enabled) {
             mFlags |= ENABLED;
@@ -186,15 +188,18 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public int getGroupId() {
         return mGroup;
     }
 
+    @Override
     @ViewDebug.CapturedViewProperty
     public int getItemId() {
         return mId;
     }
 
+    @Override
     public int getOrder() {
         return mCategoryOrder;
     }
@@ -203,10 +208,12 @@ public final class MenuItemImpl implements MenuItem {
         return mOrdering;
     }
 
+    @Override
     public Intent getIntent() {
         return mIntent;
     }
 
+    @Override
     public MenuItem setIntent(Intent intent) {
         mIntent = intent;
         return this;
@@ -221,10 +228,12 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public char getAlphabeticShortcut() {
         return mShortcutAlphabeticChar;
     }
 
+    @Override
     public MenuItem setAlphabeticShortcut(char alphaChar) {
         if (mShortcutAlphabeticChar == alphaChar) return this;
 
@@ -235,10 +244,12 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public char getNumericShortcut() {
         return mShortcutNumericChar;
     }
 
+    @Override
     public MenuItem setNumericShortcut(char numericChar) {
         if (mShortcutNumericChar == numericChar) return this;
 
@@ -249,6 +260,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public MenuItem setShortcut(char numericChar, char alphaChar) {
         mShortcutNumericChar = numericChar;
         mShortcutAlphabeticChar = Character.toLowerCase(alphaChar);
@@ -310,10 +322,12 @@ public final class MenuItemImpl implements MenuItem {
         return mMenu.isShortcutsVisible() && (getShortcut() != 0);
     }
 
+    @Override
     public SubMenu getSubMenu() {
         return mSubMenu;
     }
 
+    @Override
     public boolean hasSubMenu() {
         return mSubMenu != null;
     }
@@ -324,6 +338,7 @@ public final class MenuItemImpl implements MenuItem {
         subMenu.setHeaderTitle(getTitle());
     }
 
+    @Override
     @ViewDebug.CapturedViewProperty
     public CharSequence getTitle() {
         return mTitle;
@@ -342,6 +357,7 @@ public final class MenuItemImpl implements MenuItem {
                 : getTitle();
     }
 
+    @Override
     public MenuItem setTitle(CharSequence title) {
         mTitle = title;
 
@@ -354,14 +370,17 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public MenuItem setTitle(int title) {
         return setTitle(mMenu.getContext().getString(title));
     }
 
+    @Override
     public CharSequence getTitleCondensed() {
         return mTitleCondensed != null ? mTitleCondensed : mTitle;
     }
 
+    @Override
     public MenuItem setTitleCondensed(CharSequence title) {
         mTitleCondensed = title;
 
@@ -375,6 +394,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public Drawable getIcon() {
         if (mIconDrawable != null) {
             return mIconDrawable;
@@ -387,6 +407,7 @@ public final class MenuItemImpl implements MenuItem {
         return null;
     }
 
+    @Override
     public MenuItem setIcon(Drawable icon) {
         mIconResId = NO_ICON;
         mIconDrawable = icon;
@@ -395,6 +416,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public MenuItem setIcon(int iconResId) {
         mIconDrawable = null;
         mIconResId = iconResId;
@@ -405,10 +427,12 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public boolean isCheckable() {
         return (mFlags & CHECKABLE) == CHECKABLE;
     }
 
+    @Override
     public MenuItem setCheckable(boolean checkable) {
         final int oldFlags = mFlags;
         mFlags = (mFlags & ~CHECKABLE) | (checkable ? CHECKABLE : 0);
@@ -427,10 +451,12 @@ public final class MenuItemImpl implements MenuItem {
         return (mFlags & EXCLUSIVE) != 0;
     }
 
+    @Override
     public boolean isChecked() {
         return (mFlags & CHECKED) == CHECKED;
     }
 
+    @Override
     public MenuItem setChecked(boolean checked) {
         if ((mFlags & EXCLUSIVE) != 0) {
             // Call the method on the Menu since it knows about the others in this
@@ -451,6 +477,7 @@ public final class MenuItemImpl implements MenuItem {
         }
     }
 
+    @Override
     public boolean isVisible() {
         return (mFlags & HIDDEN) == 0;
     }
@@ -470,6 +497,7 @@ public final class MenuItemImpl implements MenuItem {
         return oldFlags != mFlags;
     }
 
+    @Override
     public MenuItem setVisible(boolean shown) {
         // Try to set the shown state to the given state. If the shown state was changed
         // (i.e. the previous state isn't the same as given state), notify the parent menu that
@@ -479,7 +507,8 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
-   public MenuItem setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener clickListener) {
+   @Override
+public MenuItem setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener clickListener) {
         mClickListener = clickListener;
         return this;
     }
@@ -493,6 +522,7 @@ public final class MenuItemImpl implements MenuItem {
         mMenuInfo = menuInfo;
     }
 
+    @Override
     public ContextMenuInfo getMenuInfo() {
         return mMenuInfo;
     }
@@ -532,6 +562,7 @@ public final class MenuItemImpl implements MenuItem {
         return (mShowAsAction & SHOW_AS_ACTION_WITH_TEXT) == SHOW_AS_ACTION_WITH_TEXT;
     }
 
+    @Override
     public void setShowAsAction(int actionEnum) {
         switch (actionEnum & SHOW_AS_ACTION_MASK) {
             case SHOW_AS_ACTION_ALWAYS:
@@ -549,6 +580,7 @@ public final class MenuItemImpl implements MenuItem {
         mMenu.onItemActionRequestChanged(this);
     }
 
+    @Override
     public MenuItem setActionView(View view) {
         mActionView = view;
         mActionProvider = null;
@@ -559,6 +591,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public MenuItem setActionView(int resId) {
         final Context context = mMenu.getContext();
         final LayoutInflater inflater = LayoutInflater.from(context);
@@ -566,6 +599,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Override
     public View getActionView() {
         if (mActionView != null) {
             return mActionView;
@@ -577,10 +611,12 @@ public final class MenuItemImpl implements MenuItem {
         }
     }
 
+    @Override
     public ActionProvider getActionProvider() {
         return mActionProvider;
     }
 
+    @Override
     public MenuItem setActionProvider(ActionProvider actionProvider) {
         mActionView = null;
         mActionProvider = actionProvider;
@@ -641,6 +677,7 @@ public final class MenuItemImpl implements MenuItem {
         mMenu.onItemsChanged(false);
     }
 
+    @Override
     public boolean isActionViewExpanded() {
         return mIsActionViewExpanded;
     }
