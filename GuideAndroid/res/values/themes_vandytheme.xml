@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="VandyTheme" parent="android:Theme.Light">
+
+    <item name="android:editTextStyle">@style/EditTextVandyTheme</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewVandyTheme</item>
+
+    <item name="android:checkboxStyle">@style/CheckBoxVandyTheme</item>
+
+    <item name="android:radioButtonStyle">@style/RadioButtonVandyTheme</item>
+
+    <item name="android:buttonStyle">@style/ButtonVandyTheme</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonVandyTheme</item>
+
+    <item name="android:spinnerStyle">@style/SpinnerVandyTheme</item>
+<!-- 
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerVandyTheme.DropDown</item>  -->
+
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemVandyTheme</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarVandyTheme</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarVandyTheme</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarVandyTheme</item>
+
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigVandyTheme</item>
+
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallVandyTheme</item>
+
+    <item name="android:buttonStyleToggle">@style/ToggleVandyTheme</item>
+
+    <item name="android:listViewStyle">@style/ListViewVandyTheme</item>
+
+    <item name="android:listViewWhiteStyle">@style/ListViewVandyTheme.White</item>
+
+    <item name="android:spinnerItemStyle">@style/SpinnerItemVandyTheme</item>
+<!-- 
+    <item name="numberPickerStyle">@style/NumberPickerVandyTheme</item>  -->
+
+  </style>
+
+</resources>

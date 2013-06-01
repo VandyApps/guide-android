@@ -34,9 +34,9 @@
             android:required="true" />
 
         <activity
-            android:name=".ui.GuideMain"
-            android:screenOrientation="portrait"
-            android:label="@string/university_name" >
+            android:name="edu.vanderbilt.vm.guide.ui.GuideMain"
+            android:label="@string/university_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,6 +66,10 @@
         <activity
             android:name=".ui.GraphUtilsDebugActivity"
             android:label="Graph Debugger" >
+        </activity>
+        <activity
+            android:name=".ui.ActTourEditor"
+            android:label="Tour Editor" >
         </activity>
 
         <provider

@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
-import edu.vanderbilt.vm.guide.ui.adapter.CursorIndexerHelper.CursorIndexer;
+import edu.vanderbilt.vm.guide.ui.adapter.CursorIndexerFactory.CursorIndexer;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 
@@ -74,20 +74,20 @@ public class IndexedCursorAdapter extends BaseAdapter {
         }
         
         switch (sort) {
-            case SORT_ALPHABETICALLY:
-                mIndexer = CursorIndexerHelper.getAlphabeticalIndexer(context, cursor, mNameColIx);
-                break;
-                
-            case SORT_BY_CATEGORY:
-                mIndexer = CursorIndexerHelper.getCategoricalIndexer(context, cursor, mCatColIx);
-                break;
-                
-            case SORT_BY_DISTANCE:
-                mIndexer = CursorIndexerHelper.getDistanceIndexer(context, cursor, mLatColIx, mLngColIx);
-                break;
-                
-            default:
-                mIndexer = null;
+        case SORT_ALPHABETICALLY:
+            mIndexer = CursorIndexerFactory.getAlphabeticalIndexer(context, cursor, mNameColIx);
+            break;
+            
+        case SORT_BY_CATEGORY:
+            mIndexer = CursorIndexerFactory.getCategoricalIndexer(context, cursor, mCatColIx);
+            break;
+            
+        case SORT_BY_DISTANCE:
+            mIndexer = CursorIndexerFactory.getDistanceIndexer(context, cursor, mLatColIx, mLngColIx);
+            break;
+            
+        default:
+            mIndexer = null;
         }
         
     }
