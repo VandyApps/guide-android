@@ -32,10 +32,14 @@ public static void open(Context ctx) {
 // Model
 public static List<String> mModel = new ArrayList<String>(); 
 
-public Controller mController;
+// Controller
+private Controller mController;
+public void setController(Controller controller) {
+    mController = controller;
+}
 
 // Messages
-public static final int MESSAGE_BACKPRESSED = 0;
+
 
 
 @Override
@@ -47,9 +51,24 @@ public void onCreate(Bundle savedInstanceState) {
 
 @Override
 public void onBackPressed() {
-    if (!mController.handleMessage(MESSAGE_BACKPRESSED))
+    if (!mController.handleMessage(ATEMemo.MESSAGE_BACKPRESSED))
         super.onBackPressed();
 }
+
+public static class ATEMemo {
+
+public static final int MESSAGE_BACKPRESSED = 0;
+
+// TourManagerFragment
+public static final int EVENT_CREATE_CLICKED = 3;
+public static final int EVENT_DELETE_CLICKED = 4;
+public static final int EVENT_MAP_CLICKED = 5;
+
+
+public static final int TEC_MESSAGE_DONE = 6;
+
+}
+
 
 }
 

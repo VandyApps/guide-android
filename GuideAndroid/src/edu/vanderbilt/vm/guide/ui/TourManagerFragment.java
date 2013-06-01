@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.ui.ActTourEditor.ATEMemo;
 import edu.vanderbilt.vm.guide.ui.controllers.Controller;
 
 /**
@@ -22,12 +23,20 @@ import edu.vanderbilt.vm.guide.ui.controllers.Controller;
  *
  */
 public class TourManagerFragment extends SherlockFragment {
-	
 
-// View Events
-public static final int EVENT_CREATE_CLICKED = 3;
-public static final int EVENT_DELETE_CLICKED = 4;
-public static final int EVENT_MAP_CLICKED = 5;
+
+/**
+ * Main page for ActTourEditor.
+ * 
+ * @param controller
+ * @return
+ */
+public static TourManagerFragment getInstance(Controller controller) {
+    TourManagerFragment frag = new TourManagerFragment();
+    frag.setRetainInstance(true);
+    frag.mController = controller;
+    return frag;
+}
 
 
 /**
@@ -84,14 +93,8 @@ public static final int MODE_NORMAL = 0;
 public static final int MODE_DELETING = 1;
 public static final int MODE_MAPPING = 2;
 
-public static TourManagerFragment getInstance(Controller controller) {
-    TourManagerFragment frag = new TourManagerFragment();
-    frag.setRetainInstance(true);
-    frag.mController = controller;
-    return frag;
-}
 
-
+// Operational objects
 private View mRoot;
 private Controller mController;
 
@@ -101,6 +104,11 @@ private Button btnDelete;
 private Button btnMap;
 private LinearLayout mMainPane;
 
+
+// private constructor. Do not use
+public TourManagerFragment(){
+    // throw new IllegalStateException("Do not use this constructor");
+}
 
 @Override
 public View onCreateView(
@@ -123,19 +131,21 @@ public void onActivityCreated(Bundle savedInstanceState) {
     
     btnCreate.setOnClickListener(new OnClickListener() {
         @Override public void onClick(View arg0) {
-            mController.handleMessage(EVENT_CREATE_CLICKED);
+            mController.handleMessage(ATEMemo.EVENT_CREATE_CLICKED);
         }
     });
     btnDelete.setOnClickListener(new OnClickListener() {
         @Override public void onClick(View arg0) {
-            mController.handleMessage(EVENT_DELETE_CLICKED);
+            mController.handleMessage(ATEMemo.EVENT_DELETE_CLICKED);
         }
     });
     btnMap.setOnClickListener(new OnClickListener() {
         @Override public void onClick(View arg0) {
-            mController.handleMessage(EVENT_MAP_CLICKED);
+            mController.handleMessage(ATEMemo.EVENT_MAP_CLICKED);
         }
     });
+    
+    changeViewMode(MODE_NORMAL);
 }
 
 	
