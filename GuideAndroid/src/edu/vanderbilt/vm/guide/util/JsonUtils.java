@@ -299,10 +299,10 @@ public class JsonUtils {
             if (propertyName.equals("id")) {
                 id = reader.nextInt();
 
-            } else if (propertyName.equals("latitude")) {
+            } else if (propertyName.equals("lat")) {
                 cv.put(NodeTable.LAT_COL, reader.nextDouble());
 
-            } else if (propertyName.equals("longitude")) {
+            } else if (propertyName.equals("lng")) {
                 cv.put(NodeTable.LON_COL, reader.nextDouble());
 
             } else if (propertyName.equals("neighbors")) {

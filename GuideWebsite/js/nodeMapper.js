@@ -1,11 +1,20 @@
-function Node(id, lat, lng) {
+function Node(id, lat, lng, neighbors) {
   this.id = id;
   this.lat = lat;
   this.lng = lng;
 
   // Array of neighbor ids
-  this.neighbors = new Array();
+  if (neighbors == null) {
+    this.neighbors = new Array();
+  } else {
+    this.neighbors = neighbors;
+  }
 }
+
+function createNodeCopy(node) {
+  return new Node(node.id, node.lat, node.lng, node.neighbors);
+}
+  
 
 // Holds a reference to the polyline connecting markers of ids 1 and 2
 function PolylineHolder(polyline, id1, id2) {
@@ -22,7 +31,8 @@ var curNodeId = STARTING_NODE_ID;
 // Array of Node objects
 var nodes = new Array(); 
 
-// Map of markers to nodes
+// Array of markers (used to clear map)
+var markerArray = new Array();
 
 // Array of PolylineHolders
 var polylineHolders = new Array();
@@ -37,19 +47,23 @@ function initialize() {
       mapOptions);
 
   google.maps.event.addListener(map, 'click', function(event) {
-    placeMarker(event.latLng);
+    var marker = placeMarker(event.latLng, curNodeId);
+    var node = new Node(curNodeId, marker.position.lat(), marker.position.lng(), new Array());
+    nodes[curNodeId] = node;
+    curNodeId++;
   });
 }
 
-function placeMarker(location) {
+function placeMarker(location, id) {
   var marker = new google.maps.Marker({
       position: location,
       map: map,
-      title: curNodeId.toString()
+      title: id.toString()
   });
-
-  var node = new Node(curNodeId, marker.position.lat(), marker.position.lng());
-  nodes[node.id] = node;
+  if (id < 10000) {
+    marker.setIcon("http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+  }
+  markerArray.push(marker);
 
   // If a marker is clicked, start a linking operation
   google.maps.event.addListener(marker, 'click', function() {
@@ -86,22 +100,26 @@ function placeMarker(location) {
       node1 = null;
     }
   });
+  return marker;
+}
 
-  // google.maps.event.addListener(marker, 'dblclick', function() {
-
-  curNodeId++;
+function deleteOverlays() {
+  for (i in markerArray) {
+    markerArray[i].setMap(null);
+  }
+  for (i in polylineHolders) {
+    polylineHolders[i].polyline.setMap(null);
+  }
+  markerArray.length = 0;
+  polylineHolders.length = 0;
 }
 
 function removePolyline(id1, id2) {
-  for (var i=0; i<polylineHolders.length; i++) {
-    if (polylineHolders[i] != null && 
-        (polylineHolders[i].id1 == id1 || polylineHolders[i].id1 == id2) &&
-        (polylineHolders[i].id2 == id1 || polylineHolders[i].id2 == id2)) {
-      // Remove that polyline from the map
-      polylineHolders[i].polyline.setPath([]);
-      polylineHolders[i] = null;
-      return;
-    }
+  var poly = getLinkingPolyline(id1, id2);
+  if (poly != null) {
+    // Remove that polyline from the map
+    poly.holder.polyline.setPath([]);
+    polylineHolders[poly.ix] = null;
   }
 }
 
@@ -109,4 +127,68 @@ function writeJSON() {
   console.log(JSON.stringify(nodes.slice(STARTING_NODE_ID)));
 }
 
+// Reads the data from the savedNodes object if it is defined and resets the
+// state of the script
+function readJSON() {
+  if (typeof(savedNodes) === "undefined") return;
+
+  deleteOverlays();
+  node1 = null;
+  nodes.length = 0;
+
+  var max = 0;
+  for (var i=0; i<savedNodes.length; i++) {
+    var node = createNodeCopy(savedNodes[i]);
+    var id = savedNodes[i]["id"];
+    nodes[id] = node;
+
+    placeMarker(new google.maps.LatLng(node.lat, node.lng), id);
+    if (max < id) max = id;
+  }
+  curNodeId = max + 1;
+
+  for (var i in nodes) {
+    var node = nodes[i];
+    for (var j in node.neighbors) {
+      if(!isLinked(node.id, node.neighbors[j])) {
+        var node2 = nodes[node.neighbors[j]];
+        var latlng1 = new google.maps.LatLng(node.lat, node.lng);
+        var latlng2 = new google.maps.LatLng(node2.lat, node2.lng);
+        var connector = new google.maps.Polyline({
+            path: [latlng1, latlng2],
+            map: map
+        });
+
+        polylineHolders.push(new PolylineHolder(connector, node.id, node2.id));
+      }
+    }
+  }
+}
+
+// Returns an object containing the polyline and and its location in the
+// polylineHolders array that links the nodes with the given ids.
+// Returns null if there is no such polyline.
+function getLinkingPolyline(id1, id2) {
+  for (var i in polylineHolders) {
+    if(isLinkingPolyline(id1, id2, polylineHolders[i])) {
+      return {"ix": i, "holder": polylineHolders[i]};
+    }
+  }
+  return null;
+}
+
+function isLinked(id1, id2) {
+  for (var i in polylineHolders) {
+    if(isLinkingPolyline(id1, id2, polylineHolders[i])) return true;
+  }
+  return false;
+}
+
+function isLinkingPolyline(id1, id2, polyline) {
+  return polyline != null && 
+        (polyline.id1 == id1 || polyline.id1 == id2) &&
+        (polyline.id2 == id1 || polyline.id2 == id2);
+}
+
+  
 google.maps.event.addDomListener(window, 'load', initialize);

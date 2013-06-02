@@ -3,12 +3,10 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?v=3.11&key=AIzaSyDWE8xMberwg5rR7zpU_TZ7cjtbFoRWKv4&sensor=false">
-    </script>
-    <script type="text/javascript" src="../js/json2.js">
-    </script>
-    <script type="text/javascript" src="../js/nodeMapper.js">
-    </script>
+      src="https://maps.googleapis.com/maps/api/js?v=3.11&key=AIzaSyDWE8xMberwg5rR7zpU_TZ7cjtbFoRWKv4&sensor=false"></script>
+    <script type="text/javascript" src="../js/json2.js"></script>
+    <script type="text/javascript" src="../js/nodes.js"></script>
+    <script type="text/javascript" src="../js/nodeMapper.js"></script>
   </head>
   <body>
     <table>
@@ -19,6 +17,7 @@
         <tr>
           <td align="center">
             <input id="writeJsonButton" type="button" value="Write JSON" onclick="writeJSON();" />
+            <input id="readJsonButton" type="button" value="Read JSON" onclick="readJSON();" />
           </td>
         </tr>
       </tbody>
