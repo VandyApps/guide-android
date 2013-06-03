@@ -124,7 +124,12 @@ function removePolyline(id1, id2) {
 }
 
 function writeJSON() {
-  console.log(JSON.stringify(nodes.slice(STARTING_NODE_ID)));
+  var json = "[";
+  for (var i in nodes) {
+    json += JSON.stringify(nodes[i]) + ",";
+  }
+  json += "]";
+  console.log(json);
 }
 
 // Reads the data from the savedNodes object if it is defined and resets the
