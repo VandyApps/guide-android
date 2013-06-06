@@ -63,4 +63,8 @@
 	<string name="tour_manager_btn3">Map</string>
 	
 	<string name="tour_editor_btn_done">Done</string>
+
+    <item type="id" name="view_item_position" />
+    <item type="id" name="view_item_checked_set" />
+
 </resources>

@@ -115,6 +115,11 @@ public class IndexedCursorAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         checkPosition(position);
+
+        if (mIndexer.isHeader(position)) {
+            return -1;
+        }
+
         mCursor.moveToPosition(mIndexer.getDBRow(position));
         return mCursor.getInt(mIdColIx);
     }

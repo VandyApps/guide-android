@@ -74,6 +74,7 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -87,6 +88,17 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
         MapViewer.resetCamera(map);
         map.setOnMarkerClickListener(this);     // What happens when a marker is tapped
         map.setMyLocationEnabled(showSelf);
+        map.setOnMapLongClickListener(this);
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                //logger.info("PlaceIdFocused: " + mPlaceIdFocused);
+                PlaceDetailer.open(getActivity(), mPlaceIdFocused);
+            }
+        });
+
+
         ArrayList<LatLng> geopointList = new ArrayList<LatLng>();
         for (Place plc : mAgenda) {
             geopointList.add(MapViewer.toLatLng(plc));
@@ -191,16 +203,6 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
         logger.debug("Path drawing done");
     }
 
-    /**
-     * Set whether the map will connect the Places in the Agenda as a sequence.
-     * This method should only be called inside or after onResume().
-     * 
-     * @param show default is false.
-     */
-    void drawSequentialPath() {
-
-    }
-
     void setAgenda(Agenda a) {
         this.mAgenda = a;
     }
@@ -281,6 +283,7 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
         if (marker.isInfoWindowShown()) {
             marker.hideInfoWindow();
             mPlaceIdFocused = -1;
+
         } else {
             marker.showInfoWindow();
 
@@ -295,8 +298,12 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
                 }
             }
 
-            if (plc != null && mMenu != null) {
+            if (plc != null) {
                 mPlaceIdFocused = plc.getUniqueId();
+            }
+
+            if (mMenu != null) {
+
                 if (mAgenda.isOnAgenda(plc)) {
                     // Option to remove
                     MenuItem item = mMenu.findItem(R.id.map_menu_remove_agenda);
@@ -307,6 +314,7 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
                     item = mMenu.findItem(R.id.map_menu_add_agenda);
                     item.setVisible(false);
                     item = null;
+
                 } else {
                     // Option to add
                     mMenu.findItem(R.id.map_menu_add_agenda).setVisible(true);

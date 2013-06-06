@@ -1,6 +1,10 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import android.widget.*;
+import edu.vanderbilt.vm.guide.container.Agenda;
+import edu.vanderbilt.vm.guide.ui.adapter.AgendaEditItemView;
+import edu.vanderbilt.vm.guide.ui.adapter.PlaceItemView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +18,6 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
@@ -28,6 +28,8 @@ import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.ImageDownloader;
+
+import java.util.Set;
 
 public class AgendaFragment extends SherlockFragment implements GeomancerListener {
 
@@ -42,7 +44,13 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
     private Place mCurrentPlace;
     
     private ImageDownloader.BitmapDownloaderTask mDlTask = null;
-    
+
+    // Views
+    private ListView mListView;
+    private ImageButton mEditButton;
+    private ImageButton mDeleteButton;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_agenda, container, false);
@@ -65,16 +73,72 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
         //helper.close();
         
         
-        ListView lv = (ListView) mRoot.findViewById(R.id.agenda_list);
-        lv.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserAgenda()));
+        mListView = (ListView) mRoot.findViewById(R.id.agenda_list);
+        mListView.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserAgenda(), PlaceItemView.getFactory()));
 
         
         // Add an empty agenda indicator
-        TextView emptyIndicator = (TextView) getActivity().getLayoutInflater().inflate(R.layout.agenda_empty, null, false);
-        ((ViewGroup) lv.getParent()).addView(emptyIndicator);
-        lv.setEmptyView(emptyIndicator);
-        
-        
+        TextView emptyIndicator = (TextView) getActivity().getLayoutInflater()
+                .inflate(R.layout.agenda_empty, null, false);
+        ((ViewGroup) mListView.getParent()).addView(emptyIndicator);
+        mListView.setEmptyView(emptyIndicator);
+
+        // Setup button
+        mEditButton = (ImageButton) mRoot.findViewById(R.id.agenda_edit);
+        mEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (GlobalState.getUserAgenda().size() != 0) {
+                    v.setVisibility(View.GONE);
+                    mDeleteButton.setVisibility(View.VISIBLE);
+
+                    mListView.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserAgenda(), AgendaEditItemView.getFactory()));
+                    mListView.invalidateViews();
+                }
+
+            }
+        });
+
+
+        mDeleteButton = (ImageButton) mRoot.findViewById(R.id.agenda_remove);
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(View v) {
+
+                Agenda a = GlobalState.getUserAgenda();
+                Set<Integer> checkedSet = (Set<Integer>) mListView.getChildAt(0).getTag();
+
+                for (int i = a.size() - 1; i >= 0; i--) {
+
+                    if (checkedSet.contains(i)) {
+                        a.remove(a.get(i));
+                    }
+
+                }
+
+                Toast.makeText(getActivity(),
+                        "Removed " + checkedSet.size() + " Places from the Agenda",
+                        Toast.LENGTH_LONG).show();
+
+                v.setVisibility(View.GONE);
+                mEditButton.setVisibility(View.VISIBLE);
+
+                mListView.setAdapter(new AgendaAdapter(getActivity(), a, PlaceItemView.getFactory()));
+                mListView.invalidateViews();
+
+            }
+        });
+
+        mRoot.findViewById(R.id.current_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlaceDetailer.open(getActivity(), mCurrentPlace.getUniqueId());
+            }
+        });
+
+
         updateLocation(Geomancer.getDeviceLocation());
         setHasOptionsMenu(true);
     }
@@ -149,6 +213,9 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
             mAllPlacesCursor.moveToPosition(closestIx);
             mCurrentPlace = DBUtils.getPlaceFromCursor(mAllPlacesCursor);
             fillViews();
+
+            mListView.invalidateViews();
+
         }
         
     }

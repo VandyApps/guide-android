@@ -2,17 +2,10 @@
 package edu.vanderbilt.vm.guide.ui.adapter;
 
 import android.content.Context;
-import android.location.Location;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
-import edu.vanderbilt.vm.guide.util.Geomancer;
 
 public class AgendaAdapter extends BaseAdapter {
 
@@ -20,9 +13,12 @@ public class AgendaAdapter extends BaseAdapter {
 
     private Agenda mAgenda;
 
-    public AgendaAdapter(Context context, Agenda agenda) {
+    private ItemView.ItemViewFactory mFactory;
+
+    public AgendaAdapter(Context context, Agenda agenda, ItemView.ItemViewFactory factory) {
         mContext = context;
         mAgenda = agenda;
+        mFactory = factory;
     }
 
     @Override
@@ -42,35 +38,17 @@ public class AgendaAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        
-        LinearLayout layout;
+        ItemView view;
         if (convertView == null) {
-            layout = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.place_list_item,
-                    null);
-            layout.setTag(layout);
+            view = mFactory.getItemView(mContext);
+
         } else {
-            layout = (LinearLayout)convertView.getTag();
+            view = (ItemView) convertView;
         }
 
-        
-        layout.findViewById(R.id.placelist_item_header).setVisibility(View.GONE);
-        ((TextView)layout.findViewById(R.id.placelist_item_title)).setText(mAgenda.get(position)
-                .getName());
-        
-        
-        // TODO replace placeholder icon.
-        ((ImageView)layout.findViewById(R.id.placelist_item_thunbnail))
-                .setImageResource(R.drawable.home);
-        
+        view.setView(mAgenda.get(position), position, null, null, null);
 
-        Location tmp = new Location("Temp");
-        tmp.setLatitude(mAgenda.get(position).getLatitude());
-        tmp.setLongitude(mAgenda.get(position).getLongitude());
-
-        ((TextView)layout.findViewById(R.id.placelist_item_distance)).setText(Geomancer
-                .getDistanceString(tmp));
-
-        return layout;
+        return view;
     }
 
 }
