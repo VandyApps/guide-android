@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import android.view.KeyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,26 +146,27 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
-            case R.id.menu_map:
-                MapViewer.openAgenda(this);
-                return true;
+        case R.id.menu_map:
+            MapViewer.openAgenda(this);
+            return true;
 
-            case R.id.menu_about:
-                About.open(this);
-                return true;
+        case R.id.menu_about:
+            About.open(this);
+            return true;
 
-            case R.id.menu_navigator:
-                Navigator.open(this);
-                return true;
-                
-            case R.id.menu_search:
-                SearchDialog.newInstance(this).show(getSupportFragmentManager(), "search_dialog");
-                return true;
-                
-            case R.id.menu_editor:
-            	ActTourEditor.open(this);
-            	return true;
-                
+        case R.id.menu_navigator:
+            Navigator.open(this);
+            return true;
+
+        case R.id.menu_search:
+            SearchDialog.newInstance(this).show(getSupportFragmentManager(), "search_dialog");
+            return true;
+
+        case R.id.menu_editor:
+            ActTourEditor.open(this);
+            return true;
+
+
             default:
                 return false;
         }
@@ -182,7 +184,8 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         //LOGGER.info("onStop is called");
         
         try {
-            FileOutputStream fos = new FileOutputStream(getExternalFilesDir(null).getAbsolutePath() + GuideConstants.CACHE_FILENAME);
+            FileOutputStream fos = new FileOutputStream(
+                    getExternalFilesDir(null).getAbsolutePath() + GuideConstants.CACHE_FILENAME);
             
             JsonWriter writer = new JsonWriter(new OutputStreamWriter(fos));
             
@@ -223,8 +226,19 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         
         
         Cursor cursor = null;
-        ((PlaceTabFragment) getSupportFragmentManager().findFragmentByTag(FRAG_PLACES)).viewListFromCursor(cursor);
+        //((PlaceTabFragment) getSupportFragmentManager().findFragmentByTag(FRAG_PLACES)).viewListFromCursor(cursor);
         
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+            SearchDialog.newInstance(this).show(getSupportFragmentManager(), "search_dialog");
+            return true;
+
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
 }

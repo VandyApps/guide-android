@@ -69,17 +69,13 @@ public class PlaceDetailerFragment extends SherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container == null) {
-            return null;
-        }
         mView = inflater.inflate(R.layout.fragment_place_detailer, container, false);
-        setupUI();
         return mView;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         setHasOptionsMenu(true);
 
@@ -101,12 +97,7 @@ public class PlaceDetailerFragment extends SherlockFragment {
         } else {
             isOnAgenda = false;
         }
-
-    }
-    
-    @Override
-    public void onResume() {
-        super.onResume();
+        setupUI();
         updateInformation();
     }
 

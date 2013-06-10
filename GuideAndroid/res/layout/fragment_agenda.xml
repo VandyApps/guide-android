@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gold"
-    android:orientation="vertical"
-    android:padding="4dp" >
+    android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/current_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@color/white"
+        android:layout_margin="8dp"
+        android:background="@drawable/white_to_darkgold"
         android:orientation="horizontal" >
 
         <ImageView
@@ -21,6 +21,7 @@
             android:layout_margin="4dp"
             android:layout_weight="45"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/abs__action_bar_home_description"
             android:src="@drawable/tour_placeholder" />
 
         <LinearLayout
@@ -46,27 +47,47 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_margin="4dp"
-        android:text="@string/menu_add_agenda"
-        android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_margin="8dp"
+            android:text="@string/menu_add_agenda"
+            android:textSize="26sp" />
+
+        <ImageButton
+            android:id="@+id/agenda_edit"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@android:drawable/ic_menu_edit"
+            android:contentDescription="@string/abs__action_bar_home_description"/>
+
+        <ImageButton
+            android:id="@+id/agenda_remove"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@android:drawable/ic_delete"
+            android:contentDescription="@string/abs__action_bar_home_description"/>
+
+        </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_margin="4dp"
         android:background="@color/dark_gold" >
     </View>
 
     <ListView
         android:id="@+id/agenda_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@color/white" >
+        android:layout_height="wrap_content" >
     </ListView>
 
 </LinearLayout>

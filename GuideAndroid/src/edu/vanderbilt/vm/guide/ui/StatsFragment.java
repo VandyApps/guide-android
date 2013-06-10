@@ -37,7 +37,7 @@ public class StatsFragment extends SherlockFragment {
         ((TextView)getActivity().findViewById(R.id.tv_history)).setText("History");
 
         listHistory = (ListView)getActivity().findViewById(R.id.list_history);
-        listHistory.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserHistory()));
+        listHistory.setAdapter(new AgendaAdapter(getActivity(), GlobalState.getUserHistory(), null));
         listHistory.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int posi, long id) {
