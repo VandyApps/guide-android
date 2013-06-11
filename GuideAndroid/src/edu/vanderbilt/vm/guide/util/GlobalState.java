@@ -131,37 +131,57 @@ public class GlobalState {
 
             // Build the graph
             for (int i = 0; i < sVertexMap.size(); i++) {
-                int mv1Id = sVertexMap.keyAt(i);
-                MapVertex mv1 = sVertexMap.get(mv1Id);
-                sGraph.addVertex(mv1);
-                for (int mv2Id : mv1.neighbors) {
-                    MapVertex mv2 = sVertexMap.get(mv2Id);
-                    // XXX: Bad hack job!
-                    if (mv2 == null)
-                        continue;
-                    // Assuming the MapVertex equals() and hashCode() methods
-                    // work
-                    // correctly, addVertex() will ensure there are no duplicate
-                    // vertices in the graph
-                    sGraph.addVertex(mv2);
-                    try {
-                        // XXX: Needs debugging, for some reason there are
-                        // vertices
-                        // adjacent to a vertex with id "0"
-                        LatLng latlng1 = new LatLng(mv1.lat, mv1.lon);
-                        LatLng latlng2 = new LatLng(mv2.lat, mv2.lon);
-                        DefaultWeightedEdge e = sGraph.addEdge(mv1, mv2);
-                        // e will be null if the edge already existed
-                        if (e != null) {
-                            sGraph.setEdgeWeight(e, distanceBetween(latlng1, latlng2));
-                        }
-                    } catch (NullPointerException e) {
-                        logger.error("mv1 id: {}, mv2 id: {}", mv1Id, mv2Id);
-                    }
+                int mvId = sVertexMap.keyAt(i);
+                MapVertex mv = sVertexMap.get(mvId);
+                /*
+                 * Do not add the vertices for places to the graph. These
+                 * vertices should only be present in the graph when finding
+                 * paths and routes. Having these extra vertices in the graph
+                 * results in the algorithms finding paths through buildings,
+                 * which is not what we want.
+                 */
+                if (!isPlace(mv)) {
+                    addVertexToGraph(sGraph, mv);
                 }
             }
         }
         return sGraph;
+    }
+
+    private static void addVertexToGraph(SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> graph,
+            MapVertex mv) {
+        graph.addVertex(mv);
+        for (int neighborId : mv.neighbors) {
+            MapVertex mv2 = sVertexMap.get(neighborId);
+            // XXX: Bad hack job!
+            if (mv2 == null)
+                continue;
+            /*
+             * Assuming the MapVertex equals() and hashCode() methods work
+             * correctly, addVertex() will ensure there are no duplicate
+             * vertices in the graph
+             */
+            graph.addVertex(mv2);
+            try {
+                /*
+                 * XXX: Needs debugging, for some reason there are vertices
+                 * adjacent to a vertex with id "0"
+                 */
+                LatLng latlng1 = new LatLng(mv.lat, mv.lon);
+                LatLng latlng2 = new LatLng(mv2.lat, mv2.lon);
+                DefaultWeightedEdge e = graph.addEdge(mv, mv2);
+                // e will be null if the edge already existed
+                if (e != null) {
+                    graph.setEdgeWeight(e, distanceBetween(latlng1, latlng2));
+                }
+            } catch (NullPointerException e) {
+                logger.error("mv1 id: {}, mv2 id: {}", mv.id, neighborId);
+            }
+        }
+    }
+
+    public static boolean isPlace(MapVertex mv) {
+        return mv.id <= GuideConstants.MAX_PLACE_ID;
     }
 
     /**
@@ -185,22 +205,31 @@ public class GlobalState {
             SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> graph) {
         KruskalMinimumSpanningTree<MapVertex, DefaultWeightedEdge> mstFinder = new KruskalMinimumSpanningTree<MapVertex, DefaultWeightedEdge>(
                 graph);
+
         Set<DefaultWeightedEdge> mstEdges = mstFinder.getEdgeSet();
         SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> mst = new SimpleWeightedGraph<MapVertex, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
+
         for (MapVertex mv : graph.vertexSet()) {
             mst.addVertex(mv);
         }
+
         for (DefaultWeightedEdge e : mstEdges) {
             mst.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
             mst.setEdgeWeight(e, graph.getEdgeWeight(e));
         }
+
         return mst;
     }
 
     public static SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> shortestPath(
             SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> graph, MapVertex start,
             MapVertex end) {
+        // Temporarily add the start and end vertices to the graph
+        addVertexToGraph(graph, start);
+        addVertexToGraph(graph, end);
+
+        // Find the path
         DijkstraShortestPath<MapVertex, DefaultWeightedEdge> pathSolver = new DijkstraShortestPath<MapVertex, DefaultWeightedEdge>(
                 graph, start, end);
         SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> path = new SimpleWeightedGraph<MapVertex, DefaultWeightedEdge>(
@@ -213,6 +242,10 @@ public class GlobalState {
             path.addVertex(mv2);
             path.addEdge(mv1, mv2);
         }
+
+        // Remove the start and end vertices
+        graph.removeVertex(start);
+        graph.removeVertex(end);
         return path;
     }
 
