@@ -2,7 +2,11 @@
 package edu.vanderbilt.vm.guide.ui;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -30,6 +35,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.Graph;
+import edu.vanderbilt.vm.guide.container.MapVertex;
 import edu.vanderbilt.vm.guide.container.Node;
 import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
@@ -37,9 +43,10 @@ import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 import edu.vanderbilt.vm.guide.util.DBUtils;
 import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
+import edu.vanderbilt.vm.guide.util.GuideConstants;
 
 public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickListener,
-        OnMarkerClickListener {
+        OnMarkerClickListener, IGraphMapper {
 
     // @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.AgendaMapFrag");
@@ -323,6 +330,30 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
             }
         }
         return true;
+    }
+
+    @Override
+    public void mapGraph(SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> graph) {
+        GoogleMap map = getMap();
+        map.clear();
+        for (MapVertex mv : graph.vertexSet()) {
+            if (mv.id <= GuideConstants.MAX_PLACE_ID) {
+                map.addMarker(new MarkerOptions().position(new LatLng(mv.lat, mv.lon))
+                        .title(DBUtils.getPlaceNameById(mv.id, GlobalState.getReadableDatabase(getActivity())))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            }
+        }
+        mapEdges(map, graph);
+    }
+    
+    private void mapEdges(GoogleMap map, SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> graph) {
+        for (DefaultWeightedEdge e : graph.edgeSet()) {
+            MapVertex mv1 = graph.getEdgeSource(e);
+            MapVertex mv2 = graph.getEdgeTarget(e);
+            PolylineOptions opts = new PolylineOptions();
+            opts.add(new LatLng(mv1.lat, mv1.lon)).add(new LatLng(mv2.lat, mv2.lon));
+            map.addPolyline(opts);
+        }
     }
 
 }

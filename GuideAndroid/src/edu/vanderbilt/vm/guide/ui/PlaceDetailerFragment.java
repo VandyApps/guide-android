@@ -170,9 +170,6 @@ public class PlaceDetailerFragment extends SherlockFragment {
     void setPlaceDetailed(Place plc) {
         mPlace = plc;
         updateInformation();
-        
-        // add to History
-        GlobalState.addHistory(mPlace);
     }
 
     /*

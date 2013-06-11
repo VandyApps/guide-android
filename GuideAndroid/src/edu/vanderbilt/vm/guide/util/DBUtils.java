@@ -48,6 +48,20 @@ public class DBUtils {
         }
         return place;
     }
+    
+    public static String getPlaceNameById(int uniqueId, SQLiteDatabase db) {
+        Cursor cursor = db.query(GuideDBConstants.PlaceTable.PLACE_TABLE_NAME,
+                new String[] {GuideDBConstants.PlaceTable.NAME_COL},
+                GuideDBConstants.PlaceTable.ID_COL + "=" + uniqueId,
+                null, null, null, null);
+
+        if (!cursor.moveToFirst()) {
+            logger.warn("Got an empty cursor");
+            return "";
+        }
+
+        return cursor.getString(cursor.getColumnIndex(GuideDBConstants.PlaceTable.NAME_COL));
+    }
 
     /**
      * Queries db for all of the given place ids and returns an array of the
