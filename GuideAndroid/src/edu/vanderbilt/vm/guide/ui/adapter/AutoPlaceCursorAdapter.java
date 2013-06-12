@@ -23,11 +23,12 @@ public class AutoPlaceCursorAdapter extends BaseAdapter implements Filterable {
     
     private Cursor mCursor;
     private List<String> mFiltered = new ArrayList<String>();
-    private Object mLock = new Object();
     private Filter mFilter;
     private Context mContext;
     private int mNameIx;
     private int mIdIx;
+    
+    private static final float TEXT_SIZE = 16;
 
     public AutoPlaceCursorAdapter(Context context, Cursor c) {
         mContext = context;
@@ -40,7 +41,7 @@ public class AutoPlaceCursorAdapter extends BaseAdapter implements Filterable {
         if (mIdIx == -1) {
             throw new SQLiteException("Cursor must have an id column");
         }
-        synchronized (mLock) {
+        synchronized (mCursor) {
             for (int i=0; i<mCursor.getCount(); i++) {
                 mCursor.moveToPosition(i);
                 mFiltered.add(mCursor.getString(mNameIx));
@@ -75,6 +76,7 @@ public class AutoPlaceCursorAdapter extends BaseAdapter implements Filterable {
             tv = new TextView(mContext);
         }
         tv.setText(mFiltered.get(position));
+        tv.setTextSize(TEXT_SIZE);
         return tv;
     }
 
@@ -93,7 +95,7 @@ public class AutoPlaceCursorAdapter extends BaseAdapter implements Filterable {
             FilterResults results = new FilterResults();
             List<String> matches = new ArrayList<String>();
             String prefix = constraint.toString().toLowerCase();
-            synchronized (mLock) {
+            synchronized (mCursor) {
                 for (int i=0; i<mCursor.getCount(); i++) {
                     mCursor.moveToPosition(i);
                     String name = mCursor.getString(mNameIx);

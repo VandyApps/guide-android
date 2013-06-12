@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.SpinnerAdapter;
+
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -246,10 +247,12 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
+    @Override
     public void addOnMenuVisibilityListener(OnMenuVisibilityListener listener) {
         mMenuVisibilityListeners.add(listener);
     }
 
+    @Override
     public void removeOnMenuVisibilityListener(OnMenuVisibilityListener listener) {
         mMenuVisibilityListeners.remove(listener);
     }
@@ -311,6 +314,7 @@ public class ActionBarImpl extends ActionBar {
         setSubtitle(mContext.getString(resId));
     }
 
+    @Override
     public void setSelectedNavigationItem(int position) {
         switch (mActionView.getNavigationMode()) {
         case NAVIGATION_MODE_TABS:
@@ -325,6 +329,7 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
+    @Override
     public void removeAllTabs() {
         cleanupTabs();
     }
@@ -340,53 +345,65 @@ public class ActionBarImpl extends ActionBar {
         mSavedTabPosition = INVALID_POSITION;
     }
 
+    @Override
     public void setTitle(CharSequence title) {
         mActionView.setTitle(title);
     }
 
+    @Override
     public void setSubtitle(CharSequence subtitle) {
         mActionView.setSubtitle(subtitle);
     }
 
+    @Override
     public void setDisplayOptions(int options) {
         mActionView.setDisplayOptions(options);
     }
 
+    @Override
     public void setDisplayOptions(int options, int mask) {
         final int current = mActionView.getDisplayOptions();
         mActionView.setDisplayOptions((options & mask) | (current & ~mask));
     }
 
+    @Override
     public void setBackgroundDrawable(Drawable d) {
         mContainerView.setPrimaryBackground(d);
     }
 
+    @Override
     public void setStackedBackgroundDrawable(Drawable d) {
         mContainerView.setStackedBackground(d);
     }
 
+    @Override
     public void setSplitBackgroundDrawable(Drawable d) {
         if (mSplitView != null) {
             mSplitView.setSplitBackground(d);
         }
     }
 
+    @Override
     public View getCustomView() {
         return mActionView.getCustomNavigationView();
     }
 
+    @Override
     public CharSequence getTitle() {
         return mActionView.getTitle();
     }
 
+    @Override
     public CharSequence getSubtitle() {
         return mActionView.getSubtitle();
     }
 
+    @Override
     public int getNavigationMode() {
         return mActionView.getNavigationMode();
     }
 
+    @Override
     public int getDisplayOptions() {
         return mActionView.getDisplayOptions();
     }
@@ -614,6 +631,7 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
+    @Override
     public boolean isShowing() {
         return mContainerView.getVisibility() == View.VISIBLE;
     }
@@ -633,6 +651,7 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
+    @Override
     public Context getThemedContext() {
         if (mThemedContext == null) {
             TypedValue outValue = new TypedValue();
@@ -766,6 +785,7 @@ public class ActionBarImpl extends ActionBar {
             return mCustomView != null ? mCustomView.get() : null;
         }
 
+        @Override
         public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
             if (mCallback != null) {
                 return mCallback.onActionItemClicked(this, item);
@@ -793,6 +813,7 @@ public class ActionBarImpl extends ActionBar {
         public void onCloseSubMenu(SubMenuBuilder menu) {
         }
 
+        @Override
         public void onMenuModeChange(MenuBuilder menu) {
             if (mCallback == null) {
                 return;

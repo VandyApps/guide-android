@@ -2,10 +2,13 @@ package com.actionbarsherlock.internal;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.xmlpull.v1.XmlPullParser;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -30,6 +33,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
 import com.actionbarsherlock.ActionBarSherlock;
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.ActionBar;
@@ -529,10 +533,12 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         return true;
     }
 
+    @Override
     public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
         return callbackOptionsItemSelected(item);
     }
 
+    @Override
     public void onMenuModeChange(MenuBuilder menu) {
         reopenMenu(true);
     }
@@ -1180,18 +1186,22 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
             mWrapped = wrapped;
         }
 
+        @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             return mWrapped.onCreateActionMode(mode, menu);
         }
 
+        @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return mWrapped.onPrepareActionMode(mode, menu);
         }
 
+        @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             return mWrapped.onActionItemClicked(mode, item);
         }
 
+        @Override
         public void onDestroyActionMode(ActionMode mode) {
             mWrapped.onDestroyActionMode(mode);
             if (mActionModeView != null) {

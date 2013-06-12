@@ -118,10 +118,12 @@ public class ActionMenuItemView extends LinearLayout
         setOnLongClickListener(this);
     }
 
+    @Override
     public MenuItemImpl getItemData() {
         return mItemData;
     }
 
+    @Override
     public void initialize(MenuItemImpl itemData, int menuType) {
         mItemData = itemData;
 
@@ -140,6 +142,7 @@ public class ActionMenuItemView extends LinearLayout
         mTextButton.setEnabled(enabled);
     }
 
+    @Override
     public void onClick(View v) {
         if (mItemInvoker != null) {
             mItemInvoker.invokeItem(mItemData);
@@ -150,14 +153,17 @@ public class ActionMenuItemView extends LinearLayout
         mItemInvoker = invoker;
     }
 
+    @Override
     public boolean prefersCondensedTitle() {
         return true;
     }
 
+    @Override
     public void setCheckable(boolean checkable) {
         // TODO Support checkable action items
     }
 
+    @Override
     public void setChecked(boolean checked) {
         // TODO Support checkable action items
     }
@@ -179,6 +185,7 @@ public class ActionMenuItemView extends LinearLayout
         mTextButton.setVisibility(visible ? VISIBLE : GONE);
     }
 
+    @Override
     public void setIcon(Drawable icon) {
         mImageButton.setImageDrawable(icon);
         if (icon != null) {
@@ -194,10 +201,12 @@ public class ActionMenuItemView extends LinearLayout
         return mTextButton.getVisibility() != GONE;
     }
 
+    @Override
     public void setShortcut(boolean showShortcut, char shortcutKey) {
         // Action buttons don't show text for shortcut keys.
     }
 
+    @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
 
@@ -233,14 +242,17 @@ public class ActionMenuItemView extends LinearLayout
         return false;
     }
 
+    @Override
     public boolean showsIcon() {
         return true;
     }
 
+    @Override
     public boolean needsDividerBefore() {
         return hasText() && mItemData.getIcon() == null;
     }
 
+    @Override
     public boolean needsDividerAfter() {
         return hasText();
     }

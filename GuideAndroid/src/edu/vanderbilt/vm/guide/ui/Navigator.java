@@ -21,6 +21,9 @@ public class Navigator extends SherlockFragmentActivity {
     private static final String MAP = "map";
     
     private int mNavChoice = 0;
+    private PlaceNavigatorFragment mPlaceNavFrag;
+    private AgendaNavigatorFragment mAgendaNavFrag;
+    private AgendaMapFrag mAgendaMapFrag;
 
     @SuppressWarnings({
             "unchecked", "rawtypes"
@@ -43,8 +46,7 @@ public class Navigator extends SherlockFragmentActivity {
                         actionBar.getThemedContext(),
                         android.R.layout.simple_list_item_1,
                         android.R.id.text1,
-                        new String[]{ "Place to Place", "Through the Agenda", 
-                            "Through a Tour" }),
+                        new String[]{ "Place to Place", "Through the Agenda" }),
 
                 // Provide a listener to be called when an item is selected.
                 new ActionBar.OnNavigationListener() {
@@ -61,13 +63,16 @@ public class Navigator extends SherlockFragmentActivity {
         
         // Setup fragments
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        mAgendaMapFrag = AgendaMapFrag.newInstance(this, new Agenda());
+        mPlaceNavFrag = new PlaceNavigatorFragment();
+        mPlaceNavFrag.setGraphMapper(mAgendaMapFrag);
+        mAgendaNavFrag = new AgendaNavigatorFragment();
+        mAgendaNavFrag.setGraphMapper(mAgendaMapFrag);
         
-        ft.add(R.id.nav_map, AgendaMapFrag.newInstance(this, new Agenda()), MAP);
-        ft.add(R.id.nav_chooser, new NavPlaceChooser(),CHOOSER);
+        ft.add(R.id.nav_map, mAgendaMapFrag, MAP);
+        ft.add(R.id.nav_chooser, mPlaceNavFrag,CHOOSER);
         
         ft.commit();
-        
-        
     }
     
     
@@ -81,6 +86,7 @@ public class Navigator extends SherlockFragmentActivity {
     }
     
     private void switchFragments(int position, long id) {
+        // TODO: Cache fragments instead of always creating new ones
         switch (position) {
             case 0:
                 // Travel from Place to Place
@@ -88,7 +94,7 @@ public class Navigator extends SherlockFragmentActivity {
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.remove( fm.findFragmentByTag(CHOOSER) );
-                    ft.add(R.id.nav_chooser, new NavPlaceChooser(), CHOOSER);
+                    ft.add(R.id.nav_chooser, mPlaceNavFrag, CHOOSER);
                     ft.commit();
                     mNavChoice = 0;
                 }
@@ -100,21 +106,9 @@ public class Navigator extends SherlockFragmentActivity {
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.remove( fm.findFragmentByTag(CHOOSER) );
-                    ft.add(R.id.nav_chooser, new NavAgendaChooser(), CHOOSER);
+                    ft.add(R.id.nav_chooser, mAgendaNavFrag, CHOOSER);
                     ft.commit();
                     mNavChoice = 1;
-                }
-                return;
-                
-            case 2:
-                // Travel through a Tour
-                if (mNavChoice != 2) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.remove( fm.findFragmentByTag(CHOOSER) );
-                    ft.add(R.id.nav_chooser, new NavTourChooser(), CHOOSER);
-                    ft.commit();
-                    mNavChoice = 2;
                 }
                 return;
                 

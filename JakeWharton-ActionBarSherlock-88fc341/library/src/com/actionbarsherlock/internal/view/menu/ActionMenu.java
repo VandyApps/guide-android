@@ -49,18 +49,22 @@ public class ActionMenu implements Menu {
         return mContext;
     }
 
+    @Override
     public MenuItem add(CharSequence title) {
         return add(0, 0, 0, title);
     }
 
+    @Override
     public MenuItem add(int titleRes) {
         return add(0, 0, 0, titleRes);
     }
 
+    @Override
     public MenuItem add(int groupId, int itemId, int order, int titleRes) {
         return add(groupId, itemId, order, mContext.getResources().getString(titleRes));
     }
 
+    @Override
     public MenuItem add(int groupId, int itemId, int order, CharSequence title) {
         ActionMenuItem item = new ActionMenuItem(getContext(),
                 groupId, itemId, 0, order, title);
@@ -68,6 +72,7 @@ public class ActionMenu implements Menu {
         return item;
     }
 
+    @Override
     public int addIntentOptions(int groupId, int itemId, int order,
             ComponentName caller, Intent[] specifics, Intent intent, int flags,
             MenuItem[] outSpecificItems) {
@@ -98,31 +103,37 @@ public class ActionMenu implements Menu {
         return N;
     }
 
+    @Override
     public SubMenu addSubMenu(CharSequence title) {
         // TODO Implement submenus
         return null;
     }
 
+    @Override
     public SubMenu addSubMenu(int titleRes) {
         // TODO Implement submenus
         return null;
     }
 
+    @Override
     public SubMenu addSubMenu(int groupId, int itemId, int order,
             CharSequence title) {
         // TODO Implement submenus
         return null;
     }
 
+    @Override
     public SubMenu addSubMenu(int groupId, int itemId, int order, int titleRes) {
         // TODO Implement submenus
         return null;
     }
 
+    @Override
     public void clear() {
         mItems.clear();
     }
 
+    @Override
     public void close() {
     }
 
@@ -138,14 +149,17 @@ public class ActionMenu implements Menu {
         return -1;
     }
 
+    @Override
     public MenuItem findItem(int id) {
         return mItems.get(findItemIndex(id));
     }
 
+    @Override
     public MenuItem getItem(int index) {
         return mItems.get(index);
     }
 
+    @Override
     public boolean hasVisibleItems() {
         final ArrayList<ActionMenuItem> items = mItems;
         final int itemCount = items.size();
@@ -176,10 +190,12 @@ public class ActionMenu implements Menu {
         return null;
     }
 
+    @Override
     public boolean isShortcutKey(int keyCode, KeyEvent event) {
         return findItemWithShortcut(keyCode, event) != null;
     }
 
+    @Override
     public boolean performIdentifierAction(int id, int flags) {
         final int index = findItemIndex(id);
         if (index < 0) {
@@ -189,6 +205,7 @@ public class ActionMenu implements Menu {
         return mItems.get(index).invoke();
     }
 
+    @Override
     public boolean performShortcut(int keyCode, KeyEvent event, int flags) {
         ActionMenuItem item = findItemWithShortcut(keyCode, event);
         if (item == null) {
@@ -198,6 +215,7 @@ public class ActionMenu implements Menu {
         return item.invoke();
     }
 
+    @Override
     public void removeGroup(int groupId) {
         final ArrayList<ActionMenuItem> items = mItems;
         int itemCount = items.size();
@@ -212,10 +230,12 @@ public class ActionMenu implements Menu {
         }
     }
 
+    @Override
     public void removeItem(int id) {
         mItems.remove(findItemIndex(id));
     }
 
+    @Override
     public void setGroupCheckable(int group, boolean checkable,
             boolean exclusive) {
         final ArrayList<ActionMenuItem> items = mItems;
@@ -230,6 +250,7 @@ public class ActionMenu implements Menu {
         }
     }
 
+    @Override
     public void setGroupEnabled(int group, boolean enabled) {
         final ArrayList<ActionMenuItem> items = mItems;
         final int itemCount = items.size();
@@ -242,6 +263,7 @@ public class ActionMenu implements Menu {
         }
     }
 
+    @Override
     public void setGroupVisible(int group, boolean visible) {
         final ArrayList<ActionMenuItem> items = mItems;
         final int itemCount = items.size();
@@ -254,10 +276,12 @@ public class ActionMenu implements Menu {
         }
     }
 
+    @Override
     public void setQwertyMode(boolean isQwerty) {
         mIsQwerty = isQwerty;
     }
 
+    @Override
     public int size() {
         return mItems.size();
     }

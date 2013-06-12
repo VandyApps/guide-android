@@ -16,7 +16,10 @@
 
 package com.actionbarsherlock.internal.widget;
 
+import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
+
 import org.xmlpull.v1.XmlPullParser;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -62,8 +65,6 @@ import com.actionbarsherlock.view.CollapsibleActionView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
-
-import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
 
 /**
  * @hide
@@ -142,11 +143,13 @@ public class ActionBarView extends AbsActionBarView {
     @SuppressWarnings("rawtypes")
     private final IcsAdapterView.OnItemSelectedListener mNavItemSelectedListener =
             new IcsAdapterView.OnItemSelectedListener() {
+        @Override
         public void onItemSelected(IcsAdapterView parent, View view, int position, long id) {
             if (mCallback != null) {
                 mCallback.onNavigationItemSelected(position, id);
             }
         }
+        @Override
         public void onNothingSelected(IcsAdapterView parent) {
             // Do nothing
         }
@@ -163,8 +166,9 @@ public class ActionBarView extends AbsActionBarView {
     };
 
     private final OnClickListener mUpClickListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
-            mWindowCallback.onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, mLogoNavItem);
+            mWindowCallback.onMenuItemSelected(android.view.Window.FEATURE_OPTIONS_PANEL, mLogoNavItem);
         }
     };
 
@@ -1275,10 +1279,12 @@ public class ActionBarView extends AbsActionBarView {
 
         public static final Parcelable.Creator<SavedState> CREATOR =
                 new Parcelable.Creator<SavedState>() {
+            @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
+            @Override
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }

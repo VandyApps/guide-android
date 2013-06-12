@@ -18,7 +18,6 @@ package com.actionbarsherlock.internal.widget;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import com.actionbarsherlock.R;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -30,12 +29,15 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SpinnerAdapter;
+
+import com.actionbarsherlock.R;
 
 
 /**
@@ -395,6 +397,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
         return handled;
     }
 
+    @Override
     public void onClick(DialogInterface dialog, int which) {
         setSelection(which);
         dialog.dismiss();
@@ -487,37 +490,45 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
             }
         }
 
+        @Override
         public int getCount() {
             return mAdapter == null ? 0 : mAdapter.getCount();
         }
 
+        @Override
         public Object getItem(int position) {
             return mAdapter == null ? null : mAdapter.getItem(position);
         }
 
+        @Override
         public long getItemId(int position) {
             return mAdapter == null ? -1 : mAdapter.getItemId(position);
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             return getDropDownView(position, convertView, parent);
         }
 
+        @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             return mAdapter == null ? null :
                     mAdapter.getDropDownView(position, convertView, parent);
         }
 
+        @Override
         public boolean hasStableIds() {
             return mAdapter != null && mAdapter.hasStableIds();
         }
 
+        @Override
         public void registerDataSetObserver(DataSetObserver observer) {
             if (mAdapter != null) {
                 mAdapter.registerDataSetObserver(observer);
             }
         }
 
+        @Override
         public void unregisterDataSetObserver(DataSetObserver observer) {
             if (mAdapter != null) {
                 mAdapter.unregisterDataSetObserver(observer);
@@ -528,6 +539,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
          * If the wrapped SpinnerAdapter is also a ListAdapter, delegate this call.
          * Otherwise, return true.
          */
+        @Override
         public boolean areAllItemsEnabled() {
             final ListAdapter adapter = mListAdapter;
             if (adapter != null) {
@@ -541,6 +553,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
          * If the wrapped SpinnerAdapter is also a ListAdapter, delegate this call.
          * Otherwise, return true.
          */
+        @Override
         public boolean isEnabled(int position) {
             final ListAdapter adapter = mListAdapter;
             if (adapter != null) {
@@ -550,14 +563,17 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
             }
         }
 
+        @Override
         public int getItemViewType(int position) {
             return 0;
         }
 
+        @Override
         public int getViewTypeCount() {
             return 1;
         }
 
+        @Override
         public boolean isEmpty() {
             return getCount() == 0;
         }
@@ -648,6 +664,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
             setModal(true);
             setPromptPosition(POSITION_PROMPT_ABOVE);
             setOnItemClickListener(new OnItemClickListener() {
+                @Override
                 @SuppressWarnings("rawtypes")
                 public void onItemClick(AdapterView parent, View v, int position, long id) {
                     IcsSpinner.this.setSelection(position);
@@ -662,10 +679,12 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
             mAdapter = adapter;
         }
 
+        @Override
         public CharSequence getHintText() {
             return mHintText;
         }
 
+        @Override
         public void setPromptText(CharSequence hintText) {
             // Hint text is ignored for dropdowns, but maintain it here.
             mHintText = hintText;
@@ -696,7 +715,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
             setHorizontalOffset(bgOffset + spinnerPaddingLeft);
             setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
             super.show();
-            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
             setSelection(IcsSpinner.this.getSelectedItemPosition());
         }
     }

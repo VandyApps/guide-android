@@ -118,9 +118,13 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
 
                 }
 
-                Toast.makeText(getActivity(),
-                        "Removed " + checkedSet.size() + " Places from the Agenda",
-                        Toast.LENGTH_LONG).show();
+                if (checkedSet.size() == 1) {
+                    Toast.makeText(getActivity(), "Removed 1 place from the Agenda",
+                            Toast.LENGTH_LONG).show();
+                } else if (checkedSet.size() > 1) {
+                    Toast.makeText(getActivity(), "Removed " + checkedSet.size() + " places from the Agenda",
+                            Toast.LENGTH_LONG).show();
+                }
 
                 v.setVisibility(View.GONE);
                 mEditButton.setVisibility(View.VISIBLE);

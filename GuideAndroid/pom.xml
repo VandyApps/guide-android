@@ -70,6 +70,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <version>2.2.4</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>support-v4</artifactId>
+      <version>r6</version>
+    </dependency>
+
   </dependencies>
 
   <build>

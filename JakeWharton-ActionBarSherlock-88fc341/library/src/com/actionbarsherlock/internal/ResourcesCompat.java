@@ -3,6 +3,7 @@ package com.actionbarsherlock.internal;
 import android.content.Context;
 import android.os.Build;
 import android.util.DisplayMetrics;
+
 import com.actionbarsherlock.R;
 
 public final class ResourcesCompat {

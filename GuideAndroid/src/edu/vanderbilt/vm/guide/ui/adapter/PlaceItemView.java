@@ -23,7 +23,7 @@ public class PlaceItemView extends ItemView {
         View.inflate(ctx, R.layout.place_list_item, this);
 
         mName = (TextView) findViewById(R.id.placelist_item_title);
-        mIcon = (ImageView) findViewById(R.id.placelist_item_thunbnail);
+        mIcon = (ImageView) findViewById(R.id.placelist_item_thumbnail);
         mDistance = (TextView) findViewById(R.id.placelist_item_distance);
 
     }
