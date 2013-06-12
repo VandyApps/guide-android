@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:hint="@string/nav_label5" />
+        android:hint="@string/nav_label5"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/nav_tv2"
@@ -30,6 +31,7 @@
     <AutoCompleteTextView
         android:id="@+id/nav_actv2"
         android:textSize="14sp"
+        android:singleLine="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"

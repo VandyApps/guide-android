@@ -192,7 +192,7 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
                 return false;
         }
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();

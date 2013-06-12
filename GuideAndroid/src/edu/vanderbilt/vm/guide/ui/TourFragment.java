@@ -22,6 +22,8 @@ import edu.vanderbilt.vm.guide.ui.adapter.TourAdapter;
 public class TourFragment extends SherlockFragment {
 
     private GridView mGridView;
+    private Cursor mCursor;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,10 +42,10 @@ public class TourFragment extends SherlockFragment {
                 GuideDBConstants.TourTable.ICON_LOC_COL
         };
         String orderBy = GuideDBConstants.TourTable.NAME_COL + " ASC";
-        final Cursor tourCursor = db.query(GuideDBConstants.TourTable.TOUR_TABLE_NAME, projection,
+        final Cursor mCursor = db.query(GuideDBConstants.TourTable.TOUR_TABLE_NAME, projection,
                 null, null, null, null, orderBy);
 
-        mGridView.setAdapter(new TourAdapter(getActivity(), tourCursor, helper));
+        mGridView.setAdapter(new TourAdapter(getActivity(), mCursor, helper));
 
         mGridView.setOnItemClickListener(new OnItemClickListener() {
 

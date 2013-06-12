@@ -29,6 +29,7 @@ public class AutoPlaceCursorAdapter extends BaseAdapter implements Filterable {
     private int mIdIx;
     
     private static final float TEXT_SIZE = 16;
+    private static final int PADDING = 8; // pixels
 
     public AutoPlaceCursorAdapter(Context context, Cursor c) {
         mContext = context;
@@ -74,9 +75,11 @@ public class AutoPlaceCursorAdapter extends BaseAdapter implements Filterable {
             tv = (TextView) convertView;
         } else {
             tv = new TextView(mContext);
+            tv.setPadding(PADDING, PADDING, PADDING, PADDING);
+            tv.setTextSize(TEXT_SIZE);
         }
+        
         tv.setText(mFiltered.get(position));
-        tv.setTextSize(TEXT_SIZE);
         return tv;
     }
 
