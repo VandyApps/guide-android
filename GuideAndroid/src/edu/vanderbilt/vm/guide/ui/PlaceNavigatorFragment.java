@@ -1,5 +1,9 @@
 package edu.vanderbilt.vm.guide.ui;
 
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.*;
+import edu.vanderbilt.vm.guide.util.Geomancer;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.slf4j.Logger;
@@ -11,9 +15,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.MapVertex;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
@@ -25,7 +26,9 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
     private Cursor mCursor;
     private SQLiteDatabase mDb;
     private AutoCompleteTextView mStartActv, mDestActv;
-    
+    private CheckBox mCheckBox;
+    private boolean mIsShowingPath;
+
     private static final Logger LOGGER = LoggerFactory.getLogger("ui.NavPlaceChooser");
     
     @Override
@@ -38,7 +41,14 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
         super.onActivityCreated(savedInstanceState);
         
         mDb = GlobalState.getReadableDatabase(getActivity());
-        mCursor = mDb.query(GuideDBConstants.PlaceTable.PLACE_TABLE_NAME, new String[] {GuideDBConstants.PlaceTable.NAME_COL, GuideDBConstants.PlaceTable.ID_COL}, null, null, null, null, null);
+        mCursor = mDb.query(
+                GuideDBConstants.PlaceTable.PLACE_TABLE_NAME,
+                new String[] {
+                        GuideDBConstants.PlaceTable.NAME_COL,
+                        GuideDBConstants.PlaceTable.ID_COL,
+                        GuideDBConstants.PlaceTable.LATITUDE_COL,
+                        GuideDBConstants.PlaceTable.LONGITUDE_COL},
+                null, null, null, null, null);
         
         mStartActv = (AutoCompleteTextView) getView().findViewById(R.id.nav_actv1);
         mDestActv = (AutoCompleteTextView) getView().findViewById(R.id.nav_actv2);
@@ -47,20 +57,77 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
         AutoPlaceCursorAdapter adapter2 = new AutoPlaceCursorAdapter(getActivity(), mCursor);
         mStartActv.setAdapter(adapter1);
         mDestActv.setAdapter(adapter2);
-        
+
+        mCheckBox = (CheckBox) getView().findViewById(R.id.nav_cb1);
+        mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {    // Use current location
+                    mStartActv.setEnabled(false);
+                    mStartActv.setText(null);
+                    mStartActv.setHint("Current location"); //TODO use string resource
+
+                } else {            // Allow user input
+                    mStartActv.setEnabled(true);
+                    mStartActv.setHint("Enter name of starting location"); //TODO use string resource
+                }
+
+            }
+        });
+
+        mIsShowingPath = false;
+
         Button navBtn = (Button)getView().findViewById(R.id.nav_btn);
         navBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Toggle view state
+                View layout = getView();
+                if (mIsShowingPath) {
+                    layout.findViewById(R.id.nav_ll_destination).setVisibility(View.VISIBLE);
+                    layout.findViewById(R.id.nav_ll_start).setVisibility(View.VISIBLE);
+                    ((Button) v).setText("Find Path");
+                    mIsShowingPath = false;
+                    return;
+
+                } else {
+                    layout.findViewById(R.id.nav_ll_start).setVisibility(View.GONE);
+                    layout.findViewById(R.id.nav_ll_destination).setVisibility(View.GONE);
+                    ((Button) v).setText("Do Another Search");
+                    mIsShowingPath = true;
+
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mStartActv.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(mDestActv.getWindowToken(), 0);
+                }
+
+
                 String startName = mStartActv.getText().toString();
                 String destName = mDestActv.getText().toString();
 
                 // Return on the trivial case
-                if (startName == null  || destName == null || 
-                        startName.length() == 0 || destName.length() == 0) return;
+                if ((!mCheckBox.isChecked() && (startName == null || startName.length() == 0))  ||
+                        destName == null || destName.length() == 0)
+                    return;
+
+                int startId = -1, destId = -1;
+
+                // Get current location if requested
+                if (mCheckBox.isChecked()) {
+                    mCursor.moveToPosition(
+                            Geomancer.findClosestPlace(
+                                    Geomancer.getDeviceLocation(),
+                                    mCursor));
+                    startId = mCursor.getInt(
+                            mCursor.getColumnIndex(
+                                    GuideDBConstants.PlaceTable.ID_COL));
+                }
+
 
                 // Do a linear search through mCursor for the two place IDs
-                int startId = -1, destId = -1;
                 synchronized (mCursor) {
                     int nameIx = mCursor.getColumnIndex(GuideDBConstants.PlaceTable.NAME_COL);
                     int idIx = mCursor.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
@@ -94,6 +161,7 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
                 MapVertex destVertex = GlobalState.getMapVertexWithId(destId);
 
                 mMapper.mapGraph(GlobalState.shortestPath(graph, startVertex, destVertex));
+
             }
             
         });

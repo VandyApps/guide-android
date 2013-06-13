@@ -78,7 +78,7 @@ public class AutoPlaceCursorAdapter extends BaseAdapter implements Filterable {
             tv.setPadding(PADDING, PADDING, PADDING, PADDING);
             tv.setTextSize(TEXT_SIZE);
         }
-        
+
         tv.setText(mFiltered.get(position));
         return tv;
     }
