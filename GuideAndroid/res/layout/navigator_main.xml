@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#FFFFDC" >
-    
-    <LinearLayout 
-        android:id="@+id/nav_chooser"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content" >
-        
-    </LinearLayout>
-	
+
     <LinearLayout 
         android:id="@+id/nav_map"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="100" >
+        android:layout_height="match_parent" >
         
     </LinearLayout>
-    
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nav_chooser"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content" >
+
+    </LinearLayout>
+
+</RelativeLayout>
