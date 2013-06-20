@@ -93,8 +93,6 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
 
                 } else {
 
-
-
                     layout.findViewById(R.id.nav_ll_start).setVisibility(View.GONE);
                     ((Button) v).setText("Do Another Search");              //TODO use string resource
                     mIsShowingPath = true;
@@ -158,10 +156,10 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
                 MapVertex destVertex = GlobalState.getMapVertexWithId(destId);
 
                 mMapper.mapGraph(GlobalState.shortestPath(graph, startVertex, destVertex));
-
+                /*
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
                         Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);*/
 
             }
             

@@ -45,8 +45,8 @@ import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 import edu.vanderbilt.vm.guide.util.GuideConstants;
 
-public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickListener,
-        OnMarkerClickListener, IGraphMapper {
+public class AgendaMapFrag extends SupportMapFragment
+        implements OnMapLongClickListener, OnMarkerClickListener, IGraphMapper {
 
     // @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger("ui.AgendaMapFrag");
@@ -160,11 +160,13 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
                 mMenu.findItem(R.id.map_menu_add_agenda).setVisible(false);
                 mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(true);
                 return true;
+
             case R.id.map_menu_remove_agenda:
                 MapViewer.removeFromAgenda(getActivity(), mPlaceIdFocused);
                 mMenu.findItem(R.id.map_menu_add_agenda).setVisible(true);
                 mMenu.findItem(R.id.map_menu_remove_agenda).setVisible(false);
                 return true;
+
             default:
                 return false;
         }
@@ -337,22 +339,37 @@ public class AgendaMapFrag extends SupportMapFragment implements OnMapLongClickL
         GoogleMap map = getMap();
         map.clear();
         for (MapVertex mv : graph.vertexSet()) {
+
             if (mv.id <= GuideConstants.MAX_PLACE_ID) {
-                map.addMarker(new MarkerOptions().position(new LatLng(mv.lat, mv.lon))
-                        .title(DBUtils.getPlaceNameById(mv.id, GlobalState.getReadableDatabase(getActivity())))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                map.addMarker(
+                        new MarkerOptions().
+                                position(new LatLng(mv.lat, mv.lon)).
+                                title(DBUtils.getPlaceNameById(
+                                        mv.id,
+                                        GlobalState.getReadableDatabase(getActivity()))).
+                                icon(BitmapDescriptorFactory.
+                                        defaultMarker(BitmapDescriptorFactory.HUE_AZURE))); }
+            else {
+                map.addMarker(
+                        new MarkerOptions().
+                                position(new LatLng(mv.lat, mv.lon)).
+                                icon(BitmapDescriptorFactory.
+                                        fromResource(R.drawable.nodemarker)).
+                                anchor(0.5f, 0.5f));
             }
         }
         mapEdges(map, graph);
     }
     
-    private void mapEdges(GoogleMap map, SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> graph) {
+    private static void mapEdges(GoogleMap map, SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> graph) {
         for (DefaultWeightedEdge e : graph.edgeSet()) {
             MapVertex mv1 = graph.getEdgeSource(e);
             MapVertex mv2 = graph.getEdgeTarget(e);
-            PolylineOptions opts = new PolylineOptions();
-            opts.add(new LatLng(mv1.lat, mv1.lon)).add(new LatLng(mv2.lat, mv2.lon));
-            map.addPolyline(opts);
+
+            map.addPolyline(new PolylineOptions().
+                    add(new LatLng(mv1.lat, mv1.lon)).
+                    add(new LatLng(mv2.lat, mv2.lon)).
+                    width(5.0f));
         }
     }
 
