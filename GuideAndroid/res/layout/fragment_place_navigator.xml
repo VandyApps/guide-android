@@ -38,16 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:animateLayoutChanges="true"
-        android:id="@+id/nav_ll_destination"
-        android:layout_width="match_parent"
-        android:layout_margin="8dp"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-
         <TextView
             android:id="@+id/nav_tv2"
             style="@style/description_text"
@@ -65,7 +55,6 @@
             android:hint="@string/nav_label6" />
 
     </LinearLayout>
-
 
     <Button
         android:animateLayoutChanges="true"

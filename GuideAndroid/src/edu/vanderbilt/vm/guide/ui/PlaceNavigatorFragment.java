@@ -86,22 +86,19 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
                 // Toggle view state
                 View layout = getView();
                 if (mIsShowingPath) {
-                    layout.findViewById(R.id.nav_ll_destination).setVisibility(View.VISIBLE);
                     layout.findViewById(R.id.nav_ll_start).setVisibility(View.VISIBLE);
-                    ((Button) v).setText("Find Path");
+                    ((Button) v).setText("Find Path");              //TODO use string resource
                     mIsShowingPath = false;
                     return;
 
                 } else {
+
+
+
                     layout.findViewById(R.id.nav_ll_start).setVisibility(View.GONE);
-                    layout.findViewById(R.id.nav_ll_destination).setVisibility(View.GONE);
-                    ((Button) v).setText("Do Another Search");
+                    ((Button) v).setText("Do Another Search");              //TODO use string resource
                     mIsShowingPath = true;
 
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mStartActv.getWindowToken(), 0);
-                    imm.hideSoftInputFromWindow(mDestActv.getWindowToken(), 0);
                 }
 
 
@@ -161,6 +158,10 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
                 MapVertex destVertex = GlobalState.getMapVertexWithId(destId);
 
                 mMapper.mapGraph(GlobalState.shortestPath(graph, startVertex, destVertex));
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
 
             }
             

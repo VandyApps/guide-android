@@ -1,6 +1,7 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import android.os.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +46,8 @@ public class PlaceDetailerFragment extends SherlockFragment {
 
     private boolean isOnAgenda = false;
 
+    private Handler mHandler;
+
     private static final Logger logger = LoggerFactory.getLogger("ui.PlaceDetailerFragment");
 	
     private static final String PLC_ID = "id";
@@ -52,8 +55,9 @@ public class PlaceDetailerFragment extends SherlockFragment {
     /**
      * Create a new instance of the PlaceDetail fragment. This method returns a
      * Fragment which you can add to a ViewGroup.
-     * 
-     * @param placeId the UniqueId of the place to be detailed.
+     *
+     * @param ctx
+     * @param id the UniqueId of the place to be detailed.
      * @return
      */
     static PlaceDetailerFragment newInstance(Context ctx, int id) {
@@ -78,6 +82,7 @@ public class PlaceDetailerFragment extends SherlockFragment {
         super.onActivityCreated(savedInstanceState);
 
         setHasOptionsMenu(true);
+        mHandler = new Handler();
 
         if (mPlace == null) {
             Bundle args = getArguments();
@@ -183,6 +188,16 @@ public class PlaceDetailerFragment extends SherlockFragment {
 
         logger.trace("Starting image download task");
         mDlTask = new ImageDownloader.BitmapDownloaderTask(ivPlaceImage);
+
+        mDlTask.setRunOnFinishDownload(new Runnable() {
+            @Override public void run() {
+                mHandler.postDelayed(
+                        new Runnable() {
+                            @Override public void run() {
+                                ivPlaceImage.setVisibility(View.VISIBLE); }},
+
+                        500); }}); // MAGIC
+
         mDlTask.execute(mPlace.getPictureLoc());
     }
 

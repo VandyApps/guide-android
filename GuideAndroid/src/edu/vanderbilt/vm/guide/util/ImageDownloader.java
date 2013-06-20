@@ -48,9 +48,15 @@ public class ImageDownloader {
         private String url;
 
         private final WeakReference<ImageView> imageViewReference;
+        private Runnable mOnFinishDownload;
 
         public BitmapDownloaderTask(ImageView imageView) {
             imageViewReference = new WeakReference<ImageView>(imageView);
+            mOnFinishDownload = null;
+        }
+
+        public void setRunOnFinishDownload(Runnable run) {
+            mOnFinishDownload = run;
         }
 
         @Override
@@ -72,6 +78,10 @@ public class ImageDownloader {
                 if (imageView != null && bitmap != null) {
                     imageView.setImageBitmap(bitmap);
                 }
+            }
+
+            if (mOnFinishDownload != null) {
+                mOnFinishDownload.run();
             }
         }
     }
