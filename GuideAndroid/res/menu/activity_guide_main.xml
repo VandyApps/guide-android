@@ -25,8 +25,5 @@
         android:icon="@android:drawable/ic_menu_search"
         android:showAsAction="always|collapseActionView"
         android:title="Search" />
-    <item
-        android:id="@+id/menu_editor"
-        android:title="Editor" />
-    
+        
 </menu>

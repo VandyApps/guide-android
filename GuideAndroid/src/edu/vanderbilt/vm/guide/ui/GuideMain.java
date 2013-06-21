@@ -162,11 +162,6 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
             SearchDialog.newInstance(this).show(getSupportFragmentManager(), "search_dialog");
             return true;
 
-        case R.id.menu_editor:
-            ActTourEditor.open(this);
-            return true;
-
-
             default:
                 return false;
         }

@@ -67,10 +67,6 @@
             android:name=".ui.GraphUtilsDebugActivity"
             android:label="Graph Debugger" >
         </activity>
-        <activity
-            android:name=".ui.ActTourEditor"
-            android:label="Tour Editor" >
-        </activity>
 
         <provider
             android:name=".db.GuideContentProvider"
