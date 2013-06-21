@@ -341,21 +341,19 @@ public class AgendaMapFrag extends SupportMapFragment
         for (MapVertex mv : graph.vertexSet()) {
 
             if (mv.id <= GuideConstants.MAX_PLACE_ID) {
-                map.addMarker(
-                        new MarkerOptions().
-                                position(new LatLng(mv.lat, mv.lon)).
-                                title(DBUtils.getPlaceNameById(
-                                        mv.id,
-                                        GlobalState.getReadableDatabase(getActivity()))).
-                                icon(BitmapDescriptorFactory.
-                                        defaultMarker(BitmapDescriptorFactory.HUE_AZURE))); }
+                map.addMarker(new MarkerOptions().
+                        position(new LatLng(mv.lat, mv.lon)).
+                        title(DBUtils.getPlaceNameById(
+                                mv.id,
+                                GlobalState.getReadableDatabase(getActivity()))).
+                        icon(BitmapDescriptorFactory.
+                                defaultMarker(BitmapDescriptorFactory.HUE_AZURE))); }
             else {
-                map.addMarker(
-                        new MarkerOptions().
-                                position(new LatLng(mv.lat, mv.lon)).
-                                icon(BitmapDescriptorFactory.
-                                        fromResource(R.drawable.nodemarker)).
-                                anchor(0.5f, 0.5f));
+                map.addMarker(new MarkerOptions().
+                        position(new LatLng(mv.lat, mv.lon)).
+                        icon(BitmapDescriptorFactory.
+                                fromResource(R.drawable.nodemarker)).
+                        anchor(0.5f, 0.5f));
             }
         }
         mapEdges(map, graph);
