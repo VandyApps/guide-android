@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<edu.vanderbilt.vm.guide.ui.CyclingTourGridItem
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp" >
+
+    <edu.vanderbilt.vm.guide.ui.SquareImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/home"
+        android:scaleType="centerCrop"
+        android:id="@+id/ctgi_iv1"
+        android:contentDescription="" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/ctgi_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:padding="4dp"
+        android:background="#000000"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:alpha="0.8"/>
+
+</edu.vanderbilt.vm.guide.ui.CyclingTourGridItem>

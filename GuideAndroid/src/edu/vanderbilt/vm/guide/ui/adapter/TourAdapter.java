@@ -123,6 +123,7 @@ public class TourAdapter extends BaseAdapter {
                 name = "Unnamed Tour";
             }
             holder.tv.setText(name);
+
         } else {
             throw new IndexOutOfBoundsException();
         }

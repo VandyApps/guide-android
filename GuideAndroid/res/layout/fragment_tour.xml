@@ -3,11 +3,10 @@
     android:id="@+id/tour_grid_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnWidth="90dp"
+
     android:gravity="center"
     android:background="@color/light_gold"
-    android:horizontalSpacing="10dp"
-    android:numColumns="auto_fit"
-    android:stretchMode="columnWidth"
-    android:verticalSpacing="10dp"
-    android:paddingTop="10dp" />
+
+    android:numColumns="2"
+    android:stretchMode="columnWidth" />
+

@@ -67,8 +67,11 @@ public class TourDetailer extends SherlockFragmentActivity {
             return;
         }
 
-        mCursor = mHelper.getReadableDatabase().query(GuideDBConstants.TourTable.TOUR_TABLE_NAME,
-                null, GuideDBConstants.TourTable.ID_COL + " = " + tourId, null, null, null, null);
+        mCursor = mHelper.getReadableDatabase().query(
+                GuideDBConstants.TourTable.TOUR_TABLE_NAME,
+                null,
+                GuideDBConstants.TourTable.ID_COL + " = " + tourId,
+                null, null, null, null);
 
         if (!mCursor.moveToFirst()) {
             logger.error("Got an empty cursor for selection of tour with id {}", tourId);

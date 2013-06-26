@@ -1,6 +1,7 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
+import android.util.Log;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.annotation.SuppressLint;
@@ -16,6 +17,7 @@ import android.widget.GridView;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
+import edu.vanderbilt.vm.guide.ui.adapter.CardTourAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.TourAdapter;
 
 @SuppressLint("NewApi")
@@ -33,19 +35,23 @@ public class TourFragment extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ///Log.i("TourFragment", "onActivityCreated");
+
         mGridView = (GridView)getView().findViewById(R.id.tour_grid_view);
 
         GuideDBOpenHelper helper = new GuideDBOpenHelper(getActivity());
         SQLiteDatabase db = helper.getReadableDatabase();
         String[] projection = {
-                GuideDBConstants.TourTable.ID_COL, GuideDBConstants.TourTable.NAME_COL,
-                GuideDBConstants.TourTable.ICON_LOC_COL
+                GuideDBConstants.TourTable.ID_COL,
+                GuideDBConstants.TourTable.NAME_COL,
+                GuideDBConstants.TourTable.ICON_LOC_COL,
+                GuideDBConstants.TourTable.PLACES_ON_TOUR_COL
         };
         String orderBy = GuideDBConstants.TourTable.NAME_COL + " ASC";
         final Cursor mCursor = db.query(GuideDBConstants.TourTable.TOUR_TABLE_NAME, projection,
                 null, null, null, null, orderBy);
 
-        mGridView.setAdapter(new TourAdapter(getActivity(), mCursor, helper));
+        mGridView.setAdapter(new CardTourAdapter(getActivity(), mCursor, helper));
 
         mGridView.setOnItemClickListener(new OnItemClickListener() {
 
