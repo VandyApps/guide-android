@@ -258,7 +258,7 @@ public class DBUtils {
      */
     public static Agenda getAgendaFromIds(String placeIds, SQLiteDatabase db) {
         if (placeIds == null || placeIds.equals("")) {
-            return null;
+            return new Agenda(); // Empty Agenda
         }
         String[] placeIdStrings = placeIds.split(",");
         int[] placeIdInts = new int[placeIdStrings.length];
@@ -279,7 +279,7 @@ public class DBUtils {
      */
     public static Agenda getAgendaFromIds(int[] placeIds, SQLiteDatabase db) {
         if (placeIds == null || placeIds.length == 0) {
-            return null;
+            return new Agenda(); // Empty Agenda
         }
         Place[] placeArr = getPlaceArrayById(placeIds, db);
         Agenda agenda = new Agenda();
@@ -299,8 +299,11 @@ public class DBUtils {
      * @return A Cursor of call places in the database with the given columns
      */
     public static Cursor getAllPlaces(String[] columns, SQLiteDatabase db) {
-        return db.query(GuideDBConstants.PlaceTable.PLACE_TABLE_NAME, columns, null, null, null,
-                null, GuideDBConstants.PlaceTable.NAME_COL);
+        return db.query(
+                GuideDBConstants.PlaceTable.PLACE_TABLE_NAME,
+                columns,
+                null, null, null, null,
+                GuideDBConstants.PlaceTable.NAME_COL);
     }
 
 }

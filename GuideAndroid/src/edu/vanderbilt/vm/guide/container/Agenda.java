@@ -197,6 +197,11 @@ public class Agenda implements Iterable<Place> {
         cursor.close();
         return agenda;
     }
+
+    @Override
+    public String toString() {
+        return mPlaces.toString();
+    }
     
 }
 

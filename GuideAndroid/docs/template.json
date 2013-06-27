@@ -28,4 +28,8 @@ Tour JSON template:
 
 Notes: 
 placesOnTour expects an array of place IDs
-iconPath should be the name of the file without the extension (for now).  For example, "tourIcon.png" should just be written in the JSON as "tourIcon"	
+iconPath should be the name of the file without the extension (for now).  For example, "tourIcon.png" should just be written in the JSON as "tourIcon"
+
+Dead Images:
+	id:34 http://www.vanderbilt.edu/map/images/32.jpg
+	id:147 http://www.vanderbilt.edu/map/images/39b.jpg

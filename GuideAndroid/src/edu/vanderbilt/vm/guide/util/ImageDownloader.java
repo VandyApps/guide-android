@@ -105,8 +105,11 @@ public class ImageDownloader {
                 InputStream inputStream = null;
                 try {
                     inputStream = entity.getContent();
-                    final Bitmap bitmap = BitmapFactory.decodeStream(new FlushedInputStream(
-                            inputStream));
+
+                    // Bitmap decoding
+                    final Bitmap bitmap = BitmapFactory.decodeStream(
+                            new FlushedInputStream(inputStream));
+
                     logger.trace("Returning a bitmap");
                     return bitmap;
                 } finally {

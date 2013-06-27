@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import edu.vanderbilt.vm.guide.R;
+import edu.vanderbilt.vm.guide.container.Agenda;
+import edu.vanderbilt.vm.guide.container.Place;
 import edu.vanderbilt.vm.guide.ui.adapter.CardTourAdapter;
 import edu.vanderbilt.vm.guide.util.ImageDownloader;
 
@@ -70,7 +72,7 @@ public void setView(CardTourAdapter.TourRecord record) {
     mPosition = 0;
     mTourName.setText(record.mTour.getName());
 
-    if (!mIsRunning) {
+    if (!mIsRunning && record.mImageList.length != 0) {
         mIsRunning = true;
         mHandler.post(mImageCycler); }
 
@@ -106,11 +108,20 @@ private void postImageAdvance() {
     }
 
     // post with a slight randomization, for giggles
-    mHandler.postDelayed(mImageCycler, 5000 + mGenerator.nextInt(500));
+    mHandler.postDelayed(mImageCycler, 4000 + mGenerator.nextInt(500));
 }
 
 private String getImageLoc(int position) {
-    return mRecord.mTour.getAgenda().get(position).getPictureLoc();
+    Agenda a = mRecord.mTour.getAgenda();
+    Place p = a.get(position);
+
+    if (p == null) {
+        throw new IllegalStateException(
+                "There is a null object in Tour#" + mRecord.mTour.getUniqueId() + " at position: " + position +
+                        ". Agenda: " + mRecord.mTour.getAgenda().toString());
+    }
+
+    return p.getPictureLoc();
 }
 
 }

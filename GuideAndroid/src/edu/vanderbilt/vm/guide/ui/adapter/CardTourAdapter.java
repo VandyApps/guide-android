@@ -29,10 +29,15 @@ public CardTourAdapter(Context context, Cursor tourCursor, GuideDBOpenHelper hel
     tourCursor.moveToFirst();
 
     do {
-        mRecords.add(new TourRecord(
+        TourRecord r = new TourRecord(
                 DBUtils.getTourFromCursor(
                         tourCursor,
-                        helper.getReadableDatabase()))); } /* CONFESSION BEAR : I LOVE LISP */
+                        helper.getReadableDatabase()));
+
+        logger.info("Tour#" + r.mTour.getUniqueId()  +  " : " + r.mTour.getAgenda().toString());
+
+        mRecords.add(r);
+         } /* CONFESSION BEAR : I LOVE LISP */
 
     while (tourCursor.moveToNext());
 }

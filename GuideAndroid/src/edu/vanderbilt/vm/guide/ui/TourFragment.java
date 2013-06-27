@@ -51,7 +51,7 @@ public class TourFragment extends SherlockFragment {
         final Cursor mCursor = db.query(GuideDBConstants.TourTable.TOUR_TABLE_NAME, projection,
                 null, null, null, null, orderBy);
 
-        mGridView.setAdapter(new CardTourAdapter(getActivity(), mCursor, helper));
+        mGridView.setAdapter(new TourAdapter(getActivity(), mCursor, helper));
 
         mGridView.setOnItemClickListener(new OnItemClickListener() {
 
