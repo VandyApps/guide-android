@@ -135,7 +135,7 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
             }
         });
 
-        mRoot.findViewById(R.id.current_ll).setOnClickListener(new View.OnClickListener() {
+        mRoot.findViewById(R.id.current_ll_ref).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PlaceDetailer.open(getActivity(), mCurrentPlace.getUniqueId());
@@ -230,7 +230,7 @@ public class AgendaFragment extends SherlockFragment implements GeomancerListene
             desc = desc.substring(0, DESCRIPTION_LENGTH).concat("...");
         }
         
-        ((TextView) mRoot.findViewById(R.id.current_tv_name)).setText(
+        ((TextView) mRoot.findViewById(R.id.location_prev_desc)).setText(
                 Html.fromHtml("<b>" + mCurrentPlace.getName() + "</b> " + desc));
         
         ImageView iv = (ImageView)mRoot.findViewById(R.id.current_img);

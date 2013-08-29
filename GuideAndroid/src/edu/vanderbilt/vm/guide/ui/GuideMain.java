@@ -113,7 +113,6 @@ public class GuideMain extends SherlockFragmentActivity implements SearchConfigR
         mAction.setDisplayShowTitleEnabled(true);
         mAction.setBackgroundDrawable(GuideConstants.DECENT_GOLD);
         mAction.setSplitBackgroundDrawable(GuideConstants.DECENT_GOLD);
-        mAction.setTitle(getResources().getText(R.string.university_name));
         
         Tab tab;
         tab = mAction

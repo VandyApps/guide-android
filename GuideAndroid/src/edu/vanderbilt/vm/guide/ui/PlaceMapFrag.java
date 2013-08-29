@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,7 +39,7 @@ public class PlaceMapFrag extends SupportMapFragment {
      */
     public static PlaceMapFrag newInstance(Context ctx, Place plc) {
 
-        PlaceMapFrag frag = (PlaceMapFrag) SupportMapFragment.instantiate(ctx,
+        PlaceMapFrag frag = (PlaceMapFrag) Fragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.PlaceMapFrag");
         frag.mPlace = plc;
         frag.setHasOptionsMenu(true);

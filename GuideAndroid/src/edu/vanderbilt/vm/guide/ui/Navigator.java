@@ -50,6 +50,7 @@ public class Navigator extends SherlockFragmentActivity {
 
                 // Provide a listener to be called when an item is selected.
                 new ActionBar.OnNavigationListener() {
+                    @Override
                     public boolean onNavigationItemSelected(
                             int position, long id) {
                         // Take action here, e.g. switching to the
@@ -86,7 +87,7 @@ public class Navigator extends SherlockFragmentActivity {
     }
     
     private void switchFragments(int position, long id) {
-        // TODO: Cache fragments instead of always creating new ones
+        mAgendaMapFrag.clearMap();
         switch (position) {
             case 0:
                 // Travel from Place to Place

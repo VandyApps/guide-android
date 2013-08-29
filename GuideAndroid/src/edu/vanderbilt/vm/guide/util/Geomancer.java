@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,6 +19,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import edu.vanderbilt.vm.guide.annotations.NeedsTesting;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
+import edu.vanderbilt.vm.guide.db.GuideDBConstants.NodeTable;
 import edu.vanderbilt.vm.guide.ui.listener.GeomancerListener;
 
 /**
@@ -56,7 +58,7 @@ public class Geomancer {
             logger.info("Receiving location at lat/lon {},{}", location.getLatitude(),
                     location.getLongitude());
 
-            alertTheGuards(location);
+            notifyObservers(location);
 
         }
 
@@ -80,7 +82,7 @@ public class Geomancer {
 
     private static Location sDefaultLocation;
 
-    private static ArrayList<GeomancerListener> mPadawan = new ArrayList<GeomancerListener>();
+    private static ArrayList<GeomancerListener> mListeners = new ArrayList<GeomancerListener>();
 
     /**
      * Find the closest place in the placeCursor to the given location
@@ -115,6 +117,55 @@ public class Geomancer {
             if (dist < shortestDist) {
                 shortestDist = dist;
                 closestIx = placeCursor.getPosition();
+            }
+        }
+
+        return closestIx;
+    }
+
+    public static int findClosestNodeId(Location location, Context c) {
+        SQLiteDatabase db = GlobalState.getReadableDatabase(c);
+        Cursor nodeCursor = db.query(NodeTable.NODE_TABLE_NAME, new String[] {
+                NodeTable.ID_COL, NodeTable.LAT_COL, NodeTable.LON_COL
+        }, null, null, null, null, null);
+        
+        nodeCursor.moveToPosition(findClosestNode(location, nodeCursor));
+        return nodeCursor.getInt(nodeCursor.getColumnIndex(NodeTable.ID_COL));
+    }
+
+    /**
+     * Find the closest node in the nodeCursor to the given location
+     * 
+     * @param location The location to find the closest node to
+     * @param nodeCursor The cursor containing the nodes to search for
+     * @return The position in the cursor of the closest node
+     */
+    public static int findClosestNode(Location location, Cursor nodeCursor) {
+        if (!nodeCursor.moveToFirst()) {
+            // Cursor was empty
+            return -1;
+        }
+
+        int latIx = nodeCursor.getColumnIndex(GuideDBConstants.NodeTable.LAT_COL);
+        int lonIx = nodeCursor.getColumnIndex(GuideDBConstants.NodeTable.LON_COL);
+
+        if (latIx == -1 || lonIx == -1) {
+            throw new SQLException("Cursor must have a lat and lon column");
+        }
+
+        double lat = nodeCursor.getDouble(latIx);
+        double lon = nodeCursor.getDouble(lonIx);
+        double shortestDist = findDistance(location.getLatitude(), location.getLongitude(), lat,
+                lon);
+        int closestIx = 0;
+
+        while (nodeCursor.moveToNext()) {
+            lat = nodeCursor.getDouble(latIx);
+            lon = nodeCursor.getDouble(lonIx);
+            double dist = findDistance(location.getLatitude(), location.getLongitude(), lat, lon);
+            if (dist < shortestDist) {
+                shortestDist = dist;
+                closestIx = nodeCursor.getPosition();
             }
         }
 
@@ -193,6 +244,7 @@ public class Geomancer {
             sDefaultLocation.setTime((new Date()).getTime());
             sCurrLocation = sDefaultLocation;
         }
+        
 
         return sCurrLocation;
     }
@@ -206,7 +258,7 @@ public class Geomancer {
      */
     public static void setDeviceLocation(Location loc) {
         sCurrLocation = loc;
-        alertTheGuards(loc);
+        notifyObservers(loc);
     }
 
     static {
@@ -225,9 +277,9 @@ public class Geomancer {
      * @param listener The Activity that implements GeomancerListener
      */
     public static void registerGeomancerListener(GeomancerListener listener) {
-        mPadawan.add(listener);
+        mListeners.add(listener);
 
-        if (mPadawan.size() == 1) {
+        if (mListeners.size() == 1) {
             String provider = sLocationManager.getBestProvider(getCriteriaA(), true);
             if (provider != null) {
                 sLocationManager.requestLocationUpdates(provider, DEFAULT_TIMEOUT, DEFAULT_RADIUS,
@@ -239,16 +291,16 @@ public class Geomancer {
     }
 
     public static void removeGeomancerListener(GeomancerListener listener) {
-        mPadawan.remove(listener);
+        mListeners.remove(listener);
 
-        if (mPadawan.isEmpty()) {
+        if (mListeners.isEmpty()) {
             sLocationManager.removeUpdates(mLocListener);
         }
     }
 
-    private static void alertTheGuards(Location loc) {
-        for (GeomancerListener anakin : mPadawan) {
-            anakin.updateLocation(loc);
+    private static void notifyObservers(Location loc) {
+        for (GeomancerListener observer : mListeners) {
+            observer.updateLocation(loc);
         }
     }
 
@@ -261,5 +313,5 @@ public class Geomancer {
         crit.setCostAllowed(true);
         return crit;
     }
-    
+
 }

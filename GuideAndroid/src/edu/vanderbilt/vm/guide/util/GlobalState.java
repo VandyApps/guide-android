@@ -1,9 +1,11 @@
 
 package edu.vanderbilt.vm.guide.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -14,12 +16,15 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import edu.vanderbilt.vm.guide.container.Agenda;
 import edu.vanderbilt.vm.guide.container.MapVertex;
+import edu.vanderbilt.vm.guide.container.Place;
+import edu.vanderbilt.vm.guide.container.Route;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants.NodeTable;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
 
@@ -247,6 +252,73 @@ public class GlobalState {
         graph.removeVertex(start);
         graph.removeVertex(end);
         return path;
+    }
+
+    public static Route findRoute(Location deviceLoc, Agenda agenda, Context c) {
+        logger.trace("Finding route through agenda.");
+        if (agenda == null || agenda.size() == 0) {
+            logger.trace("{}", (agenda == null) ? "Agenda parameter null" : "Agenda size 0");
+            return null;
+        }
+        // Load the Agenda into a list for route calculation
+        // Find closest place
+        List<Place> unusedPlaceList = new ArrayList<Place>(agenda.size()), orderedPlaceList = new ArrayList<Place>(
+                agenda.size());
+        Place closestPlace = null;
+        double minDist = Double.POSITIVE_INFINITY, deviceLat = deviceLoc.getLatitude(), deviceLon = deviceLoc
+                .getLongitude();
+        for (Place place : agenda) {
+            double dist = Geomancer.findDistance(place.getLatitude(), place.getLongitude(),
+                    deviceLat, deviceLon);
+            if (dist < minDist) {
+                minDist = dist;
+                closestPlace = place;
+            }
+            unusedPlaceList.add(place);
+        }
+        
+        logger.debug("Closest place to device location: {}", closestPlace.getName());
+
+        SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> rtGraph = new SimpleWeightedGraph<MapVertex, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
+
+        int startNodeId = Geomancer.findClosestNodeId(deviceLoc, c);
+        SimpleWeightedGraph<MapVertex, DefaultWeightedEdge> path = shortestPath(
+                getWeightedGraph(c), getMapVertexWithId(startNodeId),
+                getMapVertexWithId(closestPlace.getUniqueId()));
+        // Union the path and the route graph
+        Graphs.addGraph(rtGraph, path);
+        // Update the place lists
+        unusedPlaceList.remove(closestPlace);
+        orderedPlaceList.add(closestPlace);
+
+        // XXX: This loop needs to be refactored to make this code more DRY
+        while (!unusedPlaceList.isEmpty()) {
+            Place currentPlace = closestPlace;
+            // Find the closest place to the place we most recently added
+            // to the route
+            minDist = Double.POSITIVE_INFINITY;
+            for (Place place : unusedPlaceList) {
+                double dist = Geomancer.findDistance(currentPlace.getLatitude(),
+                        currentPlace.getLongitude(), place.getLatitude(), place.getLongitude());
+                if (dist < minDist) {
+                    closestPlace = place;
+                    minDist = dist;
+                }
+            }
+            logger.debug("Closest place to {}: {}", currentPlace.getName(), closestPlace.getName());
+            path = shortestPath(getWeightedGraph(c),
+                    getMapVertexWithId(currentPlace.getUniqueId()),
+                    getMapVertexWithId(closestPlace.getUniqueId()));
+            // Union the path and the route graph
+            Graphs.addGraph(rtGraph, path);
+            // Update the place lists
+            unusedPlaceList.remove(closestPlace);
+            orderedPlaceList.add(closestPlace);
+        }
+        
+        return new Route(orderedPlaceList, rtGraph);
+
     }
 
     public static double distanceBetween(LatLng point1, LatLng point2) {

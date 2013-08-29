@@ -1,9 +1,5 @@
 package edu.vanderbilt.vm.guide.ui;
 
-import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
-import edu.vanderbilt.vm.guide.util.Geomancer;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.slf4j.Logger;
@@ -15,17 +11,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.container.MapVertex;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.ui.adapter.AutoPlaceCursorAdapter;
+import edu.vanderbilt.vm.guide.util.Geomancer;
 import edu.vanderbilt.vm.guide.util.GlobalState;
 
 public class PlaceNavigatorFragment extends NavigatorFragment {
     
-    private Cursor mCursor;
+    private Cursor mPlaceCursor, mNodeCursor;
     private SQLiteDatabase mDb;
     private AutoCompleteTextView mStartActv, mDestActv;
+    private LinearLayout mLocationLL;
     private CheckBox mCheckBox;
     private boolean mIsShowingPath;
 
@@ -41,7 +45,7 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
         super.onActivityCreated(savedInstanceState);
         
         mDb = GlobalState.getReadableDatabase(getActivity());
-        mCursor = mDb.query(
+        mPlaceCursor = mDb.query(
                 GuideDBConstants.PlaceTable.PLACE_TABLE_NAME,
                 new String[] {
                         GuideDBConstants.PlaceTable.NAME_COL,
@@ -49,12 +53,18 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
                         GuideDBConstants.PlaceTable.LATITUDE_COL,
                         GuideDBConstants.PlaceTable.LONGITUDE_COL},
                 null, null, null, null, null);
+        mNodeCursor = mDb.query(GuideDBConstants.NodeTable.NODE_TABLE_NAME,
+                new String[] {
+                        GuideDBConstants.NodeTable.LAT_COL,
+                        GuideDBConstants.NodeTable.LON_COL,
+                        GuideDBConstants.NodeTable.ID_COL },
+                null, null, null, null, null);
         
         mStartActv = (AutoCompleteTextView) getView().findViewById(R.id.nav_actv1);
         mDestActv = (AutoCompleteTextView) getView().findViewById(R.id.nav_actv2);
         
-        AutoPlaceCursorAdapter adapter1 = new AutoPlaceCursorAdapter(getActivity(), mCursor);
-        AutoPlaceCursorAdapter adapter2 = new AutoPlaceCursorAdapter(getActivity(), mCursor);
+        AutoPlaceCursorAdapter adapter1 = new AutoPlaceCursorAdapter(getActivity(), mPlaceCursor);
+        AutoPlaceCursorAdapter adapter2 = new AutoPlaceCursorAdapter(getActivity(), mPlaceCursor);
         mStartActv.setAdapter(adapter1);
         mDestActv.setAdapter(adapter2);
 
@@ -77,6 +87,8 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
         });
 
         mIsShowingPath = false;
+        
+        mLocationLL = (LinearLayout)getView().findViewById(R.id.nav_ll_start);
 
         Button navBtn = (Button)getView().findViewById(R.id.nav_btn);
         navBtn.setOnClickListener(new View.OnClickListener() {
@@ -84,16 +96,15 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
             public void onClick(View v) {
 
                 // Toggle view state
-                View layout = getView();
                 if (mIsShowingPath) {
-                    layout.findViewById(R.id.nav_ll_start).setVisibility(View.VISIBLE);
+                    mLocationLL.setVisibility(View.VISIBLE);
                     ((Button) v).setText("Find Path");              //TODO use string resource
                     mIsShowingPath = false;
                     return;
 
                 } else {
 
-                    layout.findViewById(R.id.nav_ll_start).setVisibility(View.GONE);
+                    mLocationLL.setVisibility(View.GONE);
                     ((Button) v).setText("Do Another Search");              //TODO use string resource
                     mIsShowingPath = true;
 
@@ -112,30 +123,30 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
 
                 // Get current location if requested
                 if (mCheckBox.isChecked()) {
-                    mCursor.moveToPosition(
-                            Geomancer.findClosestPlace(
+                    mNodeCursor.moveToPosition(
+                            Geomancer.findClosestNode(
                                     Geomancer.getDeviceLocation(),
-                                    mCursor));
-                    startId = mCursor.getInt(
-                            mCursor.getColumnIndex(
-                                    GuideDBConstants.PlaceTable.ID_COL));
+                                    mNodeCursor));
+                    startId = mNodeCursor.getInt(
+                            mNodeCursor.getColumnIndex(
+                                    GuideDBConstants.NodeTable.ID_COL));
                 }
 
 
                 // Do a linear search through mCursor for the two place IDs
-                synchronized (mCursor) {
-                    int nameIx = mCursor.getColumnIndex(GuideDBConstants.PlaceTable.NAME_COL);
-                    int idIx = mCursor.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
-                    if (!mCursor.moveToFirst()) return;
+                synchronized (mPlaceCursor) {
+                    int nameIx = mPlaceCursor.getColumnIndex(GuideDBConstants.PlaceTable.NAME_COL);
+                    int idIx = mPlaceCursor.getColumnIndex(GuideDBConstants.PlaceTable.ID_COL);
+                    if (!mPlaceCursor.moveToFirst()) return;
 
                     do {
-                        String name = mCursor.getString(nameIx);
+                        String name = mPlaceCursor.getString(nameIx);
                         if (startId == -1 && name.equals(startName)) {
-                            startId = mCursor.getInt(idIx);
+                            startId = mPlaceCursor.getInt(idIx);
                         } else if (destId == -1 && name.equals(destName)) {
-                            destId = mCursor.getInt(idIx);
+                            destId = mPlaceCursor.getInt(idIx);
                         }
-                    } while(mCursor.moveToNext() && (startId == -1 || destId == -1));
+                    } while(mPlaceCursor.moveToNext() && (startId == -1 || destId == -1));
                 }
 
                 if (startId == -1) {
@@ -167,8 +178,5 @@ public class PlaceNavigatorFragment extends NavigatorFragment {
         
         
     }
-    
-    //private static class GraphPathTask extends AsyncTask
-    
     
 }

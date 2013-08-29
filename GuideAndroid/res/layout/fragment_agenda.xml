@@ -5,78 +5,42 @@
     android:background="@color/light_gold"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/current_ll"
+    <include
+        android:id="@+id/current_ll_ref"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@drawable/white_to_darkgold"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:id="@+id/current_img"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:layout_weight="45"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/abs__action_bar_home_description"
-            android:src="@drawable/tour_placeholder" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:layout_weight="55"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_current_location2"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/current_tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_agenda_empty"
-                android:textSize="14sp" />
-        </LinearLayout>
-    </LinearLayout>
+        layout="@layout/location_preview_layout" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
             android:layout_margin="8dp"
+            android:layout_weight="1"
             android:text="@string/menu_add_agenda"
-            android:textSize="26sp" />
+            android:textSize="26sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/agenda_edit"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@android:drawable/ic_menu_edit"
-            android:contentDescription="@string/abs__action_bar_home_description"/>
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/abs__action_bar_home_description"
+            android:src="@android:drawable/ic_menu_edit" />
 
         <ImageButton
             android:id="@+id/agenda_remove"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/abs__action_bar_home_description"
             android:src="@android:drawable/ic_delete"
-            android:contentDescription="@string/abs__action_bar_home_description"/>
-
-        </LinearLayout>
+            android:visibility="gone" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

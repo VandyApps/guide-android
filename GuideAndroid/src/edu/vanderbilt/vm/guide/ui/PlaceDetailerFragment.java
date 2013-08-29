@@ -13,6 +13,7 @@ import com.actionbarsherlock.view.MenuItem;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class PlaceDetailerFragment extends SherlockFragment {
      * @return
      */
     static PlaceDetailerFragment newInstance(Context ctx, int id) {
-        PlaceDetailerFragment frag = (PlaceDetailerFragment) SherlockFragment.instantiate(ctx,
+        PlaceDetailerFragment frag = (PlaceDetailerFragment) Fragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.PlaceDetailerFragment");
 
         Bundle arg = new Bundle();

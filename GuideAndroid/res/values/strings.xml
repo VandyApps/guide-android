@@ -2,7 +2,6 @@
 
     <string name="app_name">GuideAndroid</string>
     <string name="menu_settings">Settings</string>
-    <string name="university_name">Vanderbilt University</string>
     
     <string name="title_activity_guide_main">Guide Android</string>
 	<string name="title_activity_place_detail_activity">Place Details</string>
@@ -67,5 +66,8 @@
 
     <item type="id" name="view_item_position" />
     <item type="id" name="view_item_checked_set" />
+    <string name="current_location_unknown">Unknown</string>
+    <string name="mark_as_visited">Mark as Visited</string>
+    <string name="hide_panel">Hide Panel</string>
 
 </resources>

@@ -3,7 +3,7 @@
  	"id" : 1,
  	"name" : "Test Tour 1",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [170, 27, 22, 151, 60, 183, 209, 225, 182, 175, 91, 122, 79],
+ 	"placesOnTour" : [1, 22, 3, 9],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -12,7 +12,7 @@
  	"id" : 2,
  	"name" : "Test Tour 2",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [48, 116, 230, 219, 141, 169, 114, 90, 146],
+ 	"placesOnTour" : [24, 44, 13, 42],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -30,7 +30,7 @@
  	"id" : 4,
  	"name" : "Test Tour 4",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [18, 95, 138, 154, 209, 202],
+ 	"placesOnTour" : [6, 1, 7],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -39,7 +39,7 @@
  	"id" : 5,
  	"name" : "Test Tour 5",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [202],
+ 	"placesOnTour" : [6, 1, 7],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -48,7 +48,7 @@
  	"id" : 6,
  	"name" : "Test Tour 6",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [],
+ 	"placesOnTour" : [6, 1, 7],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -57,7 +57,7 @@
  	"id" : 7,
  	"name" : "Test Tour 7",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [7, 12, 129, 134, 34, 194, 131, 228, 132, 59],
+ 	"placesOnTour" : [6, 1, 7],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -66,7 +66,7 @@
  	"id" : 8,
  	"name" : "Test Tour 8",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [7, 12, 129, 134, 34, 194, 138, 154, 209, 182, 175, 91, 122, 79, 131, 228, 132, 59],
+ 	"placesOnTour" : [6, 1, 7],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
@@ -75,40 +75,13 @@
  	"id" : 9,
  	"name" : "Test Tour 9",
  	"timeRequired" : "1 hour",
- 	"placesOnTour" : [7, 12, 129, 134, 34, 194, 182, 175, 91, 122, 79, 131, 228, 132, 59],
- 	"description" : "Description for this tour",
- 	"distance" : "0.7 miles",
- 	"iconPath" : "tour_placeholder"
- },
- {
- 	"id" : 10,
- 	"name" : "Test Tour 10",
- 	"timeRequired" : "1 hour",
- 	"placesOnTour" : [138, 154, 209, 7, 12, 129, 134, 34, 194, 182, 175, 91, 122, 79, 131, 228, 132, 59],
- 	"description" : "Description for this tour",
- 	"distance" : "0.7 miles",
- 	"iconPath" : "tour_placeholder"
- },
- {
- 	"id" : 11,
- 	"name" : "Test Tour 11",
- 	"timeRequired" : "1 hour",
  	"placesOnTour" : [6, 1, 7],
  	"description" : "Description for this tour",
  	"distance" : "0.7 miles",
  	"iconPath" : "tour_placeholder"
  },
  {
- 	"id" : 12,
- 	"name" : "Test Tour 12",
- 	"timeRequired" : "1 hour",
- 	"placesOnTour" : [7, 12, 129, 134, 34, 194, 182, 175, 91, 122, 79, 131, 228, 132, 59, 17, 215, 77, 65, 171, 214, 203, 1, 83, 126, 130, 189, 149, 4, 111, 198, 205, 119, 5],
- 	"description" : "Description for this tour",
- 	"distance" : "0.7 miles",
- 	"iconPath" : "tour_placeholder"
- },
- {
- 	"id" : 13,
+ 	"id" : 10,
  	"name" : "Pathing test",
  	"timeRequired" : "1 hour",
  	"placesOnTour" : [6, 1, 7, 11, 12, 13, 14, 145, 146, 147, 157, 158, 160, 161, 162, 174, 175, 176],

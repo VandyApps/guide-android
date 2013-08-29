@@ -11,6 +11,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import edu.vanderbilt.vm.guide.ui.AgendaFragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -103,7 +104,7 @@ public class SwipingTabsAdapter extends FragmentPagerAdapter implements ActionBa
     @Override
     public SherlockFragment getItem(int position) {
         TabInfo info = mTabs.get(position);
-        SherlockFragment fragment = (SherlockFragment) SherlockFragment.instantiate(mActivity, info.clss.getName(), info.args);
+        SherlockFragment fragment = (SherlockFragment) Fragment.instantiate(mActivity, info.clss.getName(), info.args);
         if (info.clss.equals(AgendaFragment.class)) {
             //mAgendaFragment = (AgendaFragment) fragment;
         }

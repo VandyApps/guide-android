@@ -2,23 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@color/light_gold"
+    android:alpha="0.9"
     android:orientation="vertical"
     android:padding="8dp" >
 
-    <TextView
-        android:id="@+id/nav_tv1"
-        style="@style/description_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nav_label3" />
-
-    <Button
-        android:id="@+id/nav_et1"
-        style="@style/description_text_2"
+    <include
+        android:id="@+id/current_ll_ref"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left|center_vertical"
-        android:text="@string/nav_label4" />
+        android:layout_margin="8dp"
+        layout="@layout/location_preview_layout" />
 
+    <LinearLayout 
+        android:id="@+id/agenda_nav_button_ll"
+        android:layout_width = "match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+	    <Button
+	        android:id="@+id/agenda_nav_hide"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="50"
+	        android:text="@string/hide_panel" />
+	    
+	    <Button
+	        android:id="@+id/nav_mark_visited"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="50"
+	        android:text="@string/mark_as_visited" />
+	</LinearLayout>
 </LinearLayout>

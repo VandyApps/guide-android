@@ -1,9 +1,6 @@
 
 package edu.vanderbilt.vm.guide.ui;
 
-import android.util.Log;
-import com.actionbarsherlock.app.SherlockFragment;
-
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+
+import com.actionbarsherlock.app.SherlockFragment;
+
 import edu.vanderbilt.vm.guide.R;
 import edu.vanderbilt.vm.guide.db.GuideDBConstants;
 import edu.vanderbilt.vm.guide.db.GuideDBOpenHelper;
-import edu.vanderbilt.vm.guide.ui.adapter.CardTourAdapter;
 import edu.vanderbilt.vm.guide.ui.adapter.TourAdapter;
 
 @SuppressLint("NewApi")

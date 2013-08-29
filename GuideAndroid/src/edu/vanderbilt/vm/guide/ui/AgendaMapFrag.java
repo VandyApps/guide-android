@@ -2,8 +2,6 @@
 package edu.vanderbilt.vm.guide.ui;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -14,6 +12,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -69,7 +68,7 @@ public class AgendaMapFrag extends SupportMapFragment
      */
     public static AgendaMapFrag newInstance(Context ctx, Agenda agenda) {
         
-        AgendaMapFrag frag = (AgendaMapFrag)SupportMapFragment.instantiate(ctx,
+        AgendaMapFrag frag = (AgendaMapFrag)Fragment.instantiate(ctx,
                 "edu.vanderbilt.vm.guide.ui.AgendaMapFrag");
 
         frag.mAgenda = agenda;
@@ -240,6 +239,10 @@ public class AgendaMapFrag extends SupportMapFragment
         }
 
         this.getMap().addPolyline(option);
+    }
+    
+    public void clearMap() {
+        getMap().clear();
     }
 
     public void redrawMarker() {

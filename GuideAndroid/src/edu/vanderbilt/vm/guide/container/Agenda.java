@@ -9,8 +9,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
-
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
